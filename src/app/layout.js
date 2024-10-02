@@ -13,7 +13,7 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
-const poppins = Poppins({subsets: ["latin"], weight:["400", "800", "900"]});
+const poppins = Poppins({subsets: ["latin"], weight:["100", "200", "300", "400", "500", "600", "700", "800", "900"]});
 
 export const metadata = {
   title: "Create Next App",
