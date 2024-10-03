@@ -1,25 +1,50 @@
 "use client"
 import { useState } from 'react';
+import { fetchData } from "../tools/api";
 
 export default function Demo() {
   // State for inputs
-  const [polAmpas, setPolAmpas] = useState('');
-  const [polBlotong, setPolBlotong] = useState('');
-  const [polTetes, setPolTetes] = useState('');
-  const [rendemenKebun, setRendemenKebun] = useState('');
-  const [rendemenGerbang, setRendemenGerbang] = useState('');
-  const [rendemenNPP, setRendemenNPP] = useState('');
-  const [rendemenGula, setRendemenGula] = useState('');
-  const [kehilanganRendemen, setKehilanganRendemen] = useState(null);
+  const [polAmpas, setPolAmpas] = useState(0.0);
+  const [polBlotong, setPolBlotong] = useState(0.0);
+  const [polTetes, setPolTetes] = useState(0.0);
+  const [rendemenKebun, setRendemenKebun] = useState(0.0);
+  const [rendemenGerbang, setRendemenGerbang] = useState(0.0);
+  const [rendemenNPP, setRendemenNPP] = useState(0.0);
+  const [rendemenGula, setRendemenGula] = useState(0.0);
+  const [kehilanganRendemen, setKehilanganRendemen] = useState(0.0);
 
-  // Handle form submission and calculation
-  const handleSubmit = (e) => {
+  // Handle form submission and API call
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Calculate Kehilangan Rendemen (%)
-    const kehilangan = (parseFloat(rendemenKebun) - parseFloat(rendemenGerbang) - parseFloat(rendemenNPP) - parseFloat(rendemenGula)) || 0;
+    // Prepare the payload to send to the API
+    const data = {
+      pol_ampas: parseFloat(polAmpas),
+      pol_blotong:    parseFloat(polBlotong),
+      pol_tetes: parseFloat(polTetes),
+      rendemen_kebun: parseFloat(rendemenKebun),
+      rendemen_gerbang:parseFloat(rendemenGerbang),
+      rendemen_NPP: parseFloat(rendemenNPP),
+      rendemen_gula: parseFloat(rendemenGula),
+    };
 
-    setKehilanganRendemen(kehilangan);
+    try {
+      // Use fetchData to send the POST request
+      const result = await fetchData("/process-input", {
+        method: "POST",
+        data, // Payload to send
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      // Set the API response to state
+      // setResponse(result);
+      console.log("GANTENG", result)
+      setKehilanganRendemen(result.potensi_kehilangan_produksi || null);
+    } catch (error) {
+      console.error("API call failed:", error);
+    }
   };
 
   return (
@@ -38,7 +63,7 @@ export default function Demo() {
               step="0.01"
               value={polAmpas}
               onChange={(e) => setPolAmpas(e.target.value)}
-              className="w-full border border-gray-300 p-2 rounded"
+              className="w-full border border-gray-300 p-2 rounded text-black"
               required
             />
           </div>
@@ -54,7 +79,7 @@ export default function Demo() {
               step="0.01"
               value={polBlotong}
               onChange={(e) => setPolBlotong(e.target.value)}
-              className="w-full border border-gray-300 p-2 rounded"
+              className="w-full border border-gray-300 p-2 rounded text-black"
               required
             />
           </div>
@@ -70,7 +95,7 @@ export default function Demo() {
               step="0.01"
               value={polTetes}
               onChange={(e) => setPolTetes(e.target.value)}
-              className="w-full border border-gray-300 p-2 rounded"
+              className="w-full border border-gray-300 p-2 rounded text-black"
               required
             />
           </div>
@@ -93,7 +118,7 @@ export default function Demo() {
               step="0.01"
               value={rendemenKebun}
               onChange={(e) => setRendemenKebun(e.target.value)}
-              className="w-full border border-gray-300 p-2 rounded"
+              className="w-full border border-gray-300 p-2 rounded text-black"
               required
             />
           </div>
@@ -109,7 +134,7 @@ export default function Demo() {
               step="0.01"
               value={rendemenGerbang}
               onChange={(e) => setRendemenGerbang(e.target.value)}
-              className="w-full border border-gray-300 p-2 rounded"
+              className="w-full border border-gray-300 p-2 rounded text-black"
               required
             />
           </div>
@@ -125,7 +150,7 @@ export default function Demo() {
               step="0.01"
               value={rendemenNPP}
               onChange={(e) => setRendemenNPP(e.target.value)}
-              className="w-full border border-gray-300 p-2 rounded"
+              className="w-full border border-gray-300 p-2 rounded text-black"
               required
             />
           </div>
@@ -141,7 +166,7 @@ export default function Demo() {
               step="0.01"
               value={rendemenGula}
               onChange={(e) => setRendemenGula(e.target.value)}
-              className="w-full border border-gray-300 p-2 rounded"
+              className="w-full border border-gray-300 p-2 rounded text-black"
               required
             />
           </div>
@@ -157,7 +182,7 @@ export default function Demo() {
         {/* Display Kehilangan Rendemen */}
         {kehilanganRendemen !== null && (
           <div className="mt-6 text-center">
-            <h2 className="text-xl font-bold">Kehilangan Rendemen: {kehilanganRendemen.toFixed(2)}%</h2>
+            <h2 className="text-xl font-bold">Kehilangan Rendemen: {kehilanganRendemen.toFixed(3)}%</h2>
           </div>
         )}
       </div>

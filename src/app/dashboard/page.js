@@ -52,7 +52,7 @@ export default function Dashboard() {
           <div className="flex justify-between items-center mb-4 cursor-pointer" onClick={toggleDropdown1}>
             <h2 className="text-red-600 font-bold text-left">Tingkat Risiko Rantai Pasok (E1)</h2>
             <div className="flex items-center space-x-2">
-              <span className="text-right text-lg font-bold text-blue-600">1.000</span>
+              <span className="text-right text-lg font-bold text-blue-600">0.936</span>
               <div style={{ width: 50, height: 50 }}>
                 <CircularProgressbar
                   value={progressData[0].score}
@@ -99,7 +99,7 @@ export default function Dashboard() {
             <h2 className="text-red-600 font-bold text-left">Potensi Kehilangan Produksi (E2)</h2>
             <div className="flex items-center space-x-2">
               <span className="text-right text-lg font-bold text-blue-600">0.500</span>
-              <div style={{ width: 50, height: 50 }}>
+              <div className = "animate-bounce" style={{ width: 50, height: 50 }}>
                 <CircularProgressbar
                   value={progressData[1].score}
                   text={`${progressData[1].score}%`}
