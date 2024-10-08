@@ -1,4 +1,5 @@
 "use client"
+
 import { useState } from 'react';
 import { fetchData } from "../tools/api";
 
@@ -12,18 +13,22 @@ export default function Demo() {
   const [rendemenNPP, setRendemenNPP] = useState(0.0);
   const [rendemenGula, setRendemenGula] = useState(0.0);
   const [kehilanganRendemen, setKehilanganRendemen] = useState(0.0);
+  const [loading, setLoading] = useState(false); // New state for loading animation
 
   // Handle form submission and API call
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Set loading to true when the form is submitted
+    setLoading(true);
+
     // Prepare the payload to send to the API
     const data = {
       pol_ampas: parseFloat(polAmpas),
-      pol_blotong:    parseFloat(polBlotong),
+      pol_blotong: parseFloat(polBlotong),
       pol_tetes: parseFloat(polTetes),
       rendemen_kebun: parseFloat(rendemenKebun),
-      rendemen_gerbang:parseFloat(rendemenGerbang),
+      rendemen_gerbang: parseFloat(rendemenGerbang),
       rendemen_NPP: parseFloat(rendemenNPP),
       rendemen_gula: parseFloat(rendemenGula),
     };
@@ -38,12 +43,14 @@ export default function Demo() {
         },
       });
 
-      // Set the API response to state
-      // setResponse(result);
-      console.log("GANTENG", result)
+      // Set the API response to state and stop loading
+      console.log("API result", result);
       setKehilanganRendemen(result.potensi_kehilangan_produksi || null);
     } catch (error) {
       console.error("API call failed:", error);
+    } finally {
+      // Stop loading after the API call completes
+      setLoading(false);
     }
   };
 
@@ -100,11 +107,9 @@ export default function Demo() {
             />
           </div>
 
-          {/* Kehilangan rendemen (%) */}
+          {/* Kehilangan rendemen */}
           <div>
-            <label className="block font-bold mb-1" htmlFor="polTetes">
-            Kehilangan rendemen  (%)
-            </label>
+            <label className="block font-bold mb-1">Kehilangan rendemen (%)</label>
           </div>
 
           {/* Rendemen Kebun */}
@@ -179,13 +184,40 @@ export default function Demo() {
           </div>
         </form>
 
+        {/* Display Loading Spinner */}
+        {loading && (
+          <div className="mt-6 flex justify-center">
+            <div className="loader"></div>
+          </div>
+        )}
+
         {/* Display Kehilangan Rendemen */}
-        {kehilanganRendemen !== null && (
+        {!loading && kehilanganRendemen !== null && (
           <div className="mt-6 text-center">
             <h2 className="text-xl font-bold">Kehilangan Rendemen: {kehilanganRendemen.toFixed(3)}%</h2>
           </div>
         )}
       </div>
+
+      {/* Loader styles */}
+      <style jsx>{`
+        .loader {
+          border: 8px solid #f3f3f3;
+          border-top: 8px solid #3498db;
+          border-radius: 50%;
+          width: 50px;
+          height: 50px;
+          animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
+        }
+      `}</style>
     </div>
   );
 }
