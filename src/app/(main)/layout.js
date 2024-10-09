@@ -1,7 +1,7 @@
-import localFont from "next/font/local";
 import { Poppins } from "next/font/google";
-// import "./globals.css";
-import "@/app/globals.css";
+import "../globals.css";
+import Navbar from "@/components/Navbar";
+import Sidebar from "@/components/Sidebar";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -18,6 +18,8 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${poppins.className}`}>
         <div className="flex flex-col w-full bg-red-400">
+          <Navbar />
+          <Sidebar />
           <div className="min-h-screen bg-gray-100 p-4 pl-[270px]">
             <div className="mt-20 w-full">{children}</div>
           </div>

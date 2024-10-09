@@ -1,12 +1,13 @@
 // app/layout.jsx
 import OpsiDimensi from "@/components/OpsiDimensi";
+import Sidebar from "@/components/Sidebar";
 import React from "react";
 
 const Layout = ({ children }) => {
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
+    <div className="w-full">
       <OpsiDimensi />
-      <div className="mt-6">{children}</div>
+      {children}
     </div>
   );
 };

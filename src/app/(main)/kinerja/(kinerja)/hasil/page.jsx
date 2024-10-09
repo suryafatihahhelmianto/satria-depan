@@ -1,9 +1,9 @@
 import React from "react";
 
-export default function HasilPage() {
+export default function LingkunganPage() {
   return (
     <div>
-      <h1>Hasil Page</h1>
+      <h1>Hasil</h1>
     </div>
   );
 }
