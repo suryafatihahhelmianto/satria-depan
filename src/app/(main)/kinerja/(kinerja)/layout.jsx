@@ -5,7 +5,7 @@ import React from "react";
 
 const Layout = ({ children }) => {
   return (
-    <div className="w-full">
+    <div className="w-full px-4 pt-4">
       <OpsiDimensi />
       {children}
     </div>

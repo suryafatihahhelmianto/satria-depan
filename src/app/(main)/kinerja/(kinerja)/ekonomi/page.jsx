@@ -39,8 +39,8 @@ export default function DataKinerja() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <div className="max-w-7xl mx-auto p-4">
+    <div className="min-h-screen bg-gray-100 mb-24">
+      <div>
         <form onSubmit={handleSubmit} className="mt-6">
           {/* Tabel Input */}
           <h2 className="text-red-600 font-bold">

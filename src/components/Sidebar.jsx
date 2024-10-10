@@ -25,12 +25,12 @@ export default function Sidebar() {
             </Link>
           </li>
           <li className="mb-4">
-            <Link href="/yield-measurement" className="hover:text-white">
+            <Link href="#" className="hover:text-white">
               Pengukuran Rendemen
             </Link>
           </li>
           <li className="mb-4">
-            <Link href="/user-data" className="hover:text-white">
+            <Link href="#" className="hover:text-white">
               Data Pengguna
             </Link>
           </li>

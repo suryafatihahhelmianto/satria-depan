@@ -17,10 +17,8 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${poppins.className}`}>
-        <div className="flex flex-col w-full bg-red-400">
-          <div className="min-h-screen bg-gray-100 p-4 pl-[270px]">
-            <div className="mt-20 w-full">{children}</div>
-          </div>
+        <div className="bg-gray-100 p-4">
+          <div>{children}</div>
         </div>
       </body>
     </html>

@@ -10,7 +10,7 @@ export default function KinerjaPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
+    <div className="min-h-screen bg-gray-100">
       <h1 className="text-2xl font-bold mb-6">Riwayat Pengisian Sesi</h1>
       <table className="min-w-full bg-white border border-gray-200">
         <thead>
