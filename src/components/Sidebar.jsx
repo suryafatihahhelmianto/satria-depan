@@ -25,7 +25,7 @@ export default function Sidebar() {
             </Link>
           </li>
           <li className="mb-4">
-            <Link href="#" className="hover:text-white">
+            <Link href="/rendemen" className="hover:text-white">
               Pengukuran Rendemen
             </Link>
           </li>

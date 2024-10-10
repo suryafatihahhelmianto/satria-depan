@@ -15,6 +15,9 @@ module.exports = {
         ijoDash: "#69B5B9",
         ijoIsiTabel: "#CCDFBA",
         ijoKepalaTabel: "#86AE61",
+
+        abuAktif: "#ADAFB0",
+        abuNonAktif: "#E5E5E5",
       },
     },
   },
