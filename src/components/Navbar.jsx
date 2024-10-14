@@ -34,7 +34,7 @@ export default function Navbar() {
 
   return (
     <div
-      className={`fixed top-0 pl-[290px] w-full border-b p-6 bg-white z-0 flex md:flex-row justify-between items-start lg:items-center`}
+      className={`fixed top-0 pl-[320px] w-full border-b p-6 bg-white z-0 flex md:flex-row justify-between items-start lg:items-center`}
     >
       {/* Menu button */}
       <button className="outline outline-zinc-200 p-2 rounded hover:cursor-pointer hover:bg-zinc-100">
@@ -54,6 +54,8 @@ export default function Navbar() {
         {showDropdown && (
           <div className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg py-2 z-10">
             <p className="block px-4 py-2 text-gray-800">Nama Pengguna</p>
+            <hr />
+            <p className="block px-4 py-2 text-gray-800">Edit Profile</p>
             <hr />
             <button
               onClick={() => {

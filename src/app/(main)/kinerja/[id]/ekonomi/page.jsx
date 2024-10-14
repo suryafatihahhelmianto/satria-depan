@@ -1,32 +1,18 @@
 "use client";
 
-import { fetchData } from "@/tools/api";
 import { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
+import { fetchData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
+import FieldInput from "@/components/FieldInput";
+import { usePathname } from "next/navigation";
 
 export default function DataKinerja() {
   const pathname = usePathname();
-  const idMatch = pathname.match(/\/kinerja\/([a-zA-Z0-9]+)/); // Menangkap ID yang ada setelah /kinerja/
-  const sesiId = idMatch ? idMatch[1] : null; // Ambil ID jika ada
+  const idMatch = pathname.match(/\/kinerja\/([a-zA-Z0-9]+)/);
+  const sesiId = idMatch ? idMatch[1] : null;
 
-  const [rantaiPasok, setRantaiPasok] = useState(0);
-  const [polAmpas, setPolAmpas] = useState(0);
-  const [polBlotong, setPolBlotong] = useState(0);
-  const [polTetes, setPolTetes] = useState(0);
-  const [rendemenKebun, setRendemenKebun] = useState(0);
-  const [rendemenGerbang, setRendemenGerbang] = useState(0);
-  const [rendemenNPP, setRendemenNPP] = useState(0);
-  const [rendemenGula, setRendemenGula] = useState(0);
-  const [keuntunganPetani, setKeuntunganPetani] = useState(0);
-  const [keuntunganBumdes, setKeuntunganBumdes] = useState(0);
-  const [hargaAcuan, setHargaAcuan] = useState(0);
-  const [hargaLelang, setHargaLelang] = useState(0);
-  const [produksiTahunIni, setProduksiTahunIni] = useState(0);
-  const [produksiTahunLalu, setProduksiTahunLalu] = useState(0);
-  const [penjualanGula, setTotalPenjualanGula] = useState(0);
-
-  const [formDataE2, setFormDataE2] = useState({
+  const [formData, setFormData] = useState({
+    nilaiRisiko: 0,
     polAmpas: 0,
     polBlotong: 0,
     polTetes: 0,
@@ -34,48 +20,88 @@ export default function DataKinerja() {
     rendemenGerbang: 0,
     rendemenNPP: 0,
     rendemenGula: 0,
+    untungPetani: 0,
+    untungBUMDES: 0,
+    hargaAcuan: 0,
+    hargaLelang: 0,
+    shsTahunIni: 0,
+    shsTahunSebel: 0,
+    bagiHasil: 0,
   });
 
-  const [submittedData, setSubmittedData] = useState(null);
-  const [finalizedData, setFinalizedData] = useState({}); // State to track finalized data
+  const [loading, setLoading] = useState(true);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: parseFloat(value), // Convert input value to number
-    }));
-  };
-
+  // Fungsi untuk mengambil data masukkan ekonomi
   const fetchEkonomi = async () => {
     try {
       const response = await fetchData(`/api/masukkan/ekonomi/${sesiId}`, {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${getCookie("token")}`, // Ambil token dari localStorage
+          Authorization: `Bearer ${getCookie("token")}`,
         },
-      }); // Replace with the correct endpoint
-      console.log("ini data eknomi: ", response);
-
-      setRantaiPasok(response.nilaiRisiko);
-      setPolAmpas(response.polAmpas);
-      setPolBlotong(response.polBlotong);
-      setPolTetes(response.polTetes);
-      setRendemenKebun(response.rendemenKebun);
-      setRendemenGerbang(response.rendemenGerbang);
-      setRendemenNPP(response.rendemenNPP);
-      setRendemenGula(response.rendemenGUla);
-      setKeuntunganPetani(response.untungPetani);
-      setKeuntunganBumdes(response.untungBUMDES);
-      setHargaAcuan(response.hargaAcuan);
-      setHargaLelang(response.hargaLelang);
-      setProduksiTahunIni(response.shsTahunIni);
-      setProduksiTahunLalu(response.shsTahunSebel);
-      setTotalPenjualanGula(response.bagiHasil);
-
-      // setFormDataE2(response);
+      });
+      console.log("ini respon: ", response);
+      setFormData({
+        nilaiRisiko: response.nilaiRisiko,
+        polAmpas: response.polAmpas,
+        polBlotong: response.polBlotong,
+        polTetes: response.polTetes,
+        rendemenKebun: response.rendemenKebun,
+        rendemenGerbang: response.rendemenGerbang,
+        rendemenNPP: response.rendemenNPP,
+        rendemenGula: response.rendemenGula,
+        untungPetani: response.untungPetani,
+        untungBUMDES: response.untungBUMDES,
+        hargaAcuan: response.hargaAcuan,
+        hargaLelang: response.hargaLelang,
+        shsTahunIni: response.shsTahunIni,
+        shsTahunSebel: response.shsTahunSebel,
+        bagiHasil: response.bagiHasil,
+      });
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
+    }
+  };
+
+  const handleUpdate = async (field, value) => {
+    try {
+      const data = { sesiId };
+      data[field] = parseFloat(value);
+      console.log("ini data: ", data);
+
+      await fetchData(`/api/masukkan/ekonomi`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${getCookie("token")}`,
+          "Content-Type": "application/json",
+        },
+        data,
+      });
+      console.log("Update successful");
+    } catch (error) {
+      console.error("Error updating field: ", error);
+    }
+  };
+
+  const handleCalculate = async () => {
+    try {
+      const dataToSend = {
+        formData,
+      };
+
+      const response = await fetchData("/api/dimensi/ekonomi", {
+        method: "POST", // menggunakan POST untuk membuat data baru
+        headers: {
+          Authorization: `Bearer ${getCookie("token")}`,
+          "Content-Type": "application/json",
+        },
+        data: formData,
+      });
+
+      console.log("Response dari server: ", response);
+    } catch (error) {
+      console.error("Error calculating dimensions: ", error);
     }
   };
 
@@ -83,512 +109,239 @@ export default function DataKinerja() {
     fetchEkonomi();
   }, [sesiId]);
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="min-h-screen bg-gray-100 mb-24">
-      <div>
-        <form onSubmit={handleSubmit} className="mt-6">
-          {/* Tabel Input */}
-          <h2 className="text-red-600 font-bold">
-            Tingkat Risiko Rantai Pasok (E1)
-          </h2>
-          <div className="overflow-x-auto mt-4">
-            <table className="min-w-full bg-white border rounded-lg shadow-md">
-              <thead className="bg-ijoKepalaTabel">
-                <tr>
-                  <th className="px-4 py-2 text-left">Sub Indikator</th>
-                  <th className="px-4 py-2 text-left">Data</th>
-                  <th className="px-4 py-2 text-left">Status</th>
-                </tr>
-              </thead>
-              <tbody className="bg-ijoIsiTabel">
-                <tr className="border-b">
-                  <td className="px-4 py-2">Tingkat Risiko Rantai Pasok</td>
-                  <td className="px-4 py-2">
-                    <input
-                      type="number"
-                      value={rantaiPasok}
-                      onChange={handleInputChange}
-                      className="border p-2 bg-ijoIsiTabel border-none"
-                    />
-                  </td>
-                  <td className="px-4 py-2">
-                    <button
-                      type="button"
-                      // className={`p-2 rounded ${
-                      //   finalizedData[key] ? "bg-green-500" : "bg-gray-300"
-                      // }`}
-                    >
-                      ✔️
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+      <h2 className="text-red-600 font-bold mt-5">
+        Tingkat Risiko Rantai Pasok (E1)
+      </h2>
+      <div className="overflow-x-auto mt-4">
+        <table className="min-w-full bg-white border rounded-lg shadow-md">
+          <thead className="bg-ijoKepalaTabel">
+            <tr>
+              <th className="px-4 py-2 text-left">Sub Indikator</th>
+              <th className="px-4 py-2 text-left">Data</th>
+              <th className="px-4 py-2 text-left">Status</th>
+            </tr>
+          </thead>
+          <tbody className="bg-ijoIsiTabel">
+            {/* Tingkat Risiko Rantai Pasok */}
+            <FieldInput
+              label="Tingkat Risiko Rantai Pasok"
+              value={formData.nilaiRisiko}
+              onChange={(e) =>
+                setFormData({ ...formData, nilaiRisiko: e.target.value })
+              }
+              onSubmit={() => handleUpdate("nilaiRisiko", formData.nilaiRisiko)}
+            />
+          </tbody>
+        </table>
+      </div>
 
-          {/* E2 */}
-          {/* <h2 className="text-red-600 font-bold mt-5">
-            Tingkat Luas Tanam TRI (E2)
-          </h2>
-          <div className="overflow-x-auto mt-4">
-            <table className="min-w-full border rounded-lg shadow-md">
-              <thead className="bg-ijoKepalaTabel">
-                <tr>
-                  <th className="px-4 py-2 text-left">Sub Indikator</th>
-                  <th className="px-4 py-2 text-left">Data</th>
-                  <th className="px-4 py-2 text-left">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {Object.keys(formDataE2).map((key) => (
-                  <tr key={key} className="bg-ijoIsiTabel">
-                    <td className="px-4 py-2">{getLabel(key)}</td>
-                    <td className="px-4 py-2">
-                      <input
-                        type="number"
-                        name={key}
-                        value={formDataE2[key]}
-                        onChange={handleInputChange}
-                        className="p-2 bg-ijoIsiTabel"
-                      />
-                    </td>
-                    <td className="px-4 py-2">
-                      <button
-                        type="button"
-                        className={`p-2 rounded ${
-                          finalizedData[key] ? "bg-green-500" : "bg-gray-300"
-                        }`}
-                      >
-                        ✔️
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div> */}
+      <h2 className="text-red-600 font-bold mt-5">
+        Potensi Kehilangan Produksi (E2)
+      </h2>
+      <div className="overflow-x-auto mt-4">
+        <table className="min-w-full bg-white border rounded-lg shadow-md">
+          <thead className="bg-ijoKepalaTabel">
+            <tr>
+              <th className="px-4 py-2 text-left">Sub Indikator</th>
+              <th className="px-4 py-2 text-left">Data</th>
+              <th className="px-4 py-2 text-left">Status</th>
+            </tr>
+          </thead>
+          <tbody className="bg-ijoIsiTabel">
+            {/* Kehilangan Pol Ampas */}
+            <FieldInput
+              label="Kehilangan Pol Ampas"
+              value={formData.polAmpas}
+              onChange={(e) =>
+                setFormData({ ...formData, polAmpas: e.target.value })
+              }
+              onSubmit={() => handleUpdate("polAmpas", formData.polAmpas)}
+            />
 
-          {/* E2 */}
-          <h2 className="text-red-600 font-bold mt-5">
-            Potensi Kehilangan Produksi (E2)
-          </h2>
-          <div className="overflow-x-auto mt-4">
-            <table className="min-w-full bg-white border rounded-lg shadow-md">
-              <thead className="bg-ijoKepalaTabel">
-                <tr>
-                  <th className="px-4 py-2 text-left">Sub Indikator</th>
-                  <th className="px-4 py-2 text-left">Data</th>
-                  <th className="px-4 py-2 text-left">Status</th>
-                </tr>
-              </thead>
-              <tbody className="bg-ijoIsiTabel">
-                <tr className="border-b">
-                  <td className="px-4 py-2">Kehilangan Pol Ampas</td>
-                  <td className="px-4 py-2">
-                    <input
-                      type="number"
-                      value={polAmpas}
-                      onChange={handleInputChange}
-                      className="p-2 bg-ijoIsiTabel"
-                    />
-                  </td>
-                  <td className="px-4 py-2">
-                    <button
-                      type="button"
-                      // className={`p-2 rounded ${
-                      //   finalizedData[key] ? "bg-green-500" : "bg-gray-300"
-                      // }`}
-                    >
-                      ✔️
-                    </button>
-                  </td>
-                </tr>
-                <tr className="border-b">
-                  <td className="px-4 py-2">Kehilangan Pol Blotong</td>
-                  <td className="px-4 py-2">
-                    <input
-                      type="number"
-                      value={polBlotong}
-                      onChange={handleInputChange}
-                      className="p-2 bg-ijoIsiTabel"
-                    />
-                  </td>
-                  <td className="px-4 py-2">
-                    <button
-                      type="button"
-                      // className={`p-2 rounded ${
-                      //   finalizedData[key] ? "bg-green-500" : "bg-gray-300"
-                      // }`}
-                    >
-                      ✔️
-                    </button>
-                  </td>
-                </tr>
-                <tr className="border-b">
-                  <td className="px-4 py-2">Kehilangan Pol Tetes</td>
-                  <td className="px-4 py-2">
-                    <input
-                      type="number"
-                      value={polTetes}
-                      onChange={handleInputChange}
-                      className="p-2 bg-ijoIsiTabel"
-                    />
-                  </td>
-                  <td className="px-4 py-2">
-                    <button
-                      type="button"
-                      // className={`p-2 rounded ${
-                      //   finalizedData[key] ? "bg-green-500" : "bg-gray-300"
-                      // }`}
-                    >
-                      ✔️
-                    </button>
-                  </td>
-                </tr>
-                <tr className="border-b">
-                  <td className="px-4 py-2">Kehilangan Rendemen Kebun</td>
-                  <td className="px-4 py-2">
-                    <input
-                      type="number"
-                      value={rendemenKebun}
-                      onChange={handleInputChange}
-                      className="p-2 bg-ijoIsiTabel"
-                    />
-                  </td>
-                  <td className="px-4 py-2">
-                    <button
-                      type="button"
-                      // className={`p-2 rounded ${
-                      //   finalizedData[key] ? "bg-green-500" : "bg-gray-300"
-                      // }`}
-                    >
-                      ✔️
-                    </button>
-                  </td>
-                </tr>
+            {/* Kehilangan Pol Blotong */}
+            <FieldInput
+              label="Kehilangan Pol Blotong"
+              value={formData.polBlotong}
+              onChange={(e) =>
+                setFormData({ ...formData, polBlotong: e.target.value })
+              }
+              onSubmit={() => handleUpdate("polBlotong", formData.polBlotong)}
+            />
 
-                <tr className="border-b">
-                  <td className="px-4 py-2">Kehilangan Rendemen Gerbang</td>
-                  <td className="px-4 py-2">
-                    <input
-                      type="number"
-                      value={rendemenGerbang}
-                      onChange={handleInputChange}
-                      className="p-2 bg-ijoIsiTabel"
-                    />
-                  </td>
-                  <td className="px-4 py-2">
-                    <button
-                      type="button"
-                      // className={`p-2 rounded ${
-                      //   finalizedData[key] ? "bg-green-500" : "bg-gray-300"
-                      // }`}
-                    >
-                      ✔️
-                    </button>
-                  </td>
-                </tr>
+            {/* Kehilangan Pol Tetes */}
+            <FieldInput
+              label="Kehilangan Pol Tetes"
+              value={formData.polTetes}
+              onChange={(e) =>
+                setFormData({ ...formData, polTetes: e.target.value })
+              }
+              onSubmit={() => handleUpdate("polTetes", formData.polTetes)}
+            />
 
-                <tr className="border-b">
-                  <td className="px-4 py-2">Kehilangan Rendemen NPP</td>
-                  <td className="px-4 py-2">
-                    <input
-                      type="number"
-                      value={rendemenNPP}
-                      onChange={handleInputChange}
-                      className="p-2 bg-ijoIsiTabel"
-                    />
-                  </td>
-                  <td className="px-4 py-2">
-                    <button
-                      type="button"
-                      // className={`p-2 rounded ${
-                      //   finalizedData[key] ? "bg-green-500" : "bg-gray-300"
-                      // }`}
-                    >
-                      ✔️
-                    </button>
-                  </td>
-                </tr>
+            {/* Kehilangan Rendemen Kebun */}
+            <FieldInput
+              label="Kehilangan Rendemen Kebun"
+              value={formData.rendemenKebun}
+              onChange={(e) =>
+                setFormData({ ...formData, rendemenKebun: e.target.value })
+              }
+              onSubmit={() =>
+                handleUpdate("rendemenKebun", formData.rendemenKebun)
+              }
+            />
 
-                <tr className="border-b">
-                  <td className="px-4 py-2">Kehilangan Rendemen Gula</td>
-                  <td className="px-4 py-2">
-                    <input
-                      type="number"
-                      value={rendemenGula}
-                      onChange={handleInputChange}
-                      className="p-2 bg-ijoIsiTabel"
-                    />
-                  </td>
-                  <td className="px-4 py-2">
-                    <button
-                      type="button"
-                      // className={`p-2 rounded ${
-                      //   finalizedData[key] ? "bg-green-500" : "bg-gray-300"
-                      // }`}
-                    >
-                      ✔️
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+            {/* Kehilangan Rendemen Gerbang */}
+            <FieldInput
+              label="Kehilangan Rendemen Gerbang"
+              value={formData.rendemenGerbang}
+              onChange={(e) =>
+                setFormData({ ...formData, rendemenGerbang: e.target.value })
+              }
+              onSubmit={() =>
+                handleUpdate("rendemenGerbang", formData.rendemenGerbang)
+              }
+            />
 
-          {/* E3 */}
-          <h2 className="text-red-600 font-bold mt-5">
-            Distribusi Keuntungan yang Adil (E3)
-          </h2>
-          <div className="overflow-x-auto mt-4">
-            <table className="min-w-full bg-white border rounded-lg shadow-md">
-              <thead className="bg-ijoKepalaTabel">
-                <tr>
-                  <th className="px-4 py-2 text-left">Sub Indikator</th>
-                  <th className="px-4 py-2 text-left">Data</th>
-                  <th className="px-4 py-2 text-left">Status</th>
-                </tr>
-              </thead>
-              <tbody className="bg-ijoIsiTabel">
-                <tr className="border-b">
-                  <td className="px-4 py-2">Keuntungan Petani</td>
-                  <td className="px-4 py-2">
-                    <input
-                      type="number"
-                      value={keuntunganPetani}
-                      onChange={handleInputChange}
-                      className="p-2 bg-ijoIsiTabel"
-                    />
-                  </td>
-                  <td className="px-4 py-2">
-                    <button
-                      type="button"
-                      // className={`p-2 rounded ${
-                      //   finalizedData[key] ? "bg-green-500" : "bg-gray-300"
-                      // }`}
-                    >
-                      ✔️
-                    </button>
-                  </td>
-                </tr>
-                <tr className="border-b">
-                  <td className="px-4 py-2">Keuntungan BUMDES</td>
-                  <td className="px-4 py-2">
-                    <input
-                      type="number"
-                      value={keuntunganBumdes}
-                      onChange={handleInputChange}
-                      className="p-2 bg-ijoIsiTabel"
-                    />
-                  </td>
-                  <td className="px-4 py-2">
-                    <button
-                      type="button"
-                      // className={`p-2 rounded ${
-                      //   finalizedData[key] ? "bg-green-500" : "bg-gray-300"
-                      // }`}
-                    >
-                      ✔️
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+            {/* Kehilangan Rendemen NPP */}
+            <FieldInput
+              label="Kehilangan Rendemen NPP"
+              value={formData.rendemenNPP}
+              onChange={(e) =>
+                setFormData({ ...formData, rendemenNPP: e.target.value })
+              }
+              onSubmit={() => handleUpdate("rendemenNPP", formData.rendemenNPP)}
+            />
 
-          {/* E4 */}
-          <h2 className="text-red-600 font-bold mt-5">
-            Harga Patokan Petani (E4)
-          </h2>
-          <div className="overflow-x-auto mt-4">
-            <table className="min-w-full bg-white border rounded-lg shadow-md">
-              <thead className="bg-ijoKepalaTabel">
-                <tr>
-                  <th className="px-4 py-2 text-left">Sub Indikator</th>
-                  <th className="px-4 py-2 text-left">Data</th>
-                  <th className="px-4 py-2 text-left">Status</th>
-                </tr>
-              </thead>
-              <tbody className="bg-ijoIsiTabel">
-                <tr className="border-b">
-                  <td className="px-4 py-2">Harga Acuan/Referensi</td>
-                  <td className="px-4 py-2">
-                    <input
-                      type="number"
-                      value={hargaAcuan}
-                      onChange={handleInputChange}
-                      className="p-2 bg-ijoIsiTabel"
-                    />
-                  </td>
-                  <td className="px-4 py-2">
-                    <button
-                      type="button"
-                      // className={`p-2 rounded ${
-                      //   finalizedData[key] ? "bg-green-500" : "bg-gray-300"
-                      // }`}
-                    >
-                      ✔️
-                    </button>
-                  </td>
-                </tr>
-                <tr className="border-b">
-                  <td className="px-4 py-2">Harga Lelang Gula</td>
-                  <td className="px-4 py-2">
-                    <input
-                      type="number"
-                      value={hargaLelang}
-                      onChange={handleInputChange}
-                      className="p-2 bg-ijoIsiTabel"
-                    />
-                  </td>
-                  <td className="px-4 py-2">
-                    <button
-                      type="button"
-                      // className={`p-2 rounded ${
-                      //   finalizedData[key] ? "bg-green-500" : "bg-gray-300"
-                      // }`}
-                    >
-                      ✔️
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+            {/* Kehilangan Rendemen Gula */}
+            <FieldInput
+              label="Kehilangan Rendemen Gula"
+              value={formData.rendemenGula}
+              onChange={(e) =>
+                setFormData({ ...formData, rendemenGula: e.target.value })
+              }
+              onSubmit={() =>
+                handleUpdate("rendemenGula", formData.rendemenGula)
+              }
+            />
+          </tbody>
+        </table>
+      </div>
 
-          {/* E5 */}
-          <h2 className="text-red-600 font-bold mt-5">
-            Tingkat Ketangakasan (E5)
-          </h2>
-          <div className="overflow-x-auto mt-4">
-            <table className="min-w-full bg-white border rounded-lg shadow-md">
-              <thead className="bg-ijoKepalaTabel">
-                <tr>
-                  <th className="px-4 py-2 text-left">Sub Indikator</th>
-                  <th className="px-4 py-2 text-left">Data</th>
-                  <th className="px-4 py-2 text-left">Status</th>
-                </tr>
-              </thead>
-              <tbody className="bg-ijoIsiTabel">
-                <tr className="border-b">
-                  <td className="px-4 py-2">SHS yang Dihasilkan Tahun Ini</td>
-                  <td className="px-4 py-2">
-                    <input
-                      type="number"
-                      value={produksiTahunIni}
-                      onChange={handleInputChange}
-                      className="p-2 bg-ijoIsiTabel"
-                    />
-                  </td>
-                  <td className="px-4 py-2">
-                    <button
-                      type="button"
-                      // className={`p-2 rounded ${
-                      //   finalizedData[key] ? "bg-green-500" : "bg-gray-300"
-                      // }`}
-                    >
-                      ✔️
-                    </button>
-                  </td>
-                </tr>
-                <tr className="border-b">
-                  <td className="px-4 py-2">SHS yang Dihasilkan Tahun Lalu</td>
-                  <td className="px-4 py-2">
-                    <input
-                      type="number"
-                      value={produksiTahunLalu}
-                      onChange={handleInputChange}
-                      className="p-2 bg-ijoIsiTabel"
-                    />
-                  </td>
-                  <td className="px-4 py-2">
-                    <button
-                      type="button"
-                      // className={`p-2 rounded ${
-                      //   finalizedData[key] ? "bg-green-500" : "bg-gray-300"
-                      // }`}
-                    >
-                      ✔️
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+      <h2 className="text-red-600 font-bold mt-5">
+        Distribusi Keuntungan yang Adil (E3)
+      </h2>
+      <div className="overflow-x-auto mt-4">
+        <table className="min-w-full bg-white border rounded-lg shadow-md">
+          <thead className="bg-ijoKepalaTabel">
+            <tr>
+              <th className="px-4 py-2 text-left">Sub Indikator</th>
+              <th className="px-4 py-2 text-left">Data</th>
+              <th className="px-4 py-2 text-left">Status</th>
+            </tr>
+          </thead>
+          <tbody className="bg-ijoIsiTabel">
+            {/* Keuntungan Petani */}
+            <FieldInput
+              label="Keuntungan Petani"
+              value={formData.untungPetani}
+              onChange={(e) =>
+                setFormData({ ...formData, untungPetani: e.target.value })
+              }
+              onSubmit={() =>
+                handleUpdate("untungPetani", formData.untungPetani)
+              }
+            />
 
-          {/* E6 */}
-          <h2 className="text-red-600 font-bold mt-5">
-            Return on Investment (E6)
-          </h2>
-          <div className="overflow-x-auto mt-4">
-            <table className="min-w-full bg-white border rounded-lg shadow-md">
-              <thead className="bg-ijoKepalaTabel">
-                <tr>
-                  <th className="px-4 py-2 text-left">Sub Indikator</th>
-                  <th className="px-4 py-2 text-left">Data</th>
-                  <th className="px-4 py-2 text-left">Status</th>
-                </tr>
-              </thead>
-              <tbody className="bg-ijoIsiTabel">
-                <tr className="border-b">
-                  <td className="px-4 py-2">Total Penjualan Gula PG</td>
-                  <td className="px-4 py-2">
-                    <input
-                      type="number"
-                      value={penjualanGula}
-                      onChange={handleInputChange}
-                      className="p-2 bg-ijoIsiTabel"
-                    />
-                  </td>
-                  <td className="px-4 py-2">
-                    <button
-                      type="button"
-                      // className={`p-2 rounded ${
-                      //   finalizedData[key] ? "bg-green-500" : "bg-gray-300"
-                      // }`}
-                    >
-                      ✔️
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+            {/* Keuntungan BUMDES */}
+            <FieldInput
+              label="Keuntungan BUMDES"
+              value={formData.untungBUMDES}
+              onChange={(e) =>
+                setFormData({ ...formData, untungBUMDES: e.target.value })
+              }
+              onSubmit={() =>
+                handleUpdate("untungBUMDES", formData.untungBUMDES)
+              }
+            />
+          </tbody>
+        </table>
+      </div>
 
-          {/* Submit Button */}
-          <div className="text-center mt-6">
-            <button
-              type="submit"
-              className="bg-green-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-800"
-            >
-              Hitung
-            </button>
-          </div>
-        </form>
+      <h2 className="text-red-600 font-bold mt-5">Harga Patokan Petani (E4)</h2>
+      <div className="overflow-x-auto mt-4">
+        <table className="min-w-full bg-white border rounded-lg shadow-md">
+          <thead className="bg-ijoKepalaTabel">
+            <tr>
+              <th className="px-4 py-2 text-left">Sub Indikator</th>
+              <th className="px-4 py-2 text-left">Data</th>
+              <th className="px-4 py-2 text-left">Status</th>
+            </tr>
+          </thead>
+          <tbody className="bg-ijoIsiTabel">
+            {/* SHS yang Dihasilkan Tahun Ini */}
+            <FieldInput
+              label="SHS yang Dihasilkan Tahun Ini"
+              value={formData.shsTahunIni}
+              onChange={(e) =>
+                setFormData({ ...formData, shsTahunIni: e.target.value })
+              }
+              onSubmit={() => handleUpdate("shsTahunIni", formData.shsTahunIni)}
+            />
 
-        {/* Display Submitted Data */}
-        {submittedData && (
-          <div className="mt-8">
-            <h2 className="text-xl font-bold">Submitted Data</h2>
-            <pre>{JSON.stringify(submittedData, null, 2)}</pre>
-          </div>
-        )}
+            {/* SHS yang Dihasilkan Tahun Lalu */}
+            <FieldInput
+              label="SHS yang Dihasilkan Tahun Lalu"
+              value={formData.shsTahunSebel}
+              onChange={(e) =>
+                setFormData({ ...formData, shsTahunSebel: e.target.value })
+              }
+              onSubmit={() =>
+                handleUpdate("shsTahunSebel", formData.shsTahunSebel)
+              }
+            />
+          </tbody>
+        </table>
+      </div>
+
+      <h2 className="text-red-600 font-bold mt-5">Return on Investment (E6)</h2>
+      <div className="overflow-x-auto mt-4">
+        <table className="min-w-full bg-white border rounded-lg shadow-md">
+          <thead className="bg-ijoKepalaTabel">
+            <tr>
+              <th className="px-4 py-2 text-left">Sub Indikator</th>
+              <th className="px-4 py-2 text-left">Data</th>
+              <th className="px-4 py-2 text-left">Status</th>
+            </tr>
+          </thead>
+          <tbody className="bg-ijoIsiTabel">
+            {/* Total Penjualan Gula */}
+            <FieldInput
+              label="Total Penjualan Gula"
+              value={formData.bagiHasil}
+              onChange={(e) =>
+                setFormData({ ...formData, bagiHasil: e.target.value })
+              }
+              onSubmit={() => handleUpdate("bagiHasil", formData.bagiHasil)}
+            />
+          </tbody>
+        </table>
+      </div>
+
+      <div className="text-center mt-6">
+        <button
+          type="button"
+          onClick={handleCalculate}
+          className="bg-green-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-800"
+        >
+          Hitung
+        </button>
       </div>
     </div>
   );
-}
-
-// Helper function to map key to readable label
-function getLabel(key) {
-  const labels = {
-    polAmpas: "Kehilangan Pol Ampas",
-    polBlotong: "Kehilangan Pol Blotong",
-    polTetes: "Kehilangan Pol Tetes",
-    rendemenKebun: "Kehilangan Rendemen Kebun",
-    rendemenGerbang: "Kehilangan Rendemen Gerbang",
-    rendemenNPP: "Kehilangan Rendemen NPP",
-    rendemenGula: "Kehilangan Rendemen Gula",
-  };
-
-  return labels[key] || key;
 }

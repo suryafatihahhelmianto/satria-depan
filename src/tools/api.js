@@ -19,3 +19,8 @@ export const fetchData = async (url, options = {}) => {
     throw new Error("Could not get data");
   }
 };
+
+export const postData = async (url, data, options = {}) => {
+  const response = await axiosInstance.post(url, data, options);
+  return response.data;
+};
