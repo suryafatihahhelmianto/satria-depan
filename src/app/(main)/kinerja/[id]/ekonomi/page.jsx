@@ -136,7 +136,7 @@ export default function DataKinerja() {
                   onChange={(e) =>
                     setFormData({
                       ...formData,
-                      nilaiRisiko: parseInt(e.target.value),
+                      nilaiRisiko: parseFloat(e.target.value),
                     })
                   }
                   className="bg-ijoIsiTabel p-2 border rounded-lg"

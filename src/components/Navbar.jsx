@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import { BsFillPersonFill } from "react-icons/bs";
-import { AiOutlineMenu } from "react-icons/ai";
 
 export default function Navbar() {
   const [isMounted, setIsMounted] = useState(false);
@@ -33,16 +32,11 @@ export default function Navbar() {
   }
 
   return (
-    <div
-      className={`fixed top-0 pl-[320px] w-full border-b p-6 bg-white z-0 flex md:flex-row justify-between items-start lg:items-center`}
-    >
-      {/* Menu button */}
-      <button className="outline outline-zinc-200 p-2 rounded hover:cursor-pointer hover:bg-zinc-100">
-        <AiOutlineMenu />
-      </button>
+    <div className="fixed top-0 w-full border-b p-6 bg-white z-0 flex justify-between items-center">
+      {/* Other Navbar Content */}
 
-      {/* User Profile Button */}
-      <div className="relative" ref={dropdownRef}>
+      {/* User Profile Button (aligned to the right) */}
+      <div className="relative ml-auto" ref={dropdownRef}>
         <button
           onClick={() => setShowDropdown(!showDropdown)}
           className="rounded-full border text-gray-500 text-4xl p-1 hover:bg-gray-200"
