@@ -4,16 +4,38 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { fetchData } from "@/tools/api";
+import Router from "next/router"; // Import Router untuk menggunakan event
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [loading, setLoading] = useState(false); // State untuk loading
   const router = useRouter();
+
+  useEffect(() => {
+    const handleRouteChangeStart = () => {
+      setLoading(true); // Aktifkan loading saat mulai navigasi
+    };
+
+    const handleRouteChangeComplete = () => {
+      setLoading(false); // Matikan loading saat navigasi selesai
+    };
+
+    Router.events.on("routeChangeStart", handleRouteChangeStart);
+    Router.events.on("routeChangeComplete", handleRouteChangeComplete);
+
+    // Cleanup event listeners
+    return () => {
+      Router.events.off("routeChangeStart", handleRouteChangeStart);
+      Router.events.off("routeChangeComplete", handleRouteChangeComplete);
+    };
+  }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault(); // Mencegah pengiriman formulir default
+    setLoading(true); // Set loading ke true saat proses login dimulai
 
     try {
       const response = await fetchData("/api/auth/login", {
@@ -41,6 +63,8 @@ export default function LoginPage() {
     } catch (error) {
       setError("Login failed. Please check your credentials.");
       console.error("Login error:", error);
+    } finally {
+      setLoading(false); // Set loading ke false setelah proses selesai
     }
   };
 
@@ -114,14 +138,38 @@ export default function LoginPage() {
           {error && <p className="text-red-500">{error}</p>}
           {successMessage && <p className="text-green-500">{successMessage}</p>}
 
-          <button
-            type="submit"
-            className="bg-ijoTebu text-white py-2 px-4 rounded-lg hover:bg-green-400 transition duration-300"
-          >
-            Login
-          </button>
+          {/* Tampilkan loading spinner saat loading */}
+          {loading ? (
+            <div className="flex justify-center items-center mb-4">
+              <div className="loader"></div>
+            </div>
+          ) : (
+            <button
+              type="submit"
+              className="bg-ijoTebu text-white py-2 px-4 rounded-lg hover:bg-green-400 transition duration-300"
+            >
+              Login
+            </button>
+          )}
         </form>
       </div>
+
+      {/* Loading Spinner CSS */}
+      <style jsx>{`
+        .loader {
+          border: 4px solid #f3f3f3; /* Light grey */
+          border-top: 4px solid #3498db; /* Blue */
+          border-radius: 50%;
+          width: 30px;
+          height: 30px;
+          animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 }
