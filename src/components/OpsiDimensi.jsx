@@ -29,9 +29,9 @@ export default function OpsiDimensi() {
       <Link
         href={`/kinerja/${id ? id : ""}/ekonomi`} // Menambahkan ID ke URL jika ada
         className={`${getButtonStyle(
-          `/kinerja/${id ? id : ""}/ekonomi1`
-        )} bg-gray-300 *:p-2 rounded-lg`}
->
+          `/kinerja/${id ? id : ""}/ekonomi`
+        )} p-2 rounded-lg`}
+      >
         Ekonomi
       </Link>
       <Link
