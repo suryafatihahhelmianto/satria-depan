@@ -142,10 +142,10 @@ export default function DataKinerja() {
                   className="bg-ijoIsiTabel p-2 border rounded-lg"
                 >
                   <option value={1}>Sangat Rendah</option>
-                  <option value={2}>Rendah</option>
-                  <option value={3}>Sedang</option>
-                  <option value={4}>Tinggi</option>
-                  <option value={5}>Sangat Tinggi</option>
+                  <option value={0.772}>Rendah</option>
+                  <option value={0.491}>Sedang</option>
+                  <option value={0.3}>Tinggi</option>
+                  <option value={0.2}>Sangat Tinggi</option>
                 </select>
               </td>
               <td className="px-4 py-2">
@@ -271,7 +271,7 @@ export default function DataKinerja() {
             {/* Keuntungan Petani */}
             <FieldInput
               label="Kesenjangan Rantai Pasok"
-              value={formData.untungPetani}
+              value={formData.kesenjanganRantai}
               onChange={(e) =>
                 setFormData({ ...formData, kesenjanganRantai: e.target.value })
               }
