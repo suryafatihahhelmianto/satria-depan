@@ -86,8 +86,11 @@ export default function DataKinerja() {
   const handleCalculate = async () => {
     try {
       const dataToSend = {
+        sesiId,
         formData,
       };
+
+      console.log("ini datatosend: ", formData);
 
       const response = await fetchData("/api/dimensi/ekonomi", {
         method: "POST", // menggunakan POST untuk membuat data baru
@@ -95,7 +98,7 @@ export default function DataKinerja() {
           Authorization: `Bearer ${getCookie("token")}`,
           "Content-Type": "application/json",
         },
-        data: formData,
+        data: dataToSend,
       });
 
       console.log("Response dari server: ", response);
