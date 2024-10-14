@@ -20,7 +20,7 @@ export default function RootLayout({ children }) {
         <div className="flex flex-col w-full">
           <Navbar />
           <Sidebar />
-          <div className="min-h-screen bg-gray-100 px-4 pl-[270px] mt-5">
+          <div className="min-h-screen bg-gray-100 px-4 pl-[320px] mt-5">
             <div className="mt-20">{children}</div>
           </div>
         </div>

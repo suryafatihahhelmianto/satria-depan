@@ -1,4 +1,5 @@
 import React from "react";
+import { AiFillCheckCircle } from "react-icons/ai";
 
 // Komponen FieldInput untuk merender input dan tombol submit
 export default function FieldInput({ label, value, onChange, onSubmit }) {
@@ -14,12 +15,19 @@ export default function FieldInput({ label, value, onChange, onSubmit }) {
         />
       </td>
       <td className="px-4 py-2">
-        <button
+        {/* <button
           type="button"
           onClick={onSubmit}
           className="p-2 rounded bg-green-500"
         >
           ✔️
+        </button> */}
+        <button
+          type="button"
+          onClick={onSubmit}
+          className="p-2 rounded-full text-2xl hover:text-gray-600"
+        >
+          <AiFillCheckCircle />
         </button>
       </td>
     </tr>

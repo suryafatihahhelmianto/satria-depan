@@ -27,9 +27,9 @@ export default function OpsiDimensi() {
         Sumber Daya
       </Link>
       <Link
-        href={`/kinerja/${id ? id : ""}/ekonomi1`} // Menambahkan ID ke URL jika ada
+        href={`/kinerja/${id ? id : ""}/ekonomi`} // Menambahkan ID ke URL jika ada
         className={`${getButtonStyle(
-          `/kinerja/${id ? id : ""}/ekonomi1`
+          `/kinerja/${id ? id : ""}/ekonomi`
         )} p-2 rounded-lg`}
       >
         Ekonomi
