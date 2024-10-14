@@ -1,6 +1,6 @@
 "use client";
 
-import { fetchData } from "@/tools/api";
+import { fetchData, postData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -13,7 +13,7 @@ export default function KinerjaPage() {
   const [isModalOpen, setIsModalOpen] = useState(false); // State untuk mengontrol modal
   const [formData, setFormData] = useState({
     pabrik: "",
-    periode: "",
+    periode: "", // Change this to store the selected year
     batasPengisian: "",
   });
 
@@ -28,11 +28,11 @@ export default function KinerjaPage() {
         },
       });
 
-      console.log("ini response: ", response);
-      console.log("ini data: ", response);
       if (!response) {
         throw new Error("Gagal mengambil daftar sesi");
       }
+
+      console.log("ini response sesi: ", response);
 
       setSessions(response.sesi); // Set data sesi dari API ke state
       setLoading(false);
@@ -47,12 +47,34 @@ export default function KinerjaPage() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-    // Do something with the form data (e.g., send it to the server)
-    console.log(formData);
-    // Close the modal after form submission
-    setIsModalOpen(false);
+
+    console.log("ini data yang mau dikirim: ", JSON.stringify(formData));
+
+    const token = getCookie("token");
+    try {
+      // Kirim data ke API untuk membuat sesi baru
+      // await fetchData("/api/sesi", {
+      //   method: "POST",
+      //   headers: {
+      //     Authorization: `Bearer ${token}`,
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify(formData),
+      // });
+
+      await postData("/api/sesi", formData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      // Reset form dan tutup modal
+      setFormData({ pabrik: "", periode: "", batasPengisian: "" });
+      setIsModalOpen(false);
+      fetchSessions(); // Refresh sesi setelah menambah
+    } catch (error) {
+      console.error("Error creating session: ", error);
+    }
   };
 
   useEffect(() => {
@@ -66,6 +88,13 @@ export default function KinerjaPage() {
   // Jika terjadi error saat fetch data, tampilkan pesan error
   if (error) {
     return <p>{error}</p>;
+  }
+
+  // Generate an array of years for the dropdown
+  const currentYear = new Date().getFullYear();
+  const years = [];
+  for (let i = currentYear - 2; i <= currentYear + 2; i++) {
+    years.push(i);
   }
 
   return (
@@ -124,7 +153,9 @@ export default function KinerjaPage() {
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-8 rounded-lg w-1/3 relative">
-            <h2 className="text-xl font-bold mb-4">Tambah Sesi Kinerja</h2>
+            <h2 className="text-xl font-bold mb-4">
+              Tambah Form Pengukuran Kinerja
+            </h2>
             <form onSubmit={handleFormSubmit}>
               <div className="mb-4">
                 <label className="block text-gray-700">Pilihan Pabrik</label>
@@ -139,16 +170,23 @@ export default function KinerjaPage() {
                 />
               </div>
               <div className="mb-4">
-                <label className="block text-gray-700">Periode</label>
-                <input
-                  type="text"
+                <label className="block text-gray-700">
+                  Periode (Pilih Tahun)
+                </label>
+                <select
                   name="periode"
                   value={formData.periode}
                   onChange={handleInputChange}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                  placeholder="Masukkan periode"
                   required
-                />
+                >
+                  <option value="">Pilih Tahun</option>
+                  {years.map((year) => (
+                    <option key={year} value={year}>
+                      {year}
+                    </option>
+                  ))}
+                </select>
               </div>
               <div className="mb-4">
                 <label className="block text-gray-700">Batas Pengisian</label>
