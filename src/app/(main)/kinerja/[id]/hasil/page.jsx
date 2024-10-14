@@ -40,7 +40,7 @@ export default function LingkunganPage() {
         </div>
 
         {/* Nilai Indeks Table */}
-        <div className="grid grid-cols-2 gap-5 mt-5">
+        {/* <div className="grid grid-cols-2 gap-5 mt-5">
           <table className="min-w-full table-auto border-collapse mt-8">
             <thead>
               <tr>
@@ -71,12 +71,11 @@ export default function LingkunganPage() {
             </tbody>
           </table>
 
-          {/* Kinerja Rantai Pasok */}
           <div className="bg-ijoIsiTabel">
             <h2 className="bg-ijoKepalaTabel">Kinerja Rantai Pasok</h2>
             <p className="text-gray-400 text-center py-20">Nilai Prediksi</p>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
