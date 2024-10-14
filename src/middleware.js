@@ -1,4 +1,4 @@
-// middleware.js
+// // middleware.js
 import { NextResponse } from "next/server";
 
 export function middleware(req) {
@@ -7,13 +7,13 @@ export function middleware(req) {
 
   // TODO buat ngecek udah login apa blm di halaman login
 
-  // const isLoginPage = req.nextUrl.pathname === "/login";
+  const isLoginPage = req.nextUrl.pathname === "/login";
 
-  // console.log("isLoginPage: ", isLoginPage);
+  console.log("isLoginPage: ", isLoginPage);
 
-  // if (token && isLoginPage) {
-  //   return NextResponse.redirect(new URL("/", req.url));
-  // }
+  if (token && isLoginPage) {
+    return NextResponse.redirect(new URL("/", req.url));
+  }
 
   // Jika tidak ada token dan pengguna mencoba mengakses rute selain login, arahkan ke halaman login
   if (!token && req.nextUrl.pathname !== "/login") {
