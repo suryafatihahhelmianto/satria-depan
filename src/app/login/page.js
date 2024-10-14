@@ -52,7 +52,7 @@ export default function LoginPage() {
       document.cookie = `token=${response.token}; path=/; max-age=86400;`;
 
       // Tangani respons sukses
-      setSuccessMessage(response.message);
+      setSuccessMessage("Login Berhasil, Tunggu Sebentar Yaa...");
       // Simpan token atau lakukan tindakan lain setelah login berhasil
       router.push("/kinerja");
 
@@ -63,8 +63,6 @@ export default function LoginPage() {
     } catch (error) {
       setError("Login failed. Please check your credentials.");
       console.error("Login error:", error);
-    } finally {
-      setLoading(false); // Set loading ke false setelah proses selesai
     }
   };
 
@@ -146,9 +144,12 @@ export default function LoginPage() {
           ) : (
             <button
               type="submit"
-              className="bg-ijoTebu text-white py-2 px-4 rounded-lg hover:bg-green-400 transition duration-300"
+              className={`bg-ijoTebu text-white py-2 px-4 rounded-lg hover:bg-green-400 transition duration-300 ${
+                loading ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+              disabled={loading}
             >
-              Login
+              {loading ? "Logging in..." : "Login"}
             </button>
           )}
         </form>
@@ -166,8 +167,12 @@ export default function LoginPage() {
         }
 
         @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
         }
       `}</style>
     </div>

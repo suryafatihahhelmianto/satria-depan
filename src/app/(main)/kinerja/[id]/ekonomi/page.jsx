@@ -5,6 +5,7 @@ import { fetchData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
 import FieldInput from "@/components/FieldInput";
 import { usePathname } from "next/navigation";
+import { AiFillCheckCircle } from "react-icons/ai";
 
 export default function DataKinerja() {
   const pathname = usePathname();
@@ -20,13 +21,12 @@ export default function DataKinerja() {
     rendemenGerbang: 0,
     rendemenNPP: 0,
     rendemenGula: 0,
-    untungPetani: 0,
-    untungBUMDES: 0,
+    kesenjanganRantai: 0,
     hargaAcuan: 0,
     hargaLelang: 0,
     shsTahunIni: 0,
     shsTahunSebel: 0,
-    bagiHasil: 0,
+    returnOE: 0,
   });
 
   const [loading, setLoading] = useState(true);
@@ -50,13 +50,12 @@ export default function DataKinerja() {
         rendemenGerbang: response.rendemenGerbang,
         rendemenNPP: response.rendemenNPP,
         rendemenGula: response.rendemenGula,
-        untungPetani: response.untungPetani,
-        untungBUMDES: response.untungBUMDES,
+        kesenjanganRantai: response.kesenjanganRantai,
         hargaAcuan: response.hargaAcuan,
         hargaLelang: response.hargaLelang,
         shsTahunIni: response.shsTahunIni,
         shsTahunSebel: response.shsTahunSebel,
-        bagiHasil: response.bagiHasil,
+        returnOE: response.returnOE,
       });
       setLoading(false);
     } catch (error) {
@@ -129,14 +128,37 @@ export default function DataKinerja() {
           </thead>
           <tbody className="bg-ijoIsiTabel">
             {/* Tingkat Risiko Rantai Pasok */}
-            <FieldInput
-              label="Tingkat Risiko Rantai Pasok"
-              value={formData.nilaiRisiko}
-              onChange={(e) =>
-                setFormData({ ...formData, nilaiRisiko: e.target.value })
-              }
-              onSubmit={() => handleUpdate("nilaiRisiko", formData.nilaiRisiko)}
-            />
+            <tr>
+              <td className="px-4 py-2">Tingkat Risiko Rantai Pasok</td>
+              <td className="px-4 py-2">
+                <select
+                  value={formData.nilaiRisiko}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      nilaiRisiko: parseInt(e.target.value),
+                    })
+                  }
+                  className="bg-ijoIsiTabel p-2 border rounded-lg"
+                >
+                  <option value={1}>Sangat Rendah</option>
+                  <option value={2}>Rendah</option>
+                  <option value={3}>Sedang</option>
+                  <option value={4}>Tinggi</option>
+                  <option value={5}>Sangat Tinggi</option>
+                </select>
+              </td>
+              <td className="px-4 py-2">
+                <button
+                  onClick={() =>
+                    handleUpdate("nilaiRisiko", formData.nilaiRisiko)
+                  }
+                  className="p-2 rounded-full text-2xl hover:text-gray-600"
+                >
+                  <AiFillCheckCircle></AiFillCheckCircle>
+                </button>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -234,7 +256,7 @@ export default function DataKinerja() {
       </div>
 
       <h2 className="text-red-600 font-bold mt-5">
-        Distribusi Keuntungan yang Adil (E3)
+        Kesenjangan keuntungan pelaku rantai pasok per ton gula (%) (E3)
       </h2>
       <div className="overflow-x-auto mt-4">
         <table className="min-w-full bg-white border rounded-lg shadow-md">
@@ -248,25 +270,13 @@ export default function DataKinerja() {
           <tbody className="bg-ijoIsiTabel">
             {/* Keuntungan Petani */}
             <FieldInput
-              label="Keuntungan Petani"
+              label="Kesenjangan Rantai Pasok"
               value={formData.untungPetani}
               onChange={(e) =>
-                setFormData({ ...formData, untungPetani: e.target.value })
+                setFormData({ ...formData, kesenjanganRantai: e.target.value })
               }
               onSubmit={() =>
-                handleUpdate("untungPetani", formData.untungPetani)
-              }
-            />
-
-            {/* Keuntungan BUMDES */}
-            <FieldInput
-              label="Keuntungan BUMDES"
-              value={formData.untungBUMDES}
-              onChange={(e) =>
-                setFormData({ ...formData, untungBUMDES: e.target.value })
-              }
-              onSubmit={() =>
-                handleUpdate("untungBUMDES", formData.untungBUMDES)
+                handleUpdate("kesenjanganRantai", formData.kesenjanganRantai)
               }
             />
           </tbody>
@@ -286,7 +296,41 @@ export default function DataKinerja() {
           <tbody className="bg-ijoIsiTabel">
             {/* SHS yang Dihasilkan Tahun Ini */}
             <FieldInput
-              label="SHS yang Dihasilkan Tahun Ini"
+              label="Harga Acuan/Referensi"
+              value={formData.hargaAcuan}
+              onChange={(e) =>
+                setFormData({ ...formData, hargaAcuan: e.target.value })
+              }
+              onSubmit={() => handleUpdate("hargaAcuan", formData.hargaAcuan)}
+            />
+
+            {/* SHS yang Dihasilkan Tahun Lalu */}
+            <FieldInput
+              label="Harga Lelang (rata-rata)"
+              value={formData.hargaLelang}
+              onChange={(e) =>
+                setFormData({ ...formData, hargaLelang: e.target.value })
+              }
+              onSubmit={() => handleUpdate("hargaLelang", formData.hargaLelang)}
+            />
+          </tbody>
+        </table>
+      </div>
+
+      <h2 className="text-red-600 font-bold mt-5">Tingkat Ketangkasan (E5)</h2>
+      <div className="overflow-x-auto mt-4">
+        <table className="min-w-full bg-white border rounded-lg shadow-md">
+          <thead className="bg-ijoKepalaTabel">
+            <tr>
+              <th className="px-4 py-2 text-left">Sub Indikator</th>
+              <th className="px-4 py-2 text-left">Data</th>
+              <th className="px-4 py-2 text-left">Status</th>
+            </tr>
+          </thead>
+          <tbody className="bg-ijoIsiTabel">
+            {/* SHS yang Dihasilkan Tahun Ini */}
+            <FieldInput
+              label="Produksi Tahun Ini"
               value={formData.shsTahunIni}
               onChange={(e) =>
                 setFormData({ ...formData, shsTahunIni: e.target.value })
@@ -296,7 +340,7 @@ export default function DataKinerja() {
 
             {/* SHS yang Dihasilkan Tahun Lalu */}
             <FieldInput
-              label="SHS yang Dihasilkan Tahun Lalu"
+              label="Produksi tahun lalu"
               value={formData.shsTahunSebel}
               onChange={(e) =>
                 setFormData({ ...formData, shsTahunSebel: e.target.value })
@@ -323,11 +367,11 @@ export default function DataKinerja() {
             {/* Total Penjualan Gula */}
             <FieldInput
               label="Total Penjualan Gula"
-              value={formData.bagiHasil}
+              value={formData.returnOE}
               onChange={(e) =>
-                setFormData({ ...formData, bagiHasil: e.target.value })
+                setFormData({ ...formData, returnOE: e.target.value })
               }
-              onSubmit={() => handleUpdate("bagiHasil", formData.bagiHasil)}
+              onSubmit={() => handleUpdate("returnOE", formData.returnOE)}
             />
           </tbody>
         </table>
