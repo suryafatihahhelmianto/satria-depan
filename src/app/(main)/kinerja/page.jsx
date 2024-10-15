@@ -4,7 +4,12 @@ import { fetchData, postData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { AiFillEdit, AiFillPlusCircle } from "react-icons/ai";
+import {
+  AiFillDelete,
+  AiFillEdit,
+  AiFillPlusCircle,
+  AiFillRead,
+} from "react-icons/ai";
 
 export default function KinerjaPage() {
   const [sessions, setSessions] = useState([]); // State untuk menyimpan daftar sesi
@@ -112,8 +117,11 @@ export default function KinerjaPage() {
       <table className="min-w-full bg-white border border-gray-200">
         <thead>
           <tr className="bg-gray-200">
+            <th className="py-2 px-4 border-b">Pabrik</th>
             <th className="py-2 px-4 border-b">Periode</th>
-            <th className="py-2 px-4 border-b">Tanggal Mulai</th>
+            <th className="py-2 px-4 border-b">Batas Pengisian</th>
+            <th className="py-2 px-4 border-b">Nilai Kinerja (%)</th>
+            <th className="py-2 px-4 border-b">Status</th>
             <th className="py-2 px-4 border-b">Aksi</th>
           </tr>
         </thead>
@@ -127,19 +135,28 @@ export default function KinerjaPage() {
           ) : (
             sessions.map((session) => (
               <tr key={session.id} className="hover:bg-gray-50 text-center">
+                <td className="py-2 px-4 border-b">{session.pabrik}</td>
                 <td className="py-2 px-4 border-b">
                   {new Date(session.tanggalMulai).getFullYear()}
                 </td>
                 <td className="py-2 px-4 border-b">
-                  {new Date(session.tanggalMulai).toLocaleDateString("id-ID")}
+                  {new Date(session.tanggalSelesai).toLocaleDateString("id-ID")}
                 </td>
+                <td className="py-2 px-4 border-b">{}</td>
+                <td className="py-2 px-4 border-b">{}</td>
                 <td className="py-2 px-4">
                   <Link
-                    className="text-black text-2xl p-2 rounded-lg justify-center flex"
+                    className="text-black text-2xl p-2 rounded-lg justify-center flex gap-2"
                     href={`/kinerja/${session.id}/sumber-daya`}
                   >
                     <h1 className="bg-gray-400 p-2 rounded-lg">
                       <AiFillEdit />
+                    </h1>
+                    <h1 className="bg-gray-400 p-2 rounded-lg">
+                      <AiFillRead />
+                    </h1>
+                    <h1 className="bg-gray-400 p-2 rounded-lg">
+                      <AiFillDelete />
                     </h1>
                   </Link>
                 </td>

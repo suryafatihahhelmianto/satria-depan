@@ -34,9 +34,17 @@ export default function Sidebar() {
 
   // Function to add 'active' styling based on the current route
   const getLinkStyle = (path) => {
-    return pathname === path
-      ? "bg-green-600 text-white font-semibold"
-      : "text-black hover:bg-green-200 hover:text-black";
+    if (path === "/") {
+      // Check if the pathname is exactly "/"
+      return pathname === path
+        ? "bg-green-600 text-white font-semibold"
+        : "text-black hover:bg-green-200 hover:text-black";
+    } else {
+      // For other links, use startsWith
+      return pathname.startsWith(path)
+        ? "bg-green-600 text-white font-semibold"
+        : "text-black hover:bg-green-200 hover:text-black";
+    }
   };
 
   return (

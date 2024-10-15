@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { useState } from 'react';
-import { fetchData } from "../tools/api";
+import { fetchData } from "@/tools/api";
+import { useState } from "react";
 
 export default function Demo() {
   // State for inputs
@@ -57,7 +57,9 @@ export default function Demo() {
   return (
     <div className="text-white min-h-screen bg-gray-100 flex items-center justify-center">
       <div className="bg-ijoWasis p-8 rounded-lg shadow-lg w-full max-w-lg">
-        <h1 className="text-2xl font-bold mb-6 text-center">Form Input Kehilangan Produksi (E2)</h1>
+        <h1 className="text-2xl font-bold mb-6 text-center">
+          Form Input Kehilangan Produksi (E2)
+        </h1>
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Pol ampas */}
           <div>
@@ -109,7 +111,9 @@ export default function Demo() {
 
           {/* Kehilangan rendemen */}
           <div>
-            <label className="block font-bold mb-1">Kehilangan rendemen (%)</label>
+            <label className="block font-bold mb-1">
+              Kehilangan rendemen (%)
+            </label>
           </div>
 
           {/* Rendemen Kebun */}
@@ -178,7 +182,10 @@ export default function Demo() {
 
           {/* Submit Button */}
           <div className="text-center">
-            <button type="submit" className="bg-ijoTebu text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700">
+            <button
+              type="submit"
+              className="bg-ijoTebu text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700"
+            >
               Input Kehilangan Produksi (E2)
             </button>
           </div>
@@ -194,7 +201,9 @@ export default function Demo() {
         {/* Display Kehilangan Rendemen */}
         {!loading && kehilanganRendemen !== null && (
           <div className="mt-6 text-center">
-            <h2 className="text-xl font-bold">Kehilangan Rendemen: {kehilanganRendemen.toFixed(3)}%</h2>
+            <h2 className="text-xl font-bold">
+              Kehilangan Rendemen: {kehilanganRendemen.toFixed(3)}%
+            </h2>
           </div>
         )}
       </div>

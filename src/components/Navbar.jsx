@@ -1,7 +1,12 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
-import { BsFillPersonFill } from "react-icons/bs";
+import Link from "next/link"; // Import Link from Next.js for navigation
+import {
+  BsFillPersonFill,
+  BsFillGearFill,
+  BsBoxArrowRight,
+} from "react-icons/bs"; // Add more icons as needed
 
 export default function Navbar() {
   const [isMounted, setIsMounted] = useState(false);
@@ -47,19 +52,36 @@ export default function Navbar() {
         {/* Dropdown Menu */}
         {showDropdown && (
           <div className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg py-2 z-10">
-            <p className="block px-4 py-2 text-gray-800">Nama Pengguna</p>
+            {/* Biodata Link */}
+            <Link
+              href="/biodata"
+              className="block px-4 py-2 text-gray-800 hover:bg-gray-100 flex items-center"
+            >
+              <BsFillPersonFill className="mr-2" /> Biodata
+            </Link>
+
             <hr />
-            <p className="block px-4 py-2 text-gray-800">Edit Profile</p>
+
+            {/* Pengaturan Link */}
+            <Link
+              href="/pengaturan"
+              className="block px-4 py-2 text-gray-800 hover:bg-gray-100 flex items-center"
+            >
+              <BsFillGearFill className="mr-2" /> Pengaturan
+            </Link>
+
             <hr />
+
+            {/* Logout Button */}
             <button
               onClick={() => {
                 document.cookie =
                   "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
                 window.location.href = "/login";
               }}
-              className="block w-full text-left px-4 py-2 text-red-600 hover:bg-red-100"
+              className="block w-full text-left px-4 py-2 text-red-600 hover:bg-red-100 flex items-center"
             >
-              Logout
+              <BsBoxArrowRight className="mr-2" /> Logout
             </button>
           </div>
         )}
