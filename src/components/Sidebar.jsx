@@ -29,7 +29,7 @@ export default function Sidebar() {
       icon: <AiOutlineBarChart />,
     },
     { name: "Pengukuran Rendemen", path: "/rendemen", icon: <AiFillWarning /> },
-    { name: "Data Pengguna", path: "/pengguna", icon: <AiOutlineUser /> },
+    { name: "Data Pengguna", path: "/admin", icon: <AiOutlineUser /> },
   ];
 
   // Function to add 'active' styling based on the current route
@@ -49,13 +49,15 @@ export default function Sidebar() {
 
   return (
     <div
-      className={`fixed bg-ijoDash text-black h-screen p-5 flex flex-col gap-6 shadow-lg transition-all duration-300 ${
+      className={`fixed bg-ijoDash text-black h-screen p-5 z-50 flex flex-col gap-6 shadow-lg transition-all duration-300 ${
         isCollapsed ? "w-[100px]" : "w-[300px]"
       }`}
     >
       {/* Collapse button */}
       <button onClick={toggleSidebar} className="text-white self-end p-2 mb-4">
-        <AiOutlineMenu size={24} />
+        <h1>
+          <AiOutlineMenu size={24} />
+        </h1>
       </button>
 
       {/* Sidebar Title (Hide when collapsed) */}

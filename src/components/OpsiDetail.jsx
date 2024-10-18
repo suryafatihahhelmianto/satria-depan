@@ -58,7 +58,7 @@ export default function OpsiDetail() {
           `/detail/${id ? id : ""}/hasil`
         )} p-2 rounded-lg`}
       >
-        Hasil
+        Agregat
       </Link>
     </div>
   );

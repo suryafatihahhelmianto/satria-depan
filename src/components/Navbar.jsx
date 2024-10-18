@@ -37,7 +37,7 @@ export default function Navbar() {
   }
 
   return (
-    <div className="fixed top-0 w-full border-b p-6 bg-white z-0 flex justify-between items-center">
+    <div className="fixed top-0 w-full border-b z-50 p-6 bg-white flex justify-between items-center">
       {/* Other Navbar Content */}
 
       {/* User Profile Button (aligned to the right) */}

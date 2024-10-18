@@ -13,37 +13,108 @@ import {
 
 export default function KinerjaPage() {
   const [sessions, setSessions] = useState([]); // State untuk menyimpan daftar sesi
+  const [pabrikNames, setPabrikNames] = useState({});
+
+  const [pabrikList, setPabrikList] = useState([]);
   const [loading, setLoading] = useState(true); // State untuk loading
   const [error, setError] = useState(null); // State untuk menyimpan error jika ada
   const [isModalOpen, setIsModalOpen] = useState(false); // State untuk mengontrol modal
   const [formData, setFormData] = useState({
-    pabrik: "",
-    periode: "", // Change this to store the selected year
+    pabrikId: 0, // Menggunakan pabrikId untuk menghubungkan sesi dengan pabrik
+    periode: "",
     batasPengisian: "",
   });
 
-  const fetchSessions = async () => {
+  const fetchSessionAndPabrikNames = async () => {
     const cookie = getCookie("token");
     try {
-      // Lakukan fetch ke API backend yang menampilkan daftar sesi
       const response = await fetchData("/api/sesi/daftar", {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${cookie}`, // Ambil token dari localStorage
+          Authorization: `Bearer ${cookie}`,
+        },
+      });
+
+      if (response) {
+        setSessions(response.sesi);
+
+        console.log("ini sesi response: ", response.sesi);
+
+        // Ambil nama pabrik untuk setiap sesi
+        const pabrikPromises = response.sesi.map(async (session) => {
+          const pabrikResponse = await fetchData(
+            `/api/pabrik/${session.pabrikGulaId}`,
+            {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${cookie}`,
+              },
+            }
+          );
+          return {
+            id: session.pabrikGulaId,
+            nama: pabrikResponse.namaPabrik, // Sesuaikan dengan struktur response
+          };
+        });
+
+        const pabrikData = await Promise.all(pabrikPromises);
+
+        // Simpan hasil nama pabrik ke state
+        const names = {};
+        pabrikData.forEach((pabrik) => {
+          names[pabrik.id] = pabrik.nama;
+        });
+        setPabrikNames(names);
+      }
+    } catch (error) {
+      console.error("Error fetching session and pabrik names: ", error);
+      setError(error.message); // Set error state
+    } finally {
+      setLoading(false); // Set loading to false in the finally block
+    }
+  };
+
+  // const fetchSessions = async () => {
+  //   const cookie = getCookie("token");
+  //   try {
+  //     const response = await fetchData("/api/sesi/daftar", {
+  //       method: "GET",
+  //       headers: {
+  //         Authorization: `Bearer ${cookie}`, // Ambil token dari localStorage
+  //       },
+  //     });
+
+  //     if (!response) {
+  //       throw new Error("Gagal mengambil daftar sesi");
+  //     }
+
+  //     console.log("ini response sesi: ", response);
+  //     setSessions(response.sesi);
+  //     setLoading(false);
+  //   } catch (err) {
+  //     setError(err.message);
+  //     setLoading(false);
+  //   }
+  // };
+
+  const fetchPabrikList = async () => {
+    const cookie = getCookie("token");
+    try {
+      const response = await fetchData("/api/pabrik", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${cookie}`,
         },
       });
 
       if (!response) {
-        throw new Error("Gagal mengambil daftar sesi");
+        throw new Error("Gagal mengambil daftar pabrik");
       }
 
-      console.log("ini response sesi: ", response);
-
-      setSessions(response.sesi); // Set data sesi dari API ke state
-      setLoading(false);
+      console.log("ini response pabrik: ", response);
+      setPabrikList(response); // Simpan daftar pabrik ke state
     } catch (err) {
       setError(err.message);
-      setLoading(false);
     }
   };
 
@@ -59,38 +130,30 @@ export default function KinerjaPage() {
 
     const token = getCookie("token");
     try {
-      // Kirim data ke API untuk membuat sesi baru
-      // await fetchData("/api/sesi", {
-      //   method: "POST",
-      //   headers: {
-      //     Authorization: `Bearer ${token}`,
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify(formData),
-      // });
-
       await postData("/api/sesi", formData, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
       // Reset form dan tutup modal
-      setFormData({ pabrik: "", periode: "", batasPengisian: "" });
+      setFormData({ pabrikId: 0, periode: "", batasPengisian: "" });
       setIsModalOpen(false);
-      fetchSessions(); // Refresh sesi setelah menambah
+      fetchSessionAndPabrikNames();
+      // fetchSessions(); // Refresh sesi setelah menambah
     } catch (error) {
       console.error("Error creating session: ", error);
     }
   };
 
   useEffect(() => {
-    fetchSessions();
+    // fetchSessions();
+    fetchSessionAndPabrikNames();
+    fetchPabrikList();
   }, []);
 
   if (loading) {
     return <p>Loading...</p>;
   }
 
-  // Jika terjadi error saat fetch data, tampilkan pesan error
   if (error) {
     return <p>{error}</p>;
   }
@@ -135,15 +198,19 @@ export default function KinerjaPage() {
           ) : (
             sessions.map((session) => (
               <tr key={session.id} className="hover:bg-gray-50 text-center">
-                <td className="py-2 px-4 border-b">{session.pabrik}</td>
+                {/* <td className="py-2 px-4 border-b">{session.pabrik}</td> */}
+                <td className="py-2 px-4 border-b">
+                  {pabrikNames[session.pabrikGulaId] ||
+                    "Nama Pabrik Tidak Ditemukan"}
+                </td>
                 <td className="py-2 px-4 border-b">
                   {new Date(session.tanggalMulai).getFullYear()}
                 </td>
                 <td className="py-2 px-4 border-b">
                   {new Date(session.tanggalSelesai).toLocaleDateString("id-ID")}
                 </td>
-                <td className="py-2 px-4 border-b">{}</td>
-                <td className="py-2 px-4 border-b">{}</td>
+                <td className="py-2 px-4 border-b">{/* Nilai Kinerja */}</td>
+                <td className="py-2 px-4 border-b">{/* Status */}</td>
                 <td className="py-2 px-4">
                   <Link
                     className="text-black text-2xl p-2 rounded-lg justify-center flex gap-2"
@@ -168,7 +235,7 @@ export default function KinerjaPage() {
 
       {/* Modal Component */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
           <div className="bg-white p-8 rounded-lg w-1/3 relative">
             <h2 className="text-xl font-bold mb-4">
               Tambah Form Pengukuran Kinerja
@@ -176,15 +243,34 @@ export default function KinerjaPage() {
             <form onSubmit={handleFormSubmit}>
               <div className="mb-4">
                 <label className="block text-gray-700">Pilihan Pabrik</label>
-                <input
-                  type="text"
-                  name="pabrik"
-                  value={formData.pabrik}
+                <select
+                  name="pabrikId" // Mengganti nama menjadi pabrikId
+                  value={formData.pabrikId}
                   onChange={handleInputChange}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                  placeholder="Masukkan pabrik"
                   required
-                />
+                >
+                  <option value="">Pilih Pabrik</option>
+                  {pabrikList?.length > 0 ? (
+                    pabrikList.map((pabrik) => (
+                      <option key={pabrik.id} value={pabrik.id}>
+                        {pabrik.namaPabrik}
+                      </option>
+                    ))
+                  ) : (
+                    <option value="" disabled>
+                      Tidak ada pabrik tersedia
+                    </option>
+                  )}
+                </select>
+
+                {/* Link untuk menambah pabrik baru */}
+                <Link
+                  href="/admin/input-pabrik"
+                  className="mt-2 inline-block text-blue-600 underline"
+                >
+                  Tambah Pabrik Baru
+                </Link>
               </div>
               <div className="mb-4">
                 <label className="block text-gray-700">

@@ -96,8 +96,8 @@ export default function DetailPage() {
     },
     {
       id: 11,
-      indikator: "Nilai Dimensi Sumber Daya Keseluruhan",
-      simbol: "D",
+      indikator: "Total",
+      simbol: "Nilai Indikator Ekonomi",
       nilai: 74.421,
       kategori: "Cukup Berkelanjutan",
     },
@@ -123,7 +123,7 @@ export default function DetailPage() {
               <tr>
                 <th className="px-4 py-2 text-left">Indikator</th>
                 <th className="px-4 py-2 text-left">Simbol</th>
-                <th className="px-4 py-2 text-left">Nilai</th>
+                <th className="px-4 py-2 text-left">Nilai (%)</th>
                 <th className="px-4 py-2 text-left">Kategori</th>
               </tr>
             </thead>

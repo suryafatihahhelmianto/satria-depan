@@ -1,5 +1,3 @@
-// components/SpiderGraph.js
-
 import React from "react";
 import {
   Radar,
@@ -12,7 +10,7 @@ import {
 
 const SpiderGraph = ({ data }) => {
   return (
-    <ResponsiveContainer width="100%" height={300}>
+    <ResponsiveContainer className="-z-30" width="100%" height={300}>
       <RadarChart outerRadius={90} data={data}>
         <PolarGrid />
         <PolarAngleAxis dataKey="subject" />
@@ -20,9 +18,9 @@ const SpiderGraph = ({ data }) => {
         <Radar
           name="Kinerja"
           dataKey="A"
-          stroke="#4CAF50"
-          fill="#4CAF50"
-          fillOpacity={0.6}
+          stroke="#4472c4"
+          strokeWidth={3}
+          fillOpacity={0}
         />
       </RadarChart>
     </ResponsiveContainer>

@@ -10,7 +10,7 @@ export default function LingkunganPage() {
   const sesiId = idMatch ? idMatch[1] : null;
 
   const [instrumenNilai, setInstrumenNilai] = useState({}); // State untuk menyimpan data dari API
-  const [loading, setLoading] = useState(true); // State untuk loading
+  const [loading, setLoading] = useState(false); // State untuk loading
   const [error, setError] = useState(null); // State untuk error
 
   // Fungsi untuk fetch data dari API instrumen-nilai
@@ -28,7 +28,7 @@ export default function LingkunganPage() {
 
   // Memanggil fetchInstrumenNilai saat komponen pertama kali di-mount
   useEffect(() => {
-    fetchInstrumenNilai();
+    // fetchInstrumenNilai();
   }, []);
 
   if (loading) {

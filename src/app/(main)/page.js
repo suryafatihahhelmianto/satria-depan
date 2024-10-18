@@ -3,6 +3,7 @@
 import HistogramChart from "@/components/HistogramChart";
 import SustainabilityIndexChart from "@/components/SustainabilityIndexChart";
 import { fetchData } from "@/tools/api";
+import { getCookie } from "@/tools/getCookie";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
@@ -27,15 +28,25 @@ export default function HomePage() {
   const progressKinerja = 72.45;
 
   const fetchFactories = async () => {
-    const response = await fetchData("/api/pabrik");
+    const cookie = getCookie("token");
+    try {
+      const response = await fetchData("/api/pabrik", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${cookie}`, // Ambil token dari localStorage
+        },
+      });
 
-    console.log("ini pabrik: ", response);
-    setFactories(response);
+      console.log("ini pabrik: ", response);
+      if (response.length > 0) {
+        setSelectedFactory(response[0]); // Set sebagai objek pabrik
+      }
+      setFactories(response);
+    } catch (error) {
+      console.error("Error fetching pabrk", error);
+    }
 
     // Set pabrik yang dipilih default ke pabrik pertama (jika ada)
-    if (response.length > 0) {
-      setSelectedFactory(response[0]); // Set sebagai objek pabrik
-    }
   };
 
   useEffect(() => {
@@ -46,8 +57,8 @@ export default function HomePage() {
     <div className="p-6 bg-gray-100 min-h-screen">
       <div className="flex justify-between">
         <h1 className="text-3xl font-semibold mb-6 text-green-700">
-          Kondisi {selectedFactory ? selectedFactory.namaPabrik : "Pabrik"} saat
-          ini
+          Kondisi Pabrik{" "}
+          {selectedFactory ? selectedFactory.namaPabrik : "Pabrik"} saat ini
         </h1>
         <div className="mb-4 flex justify-end items-center gap-2">
           <label className="block text-lg font-semibold">Pilih Pabrik:</label>
@@ -177,7 +188,7 @@ export default function HomePage() {
         {/* Line Chart for Kinerja */}
         <div className="bg-white p-4 rounded-lg shadow-md">
           <h2 className="text-xl font-semibold mb-2 text-center">
-            Kinerja Rantai Pasok{" "}
+            Kinerja Keberlanjutan Rantai Pasok{" "}
             {selectedFactory ? selectedFactory.namaPabrik : "Pabrik"}
           </h2>
           {/* <SustainabilityIndexChart /> */}
