@@ -1,5 +1,3 @@
-// components/HistogramChart.js
-
 import React from "react";
 import {
   BarChart,
@@ -15,13 +13,21 @@ import {
 const HistogramChart = ({ data }) => {
   return (
     <ResponsiveContainer width="100%" height={300}>
-      <BarChart data={data}>
+      <BarChart
+        data={data}
+        margin={{
+          top: 20,
+          right: 30,
+          left: 20,
+          bottom: 5,
+        }}
+      >
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="year" />
+        <XAxis dataKey="name" />
         <YAxis />
         <Tooltip />
         <Legend />
-        <Bar dataKey="index" fill="#4CAF50" />
+        <Bar dataKey="value" fill="#4CAF50" />
       </BarChart>
     </ResponsiveContainer>
   );

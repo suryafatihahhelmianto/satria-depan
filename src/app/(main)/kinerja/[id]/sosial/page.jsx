@@ -13,45 +13,45 @@ export default function DataSosial() {
   const sesiId = idMatch ? idMatch[1] : null;
 
   const [formData, setFormData] = useState({
-    dukunganKelembagaan: 0,
-    infrastruktur: 0,
-    csr: 0,
-    keluhanLimbah: 0,
-    pkwtMajalengkaIndramayu: 0,
-    pkwtTotal: 0,
-    pkwttMajalengkaIndramayu: 0,
-    pkwttTotal: 0,
+    rantaiPasok: 0,
+    sediaAktivita: 0,
+    tingkatManfaat: 0,
+    tingkatLimbah: 0,
+    tetapMajaIndra: 0,
+    tetapTotal: 0,
+    tidakMajaIndra: 0,
+    tidakTetapTotal: 0,
     luasLahan: 0,
   });
 
   const [loading, setLoading] = useState(false);
 
-  // const fetchSosialData = async () => {
-  //   try {
-  //     const response = await fetchData(`/api/masukkan/sosial/${sesiId}`, {
-  //       method: "GET",
-  //       headers: {
-  //         Authorization: `Bearer ${getCookie("token")}`,
-  //       },
-  //     });
+  const fetchSosialData = async () => {
+    try {
+      const response = await fetchData(`/api/masukkan/sosial/${sesiId}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${getCookie("token")}`,
+        },
+      });
 
-  //     setFormData({
-  //       dukunganKelembagaan: response.dukunganKelembagaan,
-  //       infrastruktur: response.infrastruktur,
-  //       csr: response.csr,
-  //       keluhanLimbah: response.keluhanLimbah,
-  //       penyerapanTenagaKerja: response.penyerapanTenagaKerja,
-  //       pkwtMajalengkaIndramayu: response.pkwtMajalengkaIndramayu,
-  //       pkwtTotal: response.pkwtTotal,
-  //       pkwttMajalengkaIndramayu: response.pkwttMajalengkaIndramayu,
-  //       pkwttTotal: response.pkwttTotal,
-  //       partisipasiStakeholder: response.partisipasiStakeholder,
-  //     });
-  //     setLoading(false);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // };
+      setFormData({
+        rantaiPasok: response.rantaiPasok,
+        sediaAktivita: response.sediaAktivita,
+        tingkatManfaat: response.tingkatManfaat,
+        tingkatLimbah: response.tingkatLimbah,
+        penyerapanTenagaKerja: response.penyerapanTenagaKerja,
+        tetapMajaIndra: response.tetapMajaIndra,
+        tetapTotal: response.tetapTotal,
+        tidakMajaIndra: response.tidakMajaIndra,
+        tidakTetapTotal: response.tidakTetapTotal,
+        partisipasiStakeholder: response.partisipasiStakeholder,
+      });
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   const handleUpdate = async (field, value) => {
     try {
@@ -66,6 +66,7 @@ export default function DataSosial() {
         },
         data,
       });
+      console.log("Update successful");
     } catch (error) {
       console.error("Error updating field: ", error);
     }
@@ -91,7 +92,7 @@ export default function DataSosial() {
   };
 
   useEffect(() => {
-    // fetchSosialData();
+    fetchSosialData();
   }, [sesiId]);
 
   if (loading) {
@@ -120,11 +121,11 @@ export default function DataSosial() {
               </td>
               <td className="px-4 py-2">
                 <select
-                  value={formData.dukunganKelembagaan}
+                  value={formData.rantaiPasok}
                   onChange={(e) =>
                     setFormData({
                       ...formData,
-                      dukunganKelembagaan: parseFloat(e.target.value),
+                      rantaiPasok: parseFloat(e.target.value),
                     })
                   }
                   className="bg-ijoIsiTabel p-2 border rounded-lg"
@@ -139,10 +140,7 @@ export default function DataSosial() {
               <td className="px-4 py-2">
                 <button
                   onClick={() =>
-                    handleUpdate(
-                      "dukunganKelembagaan",
-                      formData.dukunganKelembagaan
-                    )
+                    handleUpdate("rantaiPasok", formData.rantaiPasok)
                   }
                   className="p-2 rounded-full text-2xl hover:text-gray-600"
                 >
@@ -174,11 +172,11 @@ export default function DataSosial() {
               </td>
               <td className="px-4 py-2">
                 <select
-                  value={formData.infrastruktur}
+                  value={formData.sediaAktivita}
                   onChange={(e) =>
                     setFormData({
                       ...formData,
-                      infrastruktur: parseFloat(e.target.value),
+                      sediaAktivita: parseFloat(e.target.value),
                     })
                   }
                   className="bg-ijoIsiTabel p-2 border rounded-lg"
@@ -193,7 +191,7 @@ export default function DataSosial() {
               <td className="px-4 py-2">
                 <button
                   onClick={() =>
-                    handleUpdate("infrastruktur", formData.infrastruktur)
+                    handleUpdate("sediaAktivita", formData.sediaAktivita)
                   }
                   className="p-2 rounded-full text-2xl hover:text-gray-600"
                 >
@@ -205,7 +203,7 @@ export default function DataSosial() {
         </table>
       </div>
 
-      {/* CSR */}
+      {/* tingkatManfaat */}
       <h2 className="text-red-600 font-bold mt-5">
         Manfaat Corporate Social Responsibility bagi Sosial (S3)
       </h2>
@@ -225,11 +223,11 @@ export default function DataSosial() {
               </td>
               <td className="px-4 py-2">
                 <select
-                  value={formData.csr}
+                  value={formData.tingkatManfaat}
                   onChange={(e) =>
                     setFormData({
                       ...formData,
-                      csr: parseFloat(e.target.value),
+                      tingkatManfaat: parseFloat(e.target.value),
                     })
                   }
                   className="bg-ijoIsiTabel p-2 border rounded-lg"
@@ -243,7 +241,9 @@ export default function DataSosial() {
               </td>
               <td className="px-4 py-2">
                 <button
-                  onClick={() => handleUpdate("csr", formData.csr)}
+                  onClick={() =>
+                    handleUpdate("tingkatManfaat", formData.tingkatManfaat)
+                  }
                   className="p-2 rounded-full text-2xl hover:text-gray-600"
                 >
                   <AiFillCheckCircle />
@@ -274,11 +274,11 @@ export default function DataSosial() {
               </td>
               <td className="px-4 py-2">
                 <select
-                  value={formData.keluhanLimbah}
+                  value={formData.tingkatLimbah}
                   onChange={(e) =>
                     setFormData({
                       ...formData,
-                      keluhanLimbah: parseFloat(e.target.value),
+                      tingkatLimbah: parseFloat(e.target.value),
                     })
                   }
                   className="bg-ijoIsiTabel p-2 border rounded-lg"
@@ -293,7 +293,7 @@ export default function DataSosial() {
               <td className="px-4 py-2">
                 <button
                   onClick={() =>
-                    handleUpdate("keluhanLimbah", formData.keluhanLimbah)
+                    handleUpdate("tingkatLimbah", formData.tingkatLimbah)
                   }
                   className="p-2 rounded-full text-2xl hover:text-gray-600"
                 >
@@ -321,59 +321,55 @@ export default function DataSosial() {
           <tbody className="bg-ijoIsiTabel">
             <FieldInput
               label="PKWT Tenaga Kerja Majalengka Indramayu (orang)"
-              value={formData.pkwtMajalengkaIndramayu}
+              value={formData.tetapMajaIndra}
               onChange={(e) =>
                 setFormData({
                   ...formData,
-                  pkwtMajalengkaIndramayu: e.target.value,
+                  tetapMajaIndra: e.target.value,
                 })
               }
               onSubmit={() =>
-                handleUpdate(
-                  "pkwtMajalengkaIndramayu",
-                  formData.pkwtMajalengkaIndramayu
-                )
+                handleUpdate("tetapMajaIndra", formData.tetapMajaIndra)
               }
             />
 
             <FieldInput
               label="PKWT Total (orang)"
-              value={formData.pkwtTotal}
+              value={formData.tetapTotal}
               onChange={(e) =>
                 setFormData({
                   ...formData,
-                  pkwtTotal: e.target.value,
+                  tetapTotal: e.target.value,
                 })
               }
-              onSubmit={() => handleUpdate("pkwtTotal", formData.pkwtTotal)}
+              onSubmit={() => handleUpdate("tetapTotal", formData.tetapTotal)}
             />
             <FieldInput
               label="PKWTT Tenaga Kerja Majalengka Indramayu (orang)"
-              value={formData.pkwttMajalengkaIndramayu}
+              value={formData.tidakMajaIndra}
               onChange={(e) =>
                 setFormData({
                   ...formData,
-                  pkwttMajalengkaIndramayu: e.target.value,
+                  tidakMajaIndra: e.target.value,
                 })
               }
               onSubmit={() =>
-                handleUpdate(
-                  "pkwttMajalengkaIndramayu",
-                  formData.pkwttMajalengkaIndramayu
-                )
+                handleUpdate("tidakMajaIndra", formData.tidakMajaIndra)
               }
             />
 
             <FieldInput
               label="PKWTT Total (orang)"
-              value={formData.pkwttTotal}
+              value={formData.tidakTetapTotal}
               onChange={(e) =>
                 setFormData({
                   ...formData,
-                  pkwttTotal: e.target.value,
+                  tidakTetapTotal: e.target.value,
                 })
               }
-              onSubmit={() => handleUpdate("pkwttTotal", formData.pkwttTotal)}
+              onSubmit={() =>
+                handleUpdate("tidakTetapTotal", formData.tidakTetapTotal)
+              }
             />
           </tbody>
         </table>

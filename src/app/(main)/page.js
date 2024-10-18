@@ -19,10 +19,18 @@ export default function HomePage() {
     setSelectedYear(event.target.value);
   };
 
+  // const dataHistogram = [
+  //   { year: 2022, index: 82 },
+  //   { year: 2023, index: 72.45 },
+  //   { year: 2024, index: 88 },
+  // ];
+
   const dataHistogram = [
-    { year: 2022, index: 82 },
-    { year: 2023, index: 72.45 },
-    { year: 2024, index: 88 },
+    { name: "Index Total", value: 72.45 },
+    { name: "Dimensi Ekonomi", value: 80 },
+    { name: "Dimensi Sosial", value: 65 },
+    { name: "Dimensi Sumber Daya", value: 75 },
+    { name: "Dimensi Lingkungan", value: 70 },
   ];
 
   const progressKinerja = 72.45;
@@ -45,8 +53,6 @@ export default function HomePage() {
     } catch (error) {
       console.error("Error fetching pabrk", error);
     }
-
-    // Set pabrik yang dipilih default ke pabrik pertama (jika ada)
   };
 
   useEffect(() => {
