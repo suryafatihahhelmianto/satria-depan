@@ -28,7 +28,7 @@ export default function LingkunganPage() {
 
   // Memanggil fetchInstrumenNilai saat komponen pertama kali di-mount
   useEffect(() => {
-    // fetchInstrumenNilai();
+    fetchInstrumenNilai();
   }, []);
 
   if (loading) {

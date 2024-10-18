@@ -2,6 +2,7 @@ import { Poppins } from "next/font/google";
 import "../globals.css";
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
+import AppLayout from "@/components/layout/AppLayout";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -19,6 +20,7 @@ export default function RootLayout({ children }) {
       <body className={`${poppins.className}`}>
         <div className="flex flex-col w-full">
           <Navbar />
+          {/* <AppLayout>{children}</AppLayout> */}
           <Sidebar />
           <div className="min-h-screen bg-gray-100 px-4 pl-[320px] mt-5">
             <div className="mt-20">{children}</div>

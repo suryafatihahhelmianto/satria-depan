@@ -4,6 +4,7 @@ import FieldInput from "@/components/FieldInput";
 import OpsiDimensi from "@/components/OpsiDimensi";
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
+import { AiFillCheckCircle } from "react-icons/ai";
 
 export default function SumberDayaPage() {
   const pathname = usePathname();
@@ -11,22 +12,73 @@ export default function SumberDayaPage() {
   const sesiId = idMatch ? idMatch[1] : null;
 
   const [formData, setFormData] = useState({
-    nilaiRisiko: 0,
-    polAmpas: 0,
-    polBlotong: 0,
-    polTetes: 0,
-    rendemenKebun: 0,
-    rendemenGerbang: 0,
-    rendemenNPP: 0,
-    rendemenGula: 0,
-    untungPetani: 0,
-    untungBUMDES: 0,
-    hargaAcuan: 0,
-    hargaLelang: 0,
-    shsTahunIni: 0,
-    shsTahunSebel: 0,
-    bagiHasil: 0,
+    // D1: Kemudahan Akses Sumber Daya Tenaga Kerja
+    kemudahanAkses: 0,
+
+    // D2: Tingkat Luas Tanam TRI
+    luasTanamTahunIni: 0,
+    totalLuasLahan: 0,
+
+    // D3: Kompetensi Tenaga Kerja
+    jamKerjaEfektif: 0,
+    totalJamKerja: 0,
+    jamTerlaksana: 0,
+    jamTotal: 0,
+
+    // D4: Kualitas Bahan Baku
+    produktivitasTebu: 0,
+    rendemenTebu: 0,
+    mbs: 0, // Manis Bersih Segar (ordinal)
+
+    // D5: Overall Recovery
+    overallRecovery: 0,
+
+    // D6: Total Biaya Tenaga Kerja
+    kis: 0, // Kapasitas giling include
+    kes: 0, // Kapasitas giling exclude
+
+    // D7: Tingkat Ratoon Tebu
+    ratoonTebu: 0,
+
+    // D8: Varietas Tebu yang Responsive Terhadap Kondisi Lahan
+    luasBL: 0, // Luas BL
+    luasPST41: 0, // Luas PST 41
+    luasJT49: 0, // Luas JT49
+    totalLuasLahan: 0, // Total luas lahan yang ditanami tahun ini
+
+    // D9: Tingkat Penggunaan Mekanisasi yang Tepat dan Sesuai Kebutuhan
+    tingkatMekanisasi: 0,
+
+    // D10: Teknologi Pengolahan Raw Sugar
+    teknologiPengolahanRawSugar: 0,
   });
+
+  const fetchSDAMData = async () => {
+    try {
+      const response = await fetchData(`/api/masukkan/sdam/${sesiId}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${getCookie("token")}`,
+        },
+      });
+
+      setFormData({
+        rantaiPasok: response.rantaiPasok,
+        sediaAktivita: response.sediaAktivita,
+        tingkatManfaat: response.tingkatManfaat,
+        tingkatLimbah: response.tingkatLimbah,
+        penyerapanTenagaKerja: response.penyerapanTenagaKerja,
+        tetapMajaIndra: response.tetapMajaIndra,
+        tetapTotal: response.tetapTotal,
+        tidakMajaIndra: response.tidakMajaIndra,
+        tidakTetapTotal: response.tidakTetapTotal,
+        partisipasiStakeholder: response.partisipasiStakeholder,
+      });
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   const handleCalculate = async () => {
     try {
@@ -51,6 +103,7 @@ export default function SumberDayaPage() {
 
   return (
     <div className="min-h-screen bg-gray-100 mb-24">
+      {/* D1 */}
       <h2 className="text-red-600 font-bold mt-5">
         Kemudahan Akses Sumber Daya Tenaga Kerja (D1)
       </h2>
@@ -64,19 +117,44 @@ export default function SumberDayaPage() {
             </tr>
           </thead>
           <tbody className="bg-ijoIsiTabel">
-            {/* Tingkat Risiko Rantai Pasok */}
-            <FieldInput
-              label="Kemudahan akses sumber daya tenaga kerja"
-              value={formData.nilaiRisiko}
-              onChange={(e) =>
-                setFormData({ ...formData, nilaiRisiko: e.target.value })
-              }
-              onSubmit={() => handleUpdate("nilaiRisiko", formData.nilaiRisiko)}
-            />
+            <tr>
+              <td className="px-4 py-2">
+                Kemudahan akses sumber daya tenaga kerja (ordinal)
+              </td>
+              <td className="px-4 py-2">
+                <select
+                  value={formData.kemudahanAkses}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      kemudahanAkses: parseFloat(e.target.value),
+                    })
+                  }
+                  className="bg-ijoIsiTabel p-2 border rounded-lg"
+                >
+                  <option value={0.2}>Sangat Rendah</option>
+                  <option value={0.3}>Rendah</option>
+                  <option value={0.491}>Sedang</option>
+                  <option value={0.772}>Tinggi</option>
+                  <option value={1}>Sangat Tinggi</option>
+                </select>
+              </td>
+              <td className="px-4 py-2">
+                <button
+                  onClick={() =>
+                    handleUpdate("kemudahanAkses", formData.kemudahanAkses)
+                  }
+                  className="p-2 rounded-full text-2xl hover:text-gray-600"
+                >
+                  <AiFillCheckCircle />
+                </button>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
 
+      {/* D2 */}
       <h2 className="text-red-600 font-bold mt-5">
         Tingkat Luas Tanam TRI (D2)
       </h2>
@@ -90,19 +168,25 @@ export default function SumberDayaPage() {
             </tr>
           </thead>
           <tbody className="bg-ijoIsiTabel">
-            {/* Kehilangan Pol Ampas */}
             <FieldInput
-              label="Tingkat Luas Tanam TRI (%)"
-              value={formData.polAmpas}
+              label="Luas tanam TRI tahun ini (Ha)"
+              value={formData.luasTanamTahunIni}
               onChange={(e) =>
-                setFormData({ ...formData, polAmpas: e.target.value })
+                setFormData({ ...formData, luasTanamTahunIni: e.target.value })
               }
-              onSubmit={() => handleUpdate("polAmpas", formData.polAmpas)}
+            />
+            <FieldInput
+              label="Total luas lahan yang ditanami tahun ini (Ha)"
+              value={formData.totalLuasLahan}
+              onChange={(e) =>
+                setFormData({ ...formData, totalLuasLahan: e.target.value })
+              }
             />
           </tbody>
         </table>
       </div>
 
+      {/* D3 */}
       <h2 className="text-red-600 font-bold mt-5">
         Kompetensi Tenaga Kerja (D3)
       </h2>
@@ -117,30 +201,39 @@ export default function SumberDayaPage() {
           </thead>
           <tbody className="bg-ijoIsiTabel">
             <FieldInput
-              label="Produktivitas Tenaga Kerja (%)"
-              value={formData.untungPetani}
+              label="Jumlah jam kerja efektif pegawai (hour)"
+              value={formData.jamKerjaEfektif}
               onChange={(e) =>
-                setFormData({ ...formData, untungPetani: e.target.value })
+                setFormData({ ...formData, jamKerjaEfektif: e.target.value })
               }
-              onSubmit={() =>
-                handleUpdate("untungPetani", formData.untungPetani)
+            />
+            <FieldInput
+              label="Total jam kerja pegawai (hour)"
+              value={formData.totalJamKerja}
+              onChange={(e) =>
+                setFormData({ ...formData, totalJamKerja: e.target.value })
               }
             />
 
             <FieldInput
-              label="Jumlah Jam Pelatihan (%)"
-              value={formData.untungBUMDES}
+              label="Jam terlaksana"
+              value={formData.jamTerlaksana}
               onChange={(e) =>
-                setFormData({ ...formData, untungBUMDES: e.target.value })
+                setFormData({ ...formData, jamTerlaksana: e.target.value })
               }
-              onSubmit={() =>
-                handleUpdate("untungBUMDES", formData.untungBUMDES)
+            />
+            <FieldInput
+              label="Jam total"
+              value={formData.jamTotal}
+              onChange={(e) =>
+                setFormData({ ...formData, jamTotal: e.target.value })
               }
             />
           </tbody>
         </table>
       </div>
 
+      {/* D4 */}
       <h2 className="text-red-600 font-bold mt-5">Kualitas Bahan Baku (D4)</h2>
       <div className="overflow-x-auto mt-4">
         <table className="min-w-full bg-white border rounded-lg shadow-md">
@@ -153,39 +246,53 @@ export default function SumberDayaPage() {
           </thead>
           <tbody className="bg-ijoIsiTabel">
             <FieldInput
-              label="Produktivitas Tebu (Ton/Ha"
-              value={formData.shsTahunIni}
+              label="Produktivitas tebu (Ton/Ha)"
+              value={formData.produktivitasTebu}
               onChange={(e) =>
-                setFormData({ ...formData, shsTahunIni: e.target.value })
+                setFormData({ ...formData, produktivitasTebu: e.target.value })
               }
-              onSubmit={() => handleUpdate("shsTahunIni", formData.shsTahunIni)}
             />
-
             <FieldInput
-              label="Rendemen Tebu (%)"
-              value={formData.shsTahunSebel}
+              label="Rendemen tebu (%)"
+              value={formData.rendemenTebu}
               onChange={(e) =>
-                setFormData({ ...formData, shsTahunSebel: e.target.value })
-              }
-              onSubmit={() =>
-                handleUpdate("shsTahunSebel", formData.shsTahunSebel)
+                setFormData({ ...formData, rendemenTebu: e.target.value })
               }
             />
-
-            <FieldInput
-              label="MBS"
-              value={formData.shsTahunSebel}
-              onChange={(e) =>
-                setFormData({ ...formData, shsTahunSebel: e.target.value })
-              }
-              onSubmit={() =>
-                handleUpdate("shsTahunSebel", formData.shsTahunSebel)
-              }
-            />
+            <tr>
+              <td className="px-4 py-2">Manis Bersih Segar (MBS) (range)</td>
+              <td className="px-4 py-2">
+                <select
+                  value={formData.mbs}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      mbs: parseFloat(e.target.value),
+                    })
+                  }
+                  className="bg-ijoIsiTabel p-2 border rounded-lg"
+                >
+                  <option value={0.2}>Sangat Rendah</option>
+                  <option value={0.3}>Rendah</option>
+                  <option value={0.491}>Sedang</option>
+                  <option value={0.772}>Tinggi</option>
+                  <option value={1}>Sangat Tinggi</option>
+                </select>
+              </td>
+              <td className="px-4 py-2">
+                <button
+                  onClick={() => handleUpdate("mbs", formData.mbs)}
+                  className="p-2 rounded-full text-2xl hover:text-gray-600"
+                >
+                  <AiFillCheckCircle />
+                </button>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
 
+      {/* D5 */}
       <h2 className="text-red-600 font-bold mt-5">Overall Recovery (D5)</h2>
       <div className="overflow-x-auto mt-4">
         <table className="min-w-full bg-white border rounded-lg shadow-md">
@@ -199,17 +306,19 @@ export default function SumberDayaPage() {
           <tbody className="bg-ijoIsiTabel">
             <FieldInput
               label="Overall Recovery (%)"
-              value={formData.bagiHasil}
+              value={formData.overallRecovery}
               onChange={(e) =>
-                setFormData({ ...formData, bagiHasil: e.target.value })
+                setFormData({ ...formData, overallRecovery: e.target.value })
               }
-              onSubmit={() => handleUpdate("bagiHasil", formData.bagiHasil)}
             />
           </tbody>
         </table>
       </div>
 
-      <h2 className="text-red-600 font-bold mt-5">Kecukupan Bahan Baku (D6)</h2>
+      {/* D6 */}
+      <h2 className="text-red-600 font-bold mt-5">
+        Total Biaya Tenaga Kerja (D6)
+      </h2>
       <div className="overflow-x-auto mt-4">
         <table className="min-w-full bg-white border rounded-lg shadow-md">
           <thead className="bg-ijoKepalaTabel">
@@ -219,36 +328,224 @@ export default function SumberDayaPage() {
               <th className="px-4 py-2 text-left">Status</th>
             </tr>
           </thead>
-
           <tbody className="bg-ijoIsiTabel">
             <FieldInput
-              label="KIS (TCD)"
-              value={formData.bagiHasil}
+              label="KIS (Kapasitas giling include)"
+              value={formData.kis}
               onChange={(e) =>
-                setFormData({ ...formData, bagiHasil: e.target.value })
+                setFormData({
+                  ...formData,
+                  kis: e.target.value,
+                })
               }
-              onSubmit={() => handleUpdate("bagiHasil", formData.bagiHasil)}
             />
-
             <FieldInput
-              label="KES (TCD)"
-              value={formData.bagiHasil}
+              label="KES (Kapasitas giling exclude)"
+              value={formData.kes}
               onChange={(e) =>
-                setFormData({ ...formData, bagiHasil: e.target.value })
+                setFormData({ ...formData, kes: e.target.value })
               }
-              onSubmit={() => handleUpdate("bagiHasil", formData.bagiHasil)}
             />
           </tbody>
         </table>
       </div>
 
-      <div className="text-center mt-6">
+      {/* D7 */}
+      <h2 className="text-red-600 font-bold mt-5">Tingkat Ratoon Tebu (D7)</h2>
+      <div className="overflow-x-auto mt-4">
+        <table className="min-w-full bg-white border rounded-lg shadow-md">
+          <thead className="bg-ijoKepalaTabel">
+            <tr>
+              <th className="px-4 py-2 text-left">Sub Indikator</th>
+              <th className="px-4 py-2 text-left">Data</th>
+              <th className="px-4 py-2 text-left">Status</th>
+            </tr>
+          </thead>
+          <tbody className="bg-ijoIsiTabel">
+            <FieldInput
+              label="Tingkat Ratoon Tebu"
+              value={formData.ratoonTebu}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  ratoonTebu: e.target.value,
+                })
+              }
+            />
+          </tbody>
+        </table>
+      </div>
+
+      {/* D8 */}
+      <h2 className="text-red-600 font-bold mt-5">
+        Varietas Tebu yang Responsive Terhadap Kondisi Lahan (D8)
+      </h2>
+      <div className="overflow-x-auto mt-4">
+        <table className="min-w-full bg-white border rounded-lg shadow-md">
+          <thead className="bg-ijoKepalaTabel">
+            <tr>
+              <th className="px-4 py-2 text-left">Sub Indikator</th>
+              <th className="px-4 py-2 text-left">Data</th>
+              <th className="px-4 py-2 text-left">Status</th>
+            </tr>
+          </thead>
+          <tbody className="bg-ijoIsiTabel">
+            <FieldInput
+              label="Luas BL"
+              value={formData.luasBL}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  luasBL: e.target.value,
+                })
+              }
+            />
+            <FieldInput
+              label="Luas PST 41"
+              value={formData.luasPST41}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  luasPST41: e.target.value,
+                })
+              }
+            />
+            <FieldInput
+              label="Luas JT49"
+              value={formData.luasJT49}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  luasJT49: e.target.value,
+                })
+              }
+            />
+            <FieldInput
+              label="Total Luas Lahan yang Ditanami Tahun Ini"
+              value={formData.totalLuasLahan}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  totalLuasLahan: e.target.value,
+                })
+              }
+            />
+          </tbody>
+        </table>
+      </div>
+
+      {/* D9 */}
+      <h2 className="text-red-600 font-bold mt-5">
+        Tingkat Penggunaan Mekanisasi yang Tepat dan Sesuai Kebutuhan (D9)
+      </h2>
+      <div className="overflow-x-auto mt-4">
+        <table className="min-w-full bg-white border rounded-lg shadow-md">
+          <thead className="bg-ijoKepalaTabel">
+            <tr>
+              <th className="px-4 py-2 text-left">Sub Indikator</th>
+              <th className="px-4 py-2 text-left">Data</th>
+              <th className="px-4 py-2 text-left">Status</th>
+            </tr>
+          </thead>
+          <tbody className="bg-ijoIsiTabel">
+            <tr>
+              <td className="px-4 py-2">
+                Tingkat Penggunaan Mekanisasi yang Tepat dan Sesuai Kebutuhan
+              </td>
+              <td className="px-4 py-2">
+                <select
+                  value={formData.tingkatMekanisasi}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      tingkatMekanisasi: parseFloat(e.target.value),
+                    })
+                  }
+                  className="bg-ijoIsiTabel p-2 border rounded-lg"
+                >
+                  <option value={0.2}>Sangat Rendah</option>
+                  <option value={0.3}>Rendah</option>
+                  <option value={0.491}>Sedang</option>
+                  <option value={0.772}>Tinggi</option>
+                  <option value={1}>Sangat Tinggi</option>
+                </select>
+              </td>
+              <td className="px-4 py-2">
+                <button
+                  onClick={() =>
+                    handleUpdate(
+                      "tingkatMekanisasi",
+                      formData.tingkatMekanisasi
+                    )
+                  }
+                  className="p-2 rounded-full text-2xl hover:text-gray-600"
+                >
+                  <AiFillCheckCircle />
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      {/* D10 */}
+      <h2 className="text-red-600 font-bold mt-5">
+        Teknologi Pengolahan Raw Sugar (D10)
+      </h2>
+      <div className="overflow-x-auto mt-4">
+        <table className="min-w-full bg-white border rounded-lg shadow-md">
+          <thead className="bg-ijoKepalaTabel">
+            <tr>
+              <th className="px-4 py-2 text-left">Sub Indikator</th>
+              <th className="px-4 py-2 text-left">Data</th>
+              <th className="px-4 py-2 text-left">Status</th>
+            </tr>
+          </thead>
+          <tbody className="bg-ijoIsiTabel">
+            <tr>
+              <td className="px-4 py-2">Teknologi Pengolahan Raw Sugar</td>
+              <td className="px-4 py-2">
+                <select
+                  value={formData.teknologiPengolahanRawSugar}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      teknologiPengolahanRawSugar: parseFloat(e.target.value),
+                    })
+                  }
+                  className="bg-ijoIsiTabel p-2 border rounded-lg"
+                >
+                  <option value={0.2}>Sangat Rendah</option>
+                  <option value={0.3}>Rendah</option>
+                  <option value={0.491}>Sedang</option>
+                  <option value={0.772}>Tinggi</option>
+                  <option value={1}>Sangat Tinggi</option>
+                </select>
+              </td>
+              <td className="px-4 py-2">
+                <button
+                  onClick={() =>
+                    handleUpdate(
+                      "teknologiPengolahanRawSugar",
+                      formData.teknologiPengolahanRawSugar
+                    )
+                  }
+                  className="p-2 rounded-full text-2xl hover:text-gray-600"
+                >
+                  <AiFillCheckCircle />
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div className="mt-6">
         <button
-          type="button"
           onClick={handleCalculate}
-          className="bg-green-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-800"
+          className="bg-blue-500 text-white py-2 px-4 rounded-md"
         >
-          Hitung
+          Submit Data
         </button>
       </div>
     </div>

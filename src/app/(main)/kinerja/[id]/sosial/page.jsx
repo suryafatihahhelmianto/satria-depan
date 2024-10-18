@@ -22,6 +22,7 @@ export default function DataSosial() {
     tidakMajaIndra: 0,
     tidakTetapTotal: 0,
     luasLahan: 0,
+    luasLahanYangDitanami: 0,
   });
 
   const [loading, setLoading] = useState(false);
@@ -45,7 +46,8 @@ export default function DataSosial() {
         tetapTotal: response.tetapTotal,
         tidakMajaIndra: response.tidakMajaIndra,
         tidakTetapTotal: response.tidakTetapTotal,
-        partisipasiStakeholder: response.partisipasiStakeholder,
+        luasLahan: response.luasLahan,
+        luasLahanYangDitanami: response.luasLahanYangDitanami,
       });
       setLoading(false);
     } catch (error) {
@@ -396,6 +398,23 @@ export default function DataSosial() {
                 setFormData({ ...formData, luasLahan: e.target.value })
               }
               onSubmit={() => handleUpdate("luasLahan", formData.luasLahan)}
+            />
+
+            <FieldInput
+              label="Total Luas Lahan yang Ditanami Tahun Ini (Ha)"
+              value={formData.luasLahanYangDitanami}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  luasLahanYangDitanami: e.target.value,
+                })
+              }
+              onSubmit={() =>
+                handleUpdate(
+                  "luasLahanYangDitanami",
+                  formData.luasLahanYangDitanami
+                )
+              }
             />
           </tbody>
         </table>

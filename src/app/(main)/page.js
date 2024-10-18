@@ -8,29 +8,45 @@ import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css"; // Import CSS untuk Circular Progress Bar
+import DatePicker from "react-datepicker"; // Import the DatePicker component
+import "react-datepicker/dist/react-datepicker.css"; // Import DatePicker CSS
 
 export default function HomePage() {
   const [selectedYear, setSelectedYear] = useState(2023);
   const [factories, setFactories] = useState([]);
   const [selectedFactory, setSelectedFactory] = useState({});
   const [sustainabilityData, setSustainabilityData] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(new Date()); // State for the selected date
 
   const handleYearChange = (event) => {
     setSelectedYear(event.target.value);
   };
 
-  // const dataHistogram = [
-  //   { year: 2022, index: 82 },
-  //   { year: 2023, index: 72.45 },
-  //   { year: 2024, index: 88 },
-  // ];
-
   const dataHistogram = [
-    { name: "Index Total", value: 72.45 },
-    { name: "Dimensi Ekonomi", value: 80 },
-    { name: "Dimensi Sosial", value: 65 },
-    { name: "Dimensi Sumber Daya", value: 75 },
-    { name: "Dimensi Lingkungan", value: 70 },
+    {
+      year: 2022,
+      "Index Total": 72.45,
+      "Dimensi Ekonomi": 80,
+      "Dimensi Sosial": 65,
+      "Dimensi Lingkungan": 70,
+      "Dimensi Sumber Daya": 75,
+    },
+    {
+      year: 2023,
+      "Index Total": 75,
+      "Dimensi Ekonomi": 85,
+      "Dimensi Sosial": 68,
+      "Dimensi Lingkungan": 72,
+      "Dimensi Sumber Daya": 78,
+    },
+    {
+      year: 2024,
+      "Index Total": 78,
+      "Dimensi Ekonomi": 88,
+      "Dimensi Sosial": 70,
+      "Dimensi Lingkungan": 74,
+      "Dimensi Sumber Daya": 80,
+    },
   ];
 
   const progressKinerja = 72.45;
@@ -51,7 +67,7 @@ export default function HomePage() {
       }
       setFactories(response);
     } catch (error) {
-      console.error("Error fetching pabrk", error);
+      console.error("Error fetching pabrik", error);
     }
   };
 
@@ -91,32 +107,6 @@ export default function HomePage() {
           </div>
         </div>
       </div>
-
-      {/* <div className="mb-4">
-        <label
-          htmlFor="factory-select"
-          className="block text-lg font-semibold mb-2"
-        >
-          Pilih Pabrik:
-        </label>
-        <select
-          id="factory-select"
-          value={selectedFactory ? selectedFactory.id : ""}
-          onChange={(e) => {
-            const factory = factories.find(
-              (f) => f.id === Number(e.target.value)
-            );
-            setSelectedFactory(factory);
-          }}
-          className="border border-gray-300 rounded-md p-2"
-        >
-          {factories.map((factory) => (
-            <option key={factory.id} value={factory.id}>
-              {factory.namaPabrik}
-            </option>
-          ))}
-        </select>
-      </div> */}
 
       {/* Main Grid */}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
@@ -165,26 +155,34 @@ export default function HomePage() {
           </p>
         </div>
 
-        {/* Calendar */}
+        {/* Inline Calendar */}
         <div className="bg-white p-4 rounded-lg shadow-md">
-          <h2 className="text-xl font-semibold mb-2 text-center">Calendar</h2>
           <div className="flex justify-center">
-            <h1>nanti ini calender</h1>
+            <DatePicker
+              selected={selectedDate}
+              onChange={(date) => setSelectedDate(date)}
+              inline // Makes the calendar always visible
+              dateFormat="dd/MM/yyyy"
+              className="border border-gray-300 rounded-md p-2"
+            />
           </div>
         </div>
 
         {/* Circular Progress for SDM */}
-        <div className="bg-white p-4 rounded-lg shadow-md flex flex-col items-center">
-          <div className="w-32 h-32 mb-2">
-            <CircularProgressbar
-              value={6}
-              text={`${6}%`}
-              styles={buildStyles({
-                pathColor: "#4CAF50",
-                textColor: "#4CAF50",
-                trailColor: "#d6d6d6",
-              })}
-            />
+        <div className="bg-white p-4 rounded-lg shadow-md flex flex-col items-center justify-center">
+          <div className="mb-2 flex flex-col gap-2">
+            <div className="w-32 h-32 mb-2">
+              <CircularProgressbar
+                value={6}
+                text={`${6}%`}
+                styles={buildStyles({
+                  pathColor: "#4CAF50",
+                  textColor: "#4CAF50",
+                  trailColor: "#d6d6d6",
+                })}
+              />
+            </div>
+            <h2 className="text-xl font-semibold mb-2 text-center">Rendemen</h2>
           </div>
         </div>
       </div>
@@ -197,7 +195,6 @@ export default function HomePage() {
             Kinerja Keberlanjutan Rantai Pasok{" "}
             {selectedFactory ? selectedFactory.namaPabrik : "Pabrik"}
           </h2>
-          {/* <SustainabilityIndexChart /> */}
           <HistogramChart data={dataHistogram} />
         </div>
 
