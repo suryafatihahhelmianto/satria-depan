@@ -5,8 +5,8 @@ import { AiFillCheckCircle } from "react-icons/ai";
 export default function FieldInput({ label, value, onChange, onSubmit }) {
   return (
     <tr className="border-b">
-      <td className="px-4 py-2">{label}</td>
-      <td className="px-4 py-2">
+      <td className="px-4 py-2 border border-black">{label}</td>
+      <td className="px-4 py-2 border border-black">
         <input
           type="number"
           value={value}
@@ -14,7 +14,7 @@ export default function FieldInput({ label, value, onChange, onSubmit }) {
           className="p-2 bg-ijoIsiTabel"
         />
       </td>
-      <td className="px-4 py-2">
+      <td className="px-4 py-2 border border-black text-center">
         {/* <button
           type="button"
           onClick={onSubmit}

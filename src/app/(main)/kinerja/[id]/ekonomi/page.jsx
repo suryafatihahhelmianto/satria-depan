@@ -124,16 +124,20 @@ export default function DataKinerja() {
         <table className="min-w-full bg-white border rounded-lg shadow-md">
           <thead className="bg-ijoKepalaTabel">
             <tr>
-              <th className="px-4 py-2 text-left">Sub Indikator</th>
-              <th className="px-4 py-2 text-left">Data</th>
-              <th className="px-4 py-2 text-left">Status</th>
+              <th className="px-4 py-2 w-1/3 border border-black">
+                Sub Indikator
+              </th>
+              <th className="px-4 py-2 w-1/2 border border-black">Data</th>
+              <th className="px-4 py-2 w-1/4 border border-black">Status</th>
             </tr>
           </thead>
           <tbody className="bg-ijoIsiTabel">
             {/* Tingkat Risiko Rantai Pasok */}
             <tr>
-              <td className="px-4 py-2">Tingkat Risiko Rantai Pasok</td>
-              <td className="px-4 py-2">
+              <td className="px-4 py-2 border border-black">
+                Tingkat Risiko Rantai Pasok
+              </td>
+              <td className="px-4 py-2 border border-black">
                 <select
                   value={formData.nilaiRisiko}
                   onChange={(e) =>
@@ -151,7 +155,7 @@ export default function DataKinerja() {
                   <option value={0.2}>Sangat Tinggi</option>
                 </select>
               </td>
-              <td className="px-4 py-2">
+              <td className="px-4 py-2 border border-black text-center">
                 <button
                   onClick={() =>
                     handleUpdate("nilaiRisiko", formData.nilaiRisiko)
@@ -173,9 +177,11 @@ export default function DataKinerja() {
         <table className="min-w-full bg-white border rounded-lg shadow-md">
           <thead className="bg-ijoKepalaTabel">
             <tr>
-              <th className="px-4 py-2 text-left">Sub Indikator</th>
-              <th className="px-4 py-2 text-left">Data</th>
-              <th className="px-4 py-2 text-left">Status</th>
+              <th className="px-4 py-2 w-1/3 border border-black">
+                Sub Indikator
+              </th>
+              <th className="px-4 py-2 w-1/2 border border-black">Data</th>
+              <th className="px-4 py-2 w-1/4 border border-black">Status</th>
             </tr>
           </thead>
           <tbody className="bg-ijoIsiTabel">
@@ -265,9 +271,11 @@ export default function DataKinerja() {
         <table className="min-w-full bg-white border rounded-lg shadow-md">
           <thead className="bg-ijoKepalaTabel">
             <tr>
-              <th className="px-4 py-2 text-left">Sub Indikator</th>
-              <th className="px-4 py-2 text-left">Data</th>
-              <th className="px-4 py-2 text-left">Status</th>
+              <th className="px-4 py-2 w-1/3 border border-black">
+                Sub Indikator
+              </th>
+              <th className="px-4 py-2 w-1/2 border border-black">Data</th>
+              <th className="px-4 py-2 w-1/4 border border-black">Status</th>
             </tr>
           </thead>
           <tbody className="bg-ijoIsiTabel">
@@ -291,9 +299,11 @@ export default function DataKinerja() {
         <table className="min-w-full bg-white border rounded-lg shadow-md">
           <thead className="bg-ijoKepalaTabel">
             <tr>
-              <th className="px-4 py-2 text-left">Sub Indikator</th>
-              <th className="px-4 py-2 text-left">Data</th>
-              <th className="px-4 py-2 text-left">Status</th>
+              <th className="px-4 py-2 w-1/3 border border-black">
+                Sub Indikator
+              </th>
+              <th className="px-4 py-2 w-1/2 border border-black">Data</th>
+              <th className="px-4 py-2 w-1/4 border border-black">Status</th>
             </tr>
           </thead>
           <tbody className="bg-ijoIsiTabel">
@@ -325,9 +335,11 @@ export default function DataKinerja() {
         <table className="min-w-full bg-white border rounded-lg shadow-md">
           <thead className="bg-ijoKepalaTabel">
             <tr>
-              <th className="px-4 py-2 text-left">Sub Indikator</th>
-              <th className="px-4 py-2 text-left">Data</th>
-              <th className="px-4 py-2 text-left">Status</th>
+              <th className="px-4 py-2 w-1/3 border border-black">
+                Sub Indikator
+              </th>
+              <th className="px-4 py-2 w-1/2 border border-black">Data</th>
+              <th className="px-4 py-2 w-1/4 border border-black">Status</th>
             </tr>
           </thead>
           <tbody className="bg-ijoIsiTabel">
@@ -361,9 +373,11 @@ export default function DataKinerja() {
         <table className="min-w-full bg-white border rounded-lg shadow-md">
           <thead className="bg-ijoKepalaTabel">
             <tr>
-              <th className="px-4 py-2 text-left">Sub Indikator</th>
-              <th className="px-4 py-2 text-left">Data</th>
-              <th className="px-4 py-2 text-left">Status</th>
+              <th className="px-4 py-2 w-1/3 border border-black">
+                Sub Indikator
+              </th>
+              <th className="px-4 py-2 w-1/2 border border-black">Data</th>
+              <th className="px-4 py-2 w-1/4 border border-black">Status</th>
             </tr>
           </thead>
           <tbody className="bg-ijoIsiTabel">

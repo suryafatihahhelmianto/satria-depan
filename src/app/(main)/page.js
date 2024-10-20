@@ -112,14 +112,14 @@ export default function HomePage() {
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         {/* Circular Progress for Kinerja */}
         <div className="bg-white p-4 rounded-lg shadow-md flex flex-col items-center">
-          <div className="flex w-full">
-            <Link
-              href={"/detail/sumber-daya"}
-              className="mb-2 font-semibold text-xl bg-gray-300 px-2 rounded-lg"
-            >
-              Detail
-            </Link>
-          </div>
+          {/* <div className="flex w-full"> */}
+          <Link
+            href={"/detail/sumber-daya"}
+            className="mb-2 font-semibold text-xl bg-gray-300 px-2 rounded-lg"
+          >
+            Detail
+          </Link>
+          {/* </div> */}
           <div className="w-32 h-32 mb-2">
             <CircularProgressbar
               value={progressKinerja}
@@ -131,7 +131,7 @@ export default function HomePage() {
               })}
             />
           </div>
-          <p className="text-gray-700 font-semibold">Kinerja</p>
+          {/* <p className="text-gray-700 font-semibold">Kinerja</p> */}
         </div>
 
         {/* Status Data */}

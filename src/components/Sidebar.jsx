@@ -54,11 +54,9 @@ export default function Sidebar() {
       }`}
     >
       {/* Collapse button */}
-      {/* <button onClick={toggleSidebar} className="text-white self-end p-2 mb-4">
+      <button onClick={toggleSidebar} className="text-white self-end p-2 mb-4">
         <AiOutlineMenu size={24} />
-      </button> */}
-
-      {/* <AiOutlineMenu /> */}
+      </button>
 
       {/* Sidebar Title (Hide when collapsed) */}
       {!isCollapsed && (

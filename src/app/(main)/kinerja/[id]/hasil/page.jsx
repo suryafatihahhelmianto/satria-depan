@@ -63,7 +63,8 @@ export default function LingkunganPage() {
                       Sumber Daya
                     </td>
                     <td className="border border-gray-300 px-4 py-2">
-                      {instrumenNilai.nilaiDimenSDAM || "Data tidak tersedia"}
+                      {instrumenNilai.nilaiDimenSDAM?.toFixed(1) ||
+                        "Data tidak tersedia"}
                     </td>
                   </tr>
                   <tr className="bg-ijoIsiTabel">
@@ -71,7 +72,8 @@ export default function LingkunganPage() {
                       Ekonomi
                     </td>
                     <td className="border border-gray-300 px-4 py-2">
-                      {instrumenNilai.nilaiDimenEkono || "Data tidak tersedia"}
+                      {instrumenNilai.nilaiDimenEkono?.toFixed(1) ||
+                        "Data tidak tersedia"}
                     </td>
                   </tr>
                   <tr className="bg-ijoIsiTabel">
@@ -79,13 +81,15 @@ export default function LingkunganPage() {
                       Lingkungan
                     </td>
                     <td className="border border-gray-300 px-4 py-2">
-                      {instrumenNilai.nilaiDimenLingku || "Data tidak tersedia"}
+                      {instrumenNilai.nilaiDimenLingku?.toFixed(1) ||
+                        "Data tidak tersedia"}
                     </td>
                   </tr>
                   <tr className="bg-ijoIsiTabel">
                     <td className="border border-gray-300 px-4 py-2">Sosial</td>
                     <td className="border border-gray-300 px-4 py-2">
-                      {instrumenNilai.nilaiDimenSosial || "Data tidak tersedia"}
+                      {instrumenNilai.nilaiDimenSosial?.toFixed(1) ||
+                        "Data tidak tersedia"}
                     </td>
                   </tr>
                 </>
