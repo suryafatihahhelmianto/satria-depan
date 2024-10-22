@@ -281,7 +281,7 @@ export default function DataKinerja() {
           <tbody className="bg-ijoIsiTabel">
             {/* Keuntungan Petani */}
             <FieldInput
-              label="Kesenjangan Rantai Pasok"
+              label="Kesenjangan Keuntungan Stakeholder Rantai Pasok"
               value={formData.kesenjanganRantai}
               onChange={(e) =>
                 setFormData({ ...formData, kesenjanganRantai: e.target.value })
