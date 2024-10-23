@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { fetchData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
-import FieldInput from "@/components/FieldInput";
+import KinerjaTable from "@/components/table/KinerjaTable"; // Import the KinerjaTable component
 import { usePathname } from "next/navigation";
 import { AiFillCheckCircle } from "react-icons/ai";
 
@@ -36,19 +36,7 @@ export default function DataSosial() {
         },
       });
 
-      setFormData({
-        rantaiPasok: response.rantaiPasok,
-        sediaAktivita: response.sediaAktivita,
-        tingkatManfaat: response.tingkatManfaat,
-        tingkatLimbah: response.tingkatLimbah,
-        penyerapanTenagaKerja: response.penyerapanTenagaKerja,
-        tetapMajaIndra: response.tetapMajaIndra,
-        tetapTotal: response.tetapTotal,
-        tidakMajaIndra: response.tidakMajaIndra,
-        tidakTetapTotal: response.tidakTetapTotal,
-        luasLahan: response.luasLahan,
-        luasLahanYangDitanami: response.luasLahanYangDitanami,
-      });
+      setFormData(response);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -101,324 +89,161 @@ export default function DataSosial() {
     return <div>Loading...</div>;
   }
 
+  // Define the rows for each table
+  const rowsS1 = [
+    {
+      label: "Dukungan Kelembagaan Terhadap Rantai Pasok",
+      inputType: "select",
+      value: formData.rantaiPasok,
+      options: [
+        { value: 0.2, label: "Sangat Rendah" },
+        { value: 0.3, label: "Rendah" },
+        { value: 0.491, label: "Sedang" },
+        { value: 0.772, label: "Tinggi" },
+        { value: 1, label: "Sangat Tinggi" },
+      ],
+      onChange: (e) =>
+        setFormData({ ...formData, rantaiPasok: parseFloat(e.target.value) }),
+      onSubmit: () => handleUpdate("rantaiPasok", formData.rantaiPasok),
+    },
+  ];
+
+  const rowsS2 = [
+    {
+      label: "Ketersediaan Infrastruktur Sebagai Penunjang Aktivitas",
+      inputType: "select",
+      value: formData.sediaAktivita,
+      options: [
+        { value: 0.2, label: "Sangat Rendah" },
+        { value: 0.3, label: "Rendah" },
+        { value: 0.491, label: "Sedang" },
+        { value: 0.772, label: "Tinggi" },
+        { value: 1, label: "Sangat Tinggi" },
+      ],
+      onChange: (e) =>
+        setFormData({ ...formData, sediaAktivita: parseFloat(e.target.value) }),
+      onSubmit: () => handleUpdate("sediaAktivita", formData.sediaAktivita),
+    },
+  ];
+
+  const rowsS3 = [
+    {
+      label: "Manfaat Corporate Social Responsibility Bagi Sosial",
+      inputType: "select",
+      value: formData.tingkatManfaat,
+      options: [
+        { value: 0.2, label: "Sangat Rendah" },
+        { value: 0.3, label: "Rendah" },
+        { value: 0.491, label: "Sedang" },
+        { value: 0.772, label: "Tinggi" },
+        { value: 1, label: "Sangat Tinggi" },
+      ],
+      onChange: (e) =>
+        setFormData({
+          ...formData,
+          tingkatManfaat: parseFloat(e.target.value),
+        }),
+      onSubmit: () => handleUpdate("tingkatManfaat", formData.tingkatManfaat),
+    },
+  ];
+
+  const rowsS4 = [
+    {
+      label: "Keluhan Limbah Rantai Pasok Industri",
+      inputType: "select",
+      value: formData.tingkatLimbah,
+      options: [
+        { value: 1, label: "Sangat Rendah" },
+        { value: 0.772, label: "Rendah" },
+        { value: 0.491, label: "Sedang" },
+        { value: 0.3, label: "Tinggi" },
+        { value: 0.2, label: "Sangat Tinggi" },
+      ],
+      onChange: (e) =>
+        setFormData({ ...formData, tingkatLimbah: parseFloat(e.target.value) }),
+      onSubmit: () => handleUpdate("tingkatLimbah", formData.tingkatLimbah),
+    },
+  ];
+
+  const rowsS5 = [
+    {
+      label: "PKWT Tenaga Kerja Majalengka Indramayu (orang)",
+      inputType: "text",
+      value: formData.tetapMajaIndra,
+      onChange: (e) =>
+        setFormData({ ...formData, tetapMajaIndra: e.target.value }),
+      onSubmit: () => handleUpdate("tetapMajaIndra", formData.tetapMajaIndra),
+    },
+    {
+      label: "PKWT Total (orang)",
+      inputType: "text",
+      value: formData.tetapTotal,
+      onChange: (e) => setFormData({ ...formData, tetapTotal: e.target.value }),
+      onSubmit: () => handleUpdate("tetapTotal", formData.tetapTotal),
+    },
+    {
+      label: "PKWTT Tenaga Kerja Majalengka Indramayu (orang)",
+      inputType: "text",
+      value: formData.tidakMajaIndra,
+      onChange: (e) =>
+        setFormData({ ...formData, tidakMajaIndra: e.target.value }),
+      onSubmit: () => handleUpdate("tidakMajaIndra", formData.tidakMajaIndra),
+    },
+    {
+      label: "PKWTT Total (orang)",
+      inputType: "text",
+      value: formData.tidakTetapTotal,
+      onChange: (e) =>
+        setFormData({ ...formData, tidakTetapTotal: e.target.value }),
+      onSubmit: () => handleUpdate("tidakTetapTotal", formData.tidakTetapTotal),
+    },
+  ];
+
+  const rowsS6 = [
+    {
+      label: "Luas Lahan yang Avalist Tahun Ini (Ha)",
+      inputType: "text",
+      value: formData.luasLahan,
+      onChange: (e) => setFormData({ ...formData, luasLahan: e.target.value }),
+      onSubmit: () => handleUpdate("luasLahan", formData.luasLahan),
+    },
+    {
+      label: "Total Luas Lahan yang Ditanami Tahun Ini (Ha)",
+      inputType: "text",
+      value: formData.luasLahanYangDitanami,
+      onChange: (e) =>
+        setFormData({
+          ...formData,
+          luasLahanYangDitanami: e.target.value,
+        }),
+      onSubmit: () =>
+        handleUpdate("luasLahanYangDitanami", formData.luasLahanYangDitanami),
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-gray-100 mb-24">
-      <h2 className="text-red-600 font-bold mt-5">
-        Dukungan Kelembagaan terhadap Rantai Pasok Agroindustri (S1)
-      </h2>
-      <div className="overflow-x-auto mt-4">
-        <table className="min-w-full bg-white border rounded-lg shadow-md">
-          <thead className="bg-ijoKepalaTabel">
-            <tr>
-              <th className="px-4 py-2 text-left">Sub Indikator</th>
-              <th className="px-4 py-2 text-left">Data</th>
-              <th className="px-4 py-2 text-left">Status</th>
-            </tr>
-          </thead>
-          <tbody className="bg-ijoIsiTabel">
-            {/* Dukungan Kelembagaan */}
-            <tr>
-              <td className="px-4 py-2">
-                Dukungan Kelembagaan Terhadap Rantai Pasok
-              </td>
-              <td className="px-4 py-2">
-                <select
-                  value={formData.rantaiPasok}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      rantaiPasok: parseFloat(e.target.value),
-                    })
-                  }
-                  className="bg-ijoIsiTabel p-2 border rounded-lg"
-                >
-                  <option value={0.2}>Sangat Rendah</option>
-                  <option value={0.3}>Rendah</option>
-                  <option value={0.491}>Sedang</option>
-                  <option value={0.772}>Tinggi</option>
-                  <option value={1}>Sangat Tinggi</option>
-                </select>
-              </td>
-              <td className="px-4 py-2">
-                <button
-                  onClick={() =>
-                    handleUpdate("rantaiPasok", formData.rantaiPasok)
-                  }
-                  className="p-2 rounded-full text-2xl hover:text-gray-600"
-                >
-                  <AiFillCheckCircle />
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      {/* Ketersediaan Infrastruktur */}
-      <h2 className="text-red-600 font-bold mt-5">
-        Ketersediaan Infrastruktur sebagai Penunjang Aktivitas (S2)
-      </h2>
-      <div className="overflow-x-auto mt-4">
-        <table className="min-w-full bg-white border rounded-lg shadow-md">
-          <thead className="bg-ijoKepalaTabel">
-            <tr>
-              <th className="px-4 py-2 text-left">Sub Indikator</th>
-              <th className="px-4 py-2 text-left">Data</th>
-              <th className="px-4 py-2 text-left">Status</th>
-            </tr>
-          </thead>
-          <tbody className="bg-ijoIsiTabel">
-            <tr>
-              <td className="px-4 py-2">
-                Ketersediaan Infrastruktur Sebagai Penunjang Aktivitas
-              </td>
-              <td className="px-4 py-2">
-                <select
-                  value={formData.sediaAktivita}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      sediaAktivita: parseFloat(e.target.value),
-                    })
-                  }
-                  className="bg-ijoIsiTabel p-2 border rounded-lg"
-                >
-                  <option value={0.2}>Sangat Rendah</option>
-                  <option value={0.3}>Rendah</option>
-                  <option value={0.491}>Sedang</option>
-                  <option value={0.772}>Tinggi</option>
-                  <option value={1}>Sangat Tinggi</option>
-                </select>
-              </td>
-              <td className="px-4 py-2">
-                <button
-                  onClick={() =>
-                    handleUpdate("sediaAktivita", formData.sediaAktivita)
-                  }
-                  className="p-2 rounded-full text-2xl hover:text-gray-600"
-                >
-                  <AiFillCheckCircle />
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      {/* tingkatManfaat */}
-      <h2 className="text-red-600 font-bold mt-5">
-        Manfaat Corporate Social Responsibility bagi Sosial (S3)
-      </h2>
-      <div className="overflow-x-auto mt-4">
-        <table className="min-w-full bg-white border rounded-lg shadow-md">
-          <thead className="bg-ijoKepalaTabel">
-            <tr>
-              <th className="px-4 py-2 text-left">Sub Indikator</th>
-              <th className="px-4 py-2 text-left">Data</th>
-              <th className="px-4 py-2 text-left">Status</th>
-            </tr>
-          </thead>
-          <tbody className="bg-ijoIsiTabel">
-            <tr>
-              <td className="px-4 py-2">
-                Manfaat Corporate Social Responsibility Bagi Sosial
-              </td>
-              <td className="px-4 py-2">
-                <select
-                  value={formData.tingkatManfaat}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      tingkatManfaat: parseFloat(e.target.value),
-                    })
-                  }
-                  className="bg-ijoIsiTabel p-2 border rounded-lg"
-                >
-                  <option value={0.2}>Sangat Rendah</option>
-                  <option value={0.3}>Rendah</option>
-                  <option value={0.491}>Sedang</option>
-                  <option value={0.772}>Tinggi</option>
-                  <option value={1}>Sangat Tinggi</option>
-                </select>
-              </td>
-              <td className="px-4 py-2">
-                <button
-                  onClick={() =>
-                    handleUpdate("tingkatManfaat", formData.tingkatManfaat)
-                  }
-                  className="p-2 rounded-full text-2xl hover:text-gray-600"
-                >
-                  <AiFillCheckCircle />
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      {/* Keluhan Limbah */}
-      <h2 className="text-red-600 font-bold mt-5">
-        Keluhan Limbah Rantai Pasok Industri (S4)
-      </h2>
-      <div className="overflow-x-auto mt-4">
-        <table className="min-w-full bg-white border rounded-lg shadow-md">
-          <thead className="bg-ijoKepalaTabel">
-            <tr>
-              <th className="px-4 py-2 text-left">Sub Indikator</th>
-              <th className="px-4 py-2 text-left">Data</th>
-              <th className="px-4 py-2 text-left">Status</th>
-            </tr>
-          </thead>
-          <tbody className="bg-ijoIsiTabel">
-            <tr>
-              <td className="px-4 py-2">
-                Keluhan Limbah Rantai Pasok Industri
-              </td>
-              <td className="px-4 py-2">
-                <select
-                  value={formData.tingkatLimbah}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      tingkatLimbah: parseFloat(e.target.value),
-                    })
-                  }
-                  className="bg-ijoIsiTabel p-2 border rounded-lg"
-                >
-                  <option value={1}>Sangat Rendah</option>
-                  <option value={0.772}>Rendah</option>
-                  <option value={0.491}>Sedang</option>
-                  <option value={0.3}>Tinggi</option>
-                  <option value={0.2}>Sangat Tinggi</option>
-                </select>
-              </td>
-              <td className="px-4 py-2">
-                <button
-                  onClick={() =>
-                    handleUpdate("tingkatLimbah", formData.tingkatLimbah)
-                  }
-                  className="p-2 rounded-full text-2xl hover:text-gray-600"
-                >
-                  <AiFillCheckCircle />
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      {/* S5 */}
-      <h2 className="text-red-600 font-bold mt-5">
-        Penyerapan Tenaga Kerja Lokal (S5)
-      </h2>
-      <div className="overflow-x-auto mt-4">
-        <table className="min-w-full bg-white border rounded-lg shadow-md">
-          <thead className="bg-ijoKepalaTabel">
-            <tr>
-              <th className="px-4 py-2 text-left">Sub Indikator</th>
-              <th className="px-4 py-2 text-left">Data</th>
-              <th className="px-4 py-2 text-left">Status</th>
-            </tr>
-          </thead>
-          <tbody className="bg-ijoIsiTabel">
-            <FieldInput
-              label="PKWT Tenaga Kerja Majalengka Indramayu (orang)"
-              value={formData.tetapMajaIndra}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  tetapMajaIndra: e.target.value,
-                })
-              }
-              onSubmit={() =>
-                handleUpdate("tetapMajaIndra", formData.tetapMajaIndra)
-              }
-            />
-
-            <FieldInput
-              label="PKWT Total (orang)"
-              value={formData.tetapTotal}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  tetapTotal: e.target.value,
-                })
-              }
-              onSubmit={() => handleUpdate("tetapTotal", formData.tetapTotal)}
-            />
-            <FieldInput
-              label="PKWTT Tenaga Kerja Majalengka Indramayu (orang)"
-              value={formData.tidakMajaIndra}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  tidakMajaIndra: e.target.value,
-                })
-              }
-              onSubmit={() =>
-                handleUpdate("tidakMajaIndra", formData.tidakMajaIndra)
-              }
-            />
-
-            <FieldInput
-              label="PKWTT Total (orang)"
-              value={formData.tidakTetapTotal}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  tidakTetapTotal: e.target.value,
-                })
-              }
-              onSubmit={() =>
-                handleUpdate("tidakTetapTotal", formData.tidakTetapTotal)
-              }
-            />
-          </tbody>
-        </table>
-      </div>
-
-      {/* S6 */}
-      <h2 className="text-red-600 font-bold mt-5">
-        Peningkatan Keikutsertaan Stakeholder Kemitraan (S6)
-      </h2>
-      <div className="overflow-x-auto mt-4">
-        <table className="min-w-full bg-white border rounded-lg shadow-md">
-          <thead className="bg-ijoKepalaTabel">
-            <tr>
-              <th className="px-4 py-2 text-left">Sub Indikator</th>
-              <th className="px-4 py-2 text-left">Data</th>
-              <th className="px-4 py-2 text-left">Status</th>
-            </tr>
-          </thead>
-          <tbody className="bg-ijoIsiTabel">
-            <FieldInput
-              label="Luas Lahan yang Avalist Tahun Ini (Ha)"
-              value={formData.luasLahan}
-              onChange={(e) =>
-                setFormData({ ...formData, luasLahan: e.target.value })
-              }
-              onSubmit={() => handleUpdate("luasLahan", formData.luasLahan)}
-            />
-
-            <FieldInput
-              label="Total Luas Lahan yang Ditanami Tahun Ini (Ha)"
-              value={formData.luasLahanYangDitanami}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  luasLahanYangDitanami: e.target.value,
-                })
-              }
-              onSubmit={() =>
-                handleUpdate(
-                  "luasLahanYangDitanami",
-                  formData.luasLahanYangDitanami
-                )
-              }
-            />
-          </tbody>
-        </table>
-      </div>
+      <KinerjaTable
+        title="Dukungan Kelembagaan terhadap Rantai Pasok Agroindustri (S1)"
+        rows={rowsS1}
+      />
+      <KinerjaTable
+        title="Ketersediaan Infrastruktur sebagai Penunjang Aktivitas (S2)"
+        rows={rowsS2}
+      />
+      <KinerjaTable
+        title="Manfaat Corporate Social Responsibility bagi Sosial (S3)"
+        rows={rowsS3}
+      />
+      <KinerjaTable
+        title="Keluhan Limbah Rantai Pasok Industri (S4)"
+        rows={rowsS4}
+      />
+      <KinerjaTable title="Penyerapan Tenaga Kerja Lokal (S5)" rows={rowsS5} />
+      <KinerjaTable
+        title="Peningkatan Keikutsertaan Stakeholder Kemitraan (S6)"
+        rows={rowsS6}
+      />
 
       <div className="text-center mt-6">
         <button

@@ -30,7 +30,6 @@ export default function DataKinerja() {
 
   const [loading, setLoading] = useState(true);
 
-  // Fetch economic data
   const fetchEkonomi = async () => {
     try {
       const response = await fetchData(`/api/masukkan/ekonomi/${sesiId}`, {
@@ -66,10 +65,7 @@ export default function DataKinerja() {
 
   const handleCalculate = async () => {
     try {
-      const dataToSend = {
-        sesiId,
-        formData,
-      };
+      const dataToSend = { sesiId, formData };
       const response = await fetchData("/api/dimensi/ekonomi", {
         method: "POST",
         headers: {
@@ -92,10 +88,11 @@ export default function DataKinerja() {
     return <div>Loading...</div>;
   }
 
+  // Define rows for KinerjaTable
   const rowsE1 = [
     {
       label: "Tingkat Risiko Rantai Pasok",
-      inputType: "dropdown",
+      inputType: "select",
       value: formData.nilaiRisiko,
       options: [
         { value: 1, label: "Sangat Rendah" },
@@ -104,9 +101,11 @@ export default function DataKinerja() {
         { value: 0.3, label: "Tinggi" },
         { value: 0.2, label: "Sangat Tinggi" },
       ],
-      onChange: (e) =>
-        setFormData({ ...formData, nilaiRisiko: parseFloat(e.target.value) }),
-      onSubmit: () => handleUpdate("nilaiRisiko", formData.nilaiRisiko),
+      onChange: (e) => {
+        const newValue = parseFloat(e.target.value);
+        setFormData({ ...formData, nilaiRisiko: newValue });
+        handleUpdate("nilaiRisiko", newValue); // Update immediately on change
+      },
     },
   ];
 
