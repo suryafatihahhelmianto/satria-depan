@@ -5,19 +5,27 @@ export function middleware(req) {
   // Dapatkan cookies dari request
   const token = req.cookies.get("token");
 
-  // TODO buat ngecek udah login apa blm di halaman login
+  const currentPath = req.nextUrl.pathname;
 
-  const isLoginPage = req.nextUrl.pathname === "/login";
+  // Tentukan apakah pengguna sedang berada di halaman login atau landing
+  const isLoginPage = currentPath === "/login";
+  const isLandingPage = currentPath === "/landing";
 
+  console.log("currentPath: ", currentPath);
   console.log("isLoginPage: ", isLoginPage);
+  console.log("isLandingPage: ", isLandingPage);
 
-  if (token && isLoginPage) {
+  if (token && (isLoginPage || isLandingPage)) {
     return NextResponse.redirect(new URL("/", req.url));
   }
 
   // Jika tidak ada token dan pengguna mencoba mengakses rute selain login, arahkan ke halaman login
-  if (!token && req.nextUrl.pathname !== "/login") {
-    return NextResponse.redirect(new URL("/login", req.url));
+  if (
+    !token &&
+    req.nextUrl.pathname !== "/login" &&
+    currentPath !== "/landing"
+  ) {
+    return NextResponse.redirect(new URL("/landing", req.url));
   }
 
   // Jika sudah login, izinkan akses ke halaman lain

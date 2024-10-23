@@ -6,22 +6,6 @@ import React, { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { fetchData } from "@/tools/api";
 
-// {
-//   label: "Pengukuran 1",
-//   inputType: "dropdown",
-//   value: formData.nilaiRisiko,
-//   options: [
-//     { label: "Sangat Rendah", value: 1 },
-//     { label: "Rendah", value: 0.772 },
-//     { label: "Sedang", value: 0.491 },
-//     { label: "Tinggi", value: 0.3 },
-//     { label: "Sangat Tinggi", value: 0.2 },
-//   ],
-//   onChange: (e) =>
-//     handleInputChange("nilaiRisiko", parseFloat(e.target.value)),
-//   onSubmit: () => handleUpdate("nilaiRisiko", formData.nilaiRisiko),
-// },
-
 export default function LingkunganPage() {
   const pathname = usePathname();
   const idMatch = pathname.match(/\/kinerja\/([a-zA-Z0-9]+)/);

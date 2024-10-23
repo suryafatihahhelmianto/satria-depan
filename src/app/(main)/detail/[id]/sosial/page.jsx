@@ -22,120 +22,125 @@ export default function DetailPage() {
     returnOE: 0,
   });
 
-  const dataSumberDaya = [
+  const dataSosial = [
     {
       id: 1,
-      indikator: "Kemudahan Akses Sumber Daya Tenaga Kerja",
-      simbol: "D1",
-      nilai: 0.892,
+      indikator: "Kesejahteraan Masyarakat Sekitar",
+      simbol: "S1",
+      nilai: 0.765,
       kategori: "Berkelanjutan",
     },
     {
       id: 2,
-      indikator: "Tingkat Luas Tanam TRI",
-      simbol: "D2",
-      nilai: 0.345,
+      indikator: "Partisipasi Masyarakat dalam Pengambilan Keputusan",
+      simbol: "S2",
+      nilai: 0.523,
       kategori: "Cukup Berkelanjutan",
     },
     {
       id: 3,
-      indikator: "Kompetensi Tenaga Kerja",
-      simbol: "D3",
-      nilai: 0.321,
+      indikator: "Hubungan Sosial antara Pekerja dan Masyarakat",
+      simbol: "S3",
+      nilai: 0.672,
       kategori: "Berkelanjutan",
     },
     {
       id: 4,
-      indikator: "Kualitas Bahan Baku",
-      simbol: "D4",
-      nilai: 0.983,
+      indikator: "Peran Serta Lembaga Sosial",
+      simbol: "S4",
+      nilai: 0.434,
       kategori: "Tidak Berkelanjutan",
     },
     {
       id: 5,
-      indikator: "Overall Recovery",
-      simbol: "D5",
-      nilai: 0.292,
-      kategori: "Cukup Berkelanjutan",
+      indikator: "Akses terhadap Fasilitas Pendidikan",
+      simbol: "S5",
+      nilai: 0.893,
+      kategori: "Berkelanjutan",
     },
     {
       id: 6,
-      indikator: "Kecukupan Bahan Baku",
-      simbol: "D6",
-      nilai: 0.929,
+      indikator: "Tingkat Kesehatan Masyarakat",
+      simbol: "S6",
+      nilai: 0.786,
       kategori: "Berkelanjutan",
     },
     {
       id: 7,
-      indikator: "Tingkat Ratoon Tebu",
-      simbol: "D7",
-      nilai: 0.299,
+      indikator: "Tanggung Jawab Sial Perusahaan (CSR)",
+      simbol: "S7",
+      nilai: 0.91,
       kategori: "Berkelanjutan",
     },
     {
       id: 8,
-      indikator: "Varietas Tebu yang Responsif Terhadap Kondisi Lahan",
-      simbol: "D8",
-      nilai: 0.929,
+      indikator: "Keadilan Gender dan Kesetaraan",
+      simbol: "S8",
+      nilai: 0.62,
       kategori: "Cukup Berkelanjutan",
     },
     {
       id: 9,
-      indikator:
-        "Tingkat Penggunaan Mekanisasi yang Tepat dan Sesuai Kebutuhan",
-      simbol: "D9",
-      nilai: 0.922,
-      kategori: "Berkelanjutan",
+      indikator: "Pengelolaan Konflik Sial",
+      simbol: "S9",
+      nilai: 0.542,
+      kategori: "Cukup Berkelanjutan",
     },
     {
       id: 10,
-      indikator: "Teknologi Pengolahan Raw Sugar",
-      simbol: "D10",
-      nilai: 0.822,
+      indikator: "Penghormatan terhadap Budaya Lokal",
+      simbol: "S10",
+      nilai: 0.75,
       kategori: "Berkelanjutan",
-    },
-    {
-      id: 11,
-      indikator: "Nilai Dimensi Sumber Daya Keseluruhan",
-      simbol: "D",
-      nilai: 74.421,
-      kategori: "Cukup Berkelanjutan",
     },
   ];
 
-  const dataSpider = [
-    { subject: "E1", A: 60 },
-    { subject: "E2", A: 75 },
-    { subject: "E3", A: 90 },
-    { subject: "E4", A: 85 },
-    { subject: "E5", A: 70 },
-    { subject: "E6", A: 70 },
+  const dataSpiderSosial = [
+    { subject: "S1", A: 76.5 },
+    { subject: "S2", A: 52.3 },
+    { subject: "S3", A: 67.2 },
+    { subject: "S4", A: 43.4 },
+    { subject: "S5", A: 89.3 },
+    { subject: "S6", A: 78.6 },
+    { subject: "S7", A: 91.0 },
+    { subject: "S8", A: 62.0 },
+    { subject: "S9", A: 54.2 },
+    { subject: "S10", A: 75.0 },
   ];
 
   return (
     <div>
       <OpsiDetail />
-      <SpiderGraph data={dataSpider} />
+      <SpiderGraph data={dataSpiderSosial} />
       <div className="min-h-screen bg-gray-100 mb-24">
         <div className="overflow-x-auto mt-4">
+          {/* <div className="flex justify-center mb-4">
+            <div className="bg-ijoIsiTabel p-4 border border-black">
+              <h1>Berkelanjutan</h1>
+            </div>
+          </div> */}
           <table className="min-w-full bg-white border rounded-lg shadow-md">
             <thead className="bg-ijoKepalaTabel">
               <tr>
                 <th className="px-4 py-2 text-left">Indikator</th>
                 <th className="px-4 py-2 text-left">Simbol</th>
                 <th className="px-4 py-2 text-left">Nilai</th>
-                <th className="px-4 py-2 text-left">Kategori</th>
               </tr>
             </thead>
             <tbody className="bg-ijoIsiTabel">
-              {dataSumberDaya.map((data) => (
+              {dataSosial.map((data) => (
                 <tr key={data.id}>
                   <td className="px-4 py-2">{data.indikator}</td>
                   <td className="px-4 py-2">{data.simbol}</td>
                   <td className="px-4 py-2">{data.nilai}</td>
-                  <td className="px-4 py-2">{data.kategori}</td>
                 </tr>
               ))}
+              <tr>
+                <td className="px-4 py-2 font-bold" colSpan={2}>
+                  Total Nilai Dimensi Sosial
+                </td>
+                <td className="px-4 py-2 font-bold">73.2</td>
+              </tr>
             </tbody>
           </table>
         </div>

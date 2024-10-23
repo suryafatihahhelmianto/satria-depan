@@ -5,6 +5,7 @@ import SustainabilityIndexChart from "@/components/SustainabilityIndexChart";
 import { fetchData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css"; // Import CSS untuk Circular Progress Bar
@@ -17,6 +18,8 @@ export default function HomePage() {
   const [selectedFactory, setSelectedFactory] = useState({});
   const [sustainabilityData, setSustainabilityData] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date()); // State for the selected date
+
+  const router = useRouter();
 
   const handleYearChange = (event) => {
     setSelectedYear(event.target.value);
@@ -71,6 +74,34 @@ export default function HomePage() {
     }
   };
 
+  const fetchSesiPengisian = async () => {
+    try {
+      const response = await fetchData(
+        `/api/sesi/sesiByPabrikId?tahun=${selectedYear}&pabrikId=${selectedFactory.id}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${getCookie("token")}`,
+          },
+        }
+      );
+
+      return response.id;
+    } catch (error) {
+      console.error("Error fetching sesi pengisian:", error);
+    }
+  };
+
+  const handleDetailClick = async () => {
+    const sesiPengisianId = await fetchSesiPengisian();
+    if (sesiPengisianId) {
+      // Navigate to the detail page with the sesiPengisianId
+      router.push(`/detail/${sesiPengisianId}/sumber-daya`);
+    } else {
+      alert("Sesi pengisian tidak ditemukan");
+    }
+  };
+
   useEffect(() => {
     fetchFactories();
   }, []);
@@ -113,12 +144,13 @@ export default function HomePage() {
         {/* Circular Progress for Kinerja */}
         <div className="bg-white p-4 rounded-lg shadow-md flex flex-col items-center">
           {/* <div className="flex w-full"> */}
-          <Link
-            href={"/detail/sumber-daya"}
+          <button
+            // href={"/detail/sumber-daya"}
+            onClick={handleDetailClick}
             className="mb-2 font-semibold text-xl bg-gray-300 px-2 rounded-lg"
           >
             Detail
-          </Link>
+          </button>
           {/* </div> */}
           <div className="w-32 h-32 mb-2">
             <CircularProgressbar
@@ -193,7 +225,8 @@ export default function HomePage() {
         <div className="bg-white p-4 rounded-lg shadow-md">
           <h2 className="text-xl font-semibold mb-2 text-center">
             Kinerja Keberlanjutan Rantai Pasok{" "}
-            {selectedFactory ? selectedFactory.namaPabrik : "Pabrik"}
+            {selectedFactory ? selectedFactory.namaPabrik : "Pabrik"}{" "}
+            {selectedYear}
           </h2>
           <HistogramChart data={dataHistogram} />
         </div>

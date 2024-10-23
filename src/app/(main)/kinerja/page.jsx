@@ -161,7 +161,7 @@ export default function KinerjaPage() {
   // Generate an array of years for the dropdown
   const currentYear = new Date().getFullYear();
   const years = [];
-  for (let i = currentYear - 2; i <= currentYear + 2; i++) {
+  for (let i = currentYear - 3; i <= currentYear + 1; i++) {
     years.push(i);
   }
 

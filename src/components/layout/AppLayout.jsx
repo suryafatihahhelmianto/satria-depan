@@ -1,20 +1,25 @@
 "use client";
 
-// AppLayout.jsx
-import dynamic from "next/dynamic";
-
-// Dynamically import Sidebar without SSR
-const Sidebar = dynamic(() => import("../Sidebar"), { ssr: false });
+import { useState } from "react";
+import Navbar from "../Navbar";
+import Sidebar from "../Sidebar";
 
 export default function AppLayout({ children }) {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+
   return (
     <div className="flex">
-      {/* Sidebar */}
-      <Sidebar />
+      <Navbar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+      <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
-      {/* Main content area */}
-      <div className="min-h-screen bg-gray-100 px-4 pl-[320px] mt-5 w-full">
-        <div className="mt-20">{children}</div>
+      <div
+        className={`transition-all duration-300 w-full ${
+          isSidebarOpen ? "lg:ml-[300px]" : "lg:ml-[100px]"
+        } mt-24`}
+      >
+        {children}
       </div>
     </div>
   );

@@ -6,10 +6,8 @@ import React from "react";
 
 export default function OpsiDetail() {
   const pathname = usePathname();
-  //   const idMatch = pathname.match(/\/detail\/([a-zA-Z0-9]+)/); // Menangkap ID yang ada setelah /detail/
-  //   const id = idMatch ? idMatch[1] : null; // Ambil ID jika ada
-
-  const id = "";
+  const idMatch = pathname.match(/\/detail\/([a-zA-Z0-9]+)/); // Menangkap ID yang ada setelah /detail/
+  const id = idMatch ? idMatch[1] : null; // Ambil ID jika ada
 
   // Memperbarui fungsi getButtonStyle untuk memeriksa apakah pathname mengandung path yang relevan
   const getButtonStyle = (path) => {

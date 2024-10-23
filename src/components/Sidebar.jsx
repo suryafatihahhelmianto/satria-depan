@@ -11,14 +11,14 @@ import {
   AiOutlineMenu, // Icon for the collapse button
 } from "react-icons/ai";
 
-export default function Sidebar() {
+export default function Sidebar({ isOpen, toggleSidebar }) {
   const pathname = usePathname();
-  const [isCollapsed, setIsCollapsed] = useState(false); // State to control collapse
+  // const [isCollapsed, setIsCollapsed] = useState(false); // State to control collapse
 
   // Toggle collapse state
-  const toggleSidebar = () => {
-    setIsCollapsed(!isCollapsed);
-  };
+  // const toggleSidebar = () => {
+  //   setIsCollapsed(!isCollapsed);
+  // };
 
   // Array of navigation links with paths and icons
   const navLinks = [
@@ -50,16 +50,16 @@ export default function Sidebar() {
   return (
     <div
       className={`fixed bg-ijoDash text-black h-screen p-5 z-50 flex flex-col gap-6 shadow-lg transition-all duration-300 ${
-        isCollapsed ? "w-[100px]" : "w-[300px]"
+        !isOpen ? "w-[100px]" : "w-[300px]"
       }`}
     >
       {/* Collapse button */}
-      <button onClick={toggleSidebar} className="text-white self-end p-2 mb-4">
+      {/* <button onClick={toggleSidebar} className="text-white self-end p-2 mb-4">
         <AiOutlineMenu size={24} />
-      </button>
+      </button> */}
 
       {/* Sidebar Title (Hide when collapsed) */}
-      {!isCollapsed && (
+      {isOpen && (
         <Link href="/" className="text-3xl font-bold text-center mb-10">
           Dashboard
         </Link>
@@ -79,7 +79,7 @@ export default function Sidebar() {
                 {/* Icon always visible */}
                 {link.icon}
                 {/* Hide link name when collapsed */}
-                {!isCollapsed && <span>{link.name}</span>}
+                {isOpen && <span>{link.name}</span>}
               </Link>
             </li>
           ))}
