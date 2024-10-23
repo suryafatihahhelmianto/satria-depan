@@ -28,7 +28,7 @@ export default function KinerjaTable({ title, rows }) {
                 <tr key={index} className="bg-ijoIsiTabel">
                   <td
                     colSpan="3"
-                    className="px-4 py-2 font-semibold text-start border border-black"
+                    className="px-4 py-2 font-bold text-start border border-black"
                   >
                     {row.label}
                   </td>

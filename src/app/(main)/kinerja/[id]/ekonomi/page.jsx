@@ -3,9 +3,8 @@
 import { useState, useEffect } from "react";
 import { fetchData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
-import FieldInput from "@/components/FieldInput";
+import KinerjaTable from "@/components/table/KinerjaTable"; // Import the KinerjaTable component
 import { usePathname } from "next/navigation";
-import { AiFillCheckCircle } from "react-icons/ai";
 
 export default function DataKinerja() {
   const pathname = usePathname();
@@ -31,7 +30,7 @@ export default function DataKinerja() {
 
   const [loading, setLoading] = useState(true);
 
-  // Fungsi untuk mengambil data masukkan ekonomi
+  // Fetch economic data
   const fetchEkonomi = async () => {
     try {
       const response = await fetchData(`/api/masukkan/ekonomi/${sesiId}`, {
@@ -40,23 +39,7 @@ export default function DataKinerja() {
           Authorization: `Bearer ${getCookie("token")}`,
         },
       });
-      console.log("ini respon: ", response);
-      setFormData({
-        nilaiRisiko: response.nilaiRisiko,
-        polAmpas: response.polAmpas,
-        polBlotong: response.polBlotong,
-        polTetes: response.polTetes,
-        rendemenKebun: response.rendemenKebun,
-        rendemenGerbang: response.rendemenGerbang,
-        rendemenNPP: response.rendemenNPP,
-        rendemenGula: response.rendemenGula,
-        kesenjanganRantai: response.kesenjanganRantai,
-        hargaAcuan: response.hargaAcuan,
-        hargaLelang: response.hargaLelang,
-        shsTahunIni: response.shsTahunIni,
-        shsTahunSebel: response.shsTahunSebel,
-        returnOE: response.returnOE,
-      });
+      setFormData(response);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -67,8 +50,6 @@ export default function DataKinerja() {
     try {
       const data = { sesiId };
       data[field] = parseFloat(value);
-      console.log("ini data: ", data);
-
       await fetchData(`/api/masukkan/ekonomi`, {
         method: "PATCH",
         headers: {
@@ -89,18 +70,14 @@ export default function DataKinerja() {
         sesiId,
         formData,
       };
-
-      console.log("ini datatosend: ", formData);
-
       const response = await fetchData("/api/dimensi/ekonomi", {
-        method: "POST", // menggunakan POST untuk membuat data baru
+        method: "POST",
         headers: {
           Authorization: `Bearer ${getCookie("token")}`,
           "Content-Type": "application/json",
         },
         data: dataToSend,
       });
-
       console.log("Response dari server: ", response);
     } catch (error) {
       console.error("Error calculating dimensions: ", error);
@@ -115,284 +92,150 @@ export default function DataKinerja() {
     return <div>Loading...</div>;
   }
 
+  const rowsE1 = [
+    {
+      label: "Tingkat Risiko Rantai Pasok",
+      inputType: "dropdown",
+      value: formData.nilaiRisiko,
+      options: [
+        { value: 1, label: "Sangat Rendah" },
+        { value: 0.772, label: "Rendah" },
+        { value: 0.491, label: "Sedang" },
+        { value: 0.3, label: "Tinggi" },
+        { value: 0.2, label: "Sangat Tinggi" },
+      ],
+      onChange: (e) =>
+        setFormData({ ...formData, nilaiRisiko: parseFloat(e.target.value) }),
+      onSubmit: () => handleUpdate("nilaiRisiko", formData.nilaiRisiko),
+    },
+  ];
+
+  const rowsE2 = [
+    {
+      label: "Kehilangan Pol Ampas",
+      inputType: "text",
+      value: formData.polAmpas,
+      onChange: (e) => setFormData({ ...formData, polAmpas: e.target.value }),
+      onSubmit: () => handleUpdate("polAmpas", formData.polAmpas),
+    },
+    {
+      label: "Kehilangan Pol Blotong",
+      inputType: "text",
+      value: formData.polBlotong,
+      onChange: (e) => setFormData({ ...formData, polBlotong: e.target.value }),
+      onSubmit: () => handleUpdate("polBlotong", formData.polBlotong),
+    },
+    {
+      label: "Kehilangan Pol Tetes",
+      inputType: "text",
+      value: formData.polTetes,
+      onChange: (e) => setFormData({ ...formData, polTetes: e.target.value }),
+      onSubmit: () => handleUpdate("polTetes", formData.polTetes),
+    },
+    {
+      label: "Kehilangan Rendemen Kebun",
+      inputType: "text",
+      value: formData.rendemenKebun,
+      onChange: (e) =>
+        setFormData({ ...formData, rendemenKebun: e.target.value }),
+      onSubmit: () => handleUpdate("rendemenKebun", formData.rendemenKebun),
+    },
+    {
+      label: "Kehilangan Rendemen Gerbang",
+      inputType: "text",
+      value: formData.rendemenGerbang,
+      onChange: (e) =>
+        setFormData({ ...formData, rendemenGerbang: e.target.value }),
+      onSubmit: () => handleUpdate("rendemenGerbang", formData.rendemenGerbang),
+    },
+    {
+      label: "Kehilangan Rendemen NPP",
+      inputType: "text",
+      value: formData.rendemenNPP,
+      onChange: (e) =>
+        setFormData({ ...formData, rendemenNPP: e.target.value }),
+      onSubmit: () => handleUpdate("rendemenNPP", formData.rendemenNPP),
+    },
+    {
+      label: "Kehilangan Rendemen Gula",
+      inputType: "text",
+      value: formData.rendemenGula,
+      onChange: (e) =>
+        setFormData({ ...formData, rendemenGula: e.target.value }),
+      onSubmit: () => handleUpdate("rendemenGula", formData.rendemenGula),
+    },
+  ];
+
+  const rowsE3 = [
+    {
+      label: "Kesenjangan Keuntungan Stakeholder Rantai Pasok",
+      inputType: "text",
+      value: formData.kesenjanganRantai,
+      onChange: (e) =>
+        setFormData({ ...formData, kesenjanganRantai: e.target.value }),
+      onSubmit: () =>
+        handleUpdate("kesenjanganRantai", formData.kesenjanganRantai),
+    },
+  ];
+
+  const rowsE4 = [
+    {
+      label: "Harga Acuan/Referensi",
+      inputType: "text",
+      value: formData.hargaAcuan,
+      onChange: (e) => setFormData({ ...formData, hargaAcuan: e.target.value }),
+      onSubmit: () => handleUpdate("hargaAcuan", formData.hargaAcuan),
+    },
+    {
+      label: "Harga Lelang (rata-rata)",
+      inputType: "text",
+      value: formData.hargaLelang,
+      onChange: (e) =>
+        setFormData({ ...formData, hargaLelang: e.target.value }),
+      onSubmit: () => handleUpdate("hargaLelang", formData.hargaLelang),
+    },
+  ];
+
+  const rowsE5 = [
+    {
+      label: "Produksi Tahun Ini",
+      inputType: "text",
+      value: formData.shsTahunIni,
+      onChange: (e) =>
+        setFormData({ ...formData, shsTahunIni: e.target.value }),
+      onSubmit: () => handleUpdate("shsTahunIni", formData.shsTahunIni),
+    },
+    {
+      label: "Produksi tahun lalu",
+      inputType: "text",
+      value: formData.shsTahunSebel,
+      onChange: (e) =>
+        setFormData({ ...formData, shsTahunSebel: e.target.value }),
+      onSubmit: () => handleUpdate("shsTahunSebel", formData.shsTahunSebel),
+    },
+  ];
+
+  const rowsE6 = [
+    {
+      label: "Total Penjualan Gula",
+      inputType: "text",
+      value: formData.returnOE,
+      onChange: (e) => setFormData({ ...formData, returnOE: e.target.value }),
+      onSubmit: () => handleUpdate("returnOE", formData.returnOE),
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-gray-100 mb-24">
-      <h2 className="text-red-600 font-bold mt-5">
-        Tingkat Risiko Rantai Pasok (E1)
-      </h2>
-      <div className="overflow-x-auto mt-4">
-        <table className="min-w-full bg-white border rounded-lg shadow-md">
-          <thead className="bg-ijoKepalaTabel">
-            <tr>
-              <th className="px-4 py-2 w-1/3 border border-black">
-                Sub Indikator
-              </th>
-              <th className="px-4 py-2 w-1/2 border border-black">Data</th>
-              <th className="px-4 py-2 w-1/4 border border-black">Status</th>
-            </tr>
-          </thead>
-          <tbody className="bg-ijoIsiTabel">
-            {/* Tingkat Risiko Rantai Pasok */}
-            <tr>
-              <td className="px-4 py-2 border border-black">
-                Tingkat Risiko Rantai Pasok
-              </td>
-              <td className="px-4 py-2 border border-black">
-                <select
-                  value={formData.nilaiRisiko}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      nilaiRisiko: parseFloat(e.target.value),
-                    })
-                  }
-                  className="bg-ijoIsiTabel p-2 border rounded-lg"
-                >
-                  <option value={1}>Sangat Rendah</option>
-                  <option value={0.772}>Rendah</option>
-                  <option value={0.491}>Sedang</option>
-                  <option value={0.3}>Tinggi</option>
-                  <option value={0.2}>Sangat Tinggi</option>
-                </select>
-              </td>
-              <td className="px-4 py-2 border border-black text-center">
-                <button
-                  onClick={() =>
-                    handleUpdate("nilaiRisiko", formData.nilaiRisiko)
-                  }
-                  className="p-2 rounded-full text-2xl hover:text-gray-600"
-                >
-                  <AiFillCheckCircle></AiFillCheckCircle>
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <h2 className="text-red-600 font-bold mt-5">
-        Potensi Kehilangan Produksi (E2)
-      </h2>
-      <div className="overflow-x-auto mt-4">
-        <table className="min-w-full bg-white border rounded-lg shadow-md">
-          <thead className="bg-ijoKepalaTabel">
-            <tr>
-              <th className="px-4 py-2 w-1/3 border border-black">
-                Sub Indikator
-              </th>
-              <th className="px-4 py-2 w-1/2 border border-black">Data</th>
-              <th className="px-4 py-2 w-1/4 border border-black">Status</th>
-            </tr>
-          </thead>
-          <tbody className="bg-ijoIsiTabel">
-            {/* Kehilangan Pol Ampas */}
-            <FieldInput
-              label="Kehilangan Pol Ampas"
-              value={formData.polAmpas}
-              onChange={(e) =>
-                setFormData({ ...formData, polAmpas: e.target.value })
-              }
-              onSubmit={() => handleUpdate("polAmpas", formData.polAmpas)}
-            />
-
-            {/* Kehilangan Pol Blotong */}
-            <FieldInput
-              label="Kehilangan Pol Blotong"
-              value={formData.polBlotong}
-              onChange={(e) =>
-                setFormData({ ...formData, polBlotong: e.target.value })
-              }
-              onSubmit={() => handleUpdate("polBlotong", formData.polBlotong)}
-            />
-
-            {/* Kehilangan Pol Tetes */}
-            <FieldInput
-              label="Kehilangan Pol Tetes"
-              value={formData.polTetes}
-              onChange={(e) =>
-                setFormData({ ...formData, polTetes: e.target.value })
-              }
-              onSubmit={() => handleUpdate("polTetes", formData.polTetes)}
-            />
-
-            {/* Kehilangan Rendemen Kebun */}
-            <FieldInput
-              label="Kehilangan Rendemen Kebun"
-              value={formData.rendemenKebun}
-              onChange={(e) =>
-                setFormData({ ...formData, rendemenKebun: e.target.value })
-              }
-              onSubmit={() =>
-                handleUpdate("rendemenKebun", formData.rendemenKebun)
-              }
-            />
-
-            {/* Kehilangan Rendemen Gerbang */}
-            <FieldInput
-              label="Kehilangan Rendemen Gerbang"
-              value={formData.rendemenGerbang}
-              onChange={(e) =>
-                setFormData({ ...formData, rendemenGerbang: e.target.value })
-              }
-              onSubmit={() =>
-                handleUpdate("rendemenGerbang", formData.rendemenGerbang)
-              }
-            />
-
-            {/* Kehilangan Rendemen NPP */}
-            <FieldInput
-              label="Kehilangan Rendemen NPP"
-              value={formData.rendemenNPP}
-              onChange={(e) =>
-                setFormData({ ...formData, rendemenNPP: e.target.value })
-              }
-              onSubmit={() => handleUpdate("rendemenNPP", formData.rendemenNPP)}
-            />
-
-            {/* Kehilangan Rendemen Gula */}
-            <FieldInput
-              label="Kehilangan Rendemen Gula"
-              value={formData.rendemenGula}
-              onChange={(e) =>
-                setFormData({ ...formData, rendemenGula: e.target.value })
-              }
-              onSubmit={() =>
-                handleUpdate("rendemenGula", formData.rendemenGula)
-              }
-            />
-          </tbody>
-        </table>
-      </div>
-
-      <h2 className="text-red-600 font-bold mt-5">
-        Kesenjangan keuntungan pelaku rantai pasok per ton gula (%) (E3)
-      </h2>
-      <div className="overflow-x-auto mt-4">
-        <table className="min-w-full bg-white border rounded-lg shadow-md">
-          <thead className="bg-ijoKepalaTabel">
-            <tr>
-              <th className="px-4 py-2 w-1/3 border border-black">
-                Sub Indikator
-              </th>
-              <th className="px-4 py-2 w-1/2 border border-black">Data</th>
-              <th className="px-4 py-2 w-1/4 border border-black">Status</th>
-            </tr>
-          </thead>
-          <tbody className="bg-ijoIsiTabel">
-            {/* Keuntungan Petani */}
-            <FieldInput
-              label="Kesenjangan Keuntungan Stakeholder Rantai Pasok"
-              value={formData.kesenjanganRantai}
-              onChange={(e) =>
-                setFormData({ ...formData, kesenjanganRantai: e.target.value })
-              }
-              onSubmit={() =>
-                handleUpdate("kesenjanganRantai", formData.kesenjanganRantai)
-              }
-            />
-          </tbody>
-        </table>
-      </div>
-
-      <h2 className="text-red-600 font-bold mt-5">Harga Patokan Petani (E4)</h2>
-      <div className="overflow-x-auto mt-4">
-        <table className="min-w-full bg-white border rounded-lg shadow-md">
-          <thead className="bg-ijoKepalaTabel">
-            <tr>
-              <th className="px-4 py-2 w-1/3 border border-black">
-                Sub Indikator
-              </th>
-              <th className="px-4 py-2 w-1/2 border border-black">Data</th>
-              <th className="px-4 py-2 w-1/4 border border-black">Status</th>
-            </tr>
-          </thead>
-          <tbody className="bg-ijoIsiTabel">
-            {/* SHS yang Dihasilkan Tahun Ini */}
-            <FieldInput
-              label="Harga Acuan/Referensi"
-              value={formData.hargaAcuan}
-              onChange={(e) =>
-                setFormData({ ...formData, hargaAcuan: e.target.value })
-              }
-              onSubmit={() => handleUpdate("hargaAcuan", formData.hargaAcuan)}
-            />
-
-            {/* SHS yang Dihasilkan Tahun Lalu */}
-            <FieldInput
-              label="Harga Lelang (rata-rata)"
-              value={formData.hargaLelang}
-              onChange={(e) =>
-                setFormData({ ...formData, hargaLelang: e.target.value })
-              }
-              onSubmit={() => handleUpdate("hargaLelang", formData.hargaLelang)}
-            />
-          </tbody>
-        </table>
-      </div>
-
-      <h2 className="text-red-600 font-bold mt-5">Tingkat Ketangkasan (E5)</h2>
-      <div className="overflow-x-auto mt-4">
-        <table className="min-w-full bg-white border rounded-lg shadow-md">
-          <thead className="bg-ijoKepalaTabel">
-            <tr>
-              <th className="px-4 py-2 w-1/3 border border-black">
-                Sub Indikator
-              </th>
-              <th className="px-4 py-2 w-1/2 border border-black">Data</th>
-              <th className="px-4 py-2 w-1/4 border border-black">Status</th>
-            </tr>
-          </thead>
-          <tbody className="bg-ijoIsiTabel">
-            {/* SHS yang Dihasilkan Tahun Ini */}
-            <FieldInput
-              label="Produksi Tahun Ini"
-              value={formData.shsTahunIni}
-              onChange={(e) =>
-                setFormData({ ...formData, shsTahunIni: e.target.value })
-              }
-              onSubmit={() => handleUpdate("shsTahunIni", formData.shsTahunIni)}
-            />
-
-            {/* SHS yang Dihasilkan Tahun Lalu */}
-            <FieldInput
-              label="Produksi tahun lalu"
-              value={formData.shsTahunSebel}
-              onChange={(e) =>
-                setFormData({ ...formData, shsTahunSebel: e.target.value })
-              }
-              onSubmit={() =>
-                handleUpdate("shsTahunSebel", formData.shsTahunSebel)
-              }
-            />
-          </tbody>
-        </table>
-      </div>
-
-      <h2 className="text-red-600 font-bold mt-5">Return on Investment (E6)</h2>
-      <div className="overflow-x-auto mt-4">
-        <table className="min-w-full bg-white border rounded-lg shadow-md">
-          <thead className="bg-ijoKepalaTabel">
-            <tr>
-              <th className="px-4 py-2 w-1/3 border border-black">
-                Sub Indikator
-              </th>
-              <th className="px-4 py-2 w-1/2 border border-black">Data</th>
-              <th className="px-4 py-2 w-1/4 border border-black">Status</th>
-            </tr>
-          </thead>
-          <tbody className="bg-ijoIsiTabel">
-            {/* Total Penjualan Gula */}
-            <FieldInput
-              label="Total Penjualan Gula"
-              value={formData.returnOE}
-              onChange={(e) =>
-                setFormData({ ...formData, returnOE: e.target.value })
-              }
-              onSubmit={() => handleUpdate("returnOE", formData.returnOE)}
-            />
-          </tbody>
-        </table>
-      </div>
+      <KinerjaTable title="Tingkat Risiko Rantai Pasok (E1)" rows={rowsE1} />
+      <KinerjaTable title="Potensi Kehilangan Produksi (E2)" rows={rowsE2} />
+      <KinerjaTable
+        title="Kesenjangan keuntungan pelaku rantai pasok per ton gula (%) (E3)"
+        rows={rowsE3}
+      />
+      <KinerjaTable title="Harga Patokan Petani (E4)" rows={rowsE4} />
+      <KinerjaTable title="Tingkat Ketangkasan (E5)" rows={rowsE5} />
+      <KinerjaTable title="Return on Investment (E6)" rows={rowsE6} />
 
       <div className="text-center mt-6">
         <button
