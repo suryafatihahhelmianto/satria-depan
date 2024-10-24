@@ -16,79 +16,6 @@ export default function DetailPage() {
   const [dataSpiderEkonomi, setDataSpiderEkonomi] = useState([]);
   const [nilaiDimensiEkonomi, setNilaiDimensiEkonomi] = useState(0);
 
-  // console.log("ini sesiid: ", sesiId);
-
-  // const [formData, setFormData] = useState({
-  //   nilaiRisiko: 0,
-  //   polAmpas: 0,
-  //   polBlotong: 0,
-  //   polTetes: 0,
-  //   rendemenKebun: 0,
-  //   rendemenGerbang: 0,
-  //   rendemenNPP: 0,
-  //   rendemenGula: 0,
-  //   kesenjanganRantai: 0,
-  //   hargaAcuan: 0,
-  //   hargaLelang: 0,
-  //   shsTahunIni: 0,
-  //   shsTahunSebel: 0,
-  //   returnOE: 0,
-  // });
-
-  // const dataEkonomi = [
-  //   {
-  //     id: 1,
-  //     indikator: "Tingkat Risiko",
-  //     simbol: "E1",
-  //     nilai: 0.75,
-  //     kategori: "Berkelanjutan",
-  //   },
-  //   {
-  //     id: 2,
-  //     indikator: "Hilangnya Produksi",
-  //     simbol: "E2",
-  //     nilai: 0.425,
-  //     kategori: "Cukup Berkelanjutan",
-  //   },
-  //   {
-  //     id: 3,
-  //     indikator: "Kesenjangan Keuntungan",
-  //     simbol: "E3",
-  //     nilai: 0.312,
-  //     kategori: "Tidak Berkelanjutan",
-  //   },
-  //   {
-  //     id: 4,
-  //     indikator: "Harga Patokan Petani",
-  //     simbol: "E4",
-  //     nilai: 0.89,
-  //     kategori: "Berkelanjutan",
-  //   },
-  //   {
-  //     id: 5,
-  //     indikator: "Tingkat Ketangkasan",
-  //     simbol: "E5",
-  //     nilai: 0.672,
-  //     kategori: "Cukup Berkelanjutan",
-  //   },
-  //   {
-  //     id: 6,
-  //     indikator: "Return on Investment (ROI)",
-  //     simbol: "E6",
-  //     nilai: 0.94,
-  //     kategori: "Berkelanjutan",
-  //   },
-  // ];
-
-  // const dataSpiderEkonomi = [
-  //   { subject: "E1", A: 75.0 },
-  //   { subject: "E2", A: 42.5 },
-  //   { subject: "E3", A: 31.2 },
-  //   { subject: "E4", A: 89.0 },
-  //   { subject: "E5", A: 67.2 },
-  //   { subject: "E6", A: 94.0 },
-  // ];
-
   const fetchEkonomiData = async () => {
     const token = getCookie("token");
     try {
@@ -102,10 +29,6 @@ export default function DetailPage() {
           },
         }
       );
-
-      console.log("ini token: ", token);
-
-      console.log("ini response: ", response);
 
       // Persiapkan data untuk tabel
       const dataTable = [

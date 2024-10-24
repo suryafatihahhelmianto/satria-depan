@@ -2,87 +2,96 @@
 
 import OpsiDetail from "@/components/OpsiDetail";
 import SpiderGraph from "@/components/SpiderGraph";
+import { fetchData } from "@/tools/api";
+import { getCookie } from "@/tools/getCookie";
+import { usePathname } from "next/navigation";
 import React, { useState, useEffect } from "react";
 
 export default function DetailPage() {
-  const [formData, setFormData] = useState({
-    nilaiRisiko: 0,
-    polAmpas: 0,
-    polBlotong: 0,
-    polTetes: 0,
-    rendemenKebun: 0,
-    rendemenGerbang: 0,
-    rendemenNPP: 0,
-    rendemenGula: 0,
-    kesenjanganRantai: 0,
-    hargaAcuan: 0,
-    hargaLelang: 0,
-    shsTahunIni: 0,
-    shsTahunSebel: 0,
-    returnOE: 0,
-  });
+  const pathname = usePathname();
+  const idMatch = pathname.match(/\/detail\/([a-zA-Z0-9]+)/);
+  const sesiId = idMatch ? idMatch[1] : null;
 
-  const dataLingkungan = [
-    {
-      id: 1,
-      indikator: "Tingkat Bau",
-      simbol: "L1",
-      nilai: 0.812,
-      kategori: "Berkelanjutan",
-    },
-    {
-      id: 2,
-      indikator: "Tingkat Debu",
-      simbol: "L2",
-      nilai: 0.653,
-      kategori: "Cukup Berkelanjutan",
-    },
-    {
-      id: 3,
-      indikator: "Emisi Listrik",
-      simbol: "L3",
-      nilai: 0.415,
-      kategori: "Tidak Berkelanjutan",
-    },
-    {
-      id: 4,
-      indikator: "Kebisingan",
-      simbol: "L4",
-      nilai: 0.73,
-      kategori: "Cukup Berkelanjutan",
-    },
-    {
-      id: 5,
-      indikator: "Air Muka Tanah",
-      simbol: "L5",
-      nilai: 0.942,
-      kategori: "Berkelanjutan",
-    },
-    {
-      id: 6,
-      indikator: "Udara Ambien",
-      simbol: "L6",
-      nilai: 0.867,
-      kategori: "Berkelanjutan",
-    },
-    {
-      id: 7,
-      indikator: "Udara Ruangan",
-      simbol: "L7",
-      nilai: 0.775,
-      kategori: "Cukup Berkelanjutan",
-    },
-  ];
+  const [dataLingkungan, setDataLingkungan] = useState([]);
+  const [dataSpiderLingkungan, setDataSpiderLingkungan] = useState([]);
+  const [nilaiDimensiLingkungan, setNilaiDimensiLingkungan] = useState(0);
 
-  const dataSpiderLingkungan = [
-    { subject: "L1", A: 81.2 },
-    { subject: "L2", A: 65.3 },
-    { subject: "L3", A: 41.5 },
-    { subject: "L4", A: 73.0 },
-    { subject: "L5", A: 94.2 },
-    { subject: "L6", A: 86.7 },
-    { subject: "L7", A: 77.5 },
-  ];
+  const fetchLingkunganData = async () => {
+    try {
+      const response = await fetchData(
+        `/api/dimensi/lingkungan?sesiPengisianId=${sesiId}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${getCookie("token")}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      // Persiapkan data untuk tabel
+      const dataTable = [
+        {
+          id: 1,
+          indikator: "Tingkat Bau",
+          simbol: "L1",
+          nilai: (response.tingkatBau * 100).toFixed(1),
+        },
+        {
+          id: 2,
+          indikator: "Tingkat Debu",
+          simbol: "L2",
+          nilai: (response.tingkatDebu * 100).toFixed(1),
+        },
+        {
+          id: 3,
+          indikator: "Emisi Listrik",
+          simbol: "L3",
+          nilai: (response.emisiListrik * 100).toFixed(1),
+        },
+        {
+          id: 4,
+          indikator: "Kebisingan",
+          simbol: "L4",
+          nilai: (response.kebisingan * 100).toFixed(1),
+        },
+        {
+          id: 5,
+          indikator: "Air Muka Tanah",
+          simbol: "L5",
+          nilai: (response.airMukaan * 100).toFixed(1),
+        },
+        {
+          id: 6,
+          indikator: "Udara Ambien",
+          simbol: "L6",
+          nilai: (response.udaraAmbien * 100).toFixed(1),
+        },
+        {
+          id: 7,
+          indikator: "Udara Ruangan",
+          simbol: "L7",
+          nilai: (response.udaraRuang * 100).toFixed(1),
+        },
+      ];
+
+      // Persiapkan data untuk SpiderGraph
+      const spiderData = dataTable.map((item) => ({
+        subject: item.simbol,
+        A: item.nilai,
+      }));
+
+      setDataLingkungan(dataTable);
+      setDataSpiderLingkungan(spiderData);
+      setNilaiDimensiLingkungan(response.nilaiDimenLingku);
+    } catch (error) {
+      console.error("Error fetching dimensi lingkungan data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchLingkunganData();
+  }, [sesiId]);
 
   return (
     <div>
@@ -115,7 +124,9 @@ export default function DetailPage() {
                 <td className="px-4 py-2 font-bold" colSpan={2}>
                   Total Nilai Dimensi Lingkungan
                 </td>
-                <td className="px-4 py-2 font-bold">73.2</td>
+                <td className="px-4 py-2 font-bold">
+                  {nilaiDimensiLingkungan.toFixed(1)}
+                </td>
               </tr>
             </tbody>
           </table>

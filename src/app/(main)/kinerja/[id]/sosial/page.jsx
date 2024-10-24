@@ -93,7 +93,7 @@ export default function DataSosial() {
   const rowsS1 = [
     {
       label: "Dukungan Kelembagaan Terhadap Rantai Pasok",
-      inputType: "select",
+      inputType: "dropdown",
       value: formData.rantaiPasok,
       options: [
         { value: 0.2, label: "Sangat Rendah" },
@@ -111,7 +111,7 @@ export default function DataSosial() {
   const rowsS2 = [
     {
       label: "Ketersediaan Infrastruktur Sebagai Penunjang Aktivitas",
-      inputType: "select",
+      inputType: "dropdown",
       value: formData.sediaAktivita,
       options: [
         { value: 0.2, label: "Sangat Rendah" },
@@ -129,7 +129,7 @@ export default function DataSosial() {
   const rowsS3 = [
     {
       label: "Manfaat Corporate Social Responsibility Bagi Sosial",
-      inputType: "select",
+      inputType: "dropdown",
       value: formData.tingkatManfaat,
       options: [
         { value: 0.2, label: "Sangat Rendah" },
@@ -150,7 +150,7 @@ export default function DataSosial() {
   const rowsS4 = [
     {
       label: "Keluhan Limbah Rantai Pasok Industri",
-      inputType: "select",
+      inputType: "dropdown",
       value: formData.tingkatLimbah,
       options: [
         { value: 1, label: "Sangat Rendah" },
@@ -168,7 +168,7 @@ export default function DataSosial() {
   const rowsS5 = [
     {
       label: "PKWT Tenaga Kerja Majalengka Indramayu (orang)",
-      inputType: "text",
+      inputType: "number",
       value: formData.tetapMajaIndra,
       onChange: (e) =>
         setFormData({ ...formData, tetapMajaIndra: e.target.value }),
@@ -176,14 +176,14 @@ export default function DataSosial() {
     },
     {
       label: "PKWT Total (orang)",
-      inputType: "text",
+      inputType: "number",
       value: formData.tetapTotal,
       onChange: (e) => setFormData({ ...formData, tetapTotal: e.target.value }),
       onSubmit: () => handleUpdate("tetapTotal", formData.tetapTotal),
     },
     {
       label: "PKWTT Tenaga Kerja Majalengka Indramayu (orang)",
-      inputType: "text",
+      inputType: "number",
       value: formData.tidakMajaIndra,
       onChange: (e) =>
         setFormData({ ...formData, tidakMajaIndra: e.target.value }),
@@ -191,7 +191,7 @@ export default function DataSosial() {
     },
     {
       label: "PKWTT Total (orang)",
-      inputType: "text",
+      inputType: "number",
       value: formData.tidakTetapTotal,
       onChange: (e) =>
         setFormData({ ...formData, tidakTetapTotal: e.target.value }),
@@ -202,14 +202,14 @@ export default function DataSosial() {
   const rowsS6 = [
     {
       label: "Luas Lahan yang Avalist Tahun Ini (Ha)",
-      inputType: "text",
+      inputType: "number",
       value: formData.luasLahan,
       onChange: (e) => setFormData({ ...formData, luasLahan: e.target.value }),
       onSubmit: () => handleUpdate("luasLahan", formData.luasLahan),
     },
     {
       label: "Total Luas Lahan yang Ditanami Tahun Ini (Ha)",
-      inputType: "text",
+      inputType: "number",
       value: formData.luasLahanYangDitanami,
       onChange: (e) =>
         setFormData({

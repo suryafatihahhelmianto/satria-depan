@@ -13,7 +13,7 @@ import DatePicker from "react-datepicker"; // Import the DatePicker component
 import "react-datepicker/dist/react-datepicker.css"; // Import DatePicker CSS
 
 export default function HomePage() {
-  const [selectedYear, setSelectedYear] = useState(2023);
+  const [selectedYear, setSelectedYear] = useState(2021);
   const [factories, setFactories] = useState([]);
   const [selectedFactory, setSelectedFactory] = useState({});
   const [sustainabilityData, setSustainabilityData] = useState([]);
@@ -140,83 +140,189 @@ export default function HomePage() {
       </div>
 
       {/* Main Grid */}
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        {/* Circular Progress for Kinerja */}
-        <div className="bg-white p-4 rounded-lg shadow-md flex flex-col items-center">
-          {/* <div className="flex w-full"> */}
-          <button
-            // href={"/detail/sumber-daya"}
-            onClick={handleDetailClick}
-            className="mb-2 font-semibold text-xl bg-gray-300 px-2 rounded-lg"
-          >
-            Detail
-          </button>
-          {/* </div> */}
-          <div className="w-32 h-32 mb-2">
-            <CircularProgressbar
-              value={progressKinerja}
-              text={`${progressKinerja}%`}
-              styles={buildStyles({
-                pathColor: "#4CAF50",
-                textColor: "#4CAF50",
-                trailColor: "#d6d6d6",
-              })}
-            />
+      <div className="grid grid-cols-2 gap-4">
+        {/* Gabungan Circular Progress Kinerja dan Status Data */}
+        <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center">
+          <div className="w-full mb-4">
+            <h1 className="font-semibold">
+              Nilai Kinerja Keberlanjutan Rantai Pasok
+            </h1>
           </div>
-          {/* <p className="text-gray-700 font-semibold">Kinerja</p> */}
+
+          {/* Bagian Kiri: Detail & Circular Progress */}
+          <div className="flex justify-around gap-5 w-full h-full">
+            {/* Bagian Kiri: Circular Progress */}
+            <div className="flex flex-col items-center justify-end mb-6 h-full">
+              {/* <button
+      onClick={handleDetailClick}
+      className="mb-4 font-semibold text-xl bg-gray-300 px-4 py-2 rounded-lg"
+    >
+      Detail
+    </button> */}
+              <div className="w-52 h-52 mb-2">
+                <CircularProgressbar
+                  value={progressKinerja}
+                  text={`${progressKinerja}%`}
+                  styles={buildStyles({
+                    pathColor: "#4CAF50",
+                    textColor: "#4CAF50",
+                    trailColor: "#d6d6d6",
+                  })}
+                />
+              </div>
+              <p className="mt-2 text-gray-700 text-center font-semibold">
+                BERKELANJUTAN
+              </p>
+            </div>
+
+            {/* Garis Pemisah */}
+            <div className="border-l-2 border-gray-300 h-full"></div>
+
+            {/* Bagian Kanan: Status Data */}
+            <div>
+              <div className="font-semibold mb-4">
+                <h1>Periode Perhitungan:</h1>
+                <select
+                  value={selectedYear}
+                  onChange={handleYearChange}
+                  className="bg-white border border-gray-300 rounded-md p-2 text-lg"
+                >
+                  <option value={2021}>2021</option>
+                  <option value={2022}>2022</option>
+                  <option value={2023}>2023</option>
+                  <option value={2024}>2024</option>
+                  <option value={2025}>2025</option>
+                  <option value={2026}>2026</option>
+                </select>
+              </div>
+              <p className="font-bold text-gray-700 mb-4">
+                Status Perhitungan:
+              </p>
+              <div className="flex justify-center space-x-4">
+                {/* Lingkaran dengan tulisan FINAL */}
+                <div className="flex items-center justify-center w-24 h-24 rounded-full bg-green-500 text-white font-bold">
+                  <p>FINAL</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Status Data */}
-        <div className="bg-white p-4 rounded-lg shadow-md text-center">
-          <h2 className="text-xl font-semibold mb-2">
-            <select
-              value={selectedYear}
-              onChange={handleYearChange}
-              className="bg-white border border-gray-300 rounded-md p-2 text-lg"
-            >
-              <option value={2023}>2023</option>
-              <option value={2024}>2024</option>
-              <option value={2025}>2025</option>
-              <option value={2026}>2026</option>
-            </select>
-          </h2>
-          <p className="font-bold text-gray-700 mb-2">STATUS DATA</p>
-          <p className="text-gray-700">FINAL</p>
-          <p className="mt-2 text-gray-700 font-semibold">
-            NILAI KINERJA BERKELANJUTAN
-          </p>
+        <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center">
+          <div className="w-full mb-4">
+            <h1 className="font-semibold">Nilai Prediksi Rendemen</h1>
+          </div>
+
+          <div className="flex justify-around gap-5 w-full h-full">
+            {/* Bagian Kiri: Circular Progress */}
+            <div className="flex flex-col items-center justify-end mb-6 h-full">
+              <div className="w-52 h-52 mb-2">
+                <CircularProgressbar
+                  value={6}
+                  text={`${6}%`}
+                  styles={buildStyles({
+                    pathColor: "#4CAF50",
+                    textColor: "#4CAF50",
+                    trailColor: "#d6d6d6",
+                  })}
+                />
+              </div>
+              <p className="mt-2 text-gray-700 text-center font-semibold">
+                RENDEMEN
+              </p>
+            </div>
+
+            {/* Garis Pemisah */}
+            <div className="border-l-2 border-gray-300 h-full"></div>
+
+            {/* Bagian Kanan: Status Data */}
+            <div>
+              <div className="font-semibold mb-4">
+                <h1>Periode Perhitungan:</h1>
+              </div>
+              <DatePicker
+                selected={selectedDate}
+                onChange={(date) => setSelectedDate(date)}
+                inline // Makes the calendar always visible
+                dateFormat="dd/MM/yyyy"
+                className="border border-gray-300 rounded-md p-2"
+              />
+            </div>
+          </div>
+          {/* <div className="flex justify-around items-center w-full bg-blue-300">
+            <div className="flex flex-col gap-2 bg-green-200 h-full justify-end">
+              <div className="w-52 h-52 mb-2">
+                <CircularProgressbar
+                  value={6}
+                  text={`${6}%`}
+                  styles={buildStyles({
+                    pathColor: "#4CAF50",
+                    textColor: "#4CAF50",
+                    trailColor: "#d6d6d6",
+                  })}
+                />
+              </div>
+              <h2 className="text-xl font-semibold mb-2 text-center">
+                Rendemen
+              </h2>
+            </div>
+
+            <div className="border-l-2 border-gray-300 h-full"></div>
+
+            <div className="flex flex-col items-center justify-center">
+              <h1 className="text-left font-semibold w-full mb-2">
+                Periode Perhitungan:
+              </h1>
+              <DatePicker
+                selected={selectedDate}
+                onChange={(date) => setSelectedDate(date)}
+                inline // Makes the calendar always visible
+                dateFormat="dd/MM/yyyy"
+                className="border border-gray-300 rounded-md p-2"
+              />
+            </div>
+          </div> */}
         </div>
 
         {/* Inline Calendar */}
-        <div className="bg-white p-4 rounded-lg shadow-md">
-          <div className="flex justify-center">
-            <DatePicker
-              selected={selectedDate}
-              onChange={(date) => setSelectedDate(date)}
-              inline // Makes the calendar always visible
-              dateFormat="dd/MM/yyyy"
-              className="border border-gray-300 rounded-md p-2"
-            />
+        {/* <div className="bg-white p-4 rounded-lg shadow-md flex flex-col items-center">
+          <div className="w-full mb-4">
+            <h1 className="font-semibold">Nilai Prediksi Rendemen</h1>
           </div>
-        </div>
+          <div className="flex justify-around items-center w-full bg-blue-300">
+            <div className="flex flex-col gap-2 bg-green-200 h-full justify-end">
+              <div className="w-44 h-44 mb-2">
+                <CircularProgressbar
+                  value={6}
+                  text={`${6}%`}
+                  styles={buildStyles({
+                    pathColor: "#4CAF50",
+                    textColor: "#4CAF50",
+                    trailColor: "#d6d6d6",
+                  })}
+                />
+              </div>
+              <h2 className="text-xl font-semibold mb-2 text-center">
+                Rendemen
+              </h2>
+            </div>
 
-        {/* Circular Progress for SDM */}
-        <div className="bg-white p-4 rounded-lg shadow-md flex flex-col items-center justify-center">
-          <div className="mb-2 flex flex-col gap-2">
-            <div className="w-32 h-32 mb-2">
-              <CircularProgressbar
-                value={6}
-                text={`${6}%`}
-                styles={buildStyles({
-                  pathColor: "#4CAF50",
-                  textColor: "#4CAF50",
-                  trailColor: "#d6d6d6",
-                })}
+            <div className="border-l-2 border-gray-300 h-full"></div>
+
+            <div className="flex flex-col items-center justify-center">
+              <h1 className="text-left font-semibold w-full mb-2">
+                Periode Perhitungan:
+              </h1>
+              <DatePicker
+                selected={selectedDate}
+                onChange={(date) => setSelectedDate(date)}
+                inline // Makes the calendar always visible
+                dateFormat="dd/MM/yyyy"
+                className="border border-gray-300 rounded-md p-2"
               />
             </div>
-            <h2 className="text-xl font-semibold mb-2 text-center">Rendemen</h2>
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* Lower Grid */}

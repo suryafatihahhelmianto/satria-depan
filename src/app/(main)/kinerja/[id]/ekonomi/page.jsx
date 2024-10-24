@@ -92,7 +92,7 @@ export default function DataKinerja() {
   const rowsE1 = [
     {
       label: "Tingkat Risiko Rantai Pasok",
-      inputType: "select",
+      inputType: "dropdown",
       value: formData.nilaiRisiko,
       options: [
         { value: 1, label: "Sangat Rendah" },
@@ -101,39 +101,36 @@ export default function DataKinerja() {
         { value: 0.3, label: "Tinggi" },
         { value: 0.2, label: "Sangat Tinggi" },
       ],
-      onChange: (e) => {
-        const newValue = parseFloat(e.target.value);
-        setFormData({ ...formData, nilaiRisiko: newValue });
-        handleUpdate("nilaiRisiko", newValue); // Update immediately on change
-      },
+      onChange: (e) => handleInputChange("nilaiRisiko", e.target.value),
+      onSubmit: () => handleUpdate("nilaiRisiko", formData.nilaiRisiko),
     },
   ];
 
   const rowsE2 = [
     {
       label: "Kehilangan Pol Ampas",
-      inputType: "text",
+      inputType: "number",
       value: formData.polAmpas,
       onChange: (e) => setFormData({ ...formData, polAmpas: e.target.value }),
       onSubmit: () => handleUpdate("polAmpas", formData.polAmpas),
     },
     {
       label: "Kehilangan Pol Blotong",
-      inputType: "text",
+      inputType: "number",
       value: formData.polBlotong,
       onChange: (e) => setFormData({ ...formData, polBlotong: e.target.value }),
       onSubmit: () => handleUpdate("polBlotong", formData.polBlotong),
     },
     {
       label: "Kehilangan Pol Tetes",
-      inputType: "text",
+      inputType: "number",
       value: formData.polTetes,
       onChange: (e) => setFormData({ ...formData, polTetes: e.target.value }),
       onSubmit: () => handleUpdate("polTetes", formData.polTetes),
     },
     {
       label: "Kehilangan Rendemen Kebun",
-      inputType: "text",
+      inputType: "number",
       value: formData.rendemenKebun,
       onChange: (e) =>
         setFormData({ ...formData, rendemenKebun: e.target.value }),
@@ -141,7 +138,7 @@ export default function DataKinerja() {
     },
     {
       label: "Kehilangan Rendemen Gerbang",
-      inputType: "text",
+      inputType: "number",
       value: formData.rendemenGerbang,
       onChange: (e) =>
         setFormData({ ...formData, rendemenGerbang: e.target.value }),
@@ -149,7 +146,7 @@ export default function DataKinerja() {
     },
     {
       label: "Kehilangan Rendemen NPP",
-      inputType: "text",
+      inputType: "number",
       value: formData.rendemenNPP,
       onChange: (e) =>
         setFormData({ ...formData, rendemenNPP: e.target.value }),
@@ -157,7 +154,7 @@ export default function DataKinerja() {
     },
     {
       label: "Kehilangan Rendemen Gula",
-      inputType: "text",
+      inputType: "number",
       value: formData.rendemenGula,
       onChange: (e) =>
         setFormData({ ...formData, rendemenGula: e.target.value }),
@@ -168,7 +165,7 @@ export default function DataKinerja() {
   const rowsE3 = [
     {
       label: "Kesenjangan Keuntungan Stakeholder Rantai Pasok",
-      inputType: "text",
+      inputType: "number",
       value: formData.kesenjanganRantai,
       onChange: (e) =>
         setFormData({ ...formData, kesenjanganRantai: e.target.value }),
@@ -180,14 +177,14 @@ export default function DataKinerja() {
   const rowsE4 = [
     {
       label: "Harga Acuan/Referensi",
-      inputType: "text",
+      inputType: "number",
       value: formData.hargaAcuan,
       onChange: (e) => setFormData({ ...formData, hargaAcuan: e.target.value }),
       onSubmit: () => handleUpdate("hargaAcuan", formData.hargaAcuan),
     },
     {
       label: "Harga Lelang (rata-rata)",
-      inputType: "text",
+      inputType: "number",
       value: formData.hargaLelang,
       onChange: (e) =>
         setFormData({ ...formData, hargaLelang: e.target.value }),
@@ -198,7 +195,7 @@ export default function DataKinerja() {
   const rowsE5 = [
     {
       label: "Produksi Tahun Ini",
-      inputType: "text",
+      inputType: "number",
       value: formData.shsTahunIni,
       onChange: (e) =>
         setFormData({ ...formData, shsTahunIni: e.target.value }),
@@ -206,7 +203,7 @@ export default function DataKinerja() {
     },
     {
       label: "Produksi tahun lalu",
-      inputType: "text",
+      inputType: "number",
       value: formData.shsTahunSebel,
       onChange: (e) =>
         setFormData({ ...formData, shsTahunSebel: e.target.value }),
@@ -217,7 +214,7 @@ export default function DataKinerja() {
   const rowsE6 = [
     {
       label: "Total Penjualan Gula",
-      inputType: "text",
+      inputType: "number",
       value: formData.returnOE,
       onChange: (e) => setFormData({ ...formData, returnOE: e.target.value }),
       onSubmit: () => handleUpdate("returnOE", formData.returnOE),
