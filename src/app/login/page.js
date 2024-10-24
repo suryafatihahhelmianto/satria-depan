@@ -54,7 +54,7 @@ export default function LoginPage() {
       // Tangani respons sukses
       setSuccessMessage("Login Berhasil, Tunggu Sebentar Yaa...");
       // Simpan token atau lakukan tindakan lain setelah login berhasil
-      router.push("/home");
+      router.push("/");
 
       // Reset form
       setUsername("");
