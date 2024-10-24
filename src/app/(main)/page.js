@@ -159,7 +159,10 @@ export default function HomePage() {
     >
       Detail
     </button> */}
-              <div className="w-52 h-52 mb-2">
+              <div
+                onClick={handleDetailClick}
+                className="w-52 h-52 mb-2 hover:cursor-pointer"
+              >
                 <CircularProgressbar
                   value={progressKinerja}
                   text={`${progressKinerja}%`}
