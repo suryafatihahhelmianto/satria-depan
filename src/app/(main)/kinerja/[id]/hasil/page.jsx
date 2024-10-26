@@ -13,23 +13,23 @@ export default function LingkunganPage() {
   const [loading, setLoading] = useState(false); // State untuk loading
   const [error, setError] = useState(null); // State untuk error
 
-  // Fungsi untuk fetch data dari API instrumen-nilai
-  const fetchInstrumenNilai = async () => {
-    try {
-      const response = await fetchData(`/api/instrumen-nilai/${sesiId}`);
-      console.log("ini response: ", response[0]);
-      setInstrumenNilai(response[0]); // Set data instrumen nilai dari API
-      setLoading(false);
-    } catch (err) {
-      setError("Gagal mengambil data instrumen nilai.");
-      setLoading(false);
-    }
-  };
-
   // Memanggil fetchInstrumenNilai saat komponen pertama kali di-mount
   useEffect(() => {
+    // Fungsi untuk fetch data dari API instrumen-nilai
+    const fetchInstrumenNilai = async () => {
+      try {
+        const response = await fetchData(`/api/instrumen-nilai/${sesiId}`);
+        console.log("ini response: ", response[0]);
+        setInstrumenNilai(response[0]); // Set data instrumen nilai dari API
+        setLoading(false);
+      } catch (err) {
+        setError("Gagal mengambil data instrumen nilai.");
+        setLoading(false);
+      }
+    };
+
     fetchInstrumenNilai();
-  }, []);
+  }, [sesiId]);
 
   if (loading) {
     return <p>Loading...</p>;

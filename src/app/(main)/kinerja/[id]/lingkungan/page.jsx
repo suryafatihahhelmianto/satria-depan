@@ -79,86 +79,6 @@ export default function LingkunganPage() {
 
   const [loading, setLoading] = useState(true);
 
-  const fetchLingkungan = async () => {
-    try {
-      const response = await fetchData(`/api/masukkan/lingkungan/${sesiId}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${getCookie("token")}`,
-        },
-      });
-      console.log("Response dari server (lingkungan): ", response);
-      setFormData({
-        amoniaDesaA1: response.amoniaDesaA1,
-        amoniaDesaA2: response.amoniaDesaA2,
-        amoniaDesaB1: response.amoniaDesaB1,
-        amoniaDesaB2: response.amoniaDesaB2,
-        sulfidaDesaA1: response.sulfidaDesaA1,
-        sulfidaDesaA2: response.sulfidaDesaA2,
-        sulfidaDesaB1: response.sulfidaDesaB1,
-        sulfidaDesaB2: response.sulfidaDesaB2,
-        debuDesaA1: response.debuDesaA1,
-        debuDesaA2: response.debuDesaA2,
-        debuDesaB1: response.debuDesaB1,
-        debuDesaB2: response.debuDesaB2,
-        konsumsiListrik: response.konsumsiListrik,
-        jumlahTonTebu: response.jumlahTonTebu,
-        shs: response.shs,
-        bisingProduksi1: response.bisingProduksi1,
-        bisingProduksi2: response.bisingProduksi2,
-        bisingDesaA1: response.bisingDesaA1,
-        bisingDesaA2: response.bisingDesaA2,
-        bisingDesaB1: response.bisingDesaB1,
-        bisingDesaB2: response.bisingDesaB2,
-        totalResiduJuni: response.totalResiduJuni,
-        bodJuni: response.bodJuni,
-        codJuni: response.codJuni,
-        sulfidaJuni: response.sulfidaJuni,
-        totalResiduJuli: response.totalResiduJuli,
-        bodJuli: response.bodJuli,
-        codJuli: response.codJuli,
-        sulfidaJuli: response.sulfidaJuli,
-        totalResiduAgustus: response.totalResiduAgustus,
-        bodAgustus: response.bodAgustus,
-        codAgustus: response.codAgustus,
-        sulfidaAgustus: response.sulfidaAgustus,
-        totalResiduSeptember: response.totalResiduSeptember,
-        bodSeptember: response.bodSeptember,
-        codSeptember: response.codSeptember,
-        sulfidaSeptember: response.sulfidaSeptember,
-
-        sulfurDesaA1: response.sulfurDesaA1,
-        sulfurDesaA2: response.sulfurDesaA2,
-        sulfurDesaB1: response.sulfurDesaB1,
-        sulfurDesaB2: response.sulfurdesaB2,
-        karbonDesaA1: response.karbonDesaA1,
-        karbonDesaA2: response.karbonDesaA2,
-        karbonDesaB1: response.karbonDesaB1,
-        karbonDesaB2: response.karbonDesaB2,
-        nitrogenDesaA1: response.nitrogenDesaA1,
-        nitrogenDesaA2: response.nitrogenDesaA2,
-        nitrogenDesaB1: response.nitrogenDesaB1,
-        nitrogenDesaB2: response.nitrogenDesaB2,
-        oksidaDesaA1: response.oksidaDesaA1,
-        oksidaDesaA2: response.oksidaDesaA2,
-        oksidaDesaB1: response.oksidaDesaB1,
-        oksidaDesaB2: response.oksidaDesaB2,
-
-        amoniaKerja1: response.amoniaKerja1,
-        amoniaKerja2: response.amoniaKerja2,
-        debuKerja1: response.debuKerja1,
-        debuKerja2: response.debuKerja2,
-        nitrogenKerja1: response.nitrogenKerja1,
-        nitrogenKerja2: response.nitrogenKerja2,
-        sulfurKerja1: response.sulfurKerja1,
-        sulfurKerja2: response.sulfurKerja2,
-      });
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching data (lingkungan):", error);
-    }
-  };
-
   const handleInputChange = (field, value) => {
     setFormData({ ...formData, [field]: value });
   };
@@ -214,6 +134,86 @@ export default function LingkunganPage() {
   };
 
   useEffect(() => {
+    const fetchLingkungan = async () => {
+      try {
+        const response = await fetchData(`/api/masukkan/lingkungan/${sesiId}`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${getCookie("token")}`,
+          },
+        });
+        console.log("Response dari server (lingkungan): ", response);
+        setFormData({
+          amoniaDesaA1: response.amoniaDesaA1,
+          amoniaDesaA2: response.amoniaDesaA2,
+          amoniaDesaB1: response.amoniaDesaB1,
+          amoniaDesaB2: response.amoniaDesaB2,
+          sulfidaDesaA1: response.sulfidaDesaA1,
+          sulfidaDesaA2: response.sulfidaDesaA2,
+          sulfidaDesaB1: response.sulfidaDesaB1,
+          sulfidaDesaB2: response.sulfidaDesaB2,
+          debuDesaA1: response.debuDesaA1,
+          debuDesaA2: response.debuDesaA2,
+          debuDesaB1: response.debuDesaB1,
+          debuDesaB2: response.debuDesaB2,
+          konsumsiListrik: response.konsumsiListrik,
+          jumlahTonTebu: response.jumlahTonTebu,
+          shs: response.shs,
+          bisingProduksi1: response.bisingProduksi1,
+          bisingProduksi2: response.bisingProduksi2,
+          bisingDesaA1: response.bisingDesaA1,
+          bisingDesaA2: response.bisingDesaA2,
+          bisingDesaB1: response.bisingDesaB1,
+          bisingDesaB2: response.bisingDesaB2,
+          totalResiduJuni: response.totalResiduJuni,
+          bodJuni: response.bodJuni,
+          codJuni: response.codJuni,
+          sulfidaJuni: response.sulfidaJuni,
+          totalResiduJuli: response.totalResiduJuli,
+          bodJuli: response.bodJuli,
+          codJuli: response.codJuli,
+          sulfidaJuli: response.sulfidaJuli,
+          totalResiduAgustus: response.totalResiduAgustus,
+          bodAgustus: response.bodAgustus,
+          codAgustus: response.codAgustus,
+          sulfidaAgustus: response.sulfidaAgustus,
+          totalResiduSeptember: response.totalResiduSeptember,
+          bodSeptember: response.bodSeptember,
+          codSeptember: response.codSeptember,
+          sulfidaSeptember: response.sulfidaSeptember,
+
+          sulfurDesaA1: response.sulfurDesaA1,
+          sulfurDesaA2: response.sulfurDesaA2,
+          sulfurDesaB1: response.sulfurDesaB1,
+          sulfurDesaB2: response.sulfurdesaB2,
+          karbonDesaA1: response.karbonDesaA1,
+          karbonDesaA2: response.karbonDesaA2,
+          karbonDesaB1: response.karbonDesaB1,
+          karbonDesaB2: response.karbonDesaB2,
+          nitrogenDesaA1: response.nitrogenDesaA1,
+          nitrogenDesaA2: response.nitrogenDesaA2,
+          nitrogenDesaB1: response.nitrogenDesaB1,
+          nitrogenDesaB2: response.nitrogenDesaB2,
+          oksidaDesaA1: response.oksidaDesaA1,
+          oksidaDesaA2: response.oksidaDesaA2,
+          oksidaDesaB1: response.oksidaDesaB1,
+          oksidaDesaB2: response.oksidaDesaB2,
+
+          amoniaKerja1: response.amoniaKerja1,
+          amoniaKerja2: response.amoniaKerja2,
+          debuKerja1: response.debuKerja1,
+          debuKerja2: response.debuKerja2,
+          nitrogenKerja1: response.nitrogenKerja1,
+          nitrogenKerja2: response.nitrogenKerja2,
+          sulfurKerja1: response.sulfurKerja1,
+          sulfurKerja2: response.sulfurKerja2,
+        });
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data (lingkungan):", error);
+      }
+    };
+
     fetchLingkungan();
   }, [sesiId]);
 

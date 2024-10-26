@@ -27,22 +27,6 @@ export default function DataSosial() {
 
   const [loading, setLoading] = useState(false);
 
-  const fetchSosialData = async () => {
-    try {
-      const response = await fetchData(`/api/masukkan/sosial/${sesiId}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${getCookie("token")}`,
-        },
-      });
-
-      setFormData(response);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
   const handleUpdate = async (field, value) => {
     try {
       const data = { sesiId };
@@ -82,6 +66,22 @@ export default function DataSosial() {
   };
 
   useEffect(() => {
+    const fetchSosialData = async () => {
+      try {
+        const response = await fetchData(`/api/masukkan/sosial/${sesiId}`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${getCookie("token")}`,
+          },
+        });
+
+        setFormData(response);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
     fetchSosialData();
   }, [sesiId]);
 

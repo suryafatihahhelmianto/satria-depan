@@ -16,75 +16,74 @@ export default function DetailPage() {
   const [dataSpiderEkonomi, setDataSpiderEkonomi] = useState([]);
   const [nilaiDimensiEkonomi, setNilaiDimensiEkonomi] = useState(0);
 
-  const fetchEkonomiData = async () => {
-    const token = getCookie("token");
-    try {
-      const response = await fetchData(
-        `/api/dimensi/ekonomi?sesiPengisianId=${sesiId}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${getCookie("token")}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      // Persiapkan data untuk tabel
-      const dataTable = [
-        {
-          id: 1,
-          indikator: "Tingkat Risiko",
-          simbol: "E1",
-          nilai: (response.tingkatRisiko * 100).toFixed(1), // Nilai dikali 100 untuk jadi persentase
-        },
-        {
-          id: 2,
-          indikator: "Hilangnya Produksi",
-          simbol: "E2",
-          nilai: (response.hilangProduksi * 100).toFixed(1),
-        },
-        {
-          id: 3,
-          indikator: "Kesenjangan Keuntungan",
-          simbol: "E3",
-          nilai: (response.kesenjanganKeuntungan * 100).toFixed(1),
-        },
-        {
-          id: 4,
-          indikator: "Harga Patokan Petani",
-          simbol: "E4",
-          nilai: (response.hargaPatokPetan * 100).toFixed(1),
-        },
-        {
-          id: 5,
-          indikator: "Tingkat Ketangkasan",
-          simbol: "E5",
-          nilai: (response.tingkatKetangkasan * 100).toFixed(1),
-        },
-        {
-          id: 6,
-          indikator: "Return on Investment (ROI)",
-          simbol: "E6",
-          nilai: (response.returnOnInvestment * 100).toFixed(1),
-        },
-      ];
-
-      // Persiapkan data untuk SpiderGraph
-      const spiderData = dataTable.map((item) => ({
-        subject: item.simbol,
-        A: item.nilai,
-      }));
-
-      setDataEkonomi(dataTable);
-      setDataSpiderEkonomi(spiderData);
-      setNilaiDimensiEkonomi(response.nilaiDimenEkono);
-    } catch (error) {
-      console.error("Error fetching dimensi ekonomi data:", error);
-    }
-  };
-
   useEffect(() => {
+    const fetchEkonomiData = async () => {
+      const token = getCookie("token");
+      try {
+        const response = await fetchData(
+          `/api/dimensi/ekonomi?sesiPengisianId=${sesiId}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${getCookie("token")}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        // Persiapkan data untuk tabel
+        const dataTable = [
+          {
+            id: 1,
+            indikator: "Tingkat Risiko",
+            simbol: "E1",
+            nilai: (response.tingkatRisiko * 100).toFixed(1), // Nilai dikali 100 untuk jadi persentase
+          },
+          {
+            id: 2,
+            indikator: "Hilangnya Produksi",
+            simbol: "E2",
+            nilai: (response.hilangProduksi * 100).toFixed(1),
+          },
+          {
+            id: 3,
+            indikator: "Kesenjangan Keuntungan",
+            simbol: "E3",
+            nilai: (response.kesenjanganKeuntungan * 100).toFixed(1),
+          },
+          {
+            id: 4,
+            indikator: "Harga Patokan Petani",
+            simbol: "E4",
+            nilai: (response.hargaPatokPetan * 100).toFixed(1),
+          },
+          {
+            id: 5,
+            indikator: "Tingkat Ketangkasan",
+            simbol: "E5",
+            nilai: (response.tingkatKetangkasan * 100).toFixed(1),
+          },
+          {
+            id: 6,
+            indikator: "Return on Investment (ROI)",
+            simbol: "E6",
+            nilai: (response.returnOnInvestment * 100).toFixed(1),
+          },
+        ];
+
+        // Persiapkan data untuk SpiderGraph
+        const spiderData = dataTable.map((item) => ({
+          subject: item.simbol,
+          A: item.nilai,
+        }));
+
+        setDataEkonomi(dataTable);
+        setDataSpiderEkonomi(spiderData);
+        setNilaiDimensiEkonomi(response.nilaiDimenEkono);
+      } catch (error) {
+        console.error("Error fetching dimensi ekonomi data:", error);
+      }
+    };
     fetchEkonomiData();
   }, [sesiId]);
 

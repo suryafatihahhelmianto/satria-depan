@@ -30,19 +30,8 @@ export default function DataKinerja() {
 
   const [loading, setLoading] = useState(true);
 
-  const fetchEkonomi = async () => {
-    try {
-      const response = await fetchData(`/api/masukkan/ekonomi/${sesiId}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${getCookie("token")}`,
-        },
-      });
-      setFormData(response);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
+  const handleInputChange = (field, value) => {
+    setFormData({ ...formData, [field]: value });
   };
 
   const handleUpdate = async (field, value) => {
@@ -81,6 +70,21 @@ export default function DataKinerja() {
   };
 
   useEffect(() => {
+    const fetchEkonomi = async () => {
+      try {
+        const response = await fetchData(`/api/masukkan/ekonomi/${sesiId}`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${getCookie("token")}`,
+          },
+        });
+        setFormData(response);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
     fetchEkonomi();
   }, [sesiId]);
 

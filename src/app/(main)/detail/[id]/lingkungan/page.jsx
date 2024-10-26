@@ -16,80 +16,80 @@ export default function DetailPage() {
   const [dataSpiderLingkungan, setDataSpiderLingkungan] = useState([]);
   const [nilaiDimensiLingkungan, setNilaiDimensiLingkungan] = useState(0);
 
-  const fetchLingkunganData = async () => {
-    try {
-      const response = await fetchData(
-        `/api/dimensi/lingkungan?sesiPengisianId=${sesiId}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${getCookie("token")}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      // Persiapkan data untuk tabel
-      const dataTable = [
-        {
-          id: 1,
-          indikator: "Tingkat Bau",
-          simbol: "L1",
-          nilai: (response.tingkatBau * 100).toFixed(1),
-        },
-        {
-          id: 2,
-          indikator: "Tingkat Debu",
-          simbol: "L2",
-          nilai: (response.tingkatDebu * 100).toFixed(1),
-        },
-        {
-          id: 3,
-          indikator: "Emisi Listrik",
-          simbol: "L3",
-          nilai: (response.emisiListrik * 100).toFixed(1),
-        },
-        {
-          id: 4,
-          indikator: "Kebisingan",
-          simbol: "L4",
-          nilai: (response.kebisingan * 100).toFixed(1),
-        },
-        {
-          id: 5,
-          indikator: "Air Muka Tanah",
-          simbol: "L5",
-          nilai: (response.airMukaan * 100).toFixed(1),
-        },
-        {
-          id: 6,
-          indikator: "Udara Ambien",
-          simbol: "L6",
-          nilai: (response.udaraAmbien * 100).toFixed(1),
-        },
-        {
-          id: 7,
-          indikator: "Udara Ruangan",
-          simbol: "L7",
-          nilai: (response.udaraRuang * 100).toFixed(1),
-        },
-      ];
-
-      // Persiapkan data untuk SpiderGraph
-      const spiderData = dataTable.map((item) => ({
-        subject: item.simbol,
-        A: item.nilai,
-      }));
-
-      setDataLingkungan(dataTable);
-      setDataSpiderLingkungan(spiderData);
-      setNilaiDimensiLingkungan(response.nilaiDimenLingku);
-    } catch (error) {
-      console.error("Error fetching dimensi lingkungan data:", error);
-    }
-  };
-
   useEffect(() => {
+    const fetchLingkunganData = async () => {
+      try {
+        const response = await fetchData(
+          `/api/dimensi/lingkungan?sesiPengisianId=${sesiId}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${getCookie("token")}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        // Persiapkan data untuk tabel
+        const dataTable = [
+          {
+            id: 1,
+            indikator: "Tingkat Bau",
+            simbol: "L1",
+            nilai: (response.tingkatBau * 100).toFixed(1),
+          },
+          {
+            id: 2,
+            indikator: "Tingkat Debu",
+            simbol: "L2",
+            nilai: (response.tingkatDebu * 100).toFixed(1),
+          },
+          {
+            id: 3,
+            indikator: "Emisi Listrik",
+            simbol: "L3",
+            nilai: (response.emisiListrik * 100).toFixed(1),
+          },
+          {
+            id: 4,
+            indikator: "Kebisingan",
+            simbol: "L4",
+            nilai: (response.kebisingan * 100).toFixed(1),
+          },
+          {
+            id: 5,
+            indikator: "Air Muka Tanah",
+            simbol: "L5",
+            nilai: (response.airMukaan * 100).toFixed(1),
+          },
+          {
+            id: 6,
+            indikator: "Udara Ambien",
+            simbol: "L6",
+            nilai: (response.udaraAmbien * 100).toFixed(1),
+          },
+          {
+            id: 7,
+            indikator: "Udara Ruangan",
+            simbol: "L7",
+            nilai: (response.udaraRuang * 100).toFixed(1),
+          },
+        ];
+
+        // Persiapkan data untuk SpiderGraph
+        const spiderData = dataTable.map((item) => ({
+          subject: item.simbol,
+          A: item.nilai,
+        }));
+
+        setDataLingkungan(dataTable);
+        setDataSpiderLingkungan(spiderData);
+        setNilaiDimensiLingkungan(response.nilaiDimenLingku);
+      } catch (error) {
+        console.error("Error fetching dimensi lingkungan data:", error);
+      }
+    };
+
     fetchLingkunganData();
   }, [sesiId]);
 

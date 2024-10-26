@@ -16,74 +16,74 @@ export default function DetailPage() {
   const [dataSpiderSosial, setDataSpiderSosial] = useState([]);
   const [nilaiDimensiSosial, setNilaiDimensiSosial] = useState(0);
 
-  const fetchSosialData = async () => {
-    try {
-      const response = await fetchData(
-        `/api/dimensi/sosial?sesiPengisianId=${sesiId}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${getCookie("token")}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      // Persiapkan data untuk tabel
-      const dataTable = [
-        {
-          id: 1,
-          indikator: "Dukungan Kelembagaan terhadap Rantai Pasok ",
-          simbol: "S1",
-          nilai: (response.dukunganLembaga * 100).toFixed(1),
-        },
-        {
-          id: 2,
-          indikator: "Ketersediaan Infrastruktur sebagai Penunjang Aktivitas",
-          simbol: "S2",
-          nilai: (response.tersediaaInfrast * 100).toFixed(1),
-        },
-        {
-          id: 3,
-          indikator: "Manfaat Corporate Sosial Responsibility bagi Sosial",
-          simbol: "S3",
-          nilai: (response.manfaatSosial * 100).toFixed(1),
-        },
-        {
-          id: 4,
-          indikator: "Keluhan Limbah Rantai Pasok Industri",
-          simbol: "S4",
-          nilai: (response.keluhanLimbah * 100).toFixed(1),
-        },
-        {
-          id: 5,
-          indikator: "Penyerapan Tenaga Kerja Lokal",
-          simbol: "S5",
-          nilai: (response.penyerapLokal * 100).toFixed(1),
-        },
-        {
-          id: 6,
-          indikator: "Peningkatan Keikutsertaan Stakeholder Kemitraan",
-          simbol: "S6",
-          nilai: (response.ikutMitra * 100).toFixed(1),
-        },
-      ];
-
-      // Persiapkan data untuk SpiderGraph
-      const spiderData = dataTable.map((item) => ({
-        subject: item.simbol,
-        A: item.nilai,
-      }));
-
-      setDataSosial(dataTable);
-      setDataSpiderSosial(spiderData);
-      setNilaiDimensiSosial(response.nilaiDimenSosial);
-    } catch (error) {
-      console.error("Error fetching dimensi Sosial data:", error);
-    }
-  };
-
   useEffect(() => {
+    const fetchSosialData = async () => {
+      try {
+        const response = await fetchData(
+          `/api/dimensi/sosial?sesiPengisianId=${sesiId}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${getCookie("token")}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        // Persiapkan data untuk tabel
+        const dataTable = [
+          {
+            id: 1,
+            indikator: "Dukungan Kelembagaan terhadap Rantai Pasok ",
+            simbol: "S1",
+            nilai: (response.dukunganLembaga * 100).toFixed(1),
+          },
+          {
+            id: 2,
+            indikator: "Ketersediaan Infrastruktur sebagai Penunjang Aktivitas",
+            simbol: "S2",
+            nilai: (response.tersediaaInfrast * 100).toFixed(1),
+          },
+          {
+            id: 3,
+            indikator: "Manfaat Corporate Sosial Responsibility bagi Sosial",
+            simbol: "S3",
+            nilai: (response.manfaatSosial * 100).toFixed(1),
+          },
+          {
+            id: 4,
+            indikator: "Keluhan Limbah Rantai Pasok Industri",
+            simbol: "S4",
+            nilai: (response.keluhanLimbah * 100).toFixed(1),
+          },
+          {
+            id: 5,
+            indikator: "Penyerapan Tenaga Kerja Lokal",
+            simbol: "S5",
+            nilai: (response.penyerapLokal * 100).toFixed(1),
+          },
+          {
+            id: 6,
+            indikator: "Peningkatan Keikutsertaan Stakeholder Kemitraan",
+            simbol: "S6",
+            nilai: (response.ikutMitra * 100).toFixed(1),
+          },
+        ];
+
+        // Persiapkan data untuk SpiderGraph
+        const spiderData = dataTable.map((item) => ({
+          subject: item.simbol,
+          A: item.nilai,
+        }));
+
+        setDataSosial(dataTable);
+        setDataSpiderSosial(spiderData);
+        setNilaiDimensiSosial(response.nilaiDimenSosial);
+      } catch (error) {
+        console.error("Error fetching dimensi Sosial data:", error);
+      }
+    };
+
     fetchSosialData();
   }, [sesiId]);
 
