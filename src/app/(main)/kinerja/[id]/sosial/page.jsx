@@ -245,7 +245,7 @@ export default function DataSosial() {
         rows={rowsS6}
       />
 
-      <div className="text-center mt-6">
+      {/* <div className="text-center mt-6">
         <button
           type="button"
           onClick={handleCalculate}
@@ -253,7 +253,7 @@ export default function DataSosial() {
         >
           Simpan dan Hitung Dimensi Sosial
         </button>
-      </div>
+      </div> */}
     </div>
   );
 }

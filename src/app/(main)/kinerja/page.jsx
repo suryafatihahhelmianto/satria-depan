@@ -19,6 +19,7 @@ export default function KinerjaPage() {
   const [loading, setLoading] = useState(true); // State untuk loading
   const [error, setError] = useState(null); // State untuk menyimpan error jika ada
   const [isModalOpen, setIsModalOpen] = useState(false); // State untuk mengontrol modal
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     pabrikId: 0, // Menggunakan pabrikId untuk menghubungkan sesi dengan pabrik
     periode: "",
@@ -125,8 +126,7 @@ export default function KinerjaPage() {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-
-    console.log("ini data yang mau dikirim: ", JSON.stringify(formData));
+    setIsSubmitting(true);
 
     const token = getCookie("token");
     try {
@@ -141,6 +141,8 @@ export default function KinerjaPage() {
       // fetchSessions(); // Refresh sesi setelah menambah
     } catch (error) {
       console.error("Error creating session: ", error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -305,16 +307,20 @@ export default function KinerjaPage() {
               <div className="flex justify-end gap-2">
                 <button
                   type="button"
-                  className="px-4 py-2 bg-gray-400 text-white rounded-lg"
+                  className="px-4 py-2 bg-gray-500 text-white rounded-lg"
                   onClick={() => setIsModalOpen(false)} // Close modal on cancel
+                  disabled={isSubmitting}
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-green-600 text-white rounded-lg"
+                  className={`px-4 py-2 rounded-lg ${
+                    isSubmitting ? "bg-gray-500" : "bg-green-600"
+                  } text-white`}
+                  disabled={isSubmitting}
                 >
-                  Simpan
+                  {isSubmitting ? "Menyimpan..." : "Simpan"}
                 </button>
               </div>
             </form>

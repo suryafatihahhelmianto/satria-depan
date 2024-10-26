@@ -237,7 +237,7 @@ export default function DataKinerja() {
       <KinerjaTable title="Tingkat Ketangkasan (E5)" rows={rowsE5} />
       <KinerjaTable title="Return on Investment (E6)" rows={rowsE6} />
 
-      <div className="text-center mt-6">
+      {/* <div className="text-center mt-6">
         <button
           type="button"
           onClick={handleCalculate}
@@ -245,7 +245,7 @@ export default function DataKinerja() {
         >
           Hitung
         </button>
-      </div>
+      </div> */}
     </div>
   );
 }

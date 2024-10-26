@@ -787,7 +787,7 @@ export default function LingkunganPage() {
       <KinerjaTable title="Kualitas Udara Ambien (L6)" rows={dataL6} />
       <KinerjaTable title="Kualitas Udara Ruang Kerja (L7)" rows={dataL7} />
 
-      <div className="text-center mt-6">
+      {/* <div className="text-center mt-6">
         <button
           type="button"
           onClick={handleCalculate}
@@ -795,7 +795,7 @@ export default function LingkunganPage() {
         >
           Simpan dan Hitung Dimensi Lingkungan
         </button>
-      </div>
+      </div> */}
     </div>
   );
 }

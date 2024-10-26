@@ -404,7 +404,7 @@ export default function SumberDayaPage() {
         rows={dataD10}
       />
 
-      <div className="text-center mt-6">
+      {/* <div className="text-center mt-6">
         <button
           type="button"
           onClick={handleCalculate}
@@ -412,7 +412,7 @@ export default function SumberDayaPage() {
         >
           Simpan dan Hitung Dimensi Sumber Daya
         </button>
-      </div>
+      </div> */}
     </div>
   );
 
