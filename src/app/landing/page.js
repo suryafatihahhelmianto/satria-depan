@@ -25,13 +25,6 @@ export default function Dashboard() {
     },
   ];
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      nextSlide();
-    }, 9000); // Slide auto-change every 9 seconds
-    return () => clearInterval(interval);
-  }, [nextSlide]);
-
   const nextSlide = useCallback(() => {
     setCurrentSlideIndex((currentSlideIndex + 1) % totalSlides);
   }, [currentSlideIndex, totalSlides]);
@@ -43,6 +36,13 @@ export default function Dashboard() {
   const updateDots = (index) => {
     setCurrentSlideIndex(index);
   };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      nextSlide();
+    }, 9000); // Slide auto-change every 9 seconds
+    return () => clearInterval(interval);
+  }, [nextSlide]);
 
   return (
     <div className="min-h-screen bg-gray-100">
