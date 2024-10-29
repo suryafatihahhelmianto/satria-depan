@@ -15,64 +15,64 @@ export default function HasilPage() {
   const [dataHasil, setDataHasil] = useState([]);
   const [dataSpiderHasil, setDataSpiderHasil] = useState([]);
 
-  const fetchHasilKinerja = async () => {
-    try {
-      const response = await fetchData(
-        `/api/dimensi/hasil?sesiPengisianId=${sesiId}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${getCookie("token")}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      console.log("ini respon hasil: ", response);
-
-      // Persiapkan data untuk tabel
-      const dataTable = [
-        {
-          dimensi: "Sumberdaya (D)",
-          nilai: response.nilaiDimenSDAM?.toFixed(1),
-          kategori: "Kurang Berkelanjutan",
-        },
-        {
-          dimensi: "Ekonomi (E)",
-          nilai: response.nilaiDimenEkono?.toFixed(1),
-          kategori: "Kurang Berkelanjutan",
-        },
-        {
-          dimensi: "Lingkungan (L)",
-          nilai: response.nilaiDimenLingku?.toFixed(1),
-          kategori: "Berkelanjutan",
-        },
-        {
-          dimensi: "Sosial (S)",
-          nilai: response.nilaiDimenSosial?.toFixed(1),
-          kategori: "Cukup Berkelanjutan",
-        },
-        {
-          dimensi: "Total Nilai Kinerja",
-          nilai: response.nilaiKinerja?.toFixed(1),
-          kategori: "Berkelanjutan",
-        },
-      ];
-
-      // Persiapkan data untuk SpiderGraph
-      const spiderData = dataTable.map((item) => ({
-        subject: item.simbol,
-        A: item.nilai,
-      }));
-
-      setDataHasil(dataTable);
-      setDataSpiderHasil(spiderData);
-    } catch (error) {
-      console.error("Error fetching dimensi hasil data:", error);
-    }
-  };
-
   useEffect(() => {
+    const fetchHasilKinerja = async () => {
+      try {
+        const response = await fetchData(
+          `/api/dimensi/hasil?sesiPengisianId=${sesiId}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${getCookie("token")}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        console.log("ini respon hasil: ", response);
+
+        // Persiapkan data untuk tabel
+        const dataTable = [
+          {
+            dimensi: "Sumberdaya (D)",
+            nilai: response.nilaiDimenSDAM?.toFixed(1),
+            kategori: "Kurang Berkelanjutan",
+          },
+          {
+            dimensi: "Ekonomi (E)",
+            nilai: response.nilaiDimenEkono?.toFixed(1),
+            kategori: "Kurang Berkelanjutan",
+          },
+          {
+            dimensi: "Lingkungan (L)",
+            nilai: response.nilaiDimenLingku?.toFixed(1),
+            kategori: "Berkelanjutan",
+          },
+          {
+            dimensi: "Sosial (S)",
+            nilai: response.nilaiDimenSosial?.toFixed(1),
+            kategori: "Cukup Berkelanjutan",
+          },
+          {
+            dimensi: "Total Nilai Kinerja",
+            nilai: response.nilaiKinerja?.toFixed(1),
+            kategori: "Berkelanjutan",
+          },
+        ];
+
+        // Persiapkan data untuk SpiderGraph
+        const spiderData = dataTable.map((item) => ({
+          subject: item.simbol,
+          A: item.nilai,
+        }));
+
+        setDataHasil(dataTable);
+        setDataSpiderHasil(spiderData);
+      } catch (error) {
+        console.error("Error fetching dimensi hasil data:", error);
+      }
+    };
+
     fetchHasilKinerja();
   }, [sesiId]);
 

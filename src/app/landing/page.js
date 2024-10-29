@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link"; // Use Link for navigation
 
@@ -25,16 +25,9 @@ export default function Dashboard() {
     },
   ];
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      nextSlide();
-    }, 9000); // Slide auto-change every 9 seconds
-    return () => clearInterval(interval);
-  }, [currentSlideIndex]);
-
-  const nextSlide = () => {
+  const nextSlide = useCallback(() => {
     setCurrentSlideIndex((currentSlideIndex + 1) % totalSlides);
-  };
+  }, [currentSlideIndex, totalSlides]);
 
   const prevSlide = () => {
     setCurrentSlideIndex((currentSlideIndex - 1 + totalSlides) % totalSlides);
@@ -43,6 +36,13 @@ export default function Dashboard() {
   const updateDots = (index) => {
     setCurrentSlideIndex(index);
   };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      nextSlide();
+    }, 9000); // Slide auto-change every 9 seconds
+    return () => clearInterval(interval);
+  }, [nextSlide]);
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -65,8 +65,9 @@ export default function Dashboard() {
         </div>
         <h1 className="text-4xl font-bold">Segera Hadir</h1>
         <h2 className="text-4xl font-bold mt-10">
-          "Sistem Analitik dan Teknologi Rajawali-IPB untuk Inovasi Agro:
-          Pengukuran Kinerja Keberlanjutan Rantai Pasok dan Prediksi Rendemen"
+          &quot;Sistem Analitik dan Teknologi Rajawali-IPB untuk Inovasi Agro:
+          Pengukuran Kinerja Keberlanjutan Rantai Pasok dan Prediksi
+          Rendemen&quot;
         </h2>
         <h1 className="text-3xl font-bold mt-10">SATRIA KEREN</h1>
       </header>
@@ -132,7 +133,7 @@ export default function Dashboard() {
         <div className="bg-gray-300 p-4 rounded-lg w-1/4 h-80 flex flex-col justify-center items-center space-y-4">
           {" "}
           {/* Perkecil card */}
-          <h2 className="text-lg font-bold">Masuk ke sistem</h2>
+          <h2 className="text-lg font-bold">Masuk Sekarang</h2>
           <Link
             href="/login"
             className="bg-ijoTebu text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700"

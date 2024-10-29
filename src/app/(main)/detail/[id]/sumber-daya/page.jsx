@@ -16,99 +16,99 @@ export default function DetailPage() {
   const [dataSpiderSDAM, setDataSpiderSDAM] = useState([]);
   const [nilaiDimensiSDAM, setNilaiDimensiSDAM] = useState(0);
 
-  const fetchSDAMData = async () => {
-    try {
-      const response = await fetchData(
-        `/api/dimensi/sdam?sesiPengisianId=${sesiId}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${getCookie("token")}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      // Persiapkan data untuk tabel
-      const dataTable = [
-        {
-          id: 1,
-          indikator: "Kemudahan Akses Sumber Daya Tenaga Kerja",
-          simbol: "D1",
-          nilai: (response.aksesTenagKerja * 100).toFixed(1),
-        },
-        {
-          id: 2,
-          indikator: "Tingkat Luas Tanam TRI",
-          simbol: "D2",
-          nilai: (response.luasTanamTRI * 100).toFixed(1),
-        },
-        {
-          id: 3,
-          indikator: "Kompetensi Tenaga Kerja",
-          simbol: "D3",
-          nilai: (response.kompeTenagKerja * 100).toFixed(1),
-        },
-        {
-          id: 4,
-          indikator: "Kualitas Bahan Baku",
-          simbol: "D4",
-          nilai: (response.kualiBahanBaku * 100).toFixed(1),
-        },
-        {
-          id: 5,
-          indikator: "Overall Recovery",
-          simbol: "D5",
-          nilai: (response.efesiensPabrik * 100).toFixed(1),
-        },
-        {
-          id: 6,
-          indikator: "Kecukupan Bahan Baku",
-          simbol: "D6",
-          nilai: (response.cukupBahanBaku * 100).toFixed(1),
-        },
-        {
-          id: 7,
-          indikator: "Tingkat Ratoon Tebu",
-          simbol: "D7",
-          nilai: (response.tingkatRatoon * 100).toFixed(1),
-        },
-        {
-          id: 8,
-          indikator: "Varietas Tebu yang Responsif Terhadap Kondisi Lahan",
-          simbol: "D8",
-          nilai: (response.varieTebuRespon * 100).toFixed(1),
-        },
-        {
-          id: 9,
-          indikator:
-            "Tingkat Penggunaan Mekanisasi yang Tepat dan Sesuai Kebutuhan",
-          simbol: "D9",
-          nilai: (response.tingkatMekanis * 100).toFixed(1),
-        },
-        {
-          id: 10,
-          indikator: "Teknologi Pengolahan Raw Sugar",
-          simbol: "D10",
-          nilai: (response.teknoOlahGula * 100).toFixed(1),
-        },
-      ];
-
-      // Persiapkan data untuk SpiderGraph
-      const spiderData = dataTable.map((item) => ({
-        subject: item.simbol,
-        A: item.nilai,
-      }));
-
-      setDataSDAM(dataTable);
-      setDataSpiderSDAM(spiderData);
-      setNilaiDimensiSDAM(response.nilaiDimenSDAM);
-    } catch (error) {
-      console.error("Error fetching dimensi Sosial data:", error);
-    }
-  };
-
   useEffect(() => {
+    const fetchSDAMData = async () => {
+      try {
+        const response = await fetchData(
+          `/api/dimensi/sdam?sesiPengisianId=${sesiId}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${getCookie("token")}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        // Persiapkan data untuk tabel
+        const dataTable = [
+          {
+            id: 1,
+            indikator: "Kemudahan Akses Sumber Daya Tenaga Kerja",
+            simbol: "D1",
+            nilai: (response.aksesTenagKerja * 100).toFixed(1),
+          },
+          {
+            id: 2,
+            indikator: "Tingkat Luas Tanam TRI",
+            simbol: "D2",
+            nilai: (response.luasTanamTRI * 100).toFixed(1),
+          },
+          {
+            id: 3,
+            indikator: "Kompetensi Tenaga Kerja",
+            simbol: "D3",
+            nilai: (response.kompeTenagKerja * 100).toFixed(1),
+          },
+          {
+            id: 4,
+            indikator: "Kualitas Bahan Baku",
+            simbol: "D4",
+            nilai: (response.kualiBahanBaku * 100).toFixed(1),
+          },
+          {
+            id: 5,
+            indikator: "Overall Recovery",
+            simbol: "D5",
+            nilai: (response.efesiensPabrik * 100).toFixed(1),
+          },
+          {
+            id: 6,
+            indikator: "Kecukupan Bahan Baku",
+            simbol: "D6",
+            nilai: (response.cukupBahanBaku * 100).toFixed(1),
+          },
+          {
+            id: 7,
+            indikator: "Tingkat Ratoon Tebu",
+            simbol: "D7",
+            nilai: (response.tingkatRatoon * 100).toFixed(1),
+          },
+          {
+            id: 8,
+            indikator: "Varietas Tebu yang Responsif Terhadap Kondisi Lahan",
+            simbol: "D8",
+            nilai: (response.varieTebuRespon * 100).toFixed(1),
+          },
+          {
+            id: 9,
+            indikator:
+              "Tingkat Penggunaan Mekanisasi yang Tepat dan Sesuai Kebutuhan",
+            simbol: "D9",
+            nilai: (response.tingkatMekanis * 100).toFixed(1),
+          },
+          {
+            id: 10,
+            indikator: "Teknologi Pengolahan Raw Sugar",
+            simbol: "D10",
+            nilai: (response.teknoOlahGula * 100).toFixed(1),
+          },
+        ];
+
+        // Persiapkan data untuk SpiderGraph
+        const spiderData = dataTable.map((item) => ({
+          subject: item.simbol,
+          A: item.nilai,
+        }));
+
+        setDataSDAM(dataTable);
+        setDataSpiderSDAM(spiderData);
+        setNilaiDimensiSDAM(response.nilaiDimenSDAM);
+      } catch (error) {
+        console.error("Error fetching dimensi Sosial data:", error);
+      }
+    };
+
     fetchSDAMData();
   }, [sesiId]);
 

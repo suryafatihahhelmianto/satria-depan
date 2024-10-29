@@ -48,52 +48,6 @@ export default function SumberDayaPage() {
 
   const [loading, setLoading] = useState(true);
 
-  const fetchSDAMData = async () => {
-    try {
-      const response = await fetchData(`/api/masukkan/sdam/${sesiId}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${getCookie("token")}`,
-        },
-      });
-
-      setFormData({
-        kemudahanAksesTenagaKerja: response.kemudahanAksesTenagaKerja,
-
-        luasTanamTRITahunIni: response.luasTanamTRITahunIni,
-        luasTotalTahunIni: response.luasTotalTahunIni,
-
-        jumlahJamKerjaEfektif: response.jumlahJamKerjaEfektif,
-        totalJamKerja: response.totalJamKerja,
-        jamTerlaksana: response.jamTerlaksana,
-        jamTotal: response.jamTotal,
-
-        produktivitasTebu: response.produktivitasTebu, // dataD4
-        rendemenTebu: response.rendemenTebu, // dataD4
-        mbs: response.mbs, // dataD4
-
-        overallRecovery: response.overallRecovery, // dataD5
-
-        kis: response.kis, // dataD6
-        kes: response.kes, // dataD6
-
-        ratoonTebu: response.ratoonTebu, // dataD7
-
-        luasBL: response.luasBL, // dataD8
-        luasPST41: response.luasPST41, // dataD8
-        luasJT49: response.luasJT49, // dataD8
-        luasTotal: response.luasTotal, // dataD8
-
-        tingkatMekanisasi: response.tingkatMekanisasi, // dataD9
-
-        teknologiPengolahanRawSugar: response.teknologiPengolahanRawSugar, // dataD10
-      });
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
   const handleInputChange = (field, value) => {
     setFormData({ ...formData, [field]: value });
   };
@@ -146,6 +100,52 @@ export default function SumberDayaPage() {
   };
 
   useEffect(() => {
+    const fetchSDAMData = async () => {
+      try {
+        const response = await fetchData(`/api/masukkan/sdam/${sesiId}`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${getCookie("token")}`,
+          },
+        });
+
+        setFormData({
+          kemudahanAksesTenagaKerja: response.kemudahanAksesTenagaKerja,
+
+          luasTanamTRITahunIni: response.luasTanamTRITahunIni,
+          luasTotalTahunIni: response.luasTotalTahunIni,
+
+          jumlahJamKerjaEfektif: response.jumlahJamKerjaEfektif,
+          totalJamKerja: response.totalJamKerja,
+          jamTerlaksana: response.jamTerlaksana,
+          jamTotal: response.jamTotal,
+
+          produktivitasTebu: response.produktivitasTebu, // dataD4
+          rendemenTebu: response.rendemenTebu, // dataD4
+          mbs: response.mbs, // dataD4
+
+          overallRecovery: response.overallRecovery, // dataD5
+
+          kis: response.kis, // dataD6
+          kes: response.kes, // dataD6
+
+          ratoonTebu: response.ratoonTebu, // dataD7
+
+          luasBL: response.luasBL, // dataD8
+          luasPST41: response.luasPST41, // dataD8
+          luasJT49: response.luasJT49, // dataD8
+          luasTotal: response.luasTotal, // dataD8
+
+          tingkatMekanisasi: response.tingkatMekanisasi, // dataD9
+
+          teknologiPengolahanRawSugar: response.teknologiPengolahanRawSugar, // dataD10
+        });
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
     fetchSDAMData();
   }, [sesiId]);
 
@@ -404,7 +404,7 @@ export default function SumberDayaPage() {
         rows={dataD10}
       />
 
-      <div className="text-center mt-6">
+      {/* <div className="text-center mt-6">
         <button
           type="button"
           onClick={handleCalculate}
@@ -412,7 +412,7 @@ export default function SumberDayaPage() {
         >
           Simpan dan Hitung Dimensi Sumber Daya
         </button>
-      </div>
+      </div> */}
     </div>
   );
 
