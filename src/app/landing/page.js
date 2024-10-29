@@ -132,12 +132,12 @@ export default function Dashboard() {
         <div className="bg-gray-300 p-4 rounded-lg w-1/4 h-80 flex flex-col justify-center items-center space-y-4">
           {" "}
           {/* Perkecil card */}
-          <h2 className="text-lg font-bold">Coba Sekarang</h2>
+          <h2 className="text-lg font-bold">Masuk ke sistem</h2>
           <Link
-            href="/demo"
+            href="/login"
             className="bg-ijoTebu text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700"
           >
-            Demo Fitur
+            Masuk
           </Link>
         </div>
       </div>

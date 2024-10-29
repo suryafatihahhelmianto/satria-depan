@@ -110,6 +110,7 @@ export default function DetailPage() {
                 <th className="px-4 py-2 text-left">Indikator</th>
                 <th className="px-4 py-2 text-left">Simbol</th>
                 <th className="px-4 py-2 text-left">Nilai</th>
+                <th className="px-4 py-2 text-left">Kontribusi</th>
               </tr>
             </thead>
             <tbody className="bg-ijoIsiTabel">
@@ -118,16 +119,9 @@ export default function DetailPage() {
                   <td className="px-4 py-2">{data.indikator}</td>
                   <td className="px-4 py-2">{data.simbol}</td>
                   <td className="px-4 py-2">{data.nilai}</td>
+                  <td className="px-4 py-2">{data.kontribusi}</td>
                 </tr>
               ))}
-              <tr>
-                <td className="px-4 py-2 font-bold" colSpan={2}>
-                  Total Nilai Dimensi Lingkungan
-                </td>
-                <td className="px-4 py-2 font-bold">
-                  {nilaiDimensiLingkungan.toFixed(1)}
-                </td>
-              </tr>
             </tbody>
           </table>
         </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import HistogramChart from "@/components/HistogramChart";
+import InfoButton from "@/components/InfoButton";
 import SustainabilityIndexChart from "@/components/SustainabilityIndexChart";
 import { fetchData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
@@ -11,6 +12,7 @@ import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css"; // Import CSS untuk Circular Progress Bar
 import DatePicker from "react-datepicker"; // Import the DatePicker component
 import "react-datepicker/dist/react-datepicker.css"; // Import DatePicker CSS
+import { AiOutlineInfoCircle } from "react-icons/ai";
 
 export default function HomePage() {
   const [selectedYear, setSelectedYear] = useState(2021);
@@ -144,7 +146,7 @@ export default function HomePage() {
         {/* Gabungan Circular Progress Kinerja dan Status Data */}
         <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center">
           <div className="w-full mb-4">
-            <h1 className="font-semibold">
+            <h1 className="text-xl font-semibold">
               Nilai Kinerja Keberlanjutan Rantai Pasok
             </h1>
           </div>
@@ -173,9 +175,12 @@ export default function HomePage() {
                   })}
                 />
               </div>
-              <p className="mt-2 text-gray-700 text-center font-semibold">
-                BERKELANJUTAN
-              </p>
+              <div className="flex items-center justify-center">
+                <p className="mt-2 text-gray-700 text-center font-semibold">
+                  BERKELANJUTAN
+                </p>
+                <InfoButton /> {/* Replace the icon with InfoButton */}
+              </div>
             </div>
 
             {/* Garis Pemisah */}
@@ -213,7 +218,7 @@ export default function HomePage() {
 
         <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center">
           <div className="w-full mb-4">
-            <h1 className="font-semibold">Nilai Prediksi Rendemen</h1>
+            <h1 className="text-xl font-semibold">Nilai Prediksi Rendemen</h1>
           </div>
 
           <div className="flex justify-around gap-5 w-full h-full">

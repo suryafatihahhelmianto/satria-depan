@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { AiFillCheckCircle } from "react-icons/ai";
-import { AiOutlineLoading } from "react-icons/ai"; // Import a loading icon
+import { AiOutlineLoading, AiOutlineWarning } from "react-icons/ai";
+import { AiOutlineInfoCircle } from "react-icons/ai"; // Import warning and loading icons
 
 // Komponen modal konfirmasi
 const ConfirmationModal = ({ isOpen, onClose, onConfirm }) => {
@@ -111,7 +112,11 @@ export default function TableInputRow({
   return (
     <>
       <tr className="border-b">
-        <td className="px-4 py-2 border border-black">{label}</td>
+        <td className="px-4 py-2 border border-black">
+          <div className="flex items-center">
+            {label} <AiOutlineInfoCircle className="ml-2 font-semibold" />
+          </div>
+        </td>
         <td className="px-4 py-2 border border-black">{renderInput()}</td>
         <td className="px-4 py-2 border border-black text-center">
           <button
@@ -122,10 +127,14 @@ export default function TableInputRow({
               isSubmitted ? "text-green-600" : "text-gray-900"
             }`}
           >
-            {isLoading ? (
-              <AiOutlineLoading className="animate-spin" /> // Loading spinner
+            {isSubmitted ? (
+              isLoading ? (
+                <AiOutlineLoading className="animate-spin" /> // Loading spinner
+              ) : (
+                <AiFillCheckCircle />
+              )
             ) : (
-              <AiFillCheckCircle />
+              <AiOutlineWarning className="animate-bounce text-red-600" /> // Warning icon before submission
             )}
           </button>
         </td>
