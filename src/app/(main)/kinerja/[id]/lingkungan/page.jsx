@@ -5,6 +5,7 @@ import { getCookie } from "@/tools/getCookie";
 import React, { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { fetchData } from "@/tools/api";
+import KinerjaTableBulan from "@/components/table/KinerjaTableBulan";
 
 export default function LingkunganPage() {
   const pathname = usePathname();
@@ -731,7 +732,7 @@ export default function LingkunganPage() {
     },
     {
       isSubtitle: true,
-      label: "NO3",
+      label: "NO2",
     },
     {
       label: "Pengukuran 1",
@@ -783,7 +784,12 @@ export default function LingkunganPage() {
 
       <KinerjaTable title="Kebisingan (L4)" rows={dataL4} />
 
-      <KinerjaTable title="Kualitas Air Permukaan (L5)" rows={dataL5} />
+      {/* <KinerjaTable title="Kualitas Air Permukaan (L5)" rows={dataL5} /> */}
+      <KinerjaTableBulan
+        title="Kualitas Air Permukaan (L5)"
+        data={dataL5}
+        // saveOption="individual"
+      />
       <KinerjaTable title="Kualitas Udara Ambien (L6)" rows={dataL6} />
       <KinerjaTable title="Kualitas Udara Ruang Kerja (L7)" rows={dataL7} />
 

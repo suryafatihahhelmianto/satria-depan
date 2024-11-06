@@ -38,7 +38,7 @@ export default function SumberDayaPage() {
 
     luasBL: 0, // dataD8
     luasPST41: 0, // dataD8
-    luasJT49: 0, // dataD8
+    PS864: 0, // dataD8
     luasTotal: 0, // dataD8
 
     tingkatMekanisasi: 0, // dataD9
@@ -133,7 +133,7 @@ export default function SumberDayaPage() {
 
           luasBL: response.luasBL, // dataD8
           luasPST41: response.luasPST41, // dataD8
-          luasJT49: response.luasJT49, // dataD8
+          PS864: response.PS864, // dataD8
           luasTotal: response.luasTotal, // dataD8
 
           tingkatMekanisasi: response.tingkatMekanisasi, // dataD9
@@ -197,7 +197,7 @@ export default function SumberDayaPage() {
       label: "Produktivitas Tenaga Kerja",
     },
     {
-      label: "Jumlah Jam Kerja Efektif Pegawai",
+      label: "Jumlah Jam Kerja Efektif Pegawai (Jam/Minggu)",
       inputType: "number",
       value: formData.jumlahJamKerjaEfektif,
       onChange: (e) =>
@@ -206,7 +206,7 @@ export default function SumberDayaPage() {
         handleUpdate("jumlahJamKerjaEfektif", formData.jumlahJamKerjaEfektif),
     },
     {
-      label: "Total Jam Kerja Pegawai",
+      label: "Total Jam Kerja Pegawai (Jam/Minggu)",
       inputType: "number",
       value: formData.totalJamKerja,
       onChange: (e) => handleInputChange("totalJamKerja", e.target.value),
@@ -217,14 +217,14 @@ export default function SumberDayaPage() {
       label: "Presentase Jam Pelatihan Terlaksana",
     },
     {
-      label: "Jam Terlaksana",
+      label: "Jam Terlaksana (Jam/Tahun)",
       inputType: "number",
       value: formData.jamTerlaksana,
       onChange: (e) => handleInputChange("jamTerlaksana", e.target.value),
       onSubmit: () => handleUpdate("jamTerlaksana", formData.jamTerlaksana),
     },
     {
-      label: "Jam Total",
+      label: "Jam Total (Jam/Tahun)",
       inputType: "number",
       value: formData.jamTotal,
       onChange: (e) => handleInputChange("jamTotal", e.target.value),
@@ -317,11 +317,11 @@ export default function SumberDayaPage() {
       onSubmit: () => handleUpdate("luasPST41", formData.luasPST41),
     },
     {
-      label: "Luas JT49",
+      label: "Luas PS864",
       inputType: "number",
-      value: formData.luasJT49,
-      onChange: (e) => handleInputChange("luasJT49", e.target.value),
-      onSubmit: () => handleUpdate("luasJT49", formData.luasJT49),
+      value: formData.PS864,
+      onChange: (e) => handleInputChange("PS864", e.target.value),
+      onSubmit: () => handleUpdate("PS864", formData.PS864),
     },
     {
       label: "Total Luas Lahan yang ditanam Tahun Ini",
@@ -727,11 +727,11 @@ export default function SumberDayaPage() {
   //           />
   //           <FieldInput
   //             label="Luas JT49"
-  //             value={formData.luasJT49}
+  //             value={formData.PS864}
   //             onChange={(e) =>
   //               setFormData({
   //                 ...formData,
-  //                 luasJT49: e.target.value,
+  //                 PS864: e.target.value,
   //               })
   //             }
   //           />

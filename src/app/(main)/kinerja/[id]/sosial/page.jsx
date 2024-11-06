@@ -132,11 +132,11 @@ export default function DataSosial() {
       inputType: "dropdown",
       value: formData.tingkatManfaat,
       options: [
-        { value: 0.2, label: "Sangat Rendah" },
-        { value: 0.3, label: "Rendah" },
+        { value: 0.2, label: "Sangat Buruk" },
+        { value: 0.3, label: "Buruk" },
         { value: 0.491, label: "Sedang" },
-        { value: 0.772, label: "Tinggi" },
-        { value: 1, label: "Sangat Tinggi" },
+        { value: 0.772, label: "Baik" },
+        { value: 1, label: "Sangat Baik" },
       ],
       onChange: (e) =>
         setFormData({
