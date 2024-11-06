@@ -76,7 +76,10 @@ export default function RendemenPage() {
                     <h1 className="bg-gray-400 p-2 rounded-lg">
                       <AiFillEdit />
                     </h1>
-                    <h1 className="bg-gray-400 p-2 rounded-lg">
+                    <h1
+                      className="bg-gray-400 p-2 rounded-lg"
+                      href={"/rendemen/[id]"}
+                    >
                       <AiFillRead />
                     </h1>
                     <h1 className="bg-gray-400 p-2 rounded-lg">
