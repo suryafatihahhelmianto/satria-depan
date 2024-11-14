@@ -9,6 +9,8 @@ import {
   AiFillEdit,
   AiFillPlusCircle,
   AiFillRead,
+  AiOutlineDownload,
+  AiOutlineLineChart,
 } from "react-icons/ai";
 
 export default function KinerjaPage() {
@@ -169,16 +171,30 @@ export default function KinerjaPage() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <div className="flex items-center gap-2 my-5">
-        <AiFillPlusCircle
-          className="text-2xl text-gray-500 cursor-pointer"
-          onClick={() => setIsModalOpen(true)} // Buka modal saat tombol diklik
-        />
-        <h1 className="cursor-pointer" onClick={() => setIsModalOpen(true)}>
-          Tambah Form Pengukuran Kinerja
-        </h1>
+      <div className="flex items-center justify-between gap-2 mb-8">
+        <div className="flex gap-2">
+          <AiFillPlusCircle
+            className="text-2xl text-gray-500 cursor-pointer"
+            onClick={() => setIsModalOpen(true)} // Buka modal saat tombol diklik
+          />
+          <h1 className="cursor-pointer" onClick={() => setIsModalOpen(true)}>
+            Tambah Form Pengukuran Kinerja
+          </h1>
+        </div>
+
+        <div className="flex justify-end font-bold gap-2 text-xl">
+          <Link
+            href={"/kinerja/statistics"}
+            className="bg-gray-400 p-2 rounded-lg flex items-center"
+          >
+            <AiOutlineLineChart />
+          </Link>
+          <div className="flex items-center gap-2 bg-gray-400 p-2 rounded-lg">
+            <p>Unduh</p>
+            <AiOutlineDownload />
+          </div>
+        </div>
       </div>
-      <h1 className="text-2xl font-bold mb-6">Riwayat Pengisian Sesi</h1>
       <table className="min-w-full bg-white border border-gray-200">
         <thead>
           <tr className="bg-gray-200">
@@ -193,44 +209,62 @@ export default function KinerjaPage() {
         <tbody>
           {sessions.length === 0 ? (
             <tr>
-              <td colSpan="3" className="py-2 px-4 border-b text-center">
+              <td colSpan="6" className="py-2 px-4 border-b text-center">
                 Tidak ada sesi yang tersedia
               </td>
             </tr>
           ) : (
-            sessions.map((session) => (
-              <tr key={session.id} className="hover:bg-gray-50 text-center">
-                {/* <td className="py-2 px-4 border-b">{session.pabrik}</td> */}
-                <td className="py-2 px-4 border-b">
-                  {pabrikNames[session.pabrikGulaId] ||
-                    "Nama Pabrik Tidak Ditemukan"}
-                </td>
-                <td className="py-2 px-4 border-b">
-                  {new Date(session.tanggalMulai).getFullYear()}
-                </td>
-                <td className="py-2 px-4 border-b">
-                  {new Date(session.tanggalSelesai).toLocaleDateString("id-ID")}
-                </td>
-                <td className="py-2 px-4 border-b">{/* Nilai Kinerja */}</td>
-                <td className="py-2 px-4 border-b">{/* Status */}</td>
-                <td className="py-2 px-4">
-                  <Link
-                    className="text-black text-2xl p-2 rounded-lg justify-center flex gap-2"
-                    href={`/kinerja/${session.id}/sumber-daya`}
-                  >
-                    <h1 className="bg-gray-400 p-2 rounded-lg">
-                      <AiFillEdit />
-                    </h1>
-                    <h1 className="bg-gray-400 p-2 rounded-lg">
-                      <AiFillRead />
-                    </h1>
-                    <h1 className="bg-gray-400 p-2 rounded-lg">
-                      <AiFillDelete />
-                    </h1>
-                  </Link>
-                </td>
-              </tr>
-            ))
+            sessions.map((session) => {
+              const today = new Date();
+              const batasPengisian = new Date(session.tanggalSelesai);
+              const status =
+                today > batasPengisian ? "SELESAI" : "BELUM SELESAI";
+
+              return (
+                <tr key={session.id} className="hover:bg-gray-50 text-center">
+                  <td className="py-2 px-4 border-b">
+                    {pabrikNames[session.pabrikGulaId] ||
+                      "Nama Pabrik Tidak Ditemukan"}
+                  </td>
+                  <td className="py-2 px-4 border-b">
+                    {new Date(session.tanggalMulai).getFullYear()}
+                  </td>
+                  <td className="py-2 px-4 border-b">
+                    {batasPengisian.toLocaleDateString("id-ID")}
+                  </td>
+                  <td className="py-2 px-4 border-b">
+                    {session.InstrumenNilai.nilaiKinerja || "Belum Diisi"}
+                  </td>
+                  <td className={`py-2 px-4 border-b `}>
+                    <span
+                      className={`${
+                        status === "BELUM SELESAI"
+                          ? "bg-red-600 px-2 py-1 rounded-lg text-white"
+                          : "bg-green-600 px-2 py-1 rounded-lg text-white"
+                      }`}
+                    >
+                      {status}
+                    </span>
+                  </td>
+                  <td className="py-2 px-4">
+                    <Link
+                      className="text-black text-2xl p-2 rounded-lg justify-center flex gap-2"
+                      href={`/kinerja/${session.id}/sumber-daya`}
+                    >
+                      <h1 className="bg-gray-400 p-2 rounded-lg">
+                        <AiFillEdit />
+                      </h1>
+                      <h1 className="bg-gray-400 p-2 rounded-lg">
+                        <AiFillRead />
+                      </h1>
+                      <h1 className="bg-gray-400 p-2 rounded-lg">
+                        <AiFillDelete />
+                      </h1>
+                    </Link>
+                  </td>
+                </tr>
+              );
+            })
           )}
         </tbody>
       </table>
@@ -267,12 +301,12 @@ export default function KinerjaPage() {
                 </select>
 
                 {/* Link untuk menambah pabrik baru */}
-                <Link
+                {/* <Link
                   href="/admin/input-pabrik"
                   className="mt-2 inline-block text-blue-600 underline"
                 >
                   Tambah Pabrik Baru
-                </Link>
+                </Link> */}
               </div>
               <div className="mb-4">
                 <label className="block text-gray-700">

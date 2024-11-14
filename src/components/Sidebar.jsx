@@ -11,6 +11,8 @@ import {
   AiOutlineMenu, // Icon for the collapse button
 } from "react-icons/ai";
 
+import { GoGoal } from "react-icons/go";
+
 export default function Sidebar({ isOpen, toggleSidebar }) {
   const pathname = usePathname();
   // const [isCollapsed, setIsCollapsed] = useState(false); // State to control collapse
@@ -28,7 +30,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
       path: "/kinerja",
       icon: <AiOutlineBarChart />,
     },
-    { name: "Pengukuran Rendemen", path: "/rendemen", icon: <AiFillWarning /> },
+    { name: "Pengukuran Rendemen", path: "/rendemen", icon: <GoGoal /> },
     { name: "Data Pengguna", path: "/admin", icon: <AiOutlineUser /> },
   ];
 

@@ -17,7 +17,7 @@ export default function OpsiDimensi() {
   };
 
   return (
-    <div className="grid grid-cols-5 gap-10 text-center">
+    <div className="grid grid-cols-4 gap-10 text-center">
       <Link
         href={`/kinerja/${id ? id : ""}/sumber-daya`} // Menambahkan ID ke URL jika ada
         className={`${getButtonStyle(
@@ -50,14 +50,14 @@ export default function OpsiDimensi() {
       >
         Sosial
       </Link>
-      <Link
+      {/* <Link
         href={`/kinerja/${id ? id : ""}/hasil`} // Menambahkan ID ke URL jika ada
         className={`${getButtonStyle(
           `/kinerja/${id ? id : ""}/hasil`
         )} p-2 rounded-lg`}
       >
         Hasil
-      </Link>
+      </Link> */}
     </div>
   );
 }

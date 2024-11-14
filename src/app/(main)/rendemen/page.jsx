@@ -1,166 +1,127 @@
 "use client";
 
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { fetchData } from "../../../tools/api";
 import {
   AiFillDelete,
   AiFillEdit,
   AiFillPlusCircle,
   AiFillRead,
+  AiOutlineDownload,
+  AiOutlineLineChart,
+  AiOutlineSearch,
 } from "react-icons/ai";
 
 export default function RendemenPage() {
-  const [loading, setLoading] = useState(true); // State untuk loading
-  const [error, setError] = useState(null); // State untuk menyimpan error jika ada
-  const [isModalOpen, setIsModalOpen] = useState(false); // State untuk mengontrol modal
-  const [formData, setFormData] = useState({
-    pabrik: "",
-    periode: "", // Change this to store the selected year
-    batasPengisian: "",
-  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [sessions, setSessions] = useState([]); // State untuk menyimpan data sesi
 
-  const sessions = [
-    { id: 1, periode: "2023", batasPengisian: "16/07/2024" },
-    { id: 2, periode: "2022", batasPengisian: "17/07/2024" },
-    { id: 3, periode: "2021", batasPengisian: "18/07/2024" },
-    { id: 4, periode: "2020", batasPengisian: "19/07/2024" },
-  ];
+  // Fungsi untuk mem-fetch data dari API
+  const fetchSessions = async () => {
+    try {
+      setLoading(true);
+      const token = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("token="))
+        ?.split("=")[1];
+      const response = await fetchData("/api/rendemen/list", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
+      const data = await response.data;
+
+      console.log("ini data rendemen: ", data);
+      setSessions(data); // Simpan data dari API ke state sessions
+      setLoading(false);
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchSessions(); // Panggil fungsi fetchSessions saat komponen di-mount
+  }, []);
+
+  // Render tampilan
   return (
     <div className="min-h-screen bg-gray-100">
-      <div className="flex items-center gap-2 my-5">
-        <AiFillPlusCircle
-          className="text-2xl text-gray-500 cursor-pointer"
-          onClick={() => setIsModalOpen(true)} // Buka modal saat tombol diklik
-        />
-        <h1 className="cursor-pointer" onClick={() => setIsModalOpen(true)}>
-          Tambah Form Pengukuran Rendemen
-        </h1>
-      </div>
-      <h1 className="text-2xl font-bold mb-6">Riwayat Pengisian Sesi</h1>
-      <table className="min-w-full bg-white border border-gray-200">
-        <thead>
-          <tr className="bg-gray-200">
-            <th className="py-2 px-4 border-b">Pabrik</th>
-            <th className="py-2 px-4 border-b">Periode</th>
-            <th className="py-2 px-4 border-b">Batas Pengisian</th>
-            <th className="py-2 px-4 border-b">Nilai Kinerja (%)</th>
-            <th className="py-2 px-4 border-b">Status</th>
-            <th className="py-2 px-4 border-b">Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          {sessions.length === 0 ? (
-            <tr>
-              <td colSpan="3" className="py-2 px-4 border-b text-center">
-                Tidak ada sesi yang tersedia
-              </td>
-            </tr>
-          ) : (
-            sessions.map((session) => (
-              <tr key={session.id} className="hover:bg-gray-50 text-center">
-                <td className="py-2 px-4 border-b">{session.pabrik}</td>
-                <td className="py-2 px-4 border-b">
-                  {new Date(session.tanggalMulai).getFullYear()}
-                </td>
-                <td className="py-2 px-4 border-b">
-                  {new Date(session.tanggalSelesai).toLocaleDateString("id-ID")}
-                </td>
-                <td className="py-2 px-4 border-b">{}</td>
-                <td className="py-2 px-4 border-b">{}</td>
-                <td className="py-2 px-4">
-                  <Link
-                    className="text-black text-2xl p-2 rounded-lg justify-center flex gap-2"
-                    href={`/kinerja/${session.id}/sumber-daya`}
-                  >
-                    <h1 className="bg-gray-400 p-2 rounded-lg">
-                      <AiFillEdit />
-                    </h1>
-                    <h1
-                      className="bg-gray-400 p-2 rounded-lg"
-                      href={"/rendemen/[id]"}
-                    >
-                      <AiFillRead />
-                    </h1>
-                    <h1 className="bg-gray-400 p-2 rounded-lg">
-                      <AiFillDelete />
-                    </h1>
-                  </Link>
-                </td>
-              </tr>
-            ))
-          )}
-        </tbody>
-      </table>
-
-      {/* Modal Component */}
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-8 rounded-lg w-1/3 relative">
-            <h2 className="text-xl font-bold mb-4">
-              Tambah Form Pengukuran Kinerja
-            </h2>
-            <form onSubmit={handleFormSubmit}>
-              <div className="mb-4">
-                <label className="block text-gray-700">Pilihan Pabrik</label>
-                <input
-                  type="text"
-                  name="pabrik"
-                  value={formData.pabrik}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                  placeholder="Masukkan pabrik"
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700">
-                  Periode (Pilih Tahun)
-                </label>
-                <select
-                  name="periode"
-                  value={formData.periode}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                  required
-                >
-                  <option value="">Pilih Tahun</option>
-                  {years.map((year) => (
-                    <option key={year} value={year}>
-                      {year}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700">Batas Pengisian</label>
-                <input
-                  type="date"
-                  name="batasPengisian"
-                  value={formData.batasPengisian}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                  required
-                />
-              </div>
-              <div className="flex justify-end gap-2">
-                <button
-                  type="button"
-                  className="px-4 py-2 bg-gray-400 text-white rounded-lg"
-                  onClick={() => setIsModalOpen(false)} // Close modal on cancel
-                >
-                  Batal
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-green-600 text-white rounded-lg"
-                >
-                  Simpan
-                </button>
-              </div>
-            </form>
+      <div className="flex items-center justify-between mb-8">
+        <Link href={"/rendemen/input"} className="flex items-center gap-2">
+          <AiFillPlusCircle className="text-2xl text-gray-500 cursor-pointer" />
+          <h1 className="cursor-pointer">Tambah Prediksi Rendemen</h1>
+        </Link>
+        <div className="flex justify-end font-bold gap-2 text-xl">
+          <Link
+            href={"/rendemen/statistics"}
+            className="bg-gray-400 p-2 rounded-lg flex items-center"
+          >
+            <AiOutlineLineChart />
+          </Link>
+          <div className="flex items-center gap-2 bg-gray-400 p-2 rounded-lg">
+            <p>Unduh</p>
+            <AiOutlineDownload />
           </div>
         </div>
+      </div>
+
+      {loading ? (
+        <p>Loading...</p>
+      ) : error ? (
+        <p className="text-red-500">Error: {error}</p>
+      ) : (
+        <table className="min-w-full bg-white border border-gray-200">
+          <thead>
+            <tr className="bg-gray-200">
+              <th className="py-2 px-4 border-b">Pabrik</th>
+              <th className="py-2 px-4 border-b">Tanggal Prediksi</th>
+              <th className="py-2 px-4 border-b">Blok Kebun</th>
+              <th className="py-2 px-4 border-b">Nilai Prediksi (%)</th>
+              <th className="py-2 px-4 border-b">Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sessions.length === 0 ? (
+              <tr>
+                <td colSpan="4" className="py-2 px-4 border-b text-center">
+                  Tidak ada data rendemen yang tersedia
+                </td>
+              </tr>
+            ) : (
+              sessions.map((session) => (
+                <tr
+                  key={session.tanggal}
+                  className="hover:bg-gray-50 text-center"
+                >
+                  <td className="py-2 px-4 border-b">
+                    {session.pabrikGula.namaPabrik}
+                  </td>
+                  <td className="py-2 px-4 border-b">
+                    {new Date(session.tanggal).toLocaleDateString("id-ID")}
+                  </td>
+                  <td className="py-2 px-4 border-b">{session.blokKebun}</td>
+                  <td className="py-2 px-4 border-b">
+                    {session.nilaiRendemen}
+                  </td>
+                  <td className="py-2 px-4">
+                    <Link
+                      className="text-black text-2xl p-2 rounded-lg justify-center flex gap-2"
+                      href={`/rendemen/${session.id}`}
+                    >
+                      <h1 className="bg-gray-400 p-2 rounded-lg">
+                        <AiOutlineSearch />
+                      </h1>
+                    </Link>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
       )}
     </div>
   );

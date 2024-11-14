@@ -2,14 +2,16 @@
 
 import React, { useState, useEffect } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
-import { fetchData, postData } from "@/tools/api";
+import { fetchData, postData, deleteData, putData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
 import { AiFillPlusCircle } from "react-icons/ai";
 
 export default function PenggunaPage() {
   const [isModalOpen, setModalOpen] = useState(false);
+  const [isEditMode, setEditMode] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState(null);
   const [users, setUsers] = useState([]);
-  const [factories, setFactories] = useState([]); // State untuk menyimpan daftar pabrik
+  const [factories, setFactories] = useState([]);
   const [formData, setFormData] = useState({
     nama: "",
     username: "",
@@ -17,88 +19,55 @@ export default function PenggunaPage() {
     jabatan: "",
     level: "",
     nomorHp: "",
-    pabrikGulaId: 0, // Tambahkan pabrik ke formData
+    pabrikGulaId: 0,
   });
 
-  // Fetch data pengguna dari API saat komponen pertama kali di-load
+  // Fetch data pengguna dan pabrik saat komponen pertama kali dirender
+  useEffect(() => {
+    fetchUsers();
+    fetchFactories();
+  }, []);
+
   const fetchUsers = async () => {
     try {
       const token = getCookie("token");
       const response = await fetchData("/api/users", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      console.log("ini response: ", response);
       setUsers(response);
     } catch (error) {
       console.error("Error fetching users: ", error);
     }
   };
 
-  // Fetch data pabrik dari API
   const fetchFactories = async () => {
     try {
       const token = getCookie("token");
       const response = await fetchData("/api/pabrik", {
         headers: { Authorization: `Bearer ${token}` },
       });
-
-      console.log("ni respon pabrik: ", response);
-      setFactories(response); // Simpan daftar pabrik ke state factories
+      setFactories(response);
     } catch (error) {
       console.error("Error fetching factories: ", error);
     }
   };
 
-  // Load data pengguna dan data pabrik saat komponen pertama kali dirender
-  useEffect(() => {
-    fetchUsers();
-    fetchFactories();
-  }, []);
-
-  // Function to open the modal
-  const openModal = () => {
-    setModalOpen(true);
-  };
-
-  // Function to close the modal
-  const closeModal = () => {
-    setModalOpen(false);
-  };
-
-  // Function to handle closing modal when clicking outside
-  const handleClickOutside = (e) => {
-    if (e.target.id === "modalOverlay") {
-      closeModal();
-    }
-  };
-
-  // Handle form input change
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: name === "pabrikGulaId" ? parseInt(value, 10) : value,
-    }));
-  };
-
-  // Handle form submission to add a new user
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
-
-    const dataToSend = {
-      ...formData,
-      level: formData.jabatan, // Gunakan nilai jabatan untuk level
-    };
-
-    console.log("ini datatosend: ", dataToSend);
-
-    try {
-      const token = getCookie("token");
-      await postData("/api/users/create", dataToSend, {
-        headers: { Authorization: `Bearer ${token}` },
+  const openModal = (user = null) => {
+    if (user) {
+      console.log("ini user: ", user);
+      setEditMode(true);
+      setSelectedUserId(user.id);
+      setFormData({
+        nama: user.nama,
+        username: user.username,
+        password: "", // Kosongkan password agar bisa diisi ulang
+        jabatan: user.jabatan,
+        level: user.jabatan,
+        nomorHp: user.nomorHp,
+        pabrikGulaId: user.pabrikGula?.id || 0,
       });
-
+    } else {
+      setEditMode(false);
       setFormData({
         nama: "",
         username: "",
@@ -106,12 +75,73 @@ export default function PenggunaPage() {
         jabatan: "",
         level: "",
         nomorHp: "",
-        pabrikGulaId: 0, // Reset pabrik ke kosong setelah submit
+        pabrikGulaId: 0,
       });
+    }
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setSelectedUserId(null);
+  };
+
+  const handleClickOutside = (e) => {
+    if (e.target.id === "modalOverlay") {
       closeModal();
-      fetchUsers(); // Refresh users after adding
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: name === "pabrikGulaId" ? parseInt(value, 10) : value,
+    }));
+  };
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    const token = getCookie("token");
+    const dataToSend = {
+      ...formData,
+      level: formData.jabatan,
+    };
+
+    try {
+      if (isEditMode) {
+        console.log("ini token: ", token);
+        console.log("ini datatosend: ", dataToSend);
+        await fetchData(`/api/users/${selectedUserId}`, dataToSend, {
+          headers: { Authorization: `Bearer ${token}` },
+          method: "PUT",
+        });
+      } else {
+        await postData("/api/users/create", dataToSend, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      }
+      closeModal();
+      fetchUsers();
     } catch (error) {
-      console.error("Error creating user: ", error);
+      console.error("Error saving user: ", error);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm(
+      "Apakah Anda yakin ingin menghapus pengguna ini?"
+    );
+    if (confirmDelete) {
+      try {
+        const token = getCookie("token");
+        await deleteData(`/api/users/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        fetchUsers();
+      } catch (error) {
+        console.error("Error deleting user: ", error);
+      }
     }
   };
 
@@ -120,9 +150,9 @@ export default function PenggunaPage() {
       <div className="flex items-center gap-2 my-5">
         <AiFillPlusCircle
           className="text-2xl text-gray-500 cursor-pointer"
-          onClick={openModal} // Buka modal saat tombol diklik
+          onClick={() => openModal()}
         />
-        <h1 className="cursor-pointer" onClick={openModal}>
+        <h1 className="cursor-pointer" onClick={() => openModal()}>
           Tambah Pengguna
         </h1>
       </div>
@@ -132,8 +162,6 @@ export default function PenggunaPage() {
           <tr>
             <th className="py-2 px-4 border">Pabrik</th>
             <th className="py-2 px-4 border">Nama</th>
-            {/* <th className="py-2 px-4 border">Username</th> */}
-            {/* <th className="py-2 px-4 border">Nomor Hp</th> */}
             <th className="py-2 px-4 border">Jabatan</th>
             <th className="py-2 px-4 border">Aksi</th>
           </tr>
@@ -146,15 +174,19 @@ export default function PenggunaPage() {
                   {user.pabrikGula?.namaPabrik}
                 </td>
                 <td className="py-2 px-4 border">{user.nama}</td>
-                {/* <td className="py-2 px-4 border">{user.username}</td> */}
-                {/* <td className="py-2 px-4 border">{user.nomorHp}</td> */}
                 <td className="py-2 px-4 border">{user.jabatan}</td>
                 <td className="py-2 px-4 border">
                   <div className="flex gap-2">
-                    <button className="p-2 bg-gray-300 rounded hover:bg-gray-400">
+                    <button
+                      className="p-2 bg-gray-300 rounded hover:bg-gray-400"
+                      onClick={() => openModal(user)}
+                    >
                       <FaEdit />
                     </button>
-                    <button className="p-2 bg-gray-300 rounded hover:bg-gray-400">
+                    <button
+                      className="p-2 bg-gray-300 rounded hover:bg-gray-400"
+                      onClick={() => handleDelete(user.id)}
+                    >
                       <FaTrash />
                     </button>
                   </div>
@@ -163,23 +195,14 @@ export default function PenggunaPage() {
             ))
           ) : (
             <tr>
-              <td colSpan="6" className="text-center py-4">
+              <td colSpan="4" className="text-center py-4">
                 Tidak ada pengguna
               </td>
             </tr>
           )}
         </tbody>
       </table>
-      {/* <div className="flex w-full justify-end">
-        <button
-          className="mt-4 py-2 px-6 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
-          onClick={openModal}
-        >
-          Baru
-        </button>
-      </div> */}
 
-      {/* Modal untuk menambah pengguna baru */}
       {isModalOpen && (
         <div
           id="modalOverlay"
@@ -194,7 +217,7 @@ export default function PenggunaPage() {
               X
             </button>
             <h2 className="text-black font-bold text-center mb-4">
-              Silahkan isi data dibawah ini untuk membuat akun baru!
+              {isEditMode ? "Edit Pengguna" : "Tambah Pengguna Baru"}
             </h2>
             <form className="space-y-4" onSubmit={handleFormSubmit}>
               <div>
@@ -277,7 +300,7 @@ export default function PenggunaPage() {
                 type="submit"
                 className="w-full bg-green-400 text-white py-2 rounded-lg hover:bg-green-500"
               >
-                Daftar
+                {isEditMode ? "Simpan Perubahan" : "Daftar"}
               </button>
             </form>
           </div>
