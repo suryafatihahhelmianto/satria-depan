@@ -13,6 +13,8 @@ import "react-circular-progressbar/dist/styles.css"; // Import CSS untuk Circula
 import DatePicker from "react-datepicker"; // Import the DatePicker component
 import "react-datepicker/dist/react-datepicker.css"; // Import DatePicker CSS
 import { AiOutlineInfoCircle } from "react-icons/ai";
+import { AiOutlineExclamationCircle } from "react-icons/ai";
+import { BsFillCircleFill } from "react-icons/bs";
 
 export default function HomePage() {
   const [selectedYear, setSelectedYear] = useState(2021);
@@ -346,12 +348,27 @@ export default function HomePage() {
         </div>
 
         {/* Informasi */}
-        <div className="bg-white p-4 rounded-lg shadow-md">
-          <h2 className="text-xl font-semibold mb-2">Informasi!</h2>
-          <ul className="text-gray-700">
-            <li>🔴 Bagian SDM belum mengisi data</li>
-            <li>🔴 Bagian TUK belum mengisi data</li>
-          </ul>
+        <div className="relative bg-white border-l-8 border-gray-300 p-6 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300">
+          {/* Enhanced Notebook lines */}
+          <div className="absolute inset-0 bg-[repeating-linear-gradient(black, black 34px, #e0e0e0 36px)] rounded-xl pointer-events-none"></div>
+
+          {/* Content */}
+          <div className="relative">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+              <AiOutlineExclamationCircle className="mr-3 text-gray-500" />
+              Informasi!
+            </h2>
+            <ul className="text-gray-700 space-y-3">
+              <li className="flex items-center">
+                <BsFillCircleFill className="text-red-500 mr-3 animate-pulse" />
+                Bagian SDM belum mengisi data
+              </li>
+              <li className="flex items-center">
+                <BsFillCircleFill className="text-red-500 mr-3 animate-pulse" />
+                Bagian TUK belum mengisi data
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
