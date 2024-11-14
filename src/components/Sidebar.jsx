@@ -52,7 +52,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
   return (
     <div
       className={`fixed bg-ijoDash text-white h-screen p-6 z-50 flex flex-col shadow-xl transition-all duration-300 ${
-        isOpen ? "w-[300px]" : "w-[10px]"
+        isOpen ? "w-[300px]" : "w-[90px]"
       }`}
     >
       {/* Sidebar Title */}
