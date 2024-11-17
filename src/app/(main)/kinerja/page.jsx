@@ -236,15 +236,15 @@ export default function KinerjaPage() {
                     {session.InstrumenNilai.nilaiKinerja || "Belum Diisi"}
                   </td>
                   <td className={`py-2 px-4 border-b `}>
-                    <span
+                    <div
                       className={`${
                         status === "BELUM SELESAI"
                           ? "bg-red-600 px-2 py-1 rounded-lg text-white"
                           : "bg-green-600 px-2 py-1 rounded-lg text-white"
                       }`}
                     >
-                      {status}
-                    </span>
+                      <h1>{status}</h1>
+                    </div>
                   </td>
                   <td className="py-2 px-4">
                     <Link

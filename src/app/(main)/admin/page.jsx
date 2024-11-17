@@ -34,6 +34,8 @@ export default function PenggunaPage() {
       const response = await fetchData("/api/users", {
         headers: { Authorization: `Bearer ${token}` },
       });
+
+      console.log("ini kan response: ", response);
       setUsers(response);
     } catch (error) {
       console.error("Error fetching users: ", error);
@@ -52,7 +54,7 @@ export default function PenggunaPage() {
     }
   };
 
-  const openModal = (user = null) => {
+  const openModal = (user) => {
     if (user) {
       console.log("ini user: ", user);
       setEditMode(true);
@@ -64,7 +66,7 @@ export default function PenggunaPage() {
         jabatan: user.jabatan,
         level: user.jabatan,
         nomorHp: user.nomorHp,
-        pabrikGulaId: user.pabrikGula?.id || 0,
+        pabrikGulaId: user.pabrikGulaId || 0,
       });
     } else {
       setEditMode(false);
@@ -103,18 +105,24 @@ export default function PenggunaPage() {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     const token = getCookie("token");
+
     const dataToSend = {
       ...formData,
       level: formData.jabatan,
     };
 
+    console.log("Data to send:", dataToSend);
+
+    if (isEditMode && !dataToSend.password) {
+      delete dataToSend.password;
+    }
+
     try {
       if (isEditMode) {
-        console.log("ini token: ", token);
-        console.log("ini datatosend: ", dataToSend);
-        await fetchData(`/api/users/${selectedUserId}`, dataToSend, {
-          headers: { Authorization: `Bearer ${token}` },
+        await fetchData(`/api/users/edit/${selectedUserId}`, {
           method: "PUT",
+          data: dataToSend,
+          headers: { Authorization: `Bearer ${token}` },
         });
       } else {
         await postData("/api/users/create", dataToSend, {
@@ -179,7 +187,11 @@ export default function PenggunaPage() {
                   <div className="flex gap-2">
                     <button
                       className="p-2 bg-gray-300 rounded hover:bg-gray-400"
-                      onClick={() => openModal(user)}
+                      // onClick={() => openModal(user)}
+                      onClick={() => {
+                        console.log("User yang dikirim ke openModal:", user); // Debugging: Pastikan `user.id` ada di sini
+                        openModal(user);
+                      }}
                     >
                       <FaEdit />
                     </button>
@@ -265,7 +277,11 @@ export default function PenggunaPage() {
                   name="password"
                   value={formData.password}
                   onChange={handleInputChange}
-                  placeholder="Password"
+                  placeholder={
+                    isEditMode
+                      ? "Kosongkan jika tidak ingin diubah"
+                      : "Password"
+                  }
                   className="w-full px-4 py-2 rounded-lg bg-gray-200 focus:outline-none"
                 />
               </div>
