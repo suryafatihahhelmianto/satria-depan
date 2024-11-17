@@ -31,7 +31,7 @@ export default function HasilPage() {
 
         console.log("ini respon hasil: ", response);
 
-        // Persiapkan data untuk tabel
+        // Prepare data for the table
         const dataTable = [
           {
             dimensi: "Sumberdaya (D)",
@@ -60,9 +60,9 @@ export default function HasilPage() {
           },
         ];
 
-        // Persiapkan data untuk SpiderGraph
+        // Prepare data for the SpiderGraph
         const spiderData = dataTable.map((item) => ({
-          subject: item.simbol,
+          subject: item.dimensi,
           A: item.nilai,
         }));
 
@@ -77,18 +77,22 @@ export default function HasilPage() {
   }, [sesiId]);
 
   return (
-    <div>
+    <div className="p-6 bg-gray-100 min-h-screen">
       <OpsiDetail />
-      <SpiderGraph data={dataSpiderHasil} />
+      <div className="mb-8">
+        <SpiderGraph data={dataSpiderHasil} />
+      </div>
       <div className="flex justify-center">
-        <table className="table-auto w-full max-w-4xl text-left border-collapse">
+        <table className="w-full max-w-4xl bg-white shadow-lg rounded-lg overflow-hidden border-collapse">
           <thead>
-            <tr className="bg-ijoKepalaTabel">
-              <th className="border border-black px-4 py-2">Dimensi</th>
-              <th className="border border-black px-4 py-2 text-center">
+            <tr className="bg-gradient-to-r from-green-600 to-green-400 text-white">
+              <th className="px-6 py-3 text-left font-semibold text-lg border-b border-green-700">
+                Dimensi
+              </th>
+              <th className="px-6 py-3 text-center font-semibold text-lg border-b border-green-700">
                 Nilai (%)
               </th>
-              <th className="border border-black px-4 py-2 text-center">
+              <th className="px-6 py-3 text-center font-semibold text-lg border-b border-green-700">
                 Kategori
               </th>
             </tr>
@@ -97,13 +101,25 @@ export default function HasilPage() {
             {dataHasil.map((row, index) => (
               <tr
                 key={index}
-                className={`${index % 2 === 0 ? "bg-white" : "bg-gray-100"}`}
+                className={`transition-colors duration-200 ${
+                  index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                } hover:bg-green-50`}
               >
-                <td className="border border-black px-4 py-2">{row.dimensi}</td>
-                <td className="border border-black px-4 py-2 text-center">
+                <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                  {row.dimensi}
+                </td>
+                <td className="px-6 py-4 border-b border-gray-200 text-center text-gray-800 font-semibold">
                   {row.nilai}
                 </td>
-                <td className="border border-black px-4 py-2 text-center">
+                <td
+                  className={`px-6 py-4 border-b border-gray-200 text-center font-medium ${
+                    row.kategori === "Berkelanjutan"
+                      ? "text-green-600"
+                      : row.kategori === "Cukup Berkelanjutan"
+                      ? "text-yellow-600"
+                      : "text-red-600"
+                  }`}
+                >
                   {row.kategori}
                 </td>
               </tr>

@@ -1,33 +1,40 @@
 import React, { useState } from "react";
 import { AiFillCheckCircle } from "react-icons/ai";
 import { AiOutlineLoading, AiOutlineWarning } from "react-icons/ai";
-import { AiOutlineInfoCircle } from "react-icons/ai"; // Import warning and loading icons
+import { AiOutlineInfoCircle } from "react-icons/ai";
+import { AiFillExclamationCircle } from "react-icons/ai";
 
-// Komponen modal konfirmasi
+// Redesigned modal component
 const ConfirmationModal = ({ isOpen, onClose, onConfirm }) => {
-  if (!isOpen) return null; // Don't render if not open
+  if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-1/3 relative">
-        {/* Close Button */}
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60">
+      <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-lg relative">
         <button
           onClick={onClose}
-          className="absolute top-2 right-2 text-5xl font-semibold text-gray-600 hover:text-red-600"
+          className="absolute top-3 right-3 text-3xl font-bold text-gray-500 hover:text-red-500 transition"
           aria-label="Close modal"
         >
-          &times; {/* Using "×" as the close icon */}
+          &times;
         </button>
 
-        <h2 className="text-xl font-bold mb-4">PERIKSA KEMBALI!</h2>
-        <p className="mb-6">Apakah Anda yakin format masukan sudah sesuai?</p>
-        <div className="flex justify-end space-x-4">
-          <button onClick={onClose} className="px-4 py-2 bg-gray-300 rounded">
+        <h2 className="text-2xl font-semibold mb-4 text-gray-800">
+          Periksa Kembali!
+        </h2>
+        <p className="text-gray-600 mb-6">
+          Apakah Anda yakin format masukan sudah sesuai?
+        </p>
+        <div className="flex justify-end space-x-3">
+          <button
+            onClick={onClose}
+            className="px-5 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
+          >
             Periksa Kembali
           </button>
           <button
             onClick={onConfirm}
-            className="px-4 py-2 bg-ijoKepalaTabel text-white rounded"
+            className="px-5 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 transition"
           >
             Simpan
           </button>
@@ -37,7 +44,7 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm }) => {
   );
 };
 
-// Komponen baris input untuk tabel
+// Redesigned input row component
 export default function TableInputRow({
   label,
   inputType,
@@ -46,28 +53,27 @@ export default function TableInputRow({
   onSubmit,
   options,
 }) {
-  // State untuk menandai jika tombol telah ditekan dan loading
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false); // State untuk modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => {
-    setIsModalOpen(true); // Open modal
+    setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
-    setIsModalOpen(false); // Close modal
+    setIsModalOpen(false);
   };
 
   const handleConfirmSubmit = () => {
-    setIsLoading(true); // Set loading state to true
-    onSubmit(); // Call the provided onSubmit function
+    setIsLoading(true);
+    onSubmit();
     setIsSubmitted(true);
-    handleCloseModal(); // Close the modal
-    // Simulate a delay for demonstration purposes
+    handleCloseModal();
+
     setTimeout(() => {
-      setIsLoading(false); // Reset loading state after some time
-    }, 1000); // Adjust the duration as needed
+      setIsLoading(false);
+    }, 1000);
   };
 
   const renderInput = () => {
@@ -78,7 +84,7 @@ export default function TableInputRow({
             type="text"
             value={value}
             onChange={onChange}
-            className="p-2 bg-ijoIsiTabel w-full"
+            className="p-2 bg-gray-100 border rounded-md w-full focus:outline-none focus:ring focus:ring-green-300"
           />
         );
       case "number":
@@ -87,7 +93,7 @@ export default function TableInputRow({
             type="number"
             value={value}
             onChange={onChange}
-            className="p-2 bg-ijoIsiTabel w-full"
+            className="p-2 bg-gray-100 border rounded-md w-full focus:outline-none focus:ring focus:ring-green-300"
           />
         );
       case "dropdown":
@@ -95,7 +101,7 @@ export default function TableInputRow({
           <select
             value={value}
             onChange={onChange}
-            className="bg-ijoIsiTabel p-2 border rounded-lg w-full"
+            className="bg-gray-100 p-2 border rounded-md w-full focus:outline-none focus:ring focus:ring-green-300"
           >
             {options.map((option, index) => (
               <option key={index} value={option.value}>
@@ -111,36 +117,35 @@ export default function TableInputRow({
 
   return (
     <>
-      <tr className="border-b">
-        <td className="px-4 py-2 border border-black">
+      <tr className="border-b hover:bg-gray-50 transition">
+        <td className="px-4 py-2 border border-gray-200 rounded-l-md">
           <div className="flex items-center">
-            {label} <AiOutlineInfoCircle className="ml-2 font-semibold" />
+            {label} <AiOutlineInfoCircle className="ml-2 text-green-500" />
           </div>
         </td>
-        <td className="px-4 py-2 border border-black">{renderInput()}</td>
-        <td className="px-4 py-2 border border-black text-center">
+        <td className="px-4 py-2 border border-gray-200">{renderInput()}</td>
+        <td className="px-4 py-2 border border-gray-200 text-center rounded-r-md">
           <button
             type="button"
             onClick={handleOpenModal}
-            disabled={isLoading} // Disable button when loading
-            className={`p-3 rounded-full text-3xl hover:text-gray-600 ${
-              isSubmitted ? "text-green-600" : "text-gray-900"
+            disabled={isLoading}
+            className={`p-3 rounded-full text-3xl hover:bg-gray-200 transition ${
+              isSubmitted ? "text-green-500" : "text-gray-700"
             }`}
           >
             {isSubmitted ? (
               isLoading ? (
-                <AiOutlineLoading className="animate-spin" /> // Loading spinner
+                <AiOutlineLoading className="animate-spin" />
               ) : (
                 <AiFillCheckCircle />
               )
             ) : (
-              <AiOutlineWarning className="animate-bounce text-red-600" /> // Warning icon before submission
+              <AiFillExclamationCircle className="animate-pulse text-red-500" />
             )}
           </button>
         </td>
       </tr>
 
-      {/* Modal Konfirmasi */}
       <ConfirmationModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}

@@ -30,7 +30,7 @@ export default function DetailPage() {
           }
         );
 
-        // Persiapkan data untuk tabel
+        // Prepare data for the table
         const dataTable = [
           {
             id: 1,
@@ -76,7 +76,7 @@ export default function DetailPage() {
           },
         ];
 
-        // Persiapkan data untuk SpiderGraph
+        // Prepare data for SpiderGraph
         const spiderData = dataTable.map((item) => ({
           subject: item.simbol,
           A: item.nilai,
@@ -94,37 +94,64 @@ export default function DetailPage() {
   }, [sesiId]);
 
   return (
-    <div>
+    <div className="p-6 bg-gray-100 min-h-screen">
       <OpsiDetail />
-      <SpiderGraph data={dataSpiderLingkungan} />
-      <div className="min-h-screen bg-gray-100 mb-24">
-        <div className="overflow-x-auto mt-4">
-          {/* <div className="flex justify-center mb-4">
-            <div className="bg-ijoIsiTabel p-4 border border-black">
-              <h1>Berkelanjutan</h1>
-            </div>
-          </div> */}
-          <table className="min-w-full bg-white border rounded-lg shadow-md">
-            <thead className="bg-ijoKepalaTabel">
-              <tr>
-                <th className="px-4 py-2 text-left">Indikator</th>
-                <th className="px-4 py-2 text-left">Simbol</th>
-                <th className="px-4 py-2 text-left">Nilai</th>
-                <th className="px-4 py-2 text-left">Kontribusi</th>
+      <div className="mb-8">
+        <SpiderGraph data={dataSpiderLingkungan} />
+      </div>
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-white/50 border border-white/30 shadow-xl rounded-2xl backdrop-blur-lg">
+          <thead className="bg-gradient-to-r from-green-600 to-green-400 text-white">
+            <tr>
+              <th className="px-6 py-3 text-left font-semibold text-lg border-b border-green-700">
+                Indikator
+              </th>
+              <th className="px-6 py-3 text-left font-semibold text-lg border-b border-green-700">
+                Simbol
+              </th>
+              <th className="px-6 py-3 text-center font-semibold text-lg border-b border-green-700">
+                Nilai
+              </th>
+              <th className="px-6 py-3 text-center font-semibold text-lg border-b border-green-700">
+                Kontribusi
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {dataLingkungan.map((data, index) => (
+              <tr
+                key={data.id}
+                className={`transition-colors duration-200 ${
+                  index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                } hover:bg-green-50`}
+              >
+                <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                  {data.indikator}
+                </td>
+                <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                  {data.simbol}
+                </td>
+                <td className="px-6 py-4 border-b border-gray-200 text-center text-gray-800 font-semibold">
+                  {data.nilai}
+                </td>
+                <td className="px-6 py-4 border-b border-gray-200 text-center font-medium">
+                  {/* Conditional styling for contribution */}
+                  <span
+                    className={`${
+                      data.kontribusi > 70
+                        ? "text-green-600"
+                        : data.kontribusi > 50
+                        ? "text-yellow-600"
+                        : "text-red-600"
+                    }`}
+                  >
+                    {data.kontribusi || "N/A"}
+                  </span>
+                </td>
               </tr>
-            </thead>
-            <tbody className="bg-ijoIsiTabel">
-              {dataLingkungan.map((data) => (
-                <tr key={data.id}>
-                  <td className="px-4 py-2">{data.indikator}</td>
-                  <td className="px-4 py-2">{data.simbol}</td>
-                  <td className="px-4 py-2">{data.nilai}</td>
-                  <td className="px-4 py-2">{data.kontribusi}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
