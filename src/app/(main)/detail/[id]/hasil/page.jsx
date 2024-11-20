@@ -29,8 +29,6 @@ export default function HasilPage() {
           }
         );
 
-        console.log("ini respon hasil: ", response);
-
         // Prepare data for the table
         const dataTable = [
           {

@@ -47,6 +47,7 @@ export default function KinerjaTable({ title, rows }) {
                   options={row.options}
                   onChange={row.onChange}
                   onSubmit={row.onSubmit}
+                  locked={row.locked}
                 />
               )
             )}

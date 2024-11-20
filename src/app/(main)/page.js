@@ -68,7 +68,6 @@ export default function HomePage() {
         },
       });
 
-      console.log("ini pabrik: ", response);
       if (response.length > 0) {
         setSelectedFactory(response[0]); // Set sebagai objek pabrik
       }
