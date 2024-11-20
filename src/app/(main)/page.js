@@ -224,39 +224,44 @@ export default function HomePage() {
           </div>
 
           <div className="flex justify-around gap-5 w-full h-full">
-            {/* Bagian Kiri: Circular Progress */}
-            <div className="flex flex-col items-center justify-end mb-6 h-full">
-              <div className="w-52 h-52 mb-2">
-                <CircularProgressbar
-                  value={6}
-                  text={`${6}%`}
-                  styles={buildStyles({
-                    pathColor: "#4CAF50",
-                    textColor: "#4CAF50",
-                    trailColor: "#d6d6d6",
-                  })}
-                />
+            {/* Bagian Kiri: Circular Progress dengan warna dinamis */}
+            <div className="flex flex-col items-center justify-center mb-6 h-full">
+              <div className="flex flex-col items-center justify-center mb-6 h-full">
+                {/* Nilai Rendemen */}
+                <div className="text-5xl font-bold mb-4">7.5%</div>
+
+                {/* Bar dengan Gradient */}
+                <div className="relative w-60 h-9 rounded-full bg-gradient-to-r from-red-500 via-yellow-500 to-green-500">
+                  {/* Indikator Nilai */}
+                  <div
+                    className="absolute top-1/2 transform -translate-y-1/2 -translate-x-1/2 border-2 border-gray-700 bg-transparent"
+                    style={{
+                      left: `${(7.5 / 12) * 100}%`, // Posisi indikator berdasarkan nilai
+                      width: "30px",
+                      height: "50px",
+                    }}
+                  ></div>
+                </div>
               </div>
-              <p className="mt-2 text-gray-700 text-center font-semibold">
-                RENDEMEN
-              </p>
             </div>
 
             {/* Garis Pemisah */}
             <div className="border-l-2 border-gray-300 h-full"></div>
 
             {/* Bagian Kanan: Status Data */}
-            <div>
-              <div className="font-semibold mb-4">
+            <div className="flex flex-col items-center mb-6 h-full">
+              <div className="font-semibold mb-4 text-black">
                 <h1>Periode Perhitungan:</h1>
               </div>
-              <DatePicker
-                selected={selectedDate}
-                onChange={(date) => setSelectedDate(date)}
-                inline // Makes the calendar always visible
-                dateFormat="dd/MM/yyyy"
-                className="border border-gray-300 rounded-md p-2"
-              />
+              <div className="w-full">
+                <DatePicker
+                  selected={selectedDate}
+                  onChange={(date) => setSelectedDate(date)}
+                  inline // Kalender selalu terlihat
+                  dateFormat="dd/MM/yyyy"
+                  className="border border-white/20 rounded-md p-2 bg-white/40 text-green-700 text-lg"
+                />
+              </div>
             </div>
           </div>
           {/* <div className="flex justify-around items-center w-full bg-blue-300">

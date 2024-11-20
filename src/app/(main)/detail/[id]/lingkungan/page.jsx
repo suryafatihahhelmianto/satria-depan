@@ -113,7 +113,7 @@ export default function DetailPage() {
                 Nilai
               </th>
               <th className="px-6 py-3 text-center font-semibold text-lg border-b border-green-700">
-                Kontribusi
+                Prioritas Indikator*
               </th>
             </tr>
           </thead>
@@ -134,24 +134,31 @@ export default function DetailPage() {
                 <td className="px-6 py-4 border-b border-gray-200 text-center text-gray-800 font-semibold">
                   {data.nilai}
                 </td>
-                <td className="px-6 py-4 border-b border-gray-200 text-center font-medium">
-                  {/* Conditional styling for contribution */}
-                  <span
-                    className={`${
-                      data.kontribusi > 70
-                        ? "text-green-600"
-                        : data.kontribusi > 50
-                        ? "text-yellow-600"
-                        : "text-red-600"
-                    }`}
-                  >
-                    {data.kontribusi || "N/A"}
-                  </span>
+                <td className="px-6 py-4 border-b border-gray-200 text-center">
+                  {/* Bar horizontal untuk prioritas indikator */}
+                  <div className="flex items-center">
+                    <div
+                      className="bg-ijoTebu h-2"
+                      style={{
+                        width: `${(data.nilai / 100) * 90}px`, // Panjang bar diatur proporsional, bisa disesuaikan
+                      }}
+                    ></div>
+                    <span className="ml-2 text-gray-700 font-medium">
+                      {data.nilai}
+                    </span>
+                  </div>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+        <h1 className="mt-6">
+          {" "}
+          *Indikator dengan nilai leverage tinggi memiliki tingkat sensitivitas
+          tinggi, indikator dengan nilai leverage tinggi dapat digunakan sebagai
+          prioritas utama dalam pengembangan strategi peningkatan kinerja
+          keberlanjutan rantai pasok
+        </h1>
       </div>
     </div>
   );
