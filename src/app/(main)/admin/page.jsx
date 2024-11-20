@@ -2,11 +2,13 @@
 
 import React, { useState, useEffect } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
-import { fetchData, postData, deleteData, putData } from "@/tools/api";
+import { fetchData, postData, putData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
 import { AiFillPlusCircle } from "react-icons/ai";
+import Skeleton from "@/components/common/skeleton";
 
 export default function PenggunaPage() {
+  const [loading, setLoading] = useState(true);
   const [isModalOpen, setModalOpen] = useState(false);
   const [isEditMode, setEditMode] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
@@ -36,6 +38,7 @@ export default function PenggunaPage() {
       });
 
       setUsers(response);
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching users: ", error);
     }
@@ -142,7 +145,8 @@ export default function PenggunaPage() {
     if (confirmDelete) {
       try {
         const token = getCookie("token");
-        await deleteData(`/api/users/${id}`, {
+        await fetchData(`/api/users/delete/${id}`, {
+          method: "DELETE",
           headers: { Authorization: `Bearer ${token}` },
         });
         fetchUsers();
@@ -151,6 +155,14 @@ export default function PenggunaPage() {
       }
     }
   };
+
+  if (loading) {
+    return (
+      <div>
+        <Skeleton rows={3} />
+      </div>
+    );
+  }
 
   return (
     <div className="p-6">
