@@ -77,29 +77,6 @@ export default function KinerjaPage() {
     }
   };
 
-  // const fetchSessions = async () => {
-  //   const cookie = getCookie("token");
-  //   try {
-  //     const response = await fetchData("/api/sesi/daftar", {
-  //       method: "GET",
-  //       headers: {
-  //         Authorization: `Bearer ${cookie}`, // Ambil token dari localStorage
-  //       },
-  //     });
-
-  //     if (!response) {
-  //       throw new Error("Gagal mengambil daftar sesi");
-  //     }
-
-  //     console.log("ini response sesi: ", response);
-  //     setSessions(response.sesi);
-  //     setLoading(false);
-  //   } catch (err) {
-  //     setError(err.message);
-  //     setLoading(false);
-  //   }
-  // };
-
   const fetchPabrikList = async () => {
     const cookie = getCookie("token");
     try {
@@ -145,6 +122,30 @@ export default function KinerjaPage() {
       console.error("Error creating session: ", error);
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    const token = getCookie("token");
+
+    // Konfirmasi penghapusan
+    if (confirm("Apakah Anda yakin ingin menghapus sesi ini?")) {
+      try {
+        // Panggil API delete untuk sesi
+        await fetchData(`/api/sesi/${id}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        // Refresh daftar sesi setelah penghapusan berhasil
+        fetchSessionAndPabrikNames();
+        alert("Sesi berhasil dihapus");
+      } catch (error) {
+        console.error("Error deleting session: ", error);
+        alert("Gagal menghapus sesi");
+      }
     }
   };
 
@@ -246,21 +247,26 @@ export default function KinerjaPage() {
                       <h1>{status}</h1>
                     </div>
                   </td>
-                  <td className="py-2 px-4">
-                    <Link
-                      className="text-black text-2xl p-2 rounded-lg justify-center flex gap-2"
-                      href={`/kinerja/${session.id}/sumber-daya`}
-                    >
-                      <h1 className="bg-gray-400 p-2 rounded-lg">
-                        <AiFillEdit />
-                      </h1>
-                      <h1 className="bg-gray-400 p-2 rounded-lg">
-                        <AiFillRead />
-                      </h1>
-                      <h1 className="bg-gray-400 p-2 rounded-lg">
+                  <td className="py-2 px-4 border-b text-center">
+                    <div className="flex justify-center items-center gap-2 mx-auto">
+                      <Link
+                        href={`/kinerja/${session.id}/sumber-daya`}
+                        className="flex gap-2"
+                      >
+                        <button className="bg-gray-400 p-2 rounded-lg flex items-center justify-center hover:bg-gray-500">
+                          <AiFillEdit className="text-black" />
+                        </button>
+                        <button className="bg-gray-400 p-2 rounded-lg flex items-center justify-center hover:bg-gray-500">
+                          <AiFillRead className="text-black" />
+                        </button>
+                      </Link>
+                      <button
+                        className="bg-red-500 p-2 rounded-lg flex items-center justify-center hover:bg-red-600 text-white"
+                        onClick={() => handleDelete(session.id)}
+                      >
                         <AiFillDelete />
-                      </h1>
-                    </Link>
+                      </button>
+                    </div>
                   </td>
                 </tr>
               );
