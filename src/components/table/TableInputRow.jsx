@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { AiFillCheckCircle } from "react-icons/ai";
-import { AiOutlineLoading, AiOutlineWarning } from "react-icons/ai";
-import { AiOutlineInfoCircle } from "react-icons/ai";
-import { AiFillExclamationCircle } from "react-icons/ai";
+import {
+  AiFillCheckCircle,
+  AiOutlineLoading,
+  AiOutlineInfoCircle,
+  AiFillExclamationCircle,
+} from "react-icons/ai";
 
 // Redesigned modal component
 const ConfirmationModal = ({ isOpen, onClose, onConfirm }) => {
@@ -52,13 +54,16 @@ export default function TableInputRow({
   onChange,
   onSubmit,
   options,
+  locked, // Add locked prop to indicate if the field is locked
 }) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => {
-    setIsModalOpen(true);
+    if (!locked) {
+      setIsModalOpen(true);
+    }
   };
 
   const handleCloseModal = () => {
@@ -84,7 +89,10 @@ export default function TableInputRow({
             type="text"
             value={value}
             onChange={onChange}
-            className="p-2 bg-gray-100 border rounded-md w-full focus:outline-none focus:ring focus:ring-green-300"
+            disabled={locked} // Disable input if locked
+            className={`p-2 border rounded-md w-full focus:outline-none focus:ring ${
+              locked ? "bg-gray-300" : "bg-gray-100 focus:ring-green-300"
+            }`}
           />
         );
       case "number":
@@ -93,7 +101,10 @@ export default function TableInputRow({
             type="number"
             value={value}
             onChange={onChange}
-            className="p-2 bg-gray-100 border rounded-md w-full focus:outline-none focus:ring focus:ring-green-300"
+            disabled={locked} // Disable input if locked
+            className={`p-2 border rounded-md w-full focus:outline-none focus:ring ${
+              locked ? "bg-gray-300" : "bg-gray-100 focus:ring-green-300"
+            }`}
           />
         );
       case "dropdown":
@@ -101,7 +112,12 @@ export default function TableInputRow({
           <select
             value={value}
             onChange={onChange}
-            className="bg-gray-100 p-2 border rounded-md w-full focus:outline-none focus:ring focus:ring-green-300"
+            disabled={locked} // Disable dropdown if locked
+            className={`p-2 border rounded-md w-full focus:outline-none ${
+              locked
+                ? "bg-gray-300"
+                : "bg-gray-100 focus:ring focus:ring-green-300"
+            }`}
           >
             {options.map((option, index) => (
               <option key={index} value={option.value}>
@@ -117,32 +133,43 @@ export default function TableInputRow({
 
   return (
     <>
-      <tr className="border-b hover:bg-gray-50 transition">
+      <tr
+        className={`border-b hover:bg-gray-50 transition ${
+          locked ? "opacity-50" : ""
+        }`}
+      >
         <td className="px-4 py-2 border border-gray-200 rounded-l-md">
           <div className="flex items-center">
-            {label} <AiOutlineInfoCircle className="ml-2 text-green-500" />
+            {label}
+            <AiOutlineInfoCircle className="ml-2 text-green-500" />
           </div>
         </td>
         <td className="px-4 py-2 border border-gray-200">{renderInput()}</td>
         <td className="px-4 py-2 border border-gray-200 text-center rounded-r-md">
-          <button
-            type="button"
-            onClick={handleOpenModal}
-            disabled={isLoading}
-            className={`p-3 rounded-full text-3xl hover:bg-gray-200 transition ${
-              isSubmitted ? "text-green-500" : "text-gray-700"
-            }`}
-          >
-            {isSubmitted ? (
-              isLoading ? (
-                <AiOutlineLoading className="animate-spin" />
+          {locked ? (
+            <div className="flex justify-center w-full">
+              <AiFillCheckCircle className="text-green-500 text-center rounded-full text-3xl" />
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={handleOpenModal}
+              disabled={isLoading}
+              className={`p-3 rounded-full text-3xl hover:bg-gray-200 transition ${
+                isSubmitted ? "text-green-500" : "text-gray-700"
+              }`}
+            >
+              {isSubmitted ? (
+                isLoading ? (
+                  <AiOutlineLoading className="animate-spin" />
+                ) : (
+                  <AiFillCheckCircle />
+                )
               ) : (
-                <AiFillCheckCircle />
-              )
-            ) : (
-              <AiFillExclamationCircle className="animate-pulse text-red-500" />
-            )}
-          </button>
+                <AiFillExclamationCircle className="animate-pulse text-red-500" />
+              )}
+            </button>
+          )}
         </td>
       </tr>
 
