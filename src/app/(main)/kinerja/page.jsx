@@ -1,5 +1,6 @@
 "use client";
 
+import Skeleton from "@/components/common/skeleton";
 import { fetchData, postData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
 import Link from "next/link";
@@ -156,7 +157,11 @@ export default function KinerjaPage() {
   }, []);
 
   if (loading) {
-    return <p>Loading...</p>;
+    return (
+      <div>
+        <Skeleton rows={3} />
+      </div>
+    );
   }
 
   if (error) {

@@ -12,6 +12,8 @@ import {
   AiOutlineLineChart,
   AiOutlineSearch,
 } from "react-icons/ai";
+import Skeleton from "@/components/common/skeleton";
+import { getCookie } from "@/tools/getCookie";
 
 export default function RendemenPage() {
   const [loading, setLoading] = useState(true);
@@ -43,6 +45,24 @@ export default function RendemenPage() {
     }
   };
 
+  const handleDelete = async (id) => {
+    if (confirm("Apakah Anda yakin ingin menghapus data ini?")) {
+      try {
+        const token = getCookie("token");
+        await fetchData(`/api/rendemen/${id}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        fetchSessions(); // Refresh data setelah penghapusan
+      } catch (err) {
+        console.error("Gagal menghapus data rendemen:", err);
+        alert("Gagal menghapus data");
+      }
+    }
+  };
+
   useEffect(() => {
     fetchSessions(); // Panggil fungsi fetchSessions saat komponen di-mount
   }, []);
@@ -70,7 +90,9 @@ export default function RendemenPage() {
       </div>
 
       {loading ? (
-        <p>Loading...</p>
+        <div>
+          <Skeleton rows={4} />
+        </div>
       ) : error ? (
         <p className="text-red-500">Error: {error}</p>
       ) : (
@@ -107,15 +129,23 @@ export default function RendemenPage() {
                   <td className="py-2 px-4 border-b">
                     {session.nilaiRendemen}
                   </td>
-                  <td className="py-2 px-4">
-                    <Link
-                      className="text-black text-2xl p-2 rounded-lg justify-center flex gap-2"
-                      href={`/rendemen/${session.id}`}
-                    >
-                      <h1 className="bg-gray-400 p-2 rounded-lg">
-                        <AiOutlineSearch />
-                      </h1>
-                    </Link>
+                  <td className="py-2 px-4 border-b text-center">
+                    <div className="flex justify-center items-center gap-2 mx-auto">
+                      <Link
+                        className="flex gap-2"
+                        href={`/rendemen/${session.id}`}
+                      >
+                        <button className="bg-gray-400 p-2 rounded-lg flex items-center justify-center hover:bg-gray-500">
+                          <AiOutlineSearch />
+                        </button>
+                      </Link>
+                      <button
+                        onClick={() => handleDelete(session.id)}
+                        className="bg-red-500 p-2 rounded-lg flex items-center justify-center hover:bg-red-600 text-white"
+                      >
+                        <AiFillDelete />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))

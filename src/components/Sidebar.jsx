@@ -39,10 +39,10 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
       icon: <AiOutlineUser size={isOpen ? 20 : 60} />,
       style: "text-black text-sm",
     },
-    {
-      name: "Testing",
-      path: "/testing",
-    },
+    // {
+    //   name: "Testing",
+    //   path: "/testing",
+    // },
   ];
 
   const getLinkStyle = (path) => {

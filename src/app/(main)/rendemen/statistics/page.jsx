@@ -13,9 +13,11 @@ import {
 } from "recharts";
 import { fetchData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
+import SkeletonCardBig from "@/components/common/SkeletonCardBig";
 
 export default function RendemenStatisticsPage() {
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth()); // 0-11
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [chartData, setChartData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -39,12 +41,18 @@ export default function RendemenStatisticsPage() {
     setSelectedMonth(parseInt(event.target.value));
   };
 
+  const handleYearChange = (event) => {
+    setSelectedYear(parseInt(event.target.value));
+  };
+
   useEffect(() => {
     const fetchRendemenData = async () => {
       try {
         setLoading(true);
         const response = await fetchData(
-          `/api/rendemen/statistics?month=${selectedMonth}`,
+          `/api/rendemen/daily-average?month=${
+            selectedMonth + 1
+          }&year=${selectedYear}`,
           {
             headers: {
               Authorization: `Bearer ${getCookie("token")}`,
@@ -53,7 +61,12 @@ export default function RendemenStatisticsPage() {
         );
 
         console.log("ini respon statistik: ", response.data);
-        setChartData(response.data);
+        setChartData(
+          response.data.map((entry) => ({
+            day: new Date(entry.tanggal).getDate(),
+            rendemen: entry.nilaiRendemen,
+          }))
+        );
       } catch (err) {
         setError("Gagal memuat data rendemen.");
       } finally {
@@ -62,28 +75,49 @@ export default function RendemenStatisticsPage() {
     };
 
     fetchRendemenData();
-  }, [selectedMonth]);
+  }, [selectedMonth, selectedYear]);
 
   if (loading) {
-    return <p>Loading...</p>;
+    return (
+      <div>
+        <SkeletonCardBig />
+      </div>
+    );
   }
 
   if (error) {
     return <p>{error}</p>;
   }
 
+  // Generate an array of years for the dropdown
+  const currentYear = new Date().getFullYear();
+  const years = [];
+  for (let i = currentYear - 10; i <= currentYear; i++) {
+    years.push(i);
+  }
+
   return (
     <div className="min-h-screen flex">
       {/* Konten Utama */}
       <div className="flex-1">
-        {/* Konten Utama */}
         <main className="p-6">
           <div className="bg-white rounded-lg shadow p-6">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-semibold">
                 Historis Rendemen (Prediksi)
               </h2>
-              <div>
+              <div className="flex gap-2">
+                <select
+                  value={selectedYear}
+                  onChange={handleYearChange}
+                  className="border border-gray-300 rounded p-2"
+                >
+                  {years.map((year) => (
+                    <option key={year} value={year}>
+                      {year}
+                    </option>
+                  ))}
+                </select>
                 <select
                   value={selectedMonth}
                   onChange={handleMonthChange}
@@ -99,30 +133,39 @@ export default function RendemenStatisticsPage() {
             </div>
 
             {/* Grafik */}
-            <ResponsiveContainer width="100%" height={400}>
-              <LineChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis
-                  dataKey="day"
-                  tickFormatter={(tickItem, index) =>
-                    index % 5 === 0 ? tickItem : ""
-                  }
-                  domain={[1, "dataMax"]}
-                  interval={0}
-                />
-                <YAxis domain={[0, 12]} tickCount={13} allowDecimals={false} />
-                <Tooltip labelFormatter={(label) => `Tanggal ${label}`} />
-                <Legend />
-                {/* Garis Prediksi Rendemen */}
-                <Line
-                  type="monotone"
-                  dataKey="rendemen"
-                  stroke="#00C49F" // Warna hijau
-                  activeDot={{ r: 8 }}
-                  name="Rendemen Prediksi"
-                />
-              </LineChart>
-            </ResponsiveContainer>
+            {chartData.length === 0 ? (
+              <p className="text-center text-gray-500">
+                Data tidak tersedia untuk bulan ini.
+              </p>
+            ) : (
+              <ResponsiveContainer width="100%" height={400}>
+                <LineChart data={chartData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis
+                    dataKey="day"
+                    tickFormatter={(tickItem, index) =>
+                      index % 5 === 0 ? tickItem : ""
+                    }
+                    domain={[1, "dataMax"]}
+                    interval={0}
+                  />
+                  <YAxis
+                    domain={[0, 12]}
+                    tickCount={13}
+                    allowDecimals={false}
+                  />
+                  <Tooltip labelFormatter={(label) => `Tanggal ${label}`} />
+                  <Legend />
+                  <Line
+                    type="monotone"
+                    dataKey="rendemen"
+                    stroke="#00C49F"
+                    activeDot={{ r: 8 }}
+                    name="Rendemen Prediksi"
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            )}
           </div>
         </main>
       </div>
