@@ -35,7 +35,6 @@ export default function PenggunaPage() {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      console.log("ini kan response: ", response);
       setUsers(response);
     } catch (error) {
       console.error("Error fetching users: ", error);

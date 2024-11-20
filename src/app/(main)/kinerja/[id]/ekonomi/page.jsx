@@ -5,6 +5,7 @@ import { fetchData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
 import KinerjaTable from "@/components/table/KinerjaTable"; // Import the KinerjaTable component
 import { usePathname } from "next/navigation";
+import Skeleton from "@/components/common/skeleton";
 
 export default function DataKinerja() {
   const pathname = usePathname();
@@ -28,6 +29,7 @@ export default function DataKinerja() {
     returnOE: 0,
   });
 
+  const [lockedStatus, setLockedStatus] = useState({});
   const [loading, setLoading] = useState(true);
 
   const handleInputChange = (field, value) => {
@@ -36,6 +38,11 @@ export default function DataKinerja() {
 
   const handleUpdate = async (field, value) => {
     try {
+      if (lockedStatus[field]) {
+        console.log(`Kolom ${field} sudah terkunci, tidak bisa diupdate.`);
+        return;
+      }
+
       const data = { sesiId };
       data[field] = parseFloat(value);
       await fetchData(`/api/masukkan/ekonomi`, {
@@ -47,6 +54,7 @@ export default function DataKinerja() {
         data,
       });
       console.log("Update successful");
+      fetchEkonomi();
     } catch (error) {
       console.error("Error updating field: ", error);
     }
@@ -69,27 +77,48 @@ export default function DataKinerja() {
     }
   };
 
-  useEffect(() => {
-    const fetchEkonomi = async () => {
-      try {
-        const response = await fetchData(`/api/masukkan/ekonomi/${sesiId}`, {
+  const fetchEkonomi = async () => {
+    try {
+      const response = await fetchData(`/api/masukkan/ekonomi/${sesiId}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${getCookie("token")}`,
+        },
+      });
+
+      const lockedResponse = await fetchData(
+        `/api/masukkan/ekonomi/locked-status/${sesiId}`,
+        {
           method: "GET",
           headers: {
             Authorization: `Bearer ${getCookie("token")}`,
           },
-        });
-        setFormData(response);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
+        }
+      );
 
+      const lockedStatusMap = {};
+      lockedResponse.forEach((log) => {
+        lockedStatusMap[log.columnName] = log.status === "LOCKED";
+      });
+      setLockedStatus(lockedStatusMap);
+
+      setFormData(response);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
     fetchEkonomi();
   }, [sesiId]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="py-16">
+        <Skeleton rows={10} />
+      </div>
+    );
   }
 
   // Define rows for KinerjaTable
@@ -107,6 +136,7 @@ export default function DataKinerja() {
       ],
       onChange: (e) => handleInputChange("nilaiRisiko", e.target.value),
       onSubmit: () => handleUpdate("nilaiRisiko", formData.nilaiRisiko),
+      locked: lockedStatus["nilaiRisiko"],
     },
   ];
 
@@ -117,6 +147,7 @@ export default function DataKinerja() {
       value: formData.polAmpas,
       onChange: (e) => setFormData({ ...formData, polAmpas: e.target.value }),
       onSubmit: () => handleUpdate("polAmpas", formData.polAmpas),
+      locked: lockedStatus["polAmpas"],
     },
     {
       label: "Kehilangan Pol Blotong",
@@ -124,6 +155,7 @@ export default function DataKinerja() {
       value: formData.polBlotong,
       onChange: (e) => setFormData({ ...formData, polBlotong: e.target.value }),
       onSubmit: () => handleUpdate("polBlotong", formData.polBlotong),
+      locked: lockedStatus["polBlotong"],
     },
     {
       label: "Kehilangan Pol Tetes",
@@ -131,6 +163,7 @@ export default function DataKinerja() {
       value: formData.polTetes,
       onChange: (e) => setFormData({ ...formData, polTetes: e.target.value }),
       onSubmit: () => handleUpdate("polTetes", formData.polTetes),
+      locked: lockedStatus["polTetes"],
     },
     {
       label: "Kehilangan Rendemen Kebun",
@@ -139,6 +172,7 @@ export default function DataKinerja() {
       onChange: (e) =>
         setFormData({ ...formData, rendemenKebun: e.target.value }),
       onSubmit: () => handleUpdate("rendemenKebun", formData.rendemenKebun),
+      locked: lockedStatus["rendemenKebun"],
     },
     {
       label: "Kehilangan Rendemen Gerbang",
@@ -147,6 +181,7 @@ export default function DataKinerja() {
       onChange: (e) =>
         setFormData({ ...formData, rendemenGerbang: e.target.value }),
       onSubmit: () => handleUpdate("rendemenGerbang", formData.rendemenGerbang),
+      locked: lockedStatus["rendemenGerbang"],
     },
     {
       label: "Kehilangan Rendemen NPP",
@@ -155,6 +190,7 @@ export default function DataKinerja() {
       onChange: (e) =>
         setFormData({ ...formData, rendemenNPP: e.target.value }),
       onSubmit: () => handleUpdate("rendemenNPP", formData.rendemenNPP),
+      locked: lockedStatus["rendemenNPP"],
     },
     {
       label: "Kehilangan Rendemen Gula",
@@ -163,6 +199,7 @@ export default function DataKinerja() {
       onChange: (e) =>
         setFormData({ ...formData, rendemenGula: e.target.value }),
       onSubmit: () => handleUpdate("rendemenGula", formData.rendemenGula),
+      locked: lockedStatus["rendemenGula"],
     },
   ];
 
@@ -175,6 +212,7 @@ export default function DataKinerja() {
         setFormData({ ...formData, kesenjanganRantai: e.target.value }),
       onSubmit: () =>
         handleUpdate("kesenjanganRantai", formData.kesenjanganRantai),
+      locked: lockedStatus["kesenjanganRantai"],
     },
   ];
 
@@ -185,6 +223,7 @@ export default function DataKinerja() {
       value: formData.hargaAcuan,
       onChange: (e) => setFormData({ ...formData, hargaAcuan: e.target.value }),
       onSubmit: () => handleUpdate("hargaAcuan", formData.hargaAcuan),
+      locked: lockedStatus["hargaAcuan"],
     },
     {
       label: "Harga Lelang (rata-rata)",
@@ -193,6 +232,7 @@ export default function DataKinerja() {
       onChange: (e) =>
         setFormData({ ...formData, hargaLelang: e.target.value }),
       onSubmit: () => handleUpdate("hargaLelang", formData.hargaLelang),
+      locked: lockedStatus["hargaLelang"],
     },
   ];
 
@@ -204,6 +244,7 @@ export default function DataKinerja() {
       onChange: (e) =>
         setFormData({ ...formData, shsTahunIni: e.target.value }),
       onSubmit: () => handleUpdate("shsTahunIni", formData.shsTahunIni),
+      locked: lockedStatus["shsTahunIni"],
     },
     {
       label: "Produksi tahun lalu",
@@ -212,6 +253,7 @@ export default function DataKinerja() {
       onChange: (e) =>
         setFormData({ ...formData, shsTahunSebel: e.target.value }),
       onSubmit: () => handleUpdate("shsTahunSebel", formData.shsTahunSebel),
+      locked: lockedStatus["shsTahunSebel"],
     },
   ];
 
@@ -222,6 +264,7 @@ export default function DataKinerja() {
       value: formData.returnOE,
       onChange: (e) => setFormData({ ...formData, returnOE: e.target.value }),
       onSubmit: () => handleUpdate("returnOE", formData.returnOE),
+      locked: lockedStatus["returnOE"],
     },
   ];
 

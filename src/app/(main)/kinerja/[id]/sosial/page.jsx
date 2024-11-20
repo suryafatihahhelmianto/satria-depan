@@ -6,6 +6,7 @@ import { getCookie } from "@/tools/getCookie";
 import KinerjaTable from "@/components/table/KinerjaTable"; // Import the KinerjaTable component
 import { usePathname } from "next/navigation";
 import { AiFillCheckCircle } from "react-icons/ai";
+import Skeleton from "@/components/common/skeleton";
 
 export default function DataSosial() {
   const pathname = usePathname();
@@ -25,9 +26,15 @@ export default function DataSosial() {
     luasLahanYangDitanami: 0,
   });
 
-  const [loading, setLoading] = useState(false);
+  const [lockedStatus, setLockedStatus] = useState({});
+  const [loading, setLoading] = useState(true);
 
   const handleUpdate = async (field, value) => {
+    if (lockedStatus[field]) {
+      console.log(`Kolom ${field} sudah terkunci, tidak bisa diupdate.`);
+      return;
+    }
+
     try {
       const data = { sesiId };
       data[field] = parseFloat(value);
@@ -40,6 +47,7 @@ export default function DataSosial() {
         },
         data,
       });
+      fetchSosialData();
       console.log("Update successful");
     } catch (error) {
       console.error("Error updating field: ", error);
@@ -65,28 +73,48 @@ export default function DataSosial() {
     }
   };
 
-  useEffect(() => {
-    const fetchSosialData = async () => {
-      try {
-        const response = await fetchData(`/api/masukkan/sosial/${sesiId}`, {
+  const fetchSosialData = async () => {
+    try {
+      const response = await fetchData(`/api/masukkan/sosial/${sesiId}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${getCookie("token")}`,
+        },
+      });
+
+      const lockedResponse = await fetchData(
+        `/api/masukkan/sosial/locked-status/${sesiId}`,
+        {
           method: "GET",
           headers: {
             Authorization: `Bearer ${getCookie("token")}`,
           },
-        });
+        }
+      );
 
-        setFormData(response);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
+      const lockedStatusMap = {};
+      lockedResponse.forEach((log) => {
+        lockedStatusMap[log.columnName] = log.status === "LOCKED";
+      });
+      setLockedStatus(lockedStatusMap);
 
+      setFormData(response);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
     fetchSosialData();
   }, [sesiId]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="py-16">
+        <Skeleton rows={10} />
+      </div>
+    );
   }
 
   // Define the rows for each table
@@ -105,6 +133,7 @@ export default function DataSosial() {
       onChange: (e) =>
         setFormData({ ...formData, rantaiPasok: parseFloat(e.target.value) }),
       onSubmit: () => handleUpdate("rantaiPasok", formData.rantaiPasok),
+      locked: lockedStatus["rantaiPasok"],
     },
   ];
 
@@ -123,6 +152,7 @@ export default function DataSosial() {
       onChange: (e) =>
         setFormData({ ...formData, sediaAktivita: parseFloat(e.target.value) }),
       onSubmit: () => handleUpdate("sediaAktivita", formData.sediaAktivita),
+      locked: lockedStatus["sediaAktivita"],
     },
   ];
 
@@ -144,6 +174,7 @@ export default function DataSosial() {
           tingkatManfaat: parseFloat(e.target.value),
         }),
       onSubmit: () => handleUpdate("tingkatManfaat", formData.tingkatManfaat),
+      locked: lockedStatus["tingkatManfaat"],
     },
   ];
 
@@ -162,6 +193,7 @@ export default function DataSosial() {
       onChange: (e) =>
         setFormData({ ...formData, tingkatLimbah: parseFloat(e.target.value) }),
       onSubmit: () => handleUpdate("tingkatLimbah", formData.tingkatLimbah),
+      locked: lockedStatus["tingkatLimbah"],
     },
   ];
 
@@ -173,6 +205,7 @@ export default function DataSosial() {
       onChange: (e) =>
         setFormData({ ...formData, tetapMajaIndra: e.target.value }),
       onSubmit: () => handleUpdate("tetapMajaIndra", formData.tetapMajaIndra),
+      locked: lockedStatus["tetapMajaIndra"],
     },
     {
       label: "PKWT Total (orang)",
@@ -180,6 +213,7 @@ export default function DataSosial() {
       value: formData.tetapTotal,
       onChange: (e) => setFormData({ ...formData, tetapTotal: e.target.value }),
       onSubmit: () => handleUpdate("tetapTotal", formData.tetapTotal),
+      locked: lockedStatus["tetapTotal"],
     },
     {
       label: "PKWTT Tenaga Kerja Majalengka Indramayu (orang)",
@@ -188,6 +222,7 @@ export default function DataSosial() {
       onChange: (e) =>
         setFormData({ ...formData, tidakMajaIndra: e.target.value }),
       onSubmit: () => handleUpdate("tidakMajaIndra", formData.tidakMajaIndra),
+      locked: lockedStatus["tidakMajaIndra"],
     },
     {
       label: "PKWTT Total (orang)",
@@ -196,6 +231,7 @@ export default function DataSosial() {
       onChange: (e) =>
         setFormData({ ...formData, tidakTetapTotal: e.target.value }),
       onSubmit: () => handleUpdate("tidakTetapTotal", formData.tidakTetapTotal),
+      locked: lockedStatus["tidakTetapTotal"],
     },
   ];
 
@@ -206,6 +242,7 @@ export default function DataSosial() {
       value: formData.luasLahan,
       onChange: (e) => setFormData({ ...formData, luasLahan: e.target.value }),
       onSubmit: () => handleUpdate("luasLahan", formData.luasLahan),
+      locked: lockedStatus["luasLahan"],
     },
     {
       label: "Total Luas Lahan yang Ditanami Tahun Ini (Ha)",
@@ -218,6 +255,7 @@ export default function DataSosial() {
         }),
       onSubmit: () =>
         handleUpdate("luasLahanYangDitanami", formData.luasLahanYangDitanami),
+      locked: lockedStatus["luasLahanYangDitanami"],
     },
   ];
 

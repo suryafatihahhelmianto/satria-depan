@@ -45,8 +45,6 @@ export default function PredictionPage() {
         data,
       });
 
-      console.log("ini respon submit rendemen: ", response);
-
       // if (!response.ok) {
       //   throw new Error("Failed to update data");
       // }

@@ -69,14 +69,11 @@ export default function TestInputPage() {
         },
       });
 
-      console.log("ini respon: ", response);
-
       // if (!response.ok) {
       //   throw new Error("Failed to calculate sustainability index");
       // }
 
       const data = await response.predicted_sustainability;
-      console.log("ini data: ", data);
       setResults((prev) => ({ ...prev, sustainabilityIndex: data }));
       setIndeks(data);
     } catch (err) {

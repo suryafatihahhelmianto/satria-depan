@@ -19,7 +19,6 @@ export default function BiodataPage() {
         },
       });
       setUser(response);
-      console.log("ini respons: ", response);
     } catch (error) {
       console.error("Error fetching user data", error);
     } finally {
