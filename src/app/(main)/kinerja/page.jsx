@@ -1,6 +1,6 @@
 "use client";
 
-import Skeleton from "@/components/common/skeleton";
+import Skeleton from "@/components/common/Skeleton";
 import { fetchData, postData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
 import Link from "next/link";

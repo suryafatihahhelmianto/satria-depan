@@ -6,7 +6,7 @@ import { getCookie } from "@/tools/getCookie";
 import KinerjaTable from "@/components/table/KinerjaTable"; // Import the KinerjaTable component
 import { usePathname } from "next/navigation";
 import { AiFillCheckCircle } from "react-icons/ai";
-import Skeleton from "@/components/common/skeleton";
+import Skeleton from "@/components/common/Skeleton";
 
 export default function DataSosial() {
   const pathname = usePathname();

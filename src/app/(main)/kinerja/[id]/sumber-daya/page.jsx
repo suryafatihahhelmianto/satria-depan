@@ -1,6 +1,6 @@
 "use client";
 
-import Skeleton from "@/components/common/skeleton";
+import Skeleton from "@/components/common/Skeleton";
 import FieldInput from "@/components/FieldInput";
 import OpsiDimensi from "@/components/OpsiDimensi";
 import KinerjaTable from "@/components/table/KinerjaTable";

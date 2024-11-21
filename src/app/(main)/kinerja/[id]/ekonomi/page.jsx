@@ -5,7 +5,7 @@ import { fetchData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
 import KinerjaTable from "@/components/table/KinerjaTable"; // Import the KinerjaTable component
 import { usePathname } from "next/navigation";
-import Skeleton from "@/components/common/skeleton";
+import Skeleton from "@/components/common/Skeleton";
 
 export default function DataKinerja() {
   const pathname = usePathname();

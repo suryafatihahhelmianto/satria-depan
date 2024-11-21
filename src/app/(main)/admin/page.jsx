@@ -5,7 +5,7 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import { fetchData, postData, putData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
 import { AiFillPlusCircle } from "react-icons/ai";
-import Skeleton from "@/components/common/skeleton";
+import Skeleton from "@/components/common/Skeleton";
 
 export default function PenggunaPage() {
   const [loading, setLoading] = useState(true);

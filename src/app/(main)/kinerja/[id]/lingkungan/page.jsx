@@ -6,7 +6,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { usePathname } from "next/navigation";
 import { fetchData } from "@/tools/api";
 import KinerjaTableBulan from "@/components/table/KinerjaTableBulan";
-import Skeleton from "@/components/common/skeleton";
+import Skeleton from "@/components/common/Skeleton";
 import { CheckCircle } from "lucide-react";
 
 export default function LingkunganPage() {

@@ -12,7 +12,7 @@ import {
   AiOutlineLineChart,
   AiOutlineSearch,
 } from "react-icons/ai";
-import Skeleton from "@/components/common/skeleton";
+import Skeleton from "@/components/common/Skeleton";
 import { getCookie } from "@/tools/getCookie";
 
 export default function RendemenPage() {
