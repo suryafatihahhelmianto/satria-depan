@@ -2,6 +2,7 @@
 
 import { fetchData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
+import { useRouter } from "next/navigation";
 import { createContext, useContext, useState, useEffect } from "react";
 
 const UserContext = createContext();
@@ -9,6 +10,9 @@ const UserContext = createContext();
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null); // Global state for user
   const [loading, setLoading] = useState(true);
+  const [role, setRole] = useState(""); // Store the user's role
+
+  const router = useRouter();
 
   // Fetch user data on provider mount
   useEffect(() => {
@@ -17,8 +21,15 @@ export const UserProvider = ({ children }) => {
         const response = await fetchData("/api/userinfo", {
           headers: { Authorization: `Bearer ${getCookie("token")}` },
         });
+
+        if (response.error === "Token expired") {
+          router.push("/login"); // Redirect to login
+          return; // Exit the function
+        }
+
         const data = await response;
         setUser(data); // Set user data in global state
+        setRole(data.level);
       } catch (error) {
         console.error("Failed to fetch user data", error);
       } finally {
@@ -30,7 +41,7 @@ export const UserProvider = ({ children }) => {
   }, []); // Empty dependency array ensures this runs only once
 
   return (
-    <UserContext.Provider value={{ user, setUser, loading }}>
+    <UserContext.Provider value={{ user, setUser, role, loading }}>
       {children}
     </UserContext.Provider>
   );
