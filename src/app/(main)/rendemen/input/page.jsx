@@ -71,10 +71,6 @@ export default function PredictionPage() {
     setIsConfirmModalOpen(false);
   };
 
-  useEffect(() => {
-    console.log("ini user: ", user);
-  }, []);
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-white to-white flex items-center justify-center p-4 relative">
       <div className="bg-white rounded-xl p-8 w-full h-screen max-w-full">
