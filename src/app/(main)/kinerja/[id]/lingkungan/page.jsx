@@ -101,7 +101,6 @@ export default function LingkunganPage() {
         return; // Abaikan jika nilainya tidak valid
       }
       // data[field] = parseFloat(value);
-      console.log("Data yang di-update (lingkungan): ", data);
 
       await fetchData(`/api/masukkan/lingkungan`, {
         method: "PATCH",
@@ -112,7 +111,6 @@ export default function LingkunganPage() {
         data,
       });
       fetchLingkungan();
-      console.log("Update successful (lingkungan)");
     } catch (error) {
       console.error("Error updating field (lingkungan): ", error);
     }
@@ -124,8 +122,6 @@ export default function LingkunganPage() {
         sesiId,
         formData,
       };
-
-      console.log("Data yang dikirim untuk kalkulasi (lingkungan): ", formData);
 
       const response = await fetchData("/api/dimensi/lingkungan", {
         method: "POST", // menggunakan POST untuk membuat data baru

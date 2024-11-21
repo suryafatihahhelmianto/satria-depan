@@ -3,6 +3,7 @@ import "../globals.css";
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
 import AppLayout from "@/components/layout/AppLayout";
+import { UserProvider } from "@/context/UserContext";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -15,10 +16,13 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  // const userData = await fetchUserData()
   return (
     <html lang="en">
       <body className={`${poppins.className}`}>
-        <AppLayout>{children}</AppLayout>
+        <UserProvider>
+          <AppLayout>{children}</AppLayout>
+        </UserProvider>
         {/* <div className="flex flex-col w-full">
           <Navbar />
           <Sidebar />

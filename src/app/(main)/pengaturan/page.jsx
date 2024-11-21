@@ -1,9 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
+import SkeletonCardBig from "@/components/common/SkeletonCardBig";
+import { fetchData } from "@/tools/api";
+import { getCookie } from "@/tools/getCookie";
+import React, { useEffect, useState } from "react";
 
 const PengaturanPage = () => {
-  const [usernameLama, setUsernameLama] = useState("byunequality");
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const [usernameLama, setUsernameLama] = useState("");
   const [usernameBaru, setUsernameBaru] = useState("");
   const [passwordLama, setPasswordLama] = useState("");
   const [passwordBaru, setPasswordBaru] = useState("");
@@ -12,21 +18,126 @@ const PengaturanPage = () => {
   const [showPasswordNew, setShowPasswordNew] = useState(false);
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
 
-  const handleUbahUsername = (e) => {
-    e.preventDefault();
-    // Logika untuk ubah username
-    console.log("Ubah Username", usernameBaru);
-  };
+  const [loadingUsername, setLoadingUsername] = useState(false);
+  const [loadingPassword, setLoadingPassword] = useState(false);
 
-  const handleUbahPassword = (e) => {
+  const handleUbahUsername = async (e) => {
     e.preventDefault();
-    if (passwordBaru === konfirmasiPassword) {
-      // Logika untuk ubah password
-      console.log("Ubah Password", passwordBaru);
-    } else {
-      alert("Password baru dan konfirmasi password tidak cocok!");
+    setLoadingUsername(true);
+
+    if (!usernameBaru.trim()) {
+      alert("Username baru tidak boleh kosong!");
+      return;
+    }
+
+    try {
+      const token = getCookie("token");
+
+      const response = await fetchData("/api/users/change-username", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ newUsername: usernameBaru }),
+      });
+
+      if (response.error) {
+        alert(`Error: ${response.error}`);
+        return;
+      }
+
+      alert("Username berhasil diubah!");
+      setUsernameBaru(""); // Reset input field
+      fetchUserData(); // Refresh user data
+    } catch (error) {
+      console.error("Error updating username", error);
+      alert("Terjadi kesalahan saat mengubah username");
+    } finally {
+      setLoadingUsername(false);
     }
   };
+
+  const handleUbahPassword = async (e) => {
+    e.preventDefault();
+    setLoadingPassword(true);
+
+    if (
+      !passwordLama.trim() ||
+      !passwordBaru.trim() ||
+      !konfirmasiPassword.trim()
+    ) {
+      alert("Semua field harus diisi!");
+      return;
+    }
+
+    if (passwordBaru !== konfirmasiPassword) {
+      alert("Password baru dan konfirmasi password tidak cocok!");
+      return;
+    }
+
+    try {
+      const token = getCookie("token");
+
+      const response = await fetchData("/api/users/change-password", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          currentPassword: passwordLama,
+          newPassword: passwordBaru,
+        }),
+      });
+
+      if (response.error) {
+        alert(`Error: ${response.error}`);
+        return;
+      }
+
+      alert("Password berhasil diubah!");
+      setPasswordLama("");
+      setPasswordBaru("");
+      setKonfirmasiPassword(""); // Reset all input fields
+    } catch (error) {
+      console.error("Error updating password", error);
+      alert("Terjadi kesalahan saat mengubah password");
+    } finally {
+      setLoadingPassword(false);
+    }
+  };
+
+  const fetchUserData = async () => {
+    const cookie = getCookie("token");
+    try {
+      const response = await fetchData("/api/userinfo", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${cookie}`, // Ambil token dari localStorage
+        },
+      });
+      setUser(response);
+
+      console.log("ini response user: ", response);
+    } catch (error) {
+      console.error("Error fetching user data", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div>
+        <SkeletonCardBig />
+      </div>
+    );
+  }
 
   return (
     <div
@@ -47,7 +158,7 @@ const PengaturanPage = () => {
             <input
               type="text"
               className="w-full bg-green-200 rounded px-4 py-2 mb-4"
-              value={usernameLama}
+              value={user?.username}
               readOnly
             />
             <label className="block mb-2 font-semibold">Username Baru</label>
@@ -60,9 +171,12 @@ const PengaturanPage = () => {
             />
             <button
               type="submit"
-              className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
+              className={`bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500 ${
+                loadingUsername ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+              disabled={loadingUsername}
             >
-              Ubah Username
+              {loadingUsername ? "Mengubah..." : "Ubah Username"}
             </button>
           </form>
         </div>
@@ -134,9 +248,12 @@ const PengaturanPage = () => {
 
             <button
               type="submit"
-              className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
+              className={`bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500 ${
+                loadingPassword ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+              disabled={loadingPassword}
             >
-              Ubah Password
+              {loadingPassword ? "Mengubah..." : "Ubah Password"}
             </button>
           </form>
         </div>

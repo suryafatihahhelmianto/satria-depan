@@ -57,8 +57,6 @@ export default function TestInputPage() {
     setLoading((prev) => ({ ...prev, sustainability: true }));
     setError((prev) => ({ ...prev, sustainability: null }));
 
-    console.log("ini data kriim: ", sustainabilityIndex);
-
     try {
       const response = await fetchData("/api/dimensi/calculate/anfis", {
         method: "POST",

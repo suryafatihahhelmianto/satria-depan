@@ -44,7 +44,6 @@ export default function Demo() {
       });
 
       // Set the API response to state and stop loading
-      console.log("API result", result);
       setKehilanganRendemen(result.potensi_kehilangan_produksi || null);
     } catch (error) {
       console.error("API call failed:", error);

@@ -58,7 +58,6 @@ export default function PenggunaPage() {
 
   const openModal = (user) => {
     if (user) {
-      console.log("ini user: ", user);
       setEditMode(true);
       setSelectedUserId(user.id);
       setFormData({

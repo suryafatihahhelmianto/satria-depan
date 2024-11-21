@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { fetchData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
 import { usePathname, useRouter } from "next/navigation";
+import { useUser } from "@/context/UserContext";
+import Skeleton from "@/components/common/Skeleton";
 
 export default function PredictionPage() {
   const [blokKebun, setBlokKebun] = useState("");
@@ -16,6 +18,8 @@ export default function PredictionPage() {
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  const { user } = useUser();
+
   const router = useRouter();
 
   const handleCalculate = () => {
@@ -26,7 +30,7 @@ export default function PredictionPage() {
   const handleConfirmCalculate = async () => {
     setIsLoading(true);
     const data = {
-      pabrikGulaId: 1, // Ganti dengan ID pabrik yang sesuai jika diperlukan
+      pabrikGulaId: user?.dataUser?.pabrikGulaId || 1, // Ganti dengan ID pabrik yang sesuai jika diperlukan
       blokKebun: blokKebun,
       brix: parseFloat(brix),
       pol: parseFloat(pol),
@@ -62,6 +66,10 @@ export default function PredictionPage() {
   const handleCancelCalculate = () => {
     setIsConfirmModalOpen(false);
   };
+
+  useEffect(() => {
+    console.log("ini user: ", user);
+  }, []);
 
   return (
     <div className="min-h-screen flex">

@@ -1,12 +1,17 @@
+"use client";
+
+import { fetchData } from "@/tools/api";
+import { getCookie } from "@/tools/getCookie";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import {
   AiFillCheckCircle,
   AiOutlineLoading,
   AiOutlineInfoCircle,
   AiFillExclamationCircle,
+  AiOutlineUnlock,
 } from "react-icons/ai";
 
-// Redesigned modal component
 const ConfirmationModal = ({ isOpen, onClose, onConfirm }) => {
   if (!isOpen) return null;
 
@@ -46,7 +51,6 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm }) => {
   );
 };
 
-// Redesigned input row component
 export default function TableInputRow({
   label,
   inputType,
@@ -54,11 +58,18 @@ export default function TableInputRow({
   onChange,
   onSubmit,
   options,
-  locked, // Add locked prop to indicate if the field is locked
+  locked,
+  isAdmin,
+  type,
+  sesiId,
+  fieldName,
 }) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [buttonLoading, setButtonLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const router = useRouter();
 
   const handleOpenModal = () => {
     if (!locked) {
@@ -75,10 +86,32 @@ export default function TableInputRow({
     onSubmit();
     setIsSubmitted(true);
     handleCloseModal();
+    router.refresh();
+    // window.location.reload();
+  };
 
-    setTimeout(() => {
+  const handleUnlock = async () => {
+    try {
+      setIsLoading(true);
+      setButtonLoading(true);
+      const response = await fetchData(
+        `/api/logs/unlock/${type}/${sesiId}/${fieldName}`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${getCookie("token")}`,
+          },
+        }
+      );
       setIsLoading(false);
-    }, 1000);
+      setButtonLoading(false);
+      window.location.reload();
+      // router.replace(router.asPath)
+    } catch (error) {
+      console.error("Error unlocking field: ", error);
+      alert("Gagal mengubah status pengisian data");
+      setIsLoading(false);
+    }
   };
 
   const renderInput = () => {
@@ -89,7 +122,7 @@ export default function TableInputRow({
             type="text"
             value={value}
             onChange={onChange}
-            disabled={locked} // Disable input if locked
+            disabled={locked}
             className={`p-2 border rounded-md w-full focus:outline-none focus:ring ${
               locked ? "bg-gray-300" : "bg-gray-100 focus:ring-green-300"
             }`}
@@ -101,7 +134,7 @@ export default function TableInputRow({
             type="number"
             value={value}
             onChange={onChange}
-            disabled={locked} // Disable input if locked
+            disabled={locked}
             className={`p-2 border rounded-md w-full focus:outline-none focus:ring ${
               locked ? "bg-gray-300" : "bg-gray-100 focus:ring-green-300"
             }`}
@@ -112,7 +145,7 @@ export default function TableInputRow({
           <select
             value={value}
             onChange={onChange}
-            disabled={locked} // Disable dropdown if locked
+            disabled={locked}
             className={`p-2 border rounded-md w-full focus:outline-none ${
               locked
                 ? "bg-gray-300"
@@ -133,11 +166,12 @@ export default function TableInputRow({
 
   return (
     <>
-      <tr
+      {/* <tr
         className={`border-b hover:bg-gray-50 transition ${
-          locked ? "opacity-50" : ""
+          locked ? "bg-gray-100 opacity-50" : ""
         }`}
-      >
+      > */}
+      <tr className={`border-b hover:bg-gray-50 transition`}>
         <td className="px-4 py-2 border border-gray-200 rounded-l-md">
           <div className="flex items-center">
             {label}
@@ -145,7 +179,11 @@ export default function TableInputRow({
           </div>
         </td>
         <td className="px-4 py-2 border border-gray-200">{renderInput()}</td>
-        <td className="px-4 py-2 border border-gray-200 text-center rounded-r-md">
+        <td
+          className={`px-4 py-2 border border-gray-200 text-center ${
+            locked ? "bg-gray-100 opacity-50" : ""
+          }`}
+        >
           {locked ? (
             <div className="flex justify-center w-full">
               <AiFillCheckCircle className="text-green-500 text-center rounded-full text-3xl" />
@@ -171,6 +209,28 @@ export default function TableInputRow({
             </button>
           )}
         </td>
+        {isAdmin && (
+          <td
+            className={`px-4 py-2 border border-gray-200 text-center rounded-r-md ${
+              locked ? "opacity-100 bg-blue-50" : "opacity-50 bg-gray-200"
+            }`}
+          >
+            <button
+              type="button"
+              onClick={handleUnlock}
+              disabled={!locked}
+              className={`p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition ${
+                isLoading ? "cursor-not-allowed" : ""
+              }`}
+            >
+              {buttonLoading ? (
+                <AiOutlineLoading className="animate-spin" />
+              ) : (
+                <AiOutlineUnlock className="text-2xl" />
+              )}
+            </button>
+          </td>
+        )}
       </tr>
 
       <ConfirmationModal

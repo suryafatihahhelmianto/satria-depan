@@ -22,10 +22,16 @@ export default function KinerjaPage() {
   const [loading, setLoading] = useState(true); // State untuk loading
   const [error, setError] = useState(null); // State untuk menyimpan error jika ada
   const [isModalOpen, setIsModalOpen] = useState(false); // State untuk mengontrol modal
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false); // Modal edit
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     pabrikId: 0, // Menggunakan pabrikId untuk menghubungkan sesi dengan pabrik
     periode: "",
+    batasPengisian: "",
+  });
+
+  const [editData, setEditData] = useState({
+    id: null,
     batasPengisian: "",
   });
 
@@ -41,8 +47,6 @@ export default function KinerjaPage() {
 
       if (response) {
         setSessions(response.sesi);
-
-        console.log("ini sesi response: ", response.sesi);
 
         // Ambil nama pabrik untuk setiap sesi
         const pabrikPromises = response.sesi.map(async (session) => {
@@ -92,7 +96,6 @@ export default function KinerjaPage() {
         throw new Error("Gagal mengambil daftar pabrik");
       }
 
-      console.log("ini response pabrik: ", response);
       setPabrikList(response); // Simpan daftar pabrik ke state
     } catch (err) {
       setError(err.message);
@@ -102,6 +105,11 @@ export default function KinerjaPage() {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleEditInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleFormSubmit = async (e) => {
@@ -121,6 +129,32 @@ export default function KinerjaPage() {
       // fetchSessions(); // Refresh sesi setelah menambah
     } catch (error) {
       console.error("Error creating session: ", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    const token = getCookie("token");
+    try {
+      await fetchData(
+        `/api/sesi/${editData.id}`,
+
+        {
+          method: "PUT",
+          headers: { Authorization: `Bearer ${token}` },
+          data: { batasPengisian: editData.batasPengisian },
+        }
+      );
+
+      setEditData({ id: null, batasPengisian: "" });
+      setIsEditModalOpen(false);
+      fetchSessionAndPabrikNames();
+    } catch (error) {
+      console.error("Error updating session: ", error);
     } finally {
       setIsSubmitting(false);
     }
@@ -254,13 +288,22 @@ export default function KinerjaPage() {
                   </td>
                   <td className="py-2 px-4 border-b text-center">
                     <div className="flex justify-center items-center gap-2 mx-auto">
+                      <button
+                        className="bg-gray-400 p-2 rounded-lg flex items-center justify-center hover:bg-gray-500"
+                        onClick={() => {
+                          setEditData({
+                            id: session.id,
+                            batasPengisian: session.batasPengisian,
+                          });
+                          setIsEditModalOpen(true);
+                        }}
+                      >
+                        <AiFillEdit className="text-black" />
+                      </button>
                       <Link
                         href={`/kinerja/${session.id}/sumber-daya`}
                         className="flex gap-2"
                       >
-                        <button className="bg-gray-400 p-2 rounded-lg flex items-center justify-center hover:bg-gray-500">
-                          <AiFillEdit className="text-black" />
-                        </button>
                         <button className="bg-gray-400 p-2 rounded-lg flex items-center justify-center hover:bg-gray-500">
                           <AiFillRead className="text-black" />
                         </button>
@@ -279,6 +322,45 @@ export default function KinerjaPage() {
           )}
         </tbody>
       </table>
+
+      {isEditModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+          <div className="bg-white p-8 rounded-lg w-1/3">
+            <h2 className="text-xl font-bold mb-4">Edit Batas Pengisian</h2>
+            <form onSubmit={handleEditSubmit}>
+              <div className="mb-4">
+                <label className="block text-gray-700">Batas Pengisian</label>
+                <input
+                  type="date"
+                  name="batasPengisian"
+                  value={editData.batasPengisian}
+                  onChange={handleEditInputChange}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                  required
+                />
+              </div>
+              <div className="flex justify-end gap-2">
+                <button
+                  type="button"
+                  className="px-4 py-2 bg-gray-500 text-white rounded-lg"
+                  onClick={() => setIsEditModalOpen(false)}
+                >
+                  Batal
+                </button>
+                <button
+                  type="submit"
+                  className={`px-4 py-2 rounded-lg ${
+                    isSubmitting ? "bg-gray-500" : "bg-green-600"
+                  } text-white`}
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Menyimpan..." : "Simpan"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* Modal Component */}
       {isModalOpen && (

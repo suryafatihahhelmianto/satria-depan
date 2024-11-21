@@ -13,65 +13,77 @@ import { getCookie } from "@/tools/getCookie";
 
 import "react-circular-progressbar/dist/styles.css";
 import "react-datepicker/dist/react-datepicker.css";
+import GridCardSkeleton from "@/components/common/GridCardSkeleton";
+
+const getKategori = (nilaiKinerja) => {
+  if (nilaiKinerja >= 0 && nilaiKinerja <= 25) {
+    return "TIDAK BERKELANJUTAN";
+  } else if (nilaiKinerja > 25 && nilaiKinerja <= 50) {
+    return "KURANG BERKELANJUTAN";
+  } else if (nilaiKinerja > 50 && nilaiKinerja <= 75) {
+    return "CUKUP BERKELANJUTAN";
+  } else if (nilaiKinerja > 75 && nilaiKinerja <= 100) {
+    return "BERKELANJUTAN";
+  } else {
+    return "NILAI TIDAK VALID";
+  }
+};
 
 export default function HomePage() {
+  const [loading, setLoading] = useState(true);
   const [selectedYear, setSelectedYear] = useState(2021);
   const [factories, setFactories] = useState([]);
   const [selectedFactory, setSelectedFactory] = useState({});
+  const [dashboardData, setDashboardData] = useState(null);
   const [sustainabilityData, setSustainabilityData] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   const router = useRouter();
 
-  const handleYearChange = (event) => {
-    setSelectedYear(event.target.value);
+  const handleFactoryChange = (factory) => {
+    setSelectedFactory(factory);
+    fetchDashboardData(factory.id);
   };
 
-  const dataHistogram = [
-    {
-      year: 2022,
-      "Index Total": 72.45,
-      "Dimensi Ekonomi": 80,
-      "Dimensi Sosial": 65,
-      "Dimensi Lingkungan": 70,
-      "Dimensi Sumber Daya": 75,
-    },
-    {
-      year: 2023,
-      "Index Total": 75,
-      "Dimensi Ekonomi": 85,
-      "Dimensi Sosial": 68,
-      "Dimensi Lingkungan": 72,
-      "Dimensi Sumber Daya": 78,
-    },
-    {
-      year: 2024,
-      "Index Total": 78,
-      "Dimensi Ekonomi": 88,
-      "Dimensi Sosial": 70,
-      "Dimensi Lingkungan": 74,
-      "Dimensi Sumber Daya": 80,
-    },
-  ];
-
-  const progressKinerja = 72.45;
+  const handleYearChange = (event) => {
+    setSelectedYear(event.target.value);
+    // fetchDashboardData(selectedFactory.id);
+  };
 
   const fetchFactories = async () => {
-    const cookie = getCookie("token");
     try {
       const response = await fetchData("/api/pabrik", {
         method: "GET",
-        headers: {
-          Authorization: `Bearer ${cookie}`,
-        },
+        headers: { Authorization: `Bearer ${getCookie("token")}` },
       });
 
       if (response.length > 0) {
-        setSelectedFactory(response[0]);
+        setSelectedFactory(response[0]); // Set the first factory as default
+        fetchDashboardData(response[0].id); // Fetch dashboard data for the first factory
       }
+
       setFactories(response);
     } catch (error) {
-      console.error("Error fetching pabrik", error);
+      console.error("Error fetching factories:", error);
+    }
+  };
+
+  const fetchDashboardData = async (pabrikId) => {
+    try {
+      setLoading(true);
+      const response = await fetchData(
+        `/api/dashboard/${pabrikId}?tahun=${selectedYear}&startDate=${selectedDate.toISOString()}&endDate=${selectedDate.toISOString()}`,
+        {
+          method: "GET",
+          headers: { Authorization: `Bearer ${getCookie("token")}` },
+        }
+      );
+
+      setDashboardData(response);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching dashboard data:", error);
+      setLoading(false);
     }
   };
 
@@ -106,12 +118,45 @@ export default function HomePage() {
     fetchFactories();
   }, []);
 
+  useEffect(() => {
+    if (selectedFactory.id) {
+      fetchDashboardData(selectedFactory.id);
+    }
+  }, [selectedFactory, selectedYear, selectedDate]);
+
+  if (loading) {
+    return (
+      <div>
+        <GridCardSkeleton />
+      </div>
+    );
+  }
+
+  if (!dashboardData) {
+    return <p>No data available for the selected factory.</p>;
+  }
+
+  const { nilaiKinerjaKeberlanjutan, rataRataRendemen, informasi } =
+    dashboardData;
+
+  const histogramData = nilaiKinerjaKeberlanjutan.map((data) => ({
+    year: data.tahun,
+    "Index Total": data.nilaiKinerja,
+    "Dimensi Ekonomi": data.dimensiEkonomi,
+    "Dimensi Sosial": data.dimensiSosial,
+    "Dimensi Lingkungan": data.dimensiLingkungan,
+    "Dimensi Sumber Daya": data.dimensiSDAM,
+  }));
+
+  const selectedYearData = nilaiKinerjaKeberlanjutan.find(
+    (data) => data.tahun === parseInt(selectedYear)
+  );
+
   return (
     <div className="p-4 md:p-6 bg-gray-100 min-h-screen">
       <div className="flex flex-col md:flex-row md:justify-between mb-6">
         <h1 className="text-2xl md:text-3xl font-semibold mb-4 md:mb-0 text-green-700">
-          Kondisi Pabrik{" "}
-          {selectedFactory ? selectedFactory.namaPabrik : "Pabrik"} saat ini
+          Kondisi Pabrik {selectedFactory.namaPabrik || "Pabrik"} saat ini
         </h1>
         <div className="mb-4 flex flex-col md:flex-row md:items-center gap-2">
           <label className="block text-lg font-semibold">Pilih Pabrik:</label>
@@ -124,15 +169,9 @@ export default function HomePage() {
                     ? "bg-gray-600 text-white"
                     : "bg-gray-300 text-gray-800"
                 }`}
+                onClick={() => handleFactoryChange(factory)}
               >
-                <input
-                  type="radio"
-                  value={factory.id}
-                  checked={selectedFactory?.id === factory.id}
-                  onChange={() => setSelectedFactory(factory)}
-                  className="hidden"
-                />
-                <span className="text-center">{factory.namaPabrik}</span>
+                {factory.namaPabrik}
               </label>
             ))}
           </div>
@@ -154,8 +193,8 @@ export default function HomePage() {
                 className="w-40 h-40 md:w-52 md:h-52 mb-2 hover:cursor-pointer"
               >
                 <CircularProgressbar
-                  value={progressKinerja}
-                  text={`${progressKinerja}%`}
+                  value={selectedYearData?.nilaiKinerja.toFixed(2) || 0}
+                  text={`${selectedYearData?.nilaiKinerja.toFixed(2) || 0}%`}
                   styles={buildStyles({
                     pathColor: "#4CAF50",
                     textColor: "#4CAF50",
@@ -165,7 +204,7 @@ export default function HomePage() {
               </div>
               <div className="flex items-center justify-center">
                 <p className="mt-2 text-gray-700 text-center font-semibold">
-                  BERKELANJUTAN
+                  {getKategori(selectedYearData?.nilaiKinerja)}
                 </p>
                 <InfoButton />
               </div>
@@ -193,8 +232,22 @@ export default function HomePage() {
                 Status Perhitungan:
               </p>
               <div className="flex justify-center space-x-4">
-                <div className="flex items-center justify-center w-24 h-24 rounded-full bg-green-500 text-white font-bold">
-                  <p>FINAL</p>
+                <div
+                  className={`flex items-center justify-center w-24 h-24 rounded-full text-white font-bold ${
+                    nilaiKinerjaKeberlanjutan[0]?.status === "FINAL"
+                      ? `bg-green-500`
+                      : `bg-red-500`
+                  }`}
+                >
+                  <p>
+                    {nilaiKinerjaKeberlanjutan[0]?.status === "BELUM_FINAL" ? (
+                      <div className="text-center">
+                        <span>BELUM SELESAI</span>
+                      </div>
+                    ) : (
+                      "SELESAI"
+                    )}
+                  </p>
                 </div>
               </div>
             </div>
@@ -209,17 +262,36 @@ export default function HomePage() {
           <div className="flex flex-col md:flex-row justify-around gap-5 w-full h-full">
             <div className="flex flex-col items-center justify-center mb-6 h-full">
               <div className="flex flex-col items-center justify-center mb-6 h-full">
-                <div className="text-5xl font-bold mb-4">7.5%</div>
+                {/* Tampilkan nilai rata-rata rendemen */}
+                <div className="text-5xl font-bold mb-4">
+                  {rataRataRendemen || 0}%
+                </div>
 
+                {/* Bar indikator */}
                 <div className="relative w-full md:w-60 h-9 rounded-full bg-gradient-to-r from-red-500 via-yellow-500 to-green-500">
                   <div
                     className="absolute top-1/2 transform -translate-y-1/2 -translate-x-1/2 border-2 border-gray-700 bg-transparent"
                     style={{
-                      left: `${(7.5 / 12) * 100}%`,
+                      left: `${
+                        rataRataRendemen <= 4
+                          ? (rataRataRendemen / 12) * 100 // Posisi untuk kategori rendah
+                          : rataRataRendemen <= 8
+                          ? (rataRataRendemen / 12) * 100 // Posisi untuk kategori sedang
+                          : (rataRataRendemen / 12) * 100 // Posisi untuk kategori tinggi
+                      }%`,
                       width: "30px",
                       height: "50px",
                     }}
                   ></div>
+                </div>
+
+                {/* Tampilkan label kategori */}
+                <div className="mt-4 text-xl font-semibold text-gray-700">
+                  {rataRataRendemen <= 4
+                    ? "Rendah"
+                    : rataRataRendemen <= 8
+                    ? "Sedang"
+                    : "Tinggi"}
                 </div>
               </div>
             </div>
@@ -233,7 +305,10 @@ export default function HomePage() {
               <div className="w-full">
                 <DatePicker
                   selected={selectedDate}
-                  onChange={(date) => setSelectedDate(date)}
+                  onChange={(date) => {
+                    setSelectedDate(date);
+                    // fetchDashboardData(selectedFactory.id);
+                  }}
                   inline
                   dateFormat="dd/MM/yyyy"
                   className="border border-white/20 rounded-md p-2 bg-white/40 text-green-700 text-lg"
@@ -249,9 +324,10 @@ export default function HomePage() {
           <h2 className="text-xl font-semibold mb-2 text-center">
             Kinerja Keberlanjutan Rantai Pasok{" "}
             {selectedFactory ? selectedFactory.namaPabrik : "Pabrik"}{" "}
-            {selectedYear}
+            {/* {selectedYear} */}
           </h2>
-          <HistogramChart data={dataHistogram} />
+          {/* <HistogramChart data={histogramData} /> */}
+          <HistogramChart data={dashboardData.dataHistogram} />
         </div>
 
         <div className="relative bg-white border-l-8 border-gray-300 p-6 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300">
@@ -262,7 +338,7 @@ export default function HomePage() {
               <AiOutlineExclamationCircle className="mr-3 text-gray-500" />
               Informasi!
             </h2>
-            <ul className="text-gray-700 space-y-3">
+            {/* <ul className="text-gray-700 space-y-3">
               <li className="flex items-center">
                 <BsFillCircleFill className="text-red-500 mr-3 animate-pulse" />
                 Bagian SDM belum mengisi data
@@ -271,6 +347,14 @@ export default function HomePage() {
                 <BsFillCircleFill className="text-red-500 mr-3 animate-pulse" />
                 Bagian TUK belum mengisi data
               </li>
+            </ul> */}
+            <ul className="text-gray-700 space-y-3">
+              {informasi.map((info, index) => (
+                <li key={index} className="flex items-center">
+                  <BsFillCircleFill className="text-red-500 mr-3 animate-pulse" />
+                  {info}
+                </li>
+              ))}
             </ul>
           </div>
         </div>

@@ -6,12 +6,15 @@ import OpsiDimensi from "@/components/OpsiDimensi";
 import KinerjaTable from "@/components/table/KinerjaTable";
 import { fetchData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import { AiFillCheckCircle } from "react-icons/ai";
 
+const isAdmin = true;
+
 export default function SumberDayaPage() {
   const pathname = usePathname();
+  const router = useRouter();
   const idMatch = pathname.match(/\/kinerja\/([a-zA-Z0-9]+)/);
   const sesiId = idMatch ? idMatch[1] : null;
 
@@ -79,6 +82,7 @@ export default function SumberDayaPage() {
         data,
       });
       fetchSDAMData();
+      router.refresh();
       console.log("Update successful (sdam)");
     } catch (error) {
       console.error("Error updating field (sdam): ", error);
@@ -192,6 +196,7 @@ export default function SumberDayaPage() {
           formData.kemudahanAksesTenagaKerja
         ),
       locked: lockedStatus["kemudahanAksesTenagaKerja"],
+      fieldName: "kemudahanAksesTenagaKerja",
     },
   ];
 
@@ -205,6 +210,7 @@ export default function SumberDayaPage() {
       onSubmit: () =>
         handleUpdate("luasTanamTRITahunIni", formData.luasTanamTRITahunIni),
       locked: lockedStatus["luasTanamTRITahunIni"],
+      fieldName: "luasTanamTRITahunIni",
     },
     {
       label: "Total Luas Lahan yang Ditanami Tahun Ini",
@@ -214,6 +220,7 @@ export default function SumberDayaPage() {
       onSubmit: () =>
         handleUpdate("luasTotalTahunIni", formData.luasTotalTahunIni),
       locked: lockedStatus["luasTotalTahunIni"],
+      fieldName: "luasTotalTahunIni",
     },
   ];
 
@@ -231,6 +238,7 @@ export default function SumberDayaPage() {
       onSubmit: () =>
         handleUpdate("jumlahJamKerjaEfektif", formData.jumlahJamKerjaEfektif),
       locked: lockedStatus["jumlahJamKerjaEfektif"],
+      fieldName: "jumlahJamKerjaEfektif",
     },
     {
       label: "Total Jam Kerja Pegawai (Jam/Minggu)",
@@ -239,6 +247,7 @@ export default function SumberDayaPage() {
       onChange: (e) => handleInputChange("totalJamKerja", e.target.value),
       onSubmit: () => handleUpdate("totalJamKerja", formData.totalJamKerja),
       locked: lockedStatus["totalJamKerja"],
+      fieldName: "totalJamKerja",
     },
     {
       isSubtitle: true,
@@ -251,6 +260,7 @@ export default function SumberDayaPage() {
       onChange: (e) => handleInputChange("jamTerlaksana", e.target.value),
       onSubmit: () => handleUpdate("jamTerlaksana", formData.jamTerlaksana),
       locked: lockedStatus["jamTerlaksana"],
+      fieldName: "jamTerlaksana",
     },
     {
       label: "Jam Total (Jam/Tahun)",
@@ -259,6 +269,7 @@ export default function SumberDayaPage() {
       onChange: (e) => handleInputChange("jamTotal", e.target.value),
       onSubmit: () => handleUpdate("jamTotal", formData.jamTotal),
       locked: lockedStatus["jamTotal"],
+      fieldName: "jamTotal",
     },
   ];
 
@@ -271,6 +282,7 @@ export default function SumberDayaPage() {
       onSubmit: () =>
         handleUpdate("produktivitasTebu", formData.produktivitasTebu),
       locked: lockedStatus["produktivitasTebu"],
+      fieldName: "produktivitasTebu",
     },
     {
       label: "Rendemen Tebu (%)",
@@ -279,6 +291,7 @@ export default function SumberDayaPage() {
       onChange: (e) => handleInputChange("rendemenTebu", e.target.value),
       onSubmit: () => handleUpdate("rendemenTebu", formData.rendemenTebu),
       locked: lockedStatus["rendemenTebu"],
+      fieldName: "rendemenTebu",
     },
     {
       label: "mbs",
@@ -294,6 +307,7 @@ export default function SumberDayaPage() {
       onChange: (e) => handleInputChange("mbs", e.target.value),
       onSubmit: () => handleUpdate("mbs", formData.mbs),
       locked: lockedStatus["mbs"],
+      fieldName: "mbs",
     },
   ];
 
@@ -305,6 +319,7 @@ export default function SumberDayaPage() {
       onChange: (e) => handleInputChange("overallRecovery", e.target.value),
       onSubmit: () => handleUpdate("overallRecovery", formData.overallRecovery),
       locked: lockedStatus["overallRecovery"],
+      fieldName: "overallRecovery",
     },
   ];
 
@@ -316,6 +331,7 @@ export default function SumberDayaPage() {
       onChange: (e) => handleInputChange("kis", e.target.value),
       onSubmit: () => handleUpdate("kis", formData.kis),
       locked: lockedStatus["kis"],
+      fieldName: "kis",
     },
     {
       label: "KES (TCD)",
@@ -324,6 +340,7 @@ export default function SumberDayaPage() {
       onChange: (e) => handleInputChange("kes", e.target.value),
       onSubmit: () => handleUpdate("kes", formData.kes),
       locked: lockedStatus["kes"],
+      fieldName: "kes",
     },
   ];
 
@@ -335,6 +352,7 @@ export default function SumberDayaPage() {
       onChange: (e) => handleInputChange("ratoonTebu", e.target.value),
       onSubmit: () => handleUpdate("ratoonTebu", formData.ratoonTebu),
       locked: lockedStatus["ratoonTebu"],
+      fieldName: "ratoonTebu",
     },
   ];
 
@@ -346,6 +364,7 @@ export default function SumberDayaPage() {
       onChange: (e) => handleInputChange("luasBL", e.target.value),
       onSubmit: () => handleUpdate("luasBL", formData.luasBL),
       locked: lockedStatus["luasBL"],
+      fieldName: "luasBL",
     },
     {
       label: "Luas PST41",
@@ -354,6 +373,7 @@ export default function SumberDayaPage() {
       onChange: (e) => handleInputChange("luasPST41", e.target.value),
       onSubmit: () => handleUpdate("luasPST41", formData.luasPST41),
       locked: lockedStatus["luasPST41"],
+      fieldName: "luasPST41",
     },
     {
       label: "Luas PS864",
@@ -362,6 +382,7 @@ export default function SumberDayaPage() {
       onChange: (e) => handleInputChange("PS864", e.target.value),
       onSubmit: () => handleUpdate("PS864", formData.PS864),
       locked: lockedStatus["PS864"],
+      fieldName: "PS864",
     },
     {
       label: "Total Luas Lahan yang ditanam Tahun Ini",
@@ -370,6 +391,7 @@ export default function SumberDayaPage() {
       onChange: (e) => handleInputChange("luasTotal", e.target.value),
       onSubmit: () => handleUpdate("luasTotal", formData.luasTotal),
       locked: lockedStatus["luasTotal"],
+      fieldName: "luasTotal",
     },
   ];
 
@@ -389,6 +411,7 @@ export default function SumberDayaPage() {
       onSubmit: () =>
         handleUpdate("tingkatMekanisasi", formData.tingkatMekanisasi),
       locked: lockedStatus["tingkatMekanisasi"],
+      fieldName: "tingkatMekanisasi",
     },
   ];
 
@@ -410,6 +433,7 @@ export default function SumberDayaPage() {
           formData.teknologiPengolahanRawSugar
         ),
       locked: lockedStatus["teknologiPengolahanRawSugar"],
+      fieldName: "teknologiPengolahanRawSugar",
     },
   ];
 
@@ -426,33 +450,81 @@ export default function SumberDayaPage() {
       <KinerjaTable
         title="Kemudahan Akses Sumber Daya Tenaga Kerja (D1)"
         rows={dataD1}
+        isAdmin={isAdmin}
+        type={"sdam"}
+        sesiId={sesiId}
       />
 
-      <KinerjaTable title="Tingkat Luas Tanam TRI (D2)" rows={dataD2} />
+      <KinerjaTable
+        title="Tingkat Luas Tanam TRI (D2)"
+        rows={dataD2}
+        isAdmin={isAdmin}
+        type={"sdam"}
+        sesiId={sesiId}
+      />
 
-      <KinerjaTable title="Kompetensi Tenaga Kerja (D3)" rows={dataD3} />
+      <KinerjaTable
+        title="Kompetensi Tenaga Kerja (D3)"
+        rows={dataD3}
+        isAdmin={isAdmin}
+        type={"sdam"}
+        sesiId={sesiId}
+      />
 
-      <KinerjaTable title="Kualitas Bahan Baku (D4)" rows={dataD4} />
+      <KinerjaTable
+        title="Kualitas Bahan Baku (D4)"
+        rows={dataD4}
+        isAdmin={isAdmin}
+        type={"sdam"}
+        sesiId={sesiId}
+      />
 
-      <KinerjaTable title="Overall Recovery (D5)" rows={dataD5} />
+      <KinerjaTable
+        title="Overall Recovery (D5)"
+        rows={dataD5}
+        isAdmin={isAdmin}
+        type={"sdam"}
+        sesiId={sesiId}
+      />
 
-      <KinerjaTable title="Kecukupan Bahan Baku (D6)" rows={dataD6} />
+      <KinerjaTable
+        title="Kecukupan Bahan Baku (D6)"
+        rows={dataD6}
+        isAdmin={isAdmin}
+        type={"sdam"}
+        sesiId={sesiId}
+      />
 
-      <KinerjaTable title="Tingkat Ratoon Tebu (D7)" rows={dataD7} />
+      <KinerjaTable
+        title="Tingkat Ratoon Tebu (D7)"
+        rows={dataD7}
+        isAdmin={isAdmin}
+        type={"sdam"}
+        sesiId={sesiId}
+      />
 
       <KinerjaTable
         title="Varietas Tebu yang Responsif terhadap Kondisi Lahan yang Marginal (D8)"
         rows={dataD8}
+        isAdmin={isAdmin}
+        type={"sdam"}
+        sesiId={sesiId}
       />
 
       <KinerjaTable
         title="Tingkat Penggunaan Mekanisasi yang Tepat dan Sesuai Kebutuhan (D9)"
         rows={dataD9}
+        isAdmin={isAdmin}
+        type={"sdam"}
+        sesiId={sesiId}
       />
 
       <KinerjaTable
         title="Teknologi Pengolahan Raw Sugar (D10)"
         rows={dataD10}
+        isAdmin={isAdmin}
+        type={"sdam"}
+        sesiId={sesiId}
       />
     </div>
   );
