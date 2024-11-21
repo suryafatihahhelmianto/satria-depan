@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { fetchData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
 import KinerjaTable from "@/components/table/KinerjaTable"; // Import the KinerjaTable component
@@ -77,7 +77,7 @@ export default function DataKinerja() {
     }
   };
 
-  const fetchEkonomi = async () => {
+  const fetchEkonomi = useCallback(async () => {
     try {
       const response = await fetchData(`/api/masukkan/ekonomi/${sesiId}`, {
         method: "GET",
@@ -107,11 +107,11 @@ export default function DataKinerja() {
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-  };
+  }, [sesiId]);
 
   useEffect(() => {
     fetchEkonomi();
-  }, [sesiId]);
+  }, [fetchEkonomi]);
 
   if (loading) {
     return (

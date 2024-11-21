@@ -2,11 +2,12 @@
 
 import KinerjaTable from "@/components/table/KinerjaTable";
 import { getCookie } from "@/tools/getCookie";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { usePathname } from "next/navigation";
 import { fetchData } from "@/tools/api";
 import KinerjaTableBulan from "@/components/table/KinerjaTableBulan";
 import Skeleton from "@/components/common/skeleton";
+import { CheckCircle } from "lucide-react";
 
 export default function LingkunganPage() {
   const pathname = usePathname();
@@ -138,7 +139,7 @@ export default function LingkunganPage() {
     }
   };
 
-  const fetchLingkungan = async () => {
+  const fetchLingkungan = useCallback(async () => {
     try {
       const response = await fetchData(`/api/masukkan/lingkungan/${sesiId}`, {
         method: "GET",
@@ -232,11 +233,11 @@ export default function LingkunganPage() {
     } catch (error) {
       console.error("Error fetching data (lingkungan):", error);
     }
-  };
+  }, [sesiId]);
 
   useEffect(() => {
     fetchLingkungan();
-  }, [sesiId]);
+  }, [fetchLingkungan]);
 
   const renderInputWithLockCheck = (field, label) => (
     <div key={field} className="flex items-center mb-4">
