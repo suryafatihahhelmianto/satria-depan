@@ -49,6 +49,11 @@ export default function LoginPage() {
         },
       });
 
+      // if (response.status === 401) {
+      //   const errorData = await response.error;
+      //   setError(`Login failed: `, errorData);
+      // }
+
       document.cookie = `token=${response.token}; path=/; max-age=86400;`;
 
       // Tangani respons sukses
@@ -60,8 +65,10 @@ export default function LoginPage() {
       setUsername("");
       setPassword("");
       setError("");
+      // setLoading(false);
     } catch (error) {
-      setError("Login failed. Please check your credentials.");
+      setError(`Login failed. Please check your credentials.`);
+      setLoading(false);
       console.error("Login error:", error);
     }
   };
