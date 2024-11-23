@@ -178,7 +178,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 xl:grid-cols-2 gap-4">
         <div className="bg-white p-4 md:p-6 rounded-lg shadow-md flex flex-col items-center">
           <div className="w-full mb-4">
             <h1 className="text-xl font-semibold">

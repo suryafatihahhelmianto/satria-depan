@@ -24,7 +24,6 @@ export default function PenggunaPage() {
     pabrikGulaId: 0,
   });
 
-  // Fetch data pengguna dan pabrik saat komponen pertama kali dirender
   useEffect(() => {
     fetchUsers();
     fetchFactories();
@@ -97,10 +96,21 @@ export default function PenggunaPage() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: name === "pabrikGulaId" ? parseInt(value, 10) : value,
-    }));
+
+    // Jika jabatan diubah, atur pabrikGulaId menjadi 0 jika "ADMIN" atau "DIREKSI"
+    if (name === "jabatan") {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+        pabrikGulaId:
+          value === "ADMIN" || value === "DIREKSI" ? 0 : prevData.pabrikGulaId,
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: name === "pabrikGulaId" ? parseInt(value, 10) : value,
+      }));
+    }
   };
 
   const handleFormSubmit = async (e) => {
@@ -111,6 +121,11 @@ export default function PenggunaPage() {
       ...formData,
       level: formData.jabatan,
     };
+
+    // Jika jabatan adalah "ADMIN" atau "DIREKSI", hapus atau set pabrikGulaId ke 0
+    if (dataToSend.jabatan === "ADMIN" || dataToSend.jabatan === "DIREKSI") {
+      dataToSend.pabrikGulaId = 99;
+    }
 
     console.log("Data to send:", dataToSend);
 
@@ -189,7 +204,7 @@ export default function PenggunaPage() {
             users.map((user, index) => (
               <tr key={index} className="hover:bg-gray-100">
                 <td className="py-2 px-4 border">
-                  {user.pabrikGula?.namaPabrik}
+                  {user.pabrikGula?.namaPabrik || "Semua"}
                 </td>
                 <td className="py-2 px-4 border">{user.nama}</td>
                 <td className="py-2 px-4 border">{user.jabatan}</td>
@@ -197,11 +212,7 @@ export default function PenggunaPage() {
                   <div className="flex gap-2">
                     <button
                       className="p-2 bg-gray-300 rounded hover:bg-gray-400"
-                      // onClick={() => openModal(user)}
-                      onClick={() => {
-                        console.log("User yang dikirim ke openModal:", user); // Debugging: Pastikan `user.id` ada di sini
-                        openModal(user);
-                      }}
+                      onClick={() => openModal(user)}
                     >
                       <FaEdit />
                     </button>
@@ -228,10 +239,10 @@ export default function PenggunaPage() {
       {isModalOpen && (
         <div
           id="modalOverlay"
-          className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+          className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-start pt-32"
           onClick={handleClickOutside}
         >
-          <div className="bg-gray-50 p-8 rounded-lg shadow-lg w-96 relative">
+          <div className="bg-gray-50 p-8 rounded-lg shadow-lg w-96 relative max-h-[60vh] overflow-y-auto mt-16">
             <button
               className="absolute top-2 right-2 text-black font-bold"
               onClick={closeModal}
@@ -242,22 +253,6 @@ export default function PenggunaPage() {
               {isEditMode ? "Edit Pengguna" : "Tambah Pengguna Baru"}
             </h2>
             <form className="space-y-4" onSubmit={handleFormSubmit}>
-              <div>
-                <label htmlFor="pabrikGulaId">Pabrik</label>
-                <select
-                  name="pabrikGulaId"
-                  value={formData.pabrikGulaId}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-2 rounded-lg bg-gray-200 focus:outline-none"
-                >
-                  <option value="">Pilih Pabrik</option>
-                  {factories.map((factory) => (
-                    <option key={factory.id} value={factory.id}>
-                      {factory.namaPabrik}
-                    </option>
-                  ))}
-                </select>
-              </div>
               <div>
                 <label htmlFor="nama">Nama</label>
                 <input
@@ -300,17 +295,43 @@ export default function PenggunaPage() {
                 <select
                   className="w-full px-4 py-2 rounded-lg bg-gray-200 focus:outline-none"
                   value={formData.jabatan}
-                  onChange={(e) =>
-                    setFormData({ ...formData, jabatan: e.target.value })
-                  }
+                  onChange={handleInputChange}
+                  name="jabatan"
                 >
                   <option value="">Pilih Jabatan</option>
                   <option value="ADMIN">ADMIN</option>
                   <option value="DIREKSI">DIREKSI</option>
                   <option value="KEPALAPABRIK">KEPALA PABRIK</option>
-                  <option value="KEPALABAGIAN">KEPALA BAGIAN</option>
+                  <option value="QUALITYCONTROL">
+                    KEPALA BAGIAN QUALITY CONTROL
+                  </option>
+                  <option value="SDM">KEPALA BAGIAN SDM DAN UMUM</option>
+                  <option value="INSTALASI">KEPALA BAGIAN INSTALASI</option>
+                  <option value="FABRIKASI">KEPALA BAGIAN FABRIKASI</option>
+                  <option value="TANAMAN">KEPALA BAGIAN TANAMAN</option>
+                  <option value="TUK">KEPALA BAGIAN TUK</option>
                 </select>
               </div>
+              {/* Input Pabrik hanya tampil jika jabatan bukan ADMIN atau DIREKSI */}
+              {formData.jabatan !== "ADMIN" &&
+                formData.jabatan !== "DIREKSI" && (
+                  <div>
+                    <label htmlFor="pabrikGulaId">Pabrik</label>
+                    <select
+                      name="pabrikGulaId"
+                      value={formData.pabrikGulaId}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-2 rounded-lg bg-gray-200 focus:outline-none"
+                    >
+                      <option value="">Pilih Pabrik</option>
+                      {factories.map((factory) => (
+                        <option key={factory.id} value={factory.id}>
+                          {factory.namaPabrik}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
               <div>
                 <label htmlFor="nomorHp">Nomor HP</label>
                 <input

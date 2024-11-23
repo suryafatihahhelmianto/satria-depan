@@ -7,8 +7,10 @@ import KinerjaTable from "@/components/table/KinerjaTable"; // Import the Kinerj
 import { usePathname } from "next/navigation";
 import { AiFillCheckCircle } from "react-icons/ai";
 import Skeleton from "@/components/common/Skeleton";
+import { useUser } from "@/context/UserContext";
 
 export default function DataSosial() {
+  const { isAdmin, role } = useUser();
   const pathname = usePathname();
   const idMatch = pathname.match(/\/kinerja\/([a-zA-Z0-9]+)/);
   const sesiId = idMatch ? idMatch[1] : null;
@@ -134,6 +136,7 @@ export default function DataSosial() {
         setFormData({ ...formData, rantaiPasok: parseFloat(e.target.value) }),
       onSubmit: () => handleUpdate("rantaiPasok", formData.rantaiPasok),
       locked: lockedStatus["rantaiPasok"],
+      fieldName: "rantaiPasok",
     },
   ];
 
@@ -153,6 +156,7 @@ export default function DataSosial() {
         setFormData({ ...formData, sediaAktivita: parseFloat(e.target.value) }),
       onSubmit: () => handleUpdate("sediaAktivita", formData.sediaAktivita),
       locked: lockedStatus["sediaAktivita"],
+      fieldName: "sediaAktivita",
     },
   ];
 
@@ -175,6 +179,7 @@ export default function DataSosial() {
         }),
       onSubmit: () => handleUpdate("tingkatManfaat", formData.tingkatManfaat),
       locked: lockedStatus["tingkatManfaat"],
+      fieldName: "tingkatManfaat",
     },
   ];
 
@@ -194,6 +199,7 @@ export default function DataSosial() {
         setFormData({ ...formData, tingkatLimbah: parseFloat(e.target.value) }),
       onSubmit: () => handleUpdate("tingkatLimbah", formData.tingkatLimbah),
       locked: lockedStatus["tingkatLimbah"],
+      fieldName: "tingkatLimbah",
     },
   ];
 
@@ -206,6 +212,7 @@ export default function DataSosial() {
         setFormData({ ...formData, tetapMajaIndra: e.target.value }),
       onSubmit: () => handleUpdate("tetapMajaIndra", formData.tetapMajaIndra),
       locked: lockedStatus["tetapMajaIndra"],
+      fieldName: "tetapMajaIndra",
     },
     {
       label: "PKWT Total (orang)",
@@ -214,6 +221,7 @@ export default function DataSosial() {
       onChange: (e) => setFormData({ ...formData, tetapTotal: e.target.value }),
       onSubmit: () => handleUpdate("tetapTotal", formData.tetapTotal),
       locked: lockedStatus["tetapTotal"],
+      fieldName: "tetapTotal",
     },
     {
       label: "PKWTT Tenaga Kerja Majalengka Indramayu (orang)",
@@ -223,6 +231,7 @@ export default function DataSosial() {
         setFormData({ ...formData, tidakMajaIndra: e.target.value }),
       onSubmit: () => handleUpdate("tidakMajaIndra", formData.tidakMajaIndra),
       locked: lockedStatus["tidakMajaIndra"],
+      fieldName: "tidakMajaIndra",
     },
     {
       label: "PKWTT Total (orang)",
@@ -232,6 +241,7 @@ export default function DataSosial() {
         setFormData({ ...formData, tidakTetapTotal: e.target.value }),
       onSubmit: () => handleUpdate("tidakTetapTotal", formData.tidakTetapTotal),
       locked: lockedStatus["tidakTetapTotal"],
+      fieldName: "tidakTetapTotal",
     },
   ];
 
@@ -243,6 +253,7 @@ export default function DataSosial() {
       onChange: (e) => setFormData({ ...formData, luasLahan: e.target.value }),
       onSubmit: () => handleUpdate("luasLahan", formData.luasLahan),
       locked: lockedStatus["luasLahan"],
+      fieldName: "luasLahan",
     },
     {
       label: "Total Luas Lahan yang Ditanami Tahun Ini (Ha)",
@@ -256,32 +267,69 @@ export default function DataSosial() {
       onSubmit: () =>
         handleUpdate("luasLahanYangDitanami", formData.luasLahanYangDitanami),
       locked: lockedStatus["luasLahanYangDitanami"],
+      fieldName: "luasLahanYangDitanami",
     },
   ];
 
   return (
     <div className="min-h-screen bg-gray-100 mb-24">
-      <KinerjaTable
-        title="Dukungan Kelembagaan terhadap Rantai Pasok Agroindustri (S1)"
-        rows={rowsS1}
-      />
-      <KinerjaTable
-        title="Ketersediaan Infrastruktur sebagai Penunjang Aktivitas (S2)"
-        rows={rowsS2}
-      />
-      <KinerjaTable
-        title="Manfaat Corporate Social Responsibility bagi Sosial (S3)"
-        rows={rowsS3}
-      />
-      <KinerjaTable
-        title="Keluhan Limbah Rantai Pasok Industri (S4)"
-        rows={rowsS4}
-      />
-      <KinerjaTable title="Penyerapan Tenaga Kerja Lokal (S5)" rows={rowsS5} />
-      <KinerjaTable
-        title="Peningkatan Keikutsertaan Stakeholder Kemitraan (S6)"
-        rows={rowsS6}
-      />
+      {["KEPALAPABRIK"].includes(role) && (
+        <KinerjaTable
+          title="Dukungan Kelembagaan terhadap Rantai Pasok Agroindustri (S1)"
+          rows={rowsS1}
+          isAdmin={isAdmin}
+          type={"sosial"}
+          sesiId={sesiId}
+        />
+      )}
+
+      {["TANAMAN", "KEPALAPABRIK", "TUK", "SDM"].includes(role) && (
+        <KinerjaTable
+          title="Ketersediaan Infrastruktur sebagai Penunjang Aktivitas (S2)"
+          rows={rowsS2}
+          isAdmin={isAdmin}
+          type={"sosial"}
+          sesiId={sesiId}
+        />
+      )}
+
+      {["KEPALAPABRIK", "TUK", "SDM"].includes(role) && (
+        <KinerjaTable
+          title="Manfaat Corporate Social Responsibility bagi Sosial (S3)"
+          rows={rowsS3}
+          isAdmin={isAdmin}
+          type={"sosial"}
+          sesiId={sesiId}
+        />
+      )}
+
+      {["QUALITYCONTROL"].includes(role) && (
+        <KinerjaTable
+          title="Keluhan Limbah Rantai Pasok Industri (S4)"
+          rows={rowsS4}
+          isAdmin={isAdmin}
+          type={"sosial"}
+          sesiId={sesiId}
+        />
+      )}
+      {["SDM"].includes(role) && (
+        <KinerjaTable
+          title="Penyerapan Tenaga Kerja Lokal (S5)"
+          rows={rowsS5}
+          isAdmin={isAdmin}
+          type={"sosial"}
+          sesiId={sesiId}
+        />
+      )}
+      {["TUK"].includes(role) && (
+        <KinerjaTable
+          title="Peningkatan Keikutsertaan Stakeholder Kemitraan (S6)"
+          rows={rowsS6}
+          isAdmin={isAdmin}
+          type={"sosial"}
+          sesiId={sesiId}
+        />
+      )}
 
       {/* <div className="text-center mt-6">
         <button

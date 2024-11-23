@@ -87,7 +87,6 @@ export default function TableInputRow({
     setIsSubmitted(true);
     handleCloseModal();
     router.refresh();
-    // window.location.reload();
   };
 
   const handleUnlock = async () => {

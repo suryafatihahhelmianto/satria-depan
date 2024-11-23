@@ -6,8 +6,10 @@ import { getCookie } from "@/tools/getCookie";
 import KinerjaTable from "@/components/table/KinerjaTable"; // Import the KinerjaTable component
 import { usePathname } from "next/navigation";
 import Skeleton from "@/components/common/Skeleton";
+import { useUser } from "@/context/UserContext";
 
 export default function DataKinerja() {
+  const { isAdmin, role } = useUser();
   const pathname = usePathname();
   const idMatch = pathname.match(/\/kinerja\/([a-zA-Z0-9]+)/);
   const sesiId = idMatch ? idMatch[1] : null;
@@ -137,6 +139,7 @@ export default function DataKinerja() {
       onChange: (e) => handleInputChange("nilaiRisiko", e.target.value),
       onSubmit: () => handleUpdate("nilaiRisiko", formData.nilaiRisiko),
       locked: lockedStatus["nilaiRisiko"],
+      fieldName: "nilaiRisiko",
     },
   ];
 
@@ -148,6 +151,7 @@ export default function DataKinerja() {
       onChange: (e) => setFormData({ ...formData, polAmpas: e.target.value }),
       onSubmit: () => handleUpdate("polAmpas", formData.polAmpas),
       locked: lockedStatus["polAmpas"],
+      fieldName: "polAmpas",
     },
     {
       label: "Kehilangan Pol Blotong",
@@ -156,6 +160,7 @@ export default function DataKinerja() {
       onChange: (e) => setFormData({ ...formData, polBlotong: e.target.value }),
       onSubmit: () => handleUpdate("polBlotong", formData.polBlotong),
       locked: lockedStatus["polBlotong"],
+      fieldName: "polBlotong",
     },
     {
       label: "Kehilangan Pol Tetes",
@@ -164,6 +169,7 @@ export default function DataKinerja() {
       onChange: (e) => setFormData({ ...formData, polTetes: e.target.value }),
       onSubmit: () => handleUpdate("polTetes", formData.polTetes),
       locked: lockedStatus["polTetes"],
+      fieldName: "polTetes",
     },
     {
       label: "Kehilangan Rendemen Kebun",
@@ -173,6 +179,7 @@ export default function DataKinerja() {
         setFormData({ ...formData, rendemenKebun: e.target.value }),
       onSubmit: () => handleUpdate("rendemenKebun", formData.rendemenKebun),
       locked: lockedStatus["rendemenKebun"],
+      fieldName: "rendemenKebun",
     },
     {
       label: "Kehilangan Rendemen Gerbang",
@@ -182,6 +189,7 @@ export default function DataKinerja() {
         setFormData({ ...formData, rendemenGerbang: e.target.value }),
       onSubmit: () => handleUpdate("rendemenGerbang", formData.rendemenGerbang),
       locked: lockedStatus["rendemenGerbang"],
+      fieldName: "rendemenGerbang",
     },
     {
       label: "Kehilangan Rendemen NPP",
@@ -191,6 +199,7 @@ export default function DataKinerja() {
         setFormData({ ...formData, rendemenNPP: e.target.value }),
       onSubmit: () => handleUpdate("rendemenNPP", formData.rendemenNPP),
       locked: lockedStatus["rendemenNPP"],
+      fieldName: "rendemenNPP",
     },
     {
       label: "Kehilangan Rendemen Gula",
@@ -200,6 +209,7 @@ export default function DataKinerja() {
         setFormData({ ...formData, rendemenGula: e.target.value }),
       onSubmit: () => handleUpdate("rendemenGula", formData.rendemenGula),
       locked: lockedStatus["rendemenGula"],
+      fieldName: "rendemenGula",
     },
   ];
 
@@ -213,6 +223,7 @@ export default function DataKinerja() {
       onSubmit: () =>
         handleUpdate("kesenjanganRantai", formData.kesenjanganRantai),
       locked: lockedStatus["kesenjanganRantai"],
+      fieldName: "kesenjanganRantai",
     },
   ];
 
@@ -224,6 +235,7 @@ export default function DataKinerja() {
       onChange: (e) => setFormData({ ...formData, hargaAcuan: e.target.value }),
       onSubmit: () => handleUpdate("hargaAcuan", formData.hargaAcuan),
       locked: lockedStatus["hargaAcuan"],
+      fieldName: "hargaAcuan",
     },
     {
       label: "Harga Lelang (rata-rata)",
@@ -233,6 +245,7 @@ export default function DataKinerja() {
         setFormData({ ...formData, hargaLelang: e.target.value }),
       onSubmit: () => handleUpdate("hargaLelang", formData.hargaLelang),
       locked: lockedStatus["hargaLelang"],
+      fieldName: "hargaLelang",
     },
   ];
 
@@ -245,6 +258,7 @@ export default function DataKinerja() {
         setFormData({ ...formData, shsTahunIni: e.target.value }),
       onSubmit: () => handleUpdate("shsTahunIni", formData.shsTahunIni),
       locked: lockedStatus["shsTahunIni"],
+      fieldName: "shsTahunIni",
     },
     {
       label: "Produksi tahun lalu",
@@ -254,6 +268,7 @@ export default function DataKinerja() {
         setFormData({ ...formData, shsTahunSebel: e.target.value }),
       onSubmit: () => handleUpdate("shsTahunSebel", formData.shsTahunSebel),
       locked: lockedStatus["shsTahunSebel"],
+      fieldName: "shsTahunSebel",
     },
   ];
 
@@ -265,20 +280,75 @@ export default function DataKinerja() {
       onChange: (e) => setFormData({ ...formData, returnOE: e.target.value }),
       onSubmit: () => handleUpdate("returnOE", formData.returnOE),
       locked: lockedStatus["returnOE"],
+      fieldName: "returnOE",
     },
   ];
 
   return (
     <div className="min-h-screen bg-gray-100 mb-24">
-      <KinerjaTable title="Tingkat Risiko Rantai Pasok (E1)" rows={rowsE1} />
-      <KinerjaTable title="Potensi Kehilangan Produksi (E2)" rows={rowsE2} />
-      <KinerjaTable
-        title="Kesenjangan keuntungan pelaku rantai pasok per ton gula (%) (E3)"
-        rows={rowsE3}
-      />
-      <KinerjaTable title="Harga Patokan Petani (E4)" rows={rowsE4} />
-      <KinerjaTable title="Tingkat Ketangkasan (E5)" rows={rowsE5} />
-      <KinerjaTable title="Return on Investment (E6)" rows={rowsE6} />
+      {[
+        "TANAMAN",
+        "FABRIKASI",
+        "QUALITYCONTROL",
+        "INSTALASI",
+        "KEPALAPABRIK",
+        "TUK",
+        "SDM",
+      ].includes(role) && (
+        <KinerjaTable
+          title="Tingkat Risiko Rantai Pasok (E1)"
+          rows={rowsE1}
+          type={"ekonomi"}
+          sesiId={sesiId}
+          isAdmin={isAdmin}
+        />
+      )}
+      {["QUALITYCONTROL"].includes(role) && (
+        <KinerjaTable
+          title="Potensi Kehilangan Produksi (E2)"
+          rows={rowsE2}
+          type={"ekonomi"}
+          sesiId={sesiId}
+          isAdmin={isAdmin}
+        />
+      )}
+      {["TANAMAN"].includes(role) && (
+        <>
+          <KinerjaTable
+            title="Kesenjangan keuntungan pelaku rantai pasok per ton gula (%) (E3)"
+            rows={rowsE3}
+            type={"ekonomi"}
+            sesiId={sesiId}
+            isAdmin={isAdmin}
+          />
+          <KinerjaTable
+            title="Harga Patokan Petani (E4)"
+            rows={rowsE4}
+            type={"ekonomi"}
+            sesiId={sesiId}
+            isAdmin={isAdmin}
+          />
+        </>
+      )}
+
+      {["TUK"].includes(role) && (
+        <>
+          <KinerjaTable
+            title="Tingkat Ketangkasan (E5)"
+            rows={rowsE5}
+            type={"ekonomi"}
+            sesiId={sesiId}
+            isAdmin={isAdmin}
+          />
+          <KinerjaTable
+            title="Return on Investment (E6)"
+            rows={rowsE6}
+            type={"ekonomi"}
+            sesiId={sesiId}
+            isAdmin={isAdmin}
+          />
+        </>
+      )}
 
       {/* <div className="text-center mt-6">
         <button

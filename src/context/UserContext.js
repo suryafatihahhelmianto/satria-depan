@@ -40,8 +40,10 @@ export const UserProvider = ({ children }) => {
     fetchUserData();
   }, []); // Empty dependency array ensures this runs only once
 
+  const isAdmin = role === "ADMIN";
+
   return (
-    <UserContext.Provider value={{ user, setUser, role, loading }}>
+    <UserContext.Provider value={{ user, setUser, role, isAdmin, loading }}>
       {children}
     </UserContext.Provider>
   );

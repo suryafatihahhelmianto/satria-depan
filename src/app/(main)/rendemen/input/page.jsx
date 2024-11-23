@@ -37,6 +37,9 @@ export default function PredictionPage() {
 
   const handleConfirmCalculate = async () => {
     setIsLoading(true);
+
+    const { blokKebun, brix, pol, hk, nn, fk } = formData;
+
     const data = {
       pabrikGulaId: user?.dataUser?.pabrikGulaId || 1, // Ganti dengan ID pabrik yang sesuai jika diperlukan
       blokKebun: blokKebun,

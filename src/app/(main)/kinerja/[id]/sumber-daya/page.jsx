@@ -4,15 +4,15 @@ import Skeleton from "@/components/common/Skeleton";
 import FieldInput from "@/components/FieldInput";
 import OpsiDimensi from "@/components/OpsiDimensi";
 import KinerjaTable from "@/components/table/KinerjaTable";
+import { useUser } from "@/context/UserContext";
 import { fetchData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import { AiFillCheckCircle } from "react-icons/ai";
 
-const isAdmin = true;
-
 export default function SumberDayaPage() {
+  const { isAdmin, role } = useUser();
   const pathname = usePathname();
   const router = useRouter();
   const idMatch = pathname.match(/\/kinerja\/([a-zA-Z0-9]+)/);
@@ -65,13 +65,20 @@ export default function SumberDayaPage() {
       }
 
       const data = { sesiId };
-      const numericValue = parseFloat(value.replace(",", ".")); // Ganti koma menjadi titik jika pengguna memasukkan koma
+
+      // Periksa apakah value adalah string sebelum menggunakan .replace()
+      let numericValue = value;
+      if (typeof value === "string") {
+        numericValue = parseFloat(value.replace(",", ".")); // Ganti koma menjadi titik jika value berupa string
+      } else {
+        numericValue = parseFloat(value); // Jika value sudah angka, langsung konversi ke float
+      }
+
       if (!isNaN(numericValue)) {
         data[field] = numericValue;
       } else {
         return; // Abaikan jika nilainya tidak valid
       }
-      // data[field] = parseFloat(value);
 
       await fetchData(`/api/masukkan/sdam`, {
         method: "PATCH",
@@ -447,85 +454,101 @@ export default function SumberDayaPage() {
 
   return (
     <div className="min-h-screen bg-gray-100 mb-24">
-      <KinerjaTable
-        title="Kemudahan Akses Sumber Daya Tenaga Kerja (D1)"
-        rows={dataD1}
-        isAdmin={isAdmin}
-        type={"sdam"}
-        sesiId={sesiId}
-      />
+      {["SDM"].includes(role) && (
+        <KinerjaTable
+          title="Kemudahan Akses Sumber Daya Tenaga Kerja (D1)"
+          rows={dataD1}
+          isAdmin={isAdmin}
+          type={"sdam"}
+          sesiId={sesiId}
+        />
+      )}
 
-      <KinerjaTable
-        title="Tingkat Luas Tanam TRI (D2)"
-        rows={dataD2}
-        isAdmin={isAdmin}
-        type={"sdam"}
-        sesiId={sesiId}
-      />
+      {["TANAMAN"].includes(role) && (
+        <KinerjaTable
+          title="Tingkat Luas Tanam TRI (D2)"
+          rows={dataD2}
+          isAdmin={isAdmin}
+          type={"sdam"}
+          sesiId={sesiId}
+        />
+      )}
 
-      <KinerjaTable
-        title="Kompetensi Tenaga Kerja (D3)"
-        rows={dataD3}
-        isAdmin={isAdmin}
-        type={"sdam"}
-        sesiId={sesiId}
-      />
+      {["SDM"].includes(role) && (
+        <KinerjaTable
+          title="Kompetensi Tenaga Kerja (D3)"
+          rows={dataD3}
+          isAdmin={isAdmin}
+          type={"sdam"}
+          sesiId={sesiId}
+        />
+      )}
 
-      <KinerjaTable
-        title="Kualitas Bahan Baku (D4)"
-        rows={dataD4}
-        isAdmin={isAdmin}
-        type={"sdam"}
-        sesiId={sesiId}
-      />
+      {["QUALITYCONTROL"].includes(role) && (
+        <KinerjaTable
+          title="Kualitas Bahan Baku (D4)"
+          rows={dataD4}
+          isAdmin={isAdmin}
+          type={"sdam"}
+          sesiId={sesiId}
+        />
+      )}
 
-      <KinerjaTable
-        title="Overall Recovery (D5)"
-        rows={dataD5}
-        isAdmin={isAdmin}
-        type={"sdam"}
-        sesiId={sesiId}
-      />
+      {["INSTALASI"].includes(role) && (
+        <KinerjaTable
+          title="Overall Recovery (D5)"
+          rows={dataD5}
+          isAdmin={isAdmin}
+          type={"sdam"}
+          sesiId={sesiId}
+        />
+      )}
 
-      <KinerjaTable
-        title="Kecukupan Bahan Baku (D6)"
-        rows={dataD6}
-        isAdmin={isAdmin}
-        type={"sdam"}
-        sesiId={sesiId}
-      />
+      {["TANAMAN"].includes(role) && (
+        <>
+          <KinerjaTable
+            title="Kecukupan Bahan Baku (D6)"
+            rows={dataD6}
+            isAdmin={isAdmin}
+            type={"sdam"}
+            sesiId={sesiId}
+          />
 
-      <KinerjaTable
-        title="Tingkat Ratoon Tebu (D7)"
-        rows={dataD7}
-        isAdmin={isAdmin}
-        type={"sdam"}
-        sesiId={sesiId}
-      />
+          <KinerjaTable
+            title="Tingkat Ratoon Tebu (D7)"
+            rows={dataD7}
+            isAdmin={isAdmin}
+            type={"sdam"}
+            sesiId={sesiId}
+          />
 
-      <KinerjaTable
-        title="Varietas Tebu yang Responsif terhadap Kondisi Lahan yang Marginal (D8)"
-        rows={dataD8}
-        isAdmin={isAdmin}
-        type={"sdam"}
-        sesiId={sesiId}
-      />
+          <KinerjaTable
+            title="Varietas Tebu yang Responsif terhadap Kondisi Lahan yang Marginal (D8)"
+            rows={dataD8}
+            isAdmin={isAdmin}
+            type={"sdam"}
+            sesiId={sesiId}
+          />
 
-      <KinerjaTable
-        title="Tingkat Penggunaan Mekanisasi yang Tepat dan Sesuai Kebutuhan (D9)"
-        rows={dataD9}
-        isAdmin={isAdmin}
-        type={"sdam"}
-        sesiId={sesiId}
-      />
+          <KinerjaTable
+            title="Tingkat Penggunaan Mekanisasi yang Tepat dan Sesuai Kebutuhan (D9)"
+            rows={dataD9}
+            isAdmin={isAdmin}
+            type={"sdam"}
+            sesiId={sesiId}
+          />
+        </>
+      )}
 
-      <KinerjaTable
-        title="Teknologi Pengolahan Raw Sugar (D10)"
-        rows={dataD10}
-        isAdmin={isAdmin}
-        type={"sdam"}
-        sesiId={sesiId}
-      />
+      {["FABRIKASI"].includes(role) && (
+        <KinerjaTable
+          title="Teknologi Pengolahan Raw Sugar (D10)"
+          rows={dataD10}
+          isAdmin={isAdmin}
+          type={"sdam"}
+          sesiId={sesiId}
+        />
+      )}
     </div>
   );
 }

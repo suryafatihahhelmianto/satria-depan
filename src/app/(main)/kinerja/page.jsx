@@ -1,6 +1,7 @@
 "use client";
 
 import Skeleton from "@/components/common/Skeleton";
+import { useUser } from "@/context/UserContext";
 import { fetchData, postData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
 import Link from "next/link";
@@ -15,6 +16,7 @@ import {
 } from "react-icons/ai";
 
 export default function KinerjaPage() {
+  const { isAdmin } = useUser();
   const [sessions, setSessions] = useState([]); // State untuk menyimpan daftar sesi
   const [pabrikNames, setPabrikNames] = useState({});
 
@@ -212,17 +214,19 @@ export default function KinerjaPage() {
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="flex items-center justify-between gap-2 mb-8">
-        <div className="flex gap-2">
-          <AiFillPlusCircle
-            className="text-2xl text-gray-500 cursor-pointer"
-            onClick={() => setIsModalOpen(true)} // Buka modal saat tombol diklik
-          />
-          <h1 className="cursor-pointer" onClick={() => setIsModalOpen(true)}>
-            Tambah Form Pengukuran Kinerja
-          </h1>
-        </div>
+        {isAdmin && (
+          <div className="flex w-full gap-2">
+            <AiFillPlusCircle
+              className="text-2xl text-gray-500 cursor-pointer"
+              onClick={() => setIsModalOpen(true)} // Buka modal saat tombol diklik
+            />
+            <h1 className="cursor-pointer" onClick={() => setIsModalOpen(true)}>
+              Tambah Form Pengukuran Kinerja
+            </h1>
+          </div>
+        )}
 
-        <div className="flex justify-end font-bold gap-2 text-xl">
+        <div className="flex w-full justify-end font-bold gap-2 text-xl">
           <Link
             href={"/kinerja/statistics"}
             className="bg-gray-400 p-2 rounded-lg flex items-center"
@@ -241,7 +245,7 @@ export default function KinerjaPage() {
             <th className="py-2 px-4 border-b">Pabrik</th>
             <th className="py-2 px-4 border-b">Periode</th>
             <th className="py-2 px-4 border-b">Batas Pengisian</th>
-            <th className="py-2 px-4 border-b">Nilai Kinerja (%)</th>
+            {/* <th className="py-2 px-4 border-b">Nilai Kinerja (%)</th> */}
             <th className="py-2 px-4 border-b">Status</th>
             <th className="py-2 px-4 border-b">Aksi</th>
           </tr>
@@ -272,9 +276,9 @@ export default function KinerjaPage() {
                   <td className="py-2 px-4 border-b">
                     {batasPengisian.toLocaleDateString("id-ID")}
                   </td>
-                  <td className="py-2 px-4 border-b">
+                  {/* <td className="py-2 px-4 border-b">
                     {session.InstrumenNilai.nilaiKinerja || "Belum Diisi"}
-                  </td>
+                  </td> */}
                   <td className={`py-2 px-4 border-b `}>
                     <div
                       className={`${
@@ -288,18 +292,21 @@ export default function KinerjaPage() {
                   </td>
                   <td className="py-2 px-4 border-b text-center">
                     <div className="flex justify-center items-center gap-2 mx-auto">
-                      <button
-                        className="bg-gray-400 p-2 rounded-lg flex items-center justify-center hover:bg-gray-500"
-                        onClick={() => {
-                          setEditData({
-                            id: session.id,
-                            batasPengisian: session.batasPengisian,
-                          });
-                          setIsEditModalOpen(true);
-                        }}
-                      >
-                        <AiFillEdit className="text-black" />
-                      </button>
+                      {isAdmin && (
+                        <button
+                          className="bg-gray-400 p-2 rounded-lg flex items-center justify-center hover:bg-gray-500"
+                          onClick={() => {
+                            setEditData({
+                              id: session.id,
+                              batasPengisian: session.batasPengisian,
+                            });
+                            setIsEditModalOpen(true);
+                          }}
+                        >
+                          <AiFillEdit className="text-black" />
+                        </button>
+                      )}
+
                       <Link
                         href={`/kinerja/${session.id}/sumber-daya`}
                         className="flex gap-2"
@@ -308,12 +315,14 @@ export default function KinerjaPage() {
                           <AiFillRead className="text-black" />
                         </button>
                       </Link>
-                      <button
-                        className="bg-red-500 p-2 rounded-lg flex items-center justify-center hover:bg-red-600 text-white"
-                        onClick={() => handleDelete(session.id)}
-                      >
-                        <AiFillDelete />
-                      </button>
+                      {isAdmin && (
+                        <button
+                          className="bg-red-500 p-2 rounded-lg flex items-center justify-center hover:bg-red-600 text-white"
+                          onClick={() => handleDelete(session.id)}
+                        >
+                          <AiFillDelete />
+                        </button>
+                      )}
                     </div>
                   </td>
                 </tr>

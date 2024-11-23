@@ -8,8 +8,10 @@ import { fetchData } from "@/tools/api";
 import KinerjaTableBulan from "@/components/table/KinerjaTableBulan";
 import Skeleton from "@/components/common/Skeleton";
 import { CheckCircle } from "lucide-react";
+import { useUser } from "@/context/UserContext";
 
 export default function LingkunganPage() {
+  const { isAdmin, role } = useUser();
   const pathname = usePathname();
   const idMatch = pathname.match(/\/kinerja\/([a-zA-Z0-9]+)/);
   const sesiId = idMatch ? idMatch[1] : null;
@@ -95,13 +97,20 @@ export default function LingkunganPage() {
 
     try {
       const data = { sesiId };
-      const numericValue = parseFloat(value.replace(",", ".")); // Ganti koma menjadi titik jika pengguna memasukkan koma
+
+      // Pastikan 'value' adalah string sebelum menggunakan .replace()
+      let numericValue = value;
+      if (typeof value === "string") {
+        numericValue = parseFloat(value.replace(",", ".")); // Ganti koma menjadi titik jika pengguna memasukkan koma
+      } else {
+        numericValue = parseFloat(value); // Jika value sudah berupa angka, langsung parse float
+      }
+
       if (!isNaN(numericValue)) {
         data[field] = numericValue;
       } else {
         return; // Abaikan jika nilainya tidak valid
       }
-      // data[field] = parseFloat(value);
 
       await fetchData(`/api/masukkan/lingkungan`, {
         method: "PATCH",
@@ -266,6 +275,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("amoniaDesaA1", e.target.value),
       onSubmit: () => handleUpdate("amoniaDesaA1", formData.amoniaDesaA1),
       locked: lockedStatus["amoniaDesaA1"],
+      fieldName: "amoniaDesaA1",
     },
     {
       label: "Pengukuran 2",
@@ -274,6 +284,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("amoniaDesaA2", e.target.value),
       onSubmit: () => handleUpdate("amoniaDesaA2", formData.amoniaDesaA2),
       locked: lockedStatus["amoniaDesaA2"],
+      fieldName: "amoniaDesaA2",
     },
     { isSubtitle: true, label: "Desa Sumber Kulon" },
     {
@@ -283,6 +294,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("amoniaDesaB1", e.target.value),
       onSubmit: () => handleUpdate("amoniaDesaB1", formData.amoniaDesaB1),
       locked: lockedStatus["amoniaDesaB1"],
+      fieldName: "amoniaDesaB1",
     },
     {
       label: "Pengukuran 2",
@@ -291,6 +303,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("amoniaDesaB2", e.target.value),
       onSubmit: () => handleUpdate("amoniaDesaB2", formData.amoniaDesaB2),
       locked: lockedStatus["amoniaDesaB2"],
+      fieldName: "amoniaDesaB2",
     },
     { isSubtitle: true, label: "Hidrogen Sulfida (H2S) (ppm)" },
     { isSubtitle: true, label: "Desa Kerticala" },
@@ -301,6 +314,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("sulfidaDesaA1", e.target.value),
       onSubmit: () => handleUpdate("sulfidaDesaA1", formData.sulfidaDesaA1),
       locked: lockedStatus["sulfidaDesaA1"],
+      fieldName: "sulfidaDesaA1",
     },
     {
       label: "Pengukuran 2",
@@ -309,6 +323,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("sulfidaDesaA2", e.target.value),
       onSubmit: () => handleUpdate("sulfidaDesaA2", formData.sulfidaDesaA2),
       locked: lockedStatus["sulfidaDesaA2"],
+      fieldName: "sulfidaDesaA2",
     },
     { isSubtitle: true, label: "Desa Sumber Kulon" },
     {
@@ -318,6 +333,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("sulfidaDesaB1", e.target.value),
       onSubmit: () => handleUpdate("sulfidaDesaB1", formData.sulfidaDesaB1),
       locked: lockedStatus["sulfidaDesaB1"],
+      fieldName: "sulfidaDesaB1",
     },
     {
       label: "Pengukuran 2",
@@ -326,6 +342,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("sulfidaDesaB2", e.target.value),
       onSubmit: () => handleUpdate("sulfidaDesaB2", formData.sulfidaDesaB2),
       locked: lockedStatus["sulfidaDesaB2"],
+      fieldName: "sulfidaDesaB2",
     },
   ];
 
@@ -339,6 +356,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("debuDesaA1", e.target.value),
       onSubmit: () => handleUpdate("debuDesaA1", formData.debuDesaA1),
       locked: lockedStatus["debuDesaA1"],
+      fieldName: "debuDesaA1",
     },
     {
       label: "Pengukuran 2",
@@ -347,6 +365,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("debuDesaA2", e.target.value),
       onSubmit: () => handleUpdate("debuDesaA2", formData.debuDesaA2),
       locked: lockedStatus["debuDesaA2"],
+      fieldName: "debuDesaA2",
     },
     { isSubtitle: true, label: "Desa Sumber Kulon" },
     {
@@ -356,6 +375,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("debuDesaB1", e.target.value),
       onSubmit: () => handleUpdate("debuDesaB1", formData.debuDesaB1),
       locked: lockedStatus["debuDesaB1"],
+      fieldName: "debuDesaB1",
     },
     {
       label: "Pengukuran 2",
@@ -364,6 +384,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("debuDesaB2", e.target.value),
       onSubmit: () => handleUpdate("debuDesaB2", formData.debuDesaB2),
       locked: lockedStatus["debuDesaB2"],
+      fieldName: "debuDesaB2",
     },
   ];
 
@@ -375,6 +396,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("konsumsiListrik", e.target.value),
       onSubmit: () => handleUpdate("konsumsiListrik", formData.konsumsiListrik),
       locked: lockedStatus["konsumsiListrik"],
+      fieldName: "konsumsiListrik",
     },
     {
       label: "Jumlah Tebu (Ton)",
@@ -383,6 +405,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("jumlahTonTebu", e.target.value),
       onSubmit: () => handleUpdate("jumlahTonTebu", formData.jumlahTonTebu),
       locked: lockedStatus["jumlahTonTebu"],
+      fieldName: "jumlahTonTebu",
     },
     {
       label: "SHS (%Tebu)",
@@ -391,6 +414,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("shs", e.target.value),
       onSubmit: () => handleUpdate("shs", formData.shs),
       locked: lockedStatus["shs"],
+      fieldName: "shs",
     },
   ];
 
@@ -403,6 +427,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("bisingProduksi1", e.target.value),
       onSubmit: () => handleUpdate("bisingProduksi1", formData.bisingProduksi1),
       locked: lockedStatus["bisingProduksi1"],
+      fieldName: "bisingProduksi1",
     },
     {
       label: "Pengukuran 2",
@@ -411,6 +436,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("bisingProduksi2", e.target.value),
       onSubmit: () => handleUpdate("bisingProduksi2", formData.bisingProduksi2),
       locked: lockedStatus["bisingProduksi2"],
+      fieldName: "bisingProduksi2",
     },
     { isSubtitle: true, label: "Kebisingan Lokal" },
     { isSubtitle: true, label: "Desa Kerticala" },
@@ -421,6 +447,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("bisingDesaA1", e.target.value),
       onSubmit: () => handleUpdate("bisingDesaA1", formData.bisingDesaA1),
       locked: lockedStatus["bisingDesaA1"],
+      fieldName: "bisingDesaA1",
     },
     {
       label: "Pengukuran 2",
@@ -429,6 +456,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("bisingDesaA2", e.target.value),
       onSubmit: () => handleUpdate("bisingDesaA2", formData.bisingDesaA2),
       locked: lockedStatus["bisingDesaA2"],
+      fieldName: "bisingDesaA2",
     },
     { isSubtitle: true, label: "Desa Sumber Kulon" },
     {
@@ -438,6 +466,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("bisingDesaB1", e.target.value),
       onSubmit: () => handleUpdate("bisingDesaB1", formData.bisingDesaB1),
       locked: lockedStatus["bisingDesaB1"],
+      fieldName: "bisingDesaB1",
     },
     {
       label: "Pengukuran 2",
@@ -446,6 +475,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("bisingDesaB2", e.target.value),
       onSubmit: () => handleUpdate("bisingDesaB2", formData.bisingDesaB2),
       locked: lockedStatus["bisingDesaB2"],
+      fieldName: "bisingDesaB2",
     },
   ];
 
@@ -461,6 +491,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("totalResiduJuni", e.target.value),
       onSubmit: () => handleUpdate("totalResiduJuni", formData.totalResiduJuni),
       locked: lockedStatus["totalResiduJuni"],
+      fieldName: "totalResiduJuni",
     },
     {
       label: "BOD5 (mg/L)",
@@ -469,6 +500,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("bodJuni", e.target.value),
       onSubmit: () => handleUpdate("bodJuni", formData.bodJuni),
       locked: lockedStatus["bodJuni"],
+      fieldName: "bodJuni",
     },
     {
       label: "COD (mg/L)",
@@ -477,6 +509,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("codJuni", e.target.value),
       onSubmit: () => handleUpdate("codJuni", formData.codJuni),
       locked: lockedStatus["codJuni"],
+      fieldName: "codJuni",
     },
     {
       label: "Sulfida (mg/L)",
@@ -485,6 +518,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("sulfidaJuni", e.target.value),
       onSubmit: () => handleUpdate("sulfidaJuni", formData.sulfidaJuni),
       locked: lockedStatus["sulfidaJuni"],
+      fieldName: "sulfidaJuni",
     },
     {
       isSubtitle: true,
@@ -497,6 +531,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("totalResiduJuli", e.target.value),
       onSubmit: () => handleUpdate("totalResiduJuli", formData.totalResiduJuli),
       locked: lockedStatus["totalResiduJuli"],
+      fieldName: "totalResiduJuli",
     },
     {
       label: "BOD5 (mg/L)",
@@ -505,6 +540,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("bodJuli", e.target.value),
       onSubmit: () => handleUpdate("bodJuli", formData.bodJuli),
       locked: lockedStatus["bodJuli"],
+      fieldName: "bodJuli",
     },
     {
       label: "COD (mg/L)",
@@ -513,6 +549,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("codJuli", e.target.value),
       onSubmit: () => handleUpdate("codJuli", formData.codJuli),
       locked: lockedStatus["codJuli"],
+      fieldName: "codJuli",
     },
     {
       label: "Sulfida (mg/L)",
@@ -521,6 +558,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("sulfidaJuli", e.target.value),
       onSubmit: () => handleUpdate("sulfidaJuli", formData.sulfidaJuli),
       locked: lockedStatus["sulfidaJuli"],
+      fieldName: "sulfidaJuli",
     },
     {
       isSubtitle: true,
@@ -534,6 +572,7 @@ export default function LingkunganPage() {
       onSubmit: () =>
         handleUpdate("totalResiduAgustus", formData.totalResiduAgustus),
       locked: lockedStatus["totalResiduAgustus"],
+      fieldName: "totalResiduAgustus",
     },
     {
       label: "BOD5 (mg/L)",
@@ -542,6 +581,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("bodAgustus", e.target.value),
       onSubmit: () => handleUpdate("bodAgustus", formData.bodAgustus),
       locked: lockedStatus["bodAgustus"],
+      fieldName: "bodAgustus",
     },
     {
       label: "COD (mg/L)",
@@ -550,6 +590,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("codAgustus", e.target.value),
       onSubmit: () => handleUpdate("codAgustus", formData.codAgustus),
       locked: lockedStatus["codAgustus"],
+      fieldName: "codAgustus",
     },
     {
       label: "Sulfida (mg/L)",
@@ -558,6 +599,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("sulfidaAgustus", e.target.value),
       onSubmit: () => handleUpdate("sulfidaAgustus", formData.sulfidaAgustus),
       locked: lockedStatus["sulfidaAgustus"],
+      fieldName: "sulfidaAgustus",
     },
     {
       isSubtitle: true,
@@ -572,6 +614,7 @@ export default function LingkunganPage() {
       onSubmit: () =>
         handleUpdate("totalResiduSeptember", formData.totalResiduSeptember),
       locked: lockedStatus["totalResiduSeptember"],
+      fieldName: "totalResiduSeptember",
     },
     {
       label: "BOD5 (mg/L)",
@@ -580,6 +623,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("bodSeptember", e.target.value),
       onSubmit: () => handleUpdate("bodSeptember", formData.bodSeptember),
       locked: lockedStatus["bodSeptember"],
+      fieldName: "bodSeptember",
     },
     {
       label: "COD (mg/L)",
@@ -588,6 +632,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("codSeptember", e.target.value),
       onSubmit: () => handleUpdate("codSeptember", formData.codSeptember),
       locked: lockedStatus["codSeptember"],
+      fieldName: "codSeptember",
     },
     {
       label: "Sulfida (mg/L)",
@@ -597,6 +642,7 @@ export default function LingkunganPage() {
       onSubmit: () =>
         handleUpdate("sulfidaSeptember", formData.sulfidaSeptember),
       locked: lockedStatus["sulfidaSeptember"],
+      fieldName: "sulfidaSeptember",
     },
   ];
 
@@ -616,6 +662,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("sulfurDesaA1", e.target.value),
       onSubmit: () => handleUpdate("sulfurDesaA1", formData.sulfurDesaA1),
       locked: lockedStatus["sulfurDesaA1"],
+      fieldName: "sulfurDesaA1",
     },
     {
       label: "Pengukuran 2",
@@ -624,6 +671,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("sulfurDesaA2", e.target.value),
       onSubmit: () => handleUpdate("sulfurDesaA2", formData.sulfurDesaA2),
       locked: lockedStatus["sulfurDesaA2"],
+      fieldName: "sulfurDesaA2",
     },
 
     {
@@ -637,6 +685,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("sulfurDesaB1", e.target.value),
       onSubmit: () => handleUpdate("sulfurDesaB1", formData.sulfurDesaB1),
       locked: lockedStatus["sulfurDesaB1"],
+      fieldName: "sulfurDesaB1",
     },
     {
       label: "Pengukuran 2",
@@ -645,6 +694,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("sulfurDesaB2", e.target.value),
       onSubmit: () => handleUpdate("sulfurDesaB2", formData.sulfurDesaB2),
       locked: lockedStatus["sulfurDesaB2"],
+      fieldName: "sulfurDesaB2",
     },
     {
       isSubtitle: true,
@@ -661,6 +711,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("karbonDesaA1", e.target.value),
       onSubmit: () => handleUpdate("karbonDesaA1", formData.karbonDesaA1),
       locked: lockedStatus["karbonDesaA1"],
+      fieldName: "karbonDesaA1",
     },
     {
       label: "Pengukuran 2",
@@ -669,6 +720,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("karbonDesaA2", e.target.value),
       onSubmit: () => handleUpdate("karbonDesaA2", formData.karbonDesaA2),
       locked: lockedStatus["karbonDesaA2"],
+      fieldName: "karbonDesaA2",
     },
     {
       isSubtitle: true,
@@ -706,6 +758,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("nitrogenDesaA1", e.target.value),
       onSubmit: () => handleUpdate("nitrogenDesaA1", formData.nitrogenDesaA1),
       locked: lockedStatus["nitrogenDesaA1"],
+      fieldName: "nitrogenDesaA1",
     },
     {
       label: "Pengukuran 2",
@@ -714,6 +767,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("nitrogenDesaA2", e.target.value),
       onSubmit: () => handleUpdate("nitrogenDesaA2", formData.nitrogenDesaA2),
       locked: lockedStatus["nitrogenDesaA2"],
+      fieldName: "nitrogenDesaA2",
     },
     {
       isSubtitle: true,
@@ -726,6 +780,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("nitrogenDesaB1", e.target.value),
       onSubmit: () => handleUpdate("nitrogenDesaB1", formData.nitrogenDesaB1),
       locked: lockedStatus["nitrogenDesaB1"],
+      fieldName: "nitrogenDesaB1",
     },
     {
       label: "Pengukuran 2",
@@ -734,6 +789,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("nitrogenDesaB2", e.target.value),
       onSubmit: () => handleUpdate("nitrogenDesaB2", formData.nitrogenDesaB2),
       locked: lockedStatus["nitrogenDesaB2"],
+      fieldName: "nitrogenDesaB2",
     },
     {
       isSubtitle: true,
@@ -751,6 +807,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("oksidaDesaA1", e.target.value),
       onSubmit: () => handleUpdate("oksidaDesaA1", formData.oksidaDesaA1),
       locked: lockedStatus["oksidaDesaA1"],
+      fieldName: "oksidaDesaA1",
     },
     {
       label: "Pengukuran 2",
@@ -759,6 +816,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("oksidaDesaA2", e.target.value),
       onSubmit: () => handleUpdate("oksidaDesaA2", formData.oksidaDesaA2),
       locked: lockedStatus["oksidaDesaA2"],
+      fieldName: "oksidaDesaA2",
     },
     {
       isSubtitle: true,
@@ -772,6 +830,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("oksidaDesaB1", e.target.value),
       onSubmit: () => handleUpdate("oksidaDesaB1", formData.oksidaDesaB1),
       locked: lockedStatus["oksidaDesaB1"],
+      fieldName: "oksidaDesaB1",
     },
     {
       label: "Pengukuran 2",
@@ -780,6 +839,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("oksidaDesaB2", e.target.value),
       onSubmit: () => handleUpdate("oksidaDesaB2", formData.oksidaDesaB2),
       locked: lockedStatus["oksidaDesaB2"],
+      fieldName: "oksidaDesaB2",
     },
   ];
 
@@ -795,6 +855,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("amoniaKerja1", e.target.value),
       onSubmit: () => handleUpdate("amoniaKerja1", formData.amoniaKerja1),
       locked: lockedStatus["amoniaKerja1"],
+      fieldName: "amoniaKerja1",
     },
     {
       label: "Pengukuran 2",
@@ -803,6 +864,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("amoniaKerja2", e.target.value),
       onSubmit: () => handleUpdate("amoniaKerja2", formData.amoniaKerja2),
       locked: lockedStatus["amoniaKerja2"],
+      fieldName: "amoniaKerja2",
     },
     {
       isSubtitle: true,
@@ -815,6 +877,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("debuKerja1", e.target.value),
       onSubmit: () => handleUpdate("debuKerja1", formData.debuKerja1),
       locked: lockedStatus["debuKerja1"],
+      fieldName: "debuKerja1",
     },
     {
       label: "Pengukuran 2",
@@ -823,6 +886,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("debuKerja2", e.target.value),
       onSubmit: () => handleUpdate("debuKerja2", formData.debuKerja2),
       locked: lockedStatus["debuKerja2"],
+      fieldName: "debuKerja2",
     },
     {
       isSubtitle: true,
@@ -835,6 +899,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("nitrogenKerja1", e.target.value),
       onSubmit: () => handleUpdate("nitrogenKerja1", formData.nitrogenKerja1),
       locked: lockedStatus["nitrogenKerja1"],
+      fieldName: "nitrogenKerja1",
     },
     {
       label: "Pengukuran 2",
@@ -843,6 +908,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("nitrogenKerja2", e.target.value),
       onSubmit: () => handleUpdate("nitrogenKerja2", formData.nitrogenKerja2),
       locked: lockedStatus["nitrogenKerja2"],
+      fieldName: "nitrogenKerja2",
     },
     {
       isSubtitle: true,
@@ -855,6 +921,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("sulfurKerja1", e.target.value),
       onSubmit: () => handleUpdate("sulfurKerja1", formData.sulfurKerja1),
       locked: lockedStatus["sulfurKerja1"],
+      fieldName: "sulfurKerja1",
     },
     {
       label: "Pengukuran 2",
@@ -863,6 +930,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("sulfurKerja2", e.target.value),
       onSubmit: () => handleUpdate("sulfurKerja2", formData.sulfurKerja2),
       locked: lockedStatus["sulfurKerja2"],
+      fieldName: "sulfurKerja2",
     },
   ];
 
@@ -874,28 +942,59 @@ export default function LingkunganPage() {
         </div>
       ) : (
         <>
-          <KinerjaTable
-            title="Tingkat Gangguan Bau Agroindustri pada Masyarakat (L1)"
-            rows={dataL1}
-          />
+          {["QUALITYCONTROL"].includes(role) && (
+            <div>
+              <KinerjaTable
+                title="Tingkat Gangguan Bau Agroindustri pada Masyarakat (L1)"
+                rows={dataL1}
+                isAdmin={isAdmin}
+              />
 
-          <KinerjaTable
-            title="Tingkat Gangguan Debu Agroindustri pada Masyarakat (L2)"
-            rows={dataL2}
-          />
+              <KinerjaTable
+                title="Tingkat Gangguan Debu Agroindustri pada Masyarakat (L2)"
+                rows={dataL2}
+                isAdmin={isAdmin}
+              />
+            </div>
+          )}
 
-          <KinerjaTable title="Emisi Listrik (L3)" rows={dataL3} />
+          {["INSTALASI"].includes(role) && (
+            <KinerjaTable
+              title="Emisi Listrik (L3)"
+              rows={dataL3}
+              isAdmin={isAdmin}
+            />
+          )}
 
-          <KinerjaTable title="Kebisingan (L4)" rows={dataL4} />
+          {["QUALITYCONTROL"].includes(role) && (
+            <div>
+              <KinerjaTable
+                title="Kebisingan (L4)"
+                rows={dataL4}
+                isAdmin={isAdmin}
+              />
 
-          {/* <KinerjaTable title="Kualitas Air Permukaan (L5)" rows={dataL5} /> */}
-          <KinerjaTableBulan
-            title="Kualitas Air Permukaan (L5)"
-            data={dataL5}
-            // saveOption="individual"
-          />
-          <KinerjaTable title="Kualitas Udara Ambien (L6)" rows={dataL6} />
-          <KinerjaTable title="Kualitas Udara Ruang Kerja (L7)" rows={dataL7} />
+              {/* <KinerjaTable title="Kualitas Air Permukaan (L5)" rows={dataL5} /> */}
+              <KinerjaTableBulan
+                title="Kualitas Air Permukaan (L5)"
+                data={dataL5}
+                isAdmin={isAdmin}
+                type={"lingkungan"}
+                sesiId={sesiId}
+                // saveOption="individual"
+              />
+              <KinerjaTable
+                title="Kualitas Udara Ambien (L6)"
+                rows={dataL6}
+                isAdmin={isAdmin}
+              />
+              <KinerjaTable
+                title="Kualitas Udara Ruang Kerja (L7)"
+                rows={dataL7}
+                isAdmin={isAdmin}
+              />
+            </div>
+          )}
         </>
       )}
     </div>

@@ -11,8 +11,10 @@ import {
   AiOutlineClose,
 } from "react-icons/ai";
 import { GoGoal } from "react-icons/go";
+import { useUser } from "@/context/UserContext";
 
 export default function Sidebar() {
+  const { isAdmin, role, loading } = useUser();
   const [isOpen, setIsOpen] = useState(true); // Default sidebar terbuka
   const [isMobile, setIsMobile] = useState(false); // Untuk deteksi perangkat
   const pathname = usePathname();
@@ -42,17 +44,17 @@ export default function Sidebar() {
       path: "/kinerja",
       icon: <AiOutlineBarChart size={20} />,
     },
-    {
+    (role === "QUALITYCONTROL" || isAdmin) && {
       name: "Pengukuran Rendemen",
       path: "/rendemen",
       icon: <GoGoal size={20} />,
     },
-    {
+    isAdmin && {
       name: "Data Pengguna",
       path: "/admin",
       icon: <AiOutlineUser size={20} />,
     },
-  ];
+  ].filter(Boolean);
 
   const getLinkStyle = (path) => {
     return pathname === path
