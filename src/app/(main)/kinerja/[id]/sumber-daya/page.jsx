@@ -454,7 +454,7 @@ export default function SumberDayaPage() {
 
   return (
     <div className="min-h-screen bg-gray-100 mb-24">
-      {["SDM"].includes(role) && (
+      {["ADMIN", "SDM"].includes(role) && (
         <KinerjaTable
           title="Kemudahan Akses Sumber Daya Tenaga Kerja (D1)"
           rows={dataD1}
@@ -464,7 +464,7 @@ export default function SumberDayaPage() {
         />
       )}
 
-      {["TANAMAN"].includes(role) && (
+      {["ADMIN", "TANAMAN"].includes(role) && (
         <KinerjaTable
           title="Tingkat Luas Tanam TRI (D2)"
           rows={dataD2}
@@ -474,7 +474,7 @@ export default function SumberDayaPage() {
         />
       )}
 
-      {["SDM"].includes(role) && (
+      {["ADMIN", "SDM"].includes(role) && (
         <KinerjaTable
           title="Kompetensi Tenaga Kerja (D3)"
           rows={dataD3}
@@ -484,7 +484,7 @@ export default function SumberDayaPage() {
         />
       )}
 
-      {["QUALITYCONTROL"].includes(role) && (
+      {["ADMIN", "QUALITYCONTROL"].includes(role) && (
         <KinerjaTable
           title="Kualitas Bahan Baku (D4)"
           rows={dataD4}
@@ -494,7 +494,7 @@ export default function SumberDayaPage() {
         />
       )}
 
-      {["INSTALASI"].includes(role) && (
+      {["ADMIN", "INSTALASI"].includes(role) && (
         <KinerjaTable
           title="Overall Recovery (D5)"
           rows={dataD5}
@@ -504,7 +504,7 @@ export default function SumberDayaPage() {
         />
       )}
 
-      {["TANAMAN"].includes(role) && (
+      {["ADMIN", "TANAMAN"].includes(role) && (
         <>
           <KinerjaTable
             title="Kecukupan Bahan Baku (D6)"
@@ -540,7 +540,7 @@ export default function SumberDayaPage() {
         </>
       )}
 
-      {["FABRIKASI"].includes(role) && (
+      {["ADMIN", "FABRIKASI"].includes(role) && (
         <KinerjaTable
           title="Teknologi Pengolahan Raw Sugar (D10)"
           rows={dataD10}

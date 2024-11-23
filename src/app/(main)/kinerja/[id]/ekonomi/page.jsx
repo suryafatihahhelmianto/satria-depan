@@ -287,6 +287,7 @@ export default function DataKinerja() {
   return (
     <div className="min-h-screen bg-gray-100 mb-24">
       {[
+        "ADMIN",
         "TANAMAN",
         "FABRIKASI",
         "QUALITYCONTROL",
@@ -303,7 +304,7 @@ export default function DataKinerja() {
           isAdmin={isAdmin}
         />
       )}
-      {["QUALITYCONTROL"].includes(role) && (
+      {["ADMIN", "QUALITYCONTROL"].includes(role) && (
         <KinerjaTable
           title="Potensi Kehilangan Produksi (E2)"
           rows={rowsE2}
@@ -312,7 +313,7 @@ export default function DataKinerja() {
           isAdmin={isAdmin}
         />
       )}
-      {["TANAMAN"].includes(role) && (
+      {["ADMIN", "TANAMAN"].includes(role) && (
         <>
           <KinerjaTable
             title="Kesenjangan keuntungan pelaku rantai pasok per ton gula (%) (E3)"
@@ -331,7 +332,7 @@ export default function DataKinerja() {
         </>
       )}
 
-      {["TUK"].includes(role) && (
+      {["ADMIN", "TUK"].includes(role) && (
         <>
           <KinerjaTable
             title="Tingkat Ketangkasan (E5)"

@@ -273,7 +273,7 @@ export default function DataSosial() {
 
   return (
     <div className="min-h-screen bg-gray-100 mb-24">
-      {["KEPALAPABRIK"].includes(role) && (
+      {["ADMIN", "KEPALAPABRIK"].includes(role) && (
         <KinerjaTable
           title="Dukungan Kelembagaan terhadap Rantai Pasok Agroindustri (S1)"
           rows={rowsS1}
@@ -283,7 +283,7 @@ export default function DataSosial() {
         />
       )}
 
-      {["TANAMAN", "KEPALAPABRIK", "TUK", "SDM"].includes(role) && (
+      {["ADMIN", "TANAMAN", "KEPALAPABRIK", "TUK", "SDM"].includes(role) && (
         <KinerjaTable
           title="Ketersediaan Infrastruktur sebagai Penunjang Aktivitas (S2)"
           rows={rowsS2}
@@ -293,7 +293,7 @@ export default function DataSosial() {
         />
       )}
 
-      {["KEPALAPABRIK", "TUK", "SDM"].includes(role) && (
+      {["ADMIN", "KEPALAPABRIK", "TUK", "SDM"].includes(role) && (
         <KinerjaTable
           title="Manfaat Corporate Social Responsibility bagi Sosial (S3)"
           rows={rowsS3}
@@ -303,7 +303,7 @@ export default function DataSosial() {
         />
       )}
 
-      {["QUALITYCONTROL"].includes(role) && (
+      {["ADMIN", "QUALITYCONTROL"].includes(role) && (
         <KinerjaTable
           title="Keluhan Limbah Rantai Pasok Industri (S4)"
           rows={rowsS4}
@@ -312,7 +312,7 @@ export default function DataSosial() {
           sesiId={sesiId}
         />
       )}
-      {["SDM"].includes(role) && (
+      {["ADMIN", "SDM"].includes(role) && (
         <KinerjaTable
           title="Penyerapan Tenaga Kerja Lokal (S5)"
           rows={rowsS5}
@@ -321,7 +321,7 @@ export default function DataSosial() {
           sesiId={sesiId}
         />
       )}
-      {["TUK"].includes(role) && (
+      {["ADMIN", "TUK"].includes(role) && (
         <KinerjaTable
           title="Peningkatan Keikutsertaan Stakeholder Kemitraan (S6)"
           rows={rowsS6}

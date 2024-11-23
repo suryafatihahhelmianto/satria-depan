@@ -39,7 +39,7 @@ export default function Sidebar() {
       path: "/",
       icon: <AiFillHome size={20} />,
     },
-    {
+    role !== "DIREKSI" && {
       name: "Kinerja Rantai Pasok",
       path: "/kinerja",
       icon: <AiOutlineBarChart size={20} />,

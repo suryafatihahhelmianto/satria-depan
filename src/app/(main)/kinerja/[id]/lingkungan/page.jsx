@@ -942,7 +942,7 @@ export default function LingkunganPage() {
         </div>
       ) : (
         <>
-          {["QUALITYCONTROL"].includes(role) && (
+          {["ADMIN", "QUALITYCONTROL"].includes(role) && (
             <div>
               <KinerjaTable
                 title="Tingkat Gangguan Bau Agroindustri pada Masyarakat (L1)"
@@ -958,7 +958,7 @@ export default function LingkunganPage() {
             </div>
           )}
 
-          {["INSTALASI"].includes(role) && (
+          {["ADMIN", "INSTALASI"].includes(role) && (
             <KinerjaTable
               title="Emisi Listrik (L3)"
               rows={dataL3}
@@ -966,7 +966,7 @@ export default function LingkunganPage() {
             />
           )}
 
-          {["QUALITYCONTROL"].includes(role) && (
+          {["ADMIN", "QUALITYCONTROL"].includes(role) && (
             <div>
               <KinerjaTable
                 title="Kebisingan (L4)"
