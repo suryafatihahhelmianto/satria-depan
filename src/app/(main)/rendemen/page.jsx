@@ -45,6 +45,64 @@ export default function RendemenPage() {
     }
   };
 
+  const fetchCSVData = async () => {
+    try {
+      // Panggil API untuk mendapatkan data JSON
+      const csvResponse = await fetchData("/api/rendemen/csv", {
+        headers: {
+          Authorization: `Bearer ${getCookie("token")}`,
+        },
+      });
+
+      const rendemenData = await csvResponse.data;
+
+      // Konversi data JSON ke format CSV
+      const headers = [
+        "Tanggal Prediksi",
+        "Nama Pabrik",
+        "Blok Kebun",
+        "Brix",
+        "FK",
+        "HK",
+        "NN",
+        "Pol",
+        "Nilai Prediksi Rendemen",
+      ];
+
+      // Format baris data
+      const rows = rendemenData.map((item) => [
+        new Date(item.tanggal).toLocaleDateString("id-ID"), // Format tanggal
+        item.namaPabrik || "Tidak diketahui", // Nama pabrik
+        item.blokKebun, // Blok kebun
+        item.brix, // Nilai Brix
+        item.fk, // Nilai FK
+        item.hk, // Nilai HK
+        item.nn, // Nilai NN
+        item.pol, // Nilai Pol
+        item.nilaiPrediksiRendemen, // Nilai prediksi rendemen
+      ]);
+
+      // Gabungkan header dengan data
+      const csvContent = [headers.join(",")] // Gabungkan header dengan koma
+        .concat(rows.map((row) => row.join(","))) // Gabungkan setiap baris data
+        .join("\n"); // Gabungkan semua baris dengan newline
+
+      // Buat file Blob CSV
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+
+      // Buat elemen <a> untuk mengunduh file
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.setAttribute("download", "data_rendemen.csv"); // Nama file CSV
+      document.body.appendChild(link);
+      link.click(); // Klik otomatis
+      document.body.removeChild(link); // Hapus elemen setelah unduhan
+    } catch (error) {
+      console.error("Error saat mengunduh data CSV:", error);
+      alert("Gagal mengunduh data CSV.");
+    }
+  };
+
   const handleDelete = async (id) => {
     if (confirm("Apakah Anda yakin ingin menghapus data ini?")) {
       try {
@@ -78,14 +136,17 @@ export default function RendemenPage() {
         <div className="flex justify-end font-bold gap-2 text-xl">
           <Link
             href={"/rendemen/statistics"}
-            className="bg-gray-400 p-2 rounded-lg flex items-center"
+            className="bg-gray-400 hover:bg-gray-500 hover:cursor-pointer p-2 rounded-lg flex items-center"
           >
             <AiOutlineLineChart />
           </Link>
-          <div className="flex items-center gap-2 bg-gray-400 p-2 rounded-lg">
+          <button
+            className="flex items-center gap-2 bg-gray-400 hover:bg-gray-500 hover:cursor-pointer p-2 rounded-lg"
+            onClick={fetchCSVData}
+          >
             <p>Unduh</p>
             <AiOutlineDownload />
-          </div>
+          </button>
         </div>
       </div>
 

@@ -104,6 +104,60 @@ export default function KinerjaPage() {
     }
   };
 
+  const fetchCSVKinerja = async () => {
+    try {
+      const csvResponse = await fetchData("/api/sesi/csv", {
+        headers: {
+          Authorization: `Bearer ${getCookie("token")}`,
+        },
+      });
+
+      console.log("csv response: ", csvResponse);
+
+      const kinerjaData = await csvResponse.data;
+
+      const headers = [
+        "Nama Pabrik",
+        "Periode",
+        "Nilai Dimensi Ekonomi",
+        "Nilai Dimensi Lingkungan",
+        "Nilai Dimensi Sosial",
+        "Nilai Dimensi SDAM",
+        "Nilai Indeks Kinerja",
+        "Status Pengisian",
+      ];
+
+      const rows = kinerjaData.map((item) => [
+        item.namaPabrik || "Tidak diketahui", // Nama pabrik
+        item.periode,
+        item.nilaiDimensiEkonomi,
+        item.nilaiDimensiLingkungan,
+        item.nilaiDimensiSosial,
+        item.nilaiDimensiSDAM,
+        item.nilaiIndeksKinerja,
+        item.status,
+      ]);
+
+      const csvContent = [headers.join(",")] // Gabungkan header dengan koma
+        .concat(rows.map((row) => row.join(","))) // Gabungkan setiap baris data
+        .join("\n"); // Gabungkan semua baris dengan newline
+
+      // Buat file Blob CSV
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+
+      // Buat elemen <a> untuk mengunduh file
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.setAttribute("download", "data_kinerja.csv"); // Nama file CSV
+      document.body.appendChild(link);
+      link.click(); // Klik otomatis
+      document.body.removeChild(link); // Hapus elemen setelah unduhan
+    } catch (error) {
+      console.error("Error saat mengunduh data CSV:", error);
+      alert("Gagal mengunduh data CSV.");
+    }
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -229,14 +283,17 @@ export default function KinerjaPage() {
         <div className="flex w-full justify-end font-bold gap-2 text-xl">
           <Link
             href={"/kinerja/statistics"}
-            className="bg-gray-400 p-2 rounded-lg flex items-center"
+            className="bg-gray-400 hover:bg-gray-500 hover:cursor-pointer p-2 rounded-lg flex items-center"
           >
             <AiOutlineLineChart />
           </Link>
-          <div className="flex items-center gap-2 bg-gray-400 p-2 rounded-lg">
+          <button
+            className="flex items-center gap-2 bg-gray-400 hover:bg-gray-500 hover:cursor-pointer p-2 rounded-lg"
+            onClick={fetchCSVKinerja}
+          >
             <p>Unduh</p>
             <AiOutlineDownload />
-          </div>
+          </button>
         </div>
       </div>
       <table className="min-w-full bg-white border border-gray-200">
