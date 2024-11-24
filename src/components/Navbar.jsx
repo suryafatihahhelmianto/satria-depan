@@ -39,13 +39,14 @@ export default function Navbar({ isSidebarOpen, toggleSidebar }) {
 
   return (
     <div
-      className={`fixed top-0 w-full border-b z-50 p-6 bg-white flex justify-between items-center hidden lg:flex ${
+      className={`fixed top-0 w-full border-b z-50 p-6 bg-white justify-between items-center hidden lg:flex transition-all duration-300 ease-in-out ${
         // Navbar hidden on mobile (mobile: hidden)
         isSidebarOpen ? "lg:flex lg:ml-[300px]" : "lg:ml-0 w-full"
       }`}
       style={{
         width: isSidebarOpen ? "calc(100% - 300px)" : "calc(100% - 100px)",
         marginLeft: isSidebarOpen ? "300px" : "100px",
+        transition: "margin-left 0.25s ease-in-out, width 0.25s ease-in-out", // add transition for margin and width
       }}
     >
       <button
