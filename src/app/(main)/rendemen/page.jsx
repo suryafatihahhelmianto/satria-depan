@@ -157,62 +157,64 @@ export default function RendemenPage() {
       ) : error ? (
         <p className="text-red-500">Error: {error}</p>
       ) : (
-        <table className="min-w-full bg-white border border-gray-200">
-          <thead>
-            <tr className="bg-gray-200">
-              <th className="py-2 px-4 border-b">Pabrik</th>
-              <th className="py-2 px-4 border-b">Tanggal Prediksi</th>
-              <th className="py-2 px-4 border-b">Blok Kebun</th>
-              <th className="py-2 px-4 border-b">Nilai Prediksi (%)</th>
-              <th className="py-2 px-4 border-b">Aksi</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sessions.length === 0 ? (
-              <tr>
-                <td colSpan="4" className="py-2 px-4 border-b text-center">
-                  Tidak ada data rendemen yang tersedia
-                </td>
+        <div className="overflow-x-auto shadow-lg rounded-lg border">
+          <table className="min-w-full bg-white border border-gray-200">
+            <thead>
+              <tr className="bg-gray-200">
+                <th className="py-2 px-4 border-b">Pabrik</th>
+                <th className="py-2 px-4 border-b">Tanggal Prediksi</th>
+                <th className="py-2 px-4 border-b">Blok Kebun</th>
+                <th className="py-2 px-4 border-b">Nilai Prediksi (%)</th>
+                <th className="py-2 px-4 border-b">Aksi</th>
               </tr>
-            ) : (
-              sessions.map((session) => (
-                <tr
-                  key={session.tanggal}
-                  className="hover:bg-gray-50 text-center"
-                >
-                  <td className="py-2 px-4 border-b">
-                    {session.pabrikGula.namaPabrik}
-                  </td>
-                  <td className="py-2 px-4 border-b">
-                    {new Date(session.tanggal).toLocaleDateString("id-ID")}
-                  </td>
-                  <td className="py-2 px-4 border-b">{session.blokKebun}</td>
-                  <td className="py-2 px-4 border-b">
-                    {session.nilaiRendemen}
-                  </td>
-                  <td className="py-2 px-4 border-b text-center">
-                    <div className="flex justify-center items-center gap-2 mx-auto">
-                      <Link
-                        className="flex gap-2"
-                        href={`/rendemen/${session.id}`}
-                      >
-                        <button className="bg-gray-400 p-2 rounded-lg flex items-center justify-center hover:bg-gray-500">
-                          <AiOutlineSearch />
-                        </button>
-                      </Link>
-                      <button
-                        onClick={() => handleDelete(session.id)}
-                        className="bg-red-500 p-2 rounded-lg flex items-center justify-center hover:bg-red-600 text-white"
-                      >
-                        <AiFillDelete />
-                      </button>
-                    </div>
+            </thead>
+            <tbody>
+              {sessions.length === 0 ? (
+                <tr>
+                  <td colSpan="4" className="py-2 px-4 border-b text-center">
+                    Tidak ada data rendemen yang tersedia
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : (
+                sessions.map((session) => (
+                  <tr
+                    key={session.tanggal}
+                    className="hover:bg-gray-50 text-center"
+                  >
+                    <td className="py-2 px-4 border-b">
+                      {session.pabrikGula.namaPabrik}
+                    </td>
+                    <td className="py-2 px-4 border-b">
+                      {new Date(session.tanggal).toLocaleDateString("id-ID")}
+                    </td>
+                    <td className="py-2 px-4 border-b">{session.blokKebun}</td>
+                    <td className="py-2 px-4 border-b">
+                      {session.nilaiRendemen}
+                    </td>
+                    <td className="py-2 px-4 border-b text-center">
+                      <div className="flex justify-center items-center gap-2 mx-auto">
+                        <Link
+                          className="flex gap-2"
+                          href={`/rendemen/${session.id}`}
+                        >
+                          <button className="bg-gray-400 p-2 rounded-lg flex items-center justify-center hover:bg-gray-500">
+                            <AiOutlineSearch />
+                          </button>
+                        </Link>
+                        <button
+                          onClick={() => handleDelete(session.id)}
+                          className="bg-red-500 p-2 rounded-lg flex items-center justify-center hover:bg-red-600 text-white"
+                        >
+                          <AiFillDelete />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

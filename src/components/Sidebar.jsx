@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -12,10 +12,10 @@ import {
 } from "react-icons/ai";
 import { GoGoal } from "react-icons/go";
 import { useUser } from "@/context/UserContext";
+import { BsBoxArrowRight, BsGearFill, BsPersonFill } from "react-icons/bs";
 
-export default function Sidebar() {
-  const { isAdmin, role, loading } = useUser();
-  const [isOpen, setIsOpen] = useState(true); // Default sidebar terbuka
+export default function Sidebar({ isOpen, toggleSidebar }) {
+  const { isAdmin, role } = useUser();
   const [isMobile, setIsMobile] = useState(false); // Untuk deteksi perangkat
   const pathname = usePathname();
 
@@ -23,15 +23,12 @@ export default function Sidebar() {
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768); // Jika lebar layar < 768px, dianggap mobile
-      setIsOpen(window.innerWidth >= 768); // Buka sidebar secara default di perangkat besar
     };
 
     handleResize(); // Deteksi ukuran layar saat pertama kali render
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
-  const toggleSidebar = () => setIsOpen(!isOpen); // Fungsi untuk toggle sidebar
 
   const navLinks = [
     {
@@ -64,6 +61,13 @@ export default function Sidebar() {
       : "text-gray-700 hover:bg-green-200 hover:text-gray-900";
   };
 
+  // Handler untuk menutup sidebar setelah klik menu di mobile
+  const handleLinkClick = () => {
+    if (isMobile) {
+      toggleSidebar(); // Tutup sidebar setelah klik menu pada perangkat mobile
+    }
+  };
+
   return (
     <>
       {/* Mobile Toggle Button */}
@@ -79,16 +83,26 @@ export default function Sidebar() {
 
       {/* Sidebar */}
       <div
-        className={`fixed bg-ijoDash text-white h-screen p-6 z-40 flex flex-col shadow-xl transition-all duration-300 ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        } ${isMobile ? "w-full" : "w-[300px]"}`}
+        className={`fixed bg-ijoDash text-white py-8 px-4 h-screen z-40 flex flex-col shadow-xl transition-all duration-300 ${
+          isMobile
+            ? isOpen
+              ? "translate-x-0 w-full"
+              : "-translate-x-full w-full"
+            : isOpen
+            ? "w-[300px]"
+            : "w-[100px]"
+        }`}
       >
         {/* Sidebar Title */}
         <Link href="/" className="mb-12 flex justify-center items-center">
-          <span className={`text-4xl font-extrabold ${isOpen ? "" : "hidden"}`}>
-            <span className="text-green-700">Satria</span>
-            <span className="text-white">Keren</span>
-          </span>
+          {isOpen ? (
+            <span className="text-4xl font-extrabold">
+              <span className="text-green-700">Satria</span>
+              <span className="text-white">Keren</span>
+            </span>
+          ) : (
+            <span className="text-4xl font-extrabold text-green-700">S</span>
+          )}
         </Link>
 
         {/* Navigation Links */}
@@ -98,9 +112,12 @@ export default function Sidebar() {
               <li key={index}>
                 <Link
                   href={link.path}
-                  className={`flex items-center gap-4 py-3 px-4 rounded-lg text-lg transition-colors duration-300 ${getLinkStyle(
+                  className={`flex items-center ${
+                    isOpen ? "gap-4 py-3 px-4" : "justify-center py-3 px-2"
+                  } rounded-lg text-lg transition-colors duration-300 ${getLinkStyle(
                     link.path
                   )}`}
+                  onClick={handleLinkClick} // Menambahkan handler klik
                 >
                   {/* Icon always visible */}
                   {link.icon}
@@ -110,16 +127,49 @@ export default function Sidebar() {
               </li>
             ))}
           </ul>
+          {isMobile && (
+            <ul className="mt-16 py-2 flex flex-col">
+              <li>
+                <Link
+                  href="/biodata"
+                  className="flex gap-2 px-4 py-2 text-gray-800 hover:bg-gray-100  items-center"
+                  onClick={handleLinkClick} // Menambahkan handler klik
+                >
+                  <BsPersonFill className="mr-2" /> Biodata
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/pengaturan"
+                  className="flex gap-2 px-4 py-2 text-gray-800 hover:bg-gray-100  items-center"
+                  onClick={handleLinkClick} // Menambahkan handler klik
+                >
+                  <BsGearFill className="mr-2" /> Pengaturan
+                </Link>
+              </li>
+              <li>
+                <button
+                  onClick={() => {
+                    document.cookie =
+                      "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                    window.location.href = "/landing";
+                  }}
+                  className="flex gap-2 w-full text-left px-4 py-2 text-red-600 hover:bg-red-100  items-center"
+                  // onClick={handleLinkClick} // Menambahkan handler klik
+                >
+                  <BsBoxArrowRight className="mr-2" /> Logout
+                </button>
+              </li>
+            </ul>
+          )}
         </nav>
 
         {/* Footer Text */}
-        <footer
-          className={`mt-4 text-center text-l text-green-800 ${
-            isOpen ? "" : "hidden"
-          }`}
-        >
-          © Satria-Keren 2024
-        </footer>
+        {isOpen && !isMobile && (
+          <footer className="mt-4 text-center text-l text-green-800">
+            © Satria-Keren 2024
+          </footer>
+        )}
       </div>
     </>
   );

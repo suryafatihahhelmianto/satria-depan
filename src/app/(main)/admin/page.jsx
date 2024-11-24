@@ -190,51 +190,53 @@ export default function PenggunaPage() {
         </h1>
       </div>
       <h1 className="text-2xl font-bold mb-6">Data Pengguna</h1>
-      <table className="w-full text-left border-collapse border border-gray-300">
-        <thead className="bg-gray-200">
-          <tr>
-            <th className="py-2 px-4 border">Pabrik</th>
-            <th className="py-2 px-4 border">Nama</th>
-            <th className="py-2 px-4 border">Jabatan</th>
-            <th className="py-2 px-4 border">Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.length > 0 ? (
-            users.map((user, index) => (
-              <tr key={index} className="hover:bg-gray-100">
-                <td className="py-2 px-4 border">
-                  {user.pabrikGula?.namaPabrik || "Semua"}
-                </td>
-                <td className="py-2 px-4 border">{user.nama}</td>
-                <td className="py-2 px-4 border">{user.jabatan}</td>
-                <td className="py-2 px-4 border">
-                  <div className="flex gap-2">
-                    <button
-                      className="p-2 bg-gray-300 rounded hover:bg-gray-400"
-                      onClick={() => openModal(user)}
-                    >
-                      <FaEdit />
-                    </button>
-                    <button
-                      className="p-2 bg-gray-300 rounded hover:bg-gray-400"
-                      onClick={() => handleDelete(user.id)}
-                    >
-                      <FaTrash />
-                    </button>
-                  </div>
+      <div className="overflow-x-auto shadow-lg rounded-lg border">
+        <table className="w-full text-left border-collapse border border-gray-300">
+          <thead className="bg-gray-200">
+            <tr>
+              <th className="py-2 px-4 border">Pabrik</th>
+              <th className="py-2 px-4 border">Nama</th>
+              <th className="py-2 px-4 border">Jabatan</th>
+              <th className="py-2 px-4 border">Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.length > 0 ? (
+              users.map((user, index) => (
+                <tr key={index} className="hover:bg-gray-100">
+                  <td className="py-2 px-4 border">
+                    {user.pabrikGula?.namaPabrik || "Semua"}
+                  </td>
+                  <td className="py-2 px-4 border">{user.nama}</td>
+                  <td className="py-2 px-4 border">{user.jabatan}</td>
+                  <td className="py-2 px-4 border">
+                    <div className="flex gap-2">
+                      <button
+                        className="p-2 bg-gray-300 rounded hover:bg-gray-400"
+                        onClick={() => openModal(user)}
+                      >
+                        <FaEdit />
+                      </button>
+                      <button
+                        className="p-2 bg-gray-300 rounded hover:bg-gray-400"
+                        onClick={() => handleDelete(user.id)}
+                      >
+                        <FaTrash />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="4" className="text-center py-4">
+                  Tidak ada pengguna
                 </td>
               </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="4" className="text-center py-4">
-                Tidak ada pengguna
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+            )}
+          </tbody>
+        </table>
+      </div>
 
       {isModalOpen && (
         <div
