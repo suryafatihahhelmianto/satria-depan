@@ -369,6 +369,7 @@ export default function PenggunaPage() {
                     </select>
                   </div>
                 )}
+
               <div>
                 <label htmlFor="nomorHp">Nomor HP</label>
                 <input
@@ -377,9 +378,22 @@ export default function PenggunaPage() {
                   value={formData.nomorHp}
                   onChange={handleInputChange}
                   placeholder="Nomor HP"
-                  className="w-full px-4 py-2 rounded-lg bg-gray-200 focus:outline-none"
+                  className={`w-full px-4 py-2 rounded-lg focus:outline-none ${
+                    !/^0[0-9]*$/.test(formData.nomorHp) ||
+                    formData.nomorHp.length > 13
+                      ? "bg-red-100 border-2 border-red-500"
+                      : "bg-gray-200"
+                  }`}
                 />
+                {(!/^0[0-9]*$/.test(formData.nomorHp) ||
+                  formData.nomorHp.length > 13) && (
+                  <p className="text-red-500 text-sm mt-1">
+                    Nomor HP harus dimulai dengan "0" dan maksimal 13 digit
+                    angka.
+                  </p>
+                )}
               </div>
+
               <button
                 type="submit"
                 className="w-full bg-green-400 text-white py-2 rounded-lg hover:bg-green-500"
