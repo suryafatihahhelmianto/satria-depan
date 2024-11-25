@@ -433,14 +433,14 @@ export default function KinerjaPage() {
               <div className="flex justify-end gap-2">
                 <button
                   type="button"
-                  className="px-4 py-2 bg-gray-500 text-white rounded-lg"
+                  className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg"
                   onClick={() => setIsEditModalOpen(false)}
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
-                  className={`px-4 py-2 rounded-lg ${
+                  className={`px-4 py-2 rounded-lg bg-green-500 hover:bg-green-600 ${
                     isSubmitting ? "bg-gray-500" : "bg-green-600"
                   } text-white`}
                   disabled={isSubmitting}
