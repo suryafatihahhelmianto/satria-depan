@@ -388,8 +388,8 @@ export default function PenggunaPage() {
                 {(!/^0[0-9]*$/.test(formData.nomorHp) ||
                   formData.nomorHp.length > 13) && (
                   <p className="text-red-500 text-sm mt-1">
-                    Nomor HP harus dimulai dengan "0" dan maksimal 13 digit
-                    angka.
+                    Nomor HP harus dimulai dengan &quot;0&quot; dan maksimal 13
+                    digit angka.
                   </p>
                 )}
               </div>
