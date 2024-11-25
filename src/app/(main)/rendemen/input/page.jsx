@@ -147,7 +147,7 @@ export default function PredictionPage() {
             <div className="flex justify-end gap-4">
               <button
                 onClick={handleCancelCalculate}
-                className="px-6 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition duration-300"
+                className="px-6 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg hover:from-red-600 hover:to-red-700 transition duration-300"
               >
                 Batal
               </button>
@@ -156,7 +156,7 @@ export default function PredictionPage() {
                 className="px-6 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 transition duration-300"
                 disabled={isLoading}
               >
-                {isLoading ? "Menghitung..." : "Lanjut Hitung"}
+                {isLoading ? "Menghitung..." : "Hitung!"}
               </button>
             </div>
           </div>

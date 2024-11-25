@@ -208,10 +208,13 @@ export default function PenggunaPage() {
 
       <div className="flex items-center gap-2 my-5">
         <AiFillPlusCircle
-          className="text-2xl text-gray-500 cursor-pointer"
+          className="text-2xl text-green-500 hover:text-green-700 cursor-pointer"
           onClick={() => openModal()}
         />
-        <h1 className="cursor-pointer" onClick={() => openModal()}>
+        <h1
+          className="cursor-pointer hover:text-green-600"
+          onClick={() => openModal()}
+        >
           Tambah Pengguna
         </h1>
       </div>
@@ -220,17 +223,17 @@ export default function PenggunaPage() {
       <div className="overflow-x-auto shadow-lg rounded-lg border">
         <table className="w-full text-left border-collapse border border-gray-300">
           <thead className="bg-gray-200">
-            <tr>
-              <th className="py-2 px-4 border">Pabrik</th>
-              <th className="py-2 px-4 border">Nama</th>
-              <th className="py-2 px-4 border">Jabatan</th>
-              <th className="py-2 px-4 border">Aksi</th>
+            <tr className="bg-gradient-to-r from-gray-500 to-gray-300 text-black">
+              <th className="py-2 px-4">Pabrik</th>
+              <th className="py-2 px-4">Nama</th>
+              <th className="py-2 px-4">Jabatan</th>
+              <th className="py-2 px-4">Aksi</th>
             </tr>
           </thead>
           <tbody>
             {users.length > 0 ? (
               users.map((user, index) => (
-                <tr key={index} className="hover:bg-gray-100">
+                <tr key={index} className="hover:bg-gray-200">
                   <td className="py-2 px-4 border">
                     {user.pabrikGula?.namaPabrik || "Semua"}
                   </td>
@@ -239,16 +242,16 @@ export default function PenggunaPage() {
                   <td className="py-2 px-4 border">
                     <div className="flex gap-2">
                       <button
-                        className="p-2 bg-gray-300 rounded hover:bg-gray-400"
+                        className="p-2 bg-yellow-500 rounded hover:bg-yellow-600"
                         onClick={() => openModal(user)}
                       >
-                        <FaEdit />
+                        <FaEdit className="text-white" />
                       </button>
                       <button
-                        className="p-2 bg-gray-300 rounded hover:bg-gray-400"
+                        className="p-2 bg-red-500 rounded hover:bg-red-600"
                         onClick={() => handleDelete(user.id)}
                       >
-                        <FaTrash />
+                        <FaTrash className="text-white" />
                       </button>
                     </div>
                   </td>
@@ -366,6 +369,7 @@ export default function PenggunaPage() {
                     </select>
                   </div>
                 )}
+
               <div>
                 <label htmlFor="nomorHp">Nomor HP</label>
                 <input
@@ -374,9 +378,22 @@ export default function PenggunaPage() {
                   value={formData.nomorHp}
                   onChange={handleInputChange}
                   placeholder="Nomor HP"
-                  className="w-full px-4 py-2 rounded-lg bg-gray-200 focus:outline-none"
+                  className={`w-full px-4 py-2 rounded-lg focus:outline-none ${
+                    !/^0[0-9]*$/.test(formData.nomorHp) ||
+                    formData.nomorHp.length > 13
+                      ? "bg-red-100 border-2 border-red-500"
+                      : "bg-gray-200"
+                  }`}
                 />
+                {(!/^0[0-9]*$/.test(formData.nomorHp) ||
+                  formData.nomorHp.length > 13) && (
+                  <p className="text-red-500 text-sm mt-1">
+                    Nomor HP harus dimulai dengan "0" dan maksimal 13 digit
+                    angka.
+                  </p>
+                )}
               </div>
+
               <button
                 type="submit"
                 className="w-full bg-green-400 text-white py-2 rounded-lg hover:bg-green-500"

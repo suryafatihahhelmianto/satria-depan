@@ -4,6 +4,8 @@ import SkeletonCardBig from "@/components/common/SkeletonCardBig";
 import { fetchData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
 import React, { useEffect, useState } from "react";
+import { AiOutlineWarning } from "react-icons/ai";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 const PengaturanPage = () => {
   const [user, setUser] = useState(null);
@@ -145,7 +147,8 @@ const PengaturanPage = () => {
       style={{ backgroundImage: `url('../img/tanaman.png')` }}
     >
       <div className="flex flex-col items-center p-8">
-        <p className="mb-4 text-gray-800">
+        <p className="flex mb-4 p-4 bg-red-500 text-white rounded-lg animate-pulse shadow-lg">
+          <AiOutlineWarning className="text-2xl mr-3" />
           Mohon untuk menjaga kerahasiaan password dan tidak membagikan ke
           siapapun!
         </p>
@@ -171,7 +174,7 @@ const PengaturanPage = () => {
             />
             <button
               type="submit"
-              className={`bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500 ${
+              className={`bg-gradient-to-r from-green-400 to-green-600 text-white px-4 py-2 rounded hover:bg-green-800 ${
                 loadingUsername ? "opacity-50 cursor-not-allowed" : ""
               }`}
               disabled={loadingUsername}
@@ -199,7 +202,11 @@ const PengaturanPage = () => {
                 className="absolute right-3 top-2"
                 onClick={() => setShowPasswordOld(!showPasswordOld)}
               >
-                👁️
+                {showPasswordNew ? (
+                  <AiOutlineEyeInvisible className="text-2xl" />
+                ) : (
+                  <AiOutlineEye className="text-2xl" />
+                )}
               </button>
             </div>
 
@@ -214,10 +221,14 @@ const PengaturanPage = () => {
               />
               <button
                 type="button"
-                className="absolute right-3 top-2"
+                className="absolute right-3 top-2 text-gray-600 hover:text-gray-800"
                 onClick={() => setShowPasswordNew(!showPasswordNew)}
               >
-                👁️
+                {showPasswordNew ? (
+                  <AiOutlineEyeInvisible className="text-2xl" />
+                ) : (
+                  <AiOutlineEye className="text-2xl" />
+                )}
               </button>
             </div>
 
@@ -237,7 +248,11 @@ const PengaturanPage = () => {
                 className="absolute right-3 top-2"
                 onClick={() => setShowPasswordConfirm(!showPasswordConfirm)}
               >
-                👁️
+                {showPasswordNew ? (
+                  <AiOutlineEyeInvisible className="text-2xl" />
+                ) : (
+                  <AiOutlineEye className="text-2xl" />
+                )}
               </button>
             </div>
 
@@ -248,7 +263,7 @@ const PengaturanPage = () => {
 
             <button
               type="submit"
-              className={`bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500 ${
+              className={`bg-gradient-to-r from-green-400 to-green-600 text-white px-4 py-2 rounded hover:bg-green-800 ${
                 loadingPassword ? "opacity-50 cursor-not-allowed" : ""
               }`}
               disabled={loadingPassword}
