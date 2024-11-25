@@ -47,7 +47,7 @@ export default function OpsiDetail() {
   return (
     <div>
       <div className="flex justify-center mb-8">
-        <h1 className="font-bold text-7xl">
+        <h1 className="font-bold text-5xl">
           Detail Pengisian Pabrik{" "}
           <span className="text-green-800">{namaPabrik}</span> - Periode{" "}
           <span className="text-green-800">{periode}</span>
