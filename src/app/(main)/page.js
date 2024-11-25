@@ -38,6 +38,7 @@ export default function HomePage() {
   const [dashboardData, setDashboardData] = useState(null);
   const [sustainabilityData, setSustainabilityData] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [availableYears, setAvailableYears] = useState([]);
 
   const router = useRouter();
 
@@ -49,6 +50,36 @@ export default function HomePage() {
   const handleYearChange = (event) => {
     setSelectedYear(event.target.value);
     // fetchDashboardData(selectedFactory.id);
+  };
+
+  const fetchYears = async () => {
+    if (!selectedFactory.id) return;
+
+    try {
+      const response = await fetchData(
+        `/api/sesi/daftar?pabrikId=${selectedFactory.id}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${getCookie("token")}`,
+          },
+        }
+      );
+
+      // Ekstrak tahun dari tanggal mulai sesi
+      const years = Array.from(
+        new Set(
+          response.sesi.map((item) => new Date(item.tanggalMulai).getFullYear())
+        )
+      ).sort((a, b) => b - a); // Mengurutkan tahun dari terbesar ke terkecil
+
+      setAvailableYears(years);
+      if (years.length > 0) {
+        setSelectedYear(years[0]); // Pilih tahun pertama sebagai default
+      }
+    } catch (error) {
+      console.error("Error fetching years:", error);
+    }
   };
 
   const fetchFactories = async () => {
@@ -118,6 +149,10 @@ export default function HomePage() {
   useEffect(() => {
     fetchFactories();
   }, []);
+
+  useEffect(() => {
+    fetchYears();
+  }, [selectedFactory]);
 
   useEffect(() => {
     if (selectedFactory.id) {
@@ -224,12 +259,11 @@ export default function HomePage() {
                   onChange={handleYearChange}
                   className="bg-white border border-gray-300 rounded-md p-2 text-lg"
                 >
-                  <option value={2021}>2021</option>
-                  <option value={2022}>2022</option>
-                  <option value={2023}>2023</option>
-                  <option value={2024}>2024</option>
-                  <option value={2025}>2025</option>
-                  <option value={2026}>2026</option>
+                  {availableYears.map((year) => (
+                    <option key={year} value={year}>
+                      {year}
+                    </option>
+                  ))}
                 </select>
               </div>
               <p className="font-bold text-gray-700 mb-4">

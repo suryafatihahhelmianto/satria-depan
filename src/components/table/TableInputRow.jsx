@@ -146,7 +146,7 @@ export default function TableInputRow({
             type="text"
             value={value}
             onChange={onChange}
-            disabled={locked || isLoading} // Tambahkan kondisi isLoading untuk menonaktifkan input
+            disabled={locked || isLoading || isSubmitted} // Tambahkan kondisi isLoading untuk menonaktifkan input
             className={`p-2 border rounded-md w-full focus:outline-none focus:ring ${
               locked || isLoading
                 ? "bg-gray-300"
@@ -160,7 +160,7 @@ export default function TableInputRow({
             type="number"
             value={value}
             onChange={onChange}
-            disabled={locked || isLoading} // Tambahkan kondisi isLoading untuk menonaktifkan input
+            disabled={locked || isLoading || isSubmitted} // Tambahkan kondisi isLoading untuk menonaktifkan input
             className={`p-2 border rounded-md w-full focus:outline-none focus:ring ${
               locked || isLoading
                 ? "bg-gray-300"
@@ -173,7 +173,7 @@ export default function TableInputRow({
           <select
             value={value}
             onChange={onChange}
-            disabled={locked || isLoading} // Tambahkan kondisi isLoading untuk menonaktifkan input
+            disabled={locked || isLoading || isSubmitted} // Tambahkan kondisi isLoading untuk menonaktifkan input
             className={`p-2 border rounded-md w-full focus:outline-none ${
               locked || isLoading
                 ? "bg-gray-300"
