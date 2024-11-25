@@ -278,10 +278,13 @@ export default function KinerjaPage() {
         {isAdmin && (
           <div className="flex w-full gap-2">
             <AiFillPlusCircle
-              className="text-2xl text-gray-500 cursor-pointer"
+              className="text-2xl text-green-600 hover:text-green-800 cursor-pointer"
               onClick={() => setIsModalOpen(true)} // Buka modal saat tombol diklik
             />
-            <h1 className="cursor-pointer" onClick={() => setIsModalOpen(true)}>
+            <h1
+              className="cursor-pointer hover:text-green-900"
+              onClick={() => setIsModalOpen(true)}
+            >
               Tambah Form Pengukuran Kinerja
             </h1>
           </div>
@@ -315,7 +318,7 @@ export default function KinerjaPage() {
       <div className="overflow-x-auto shadow-lg rounded-lg border">
         <table className="min-w-full bg-white border border-gray-200">
           <thead>
-            <tr className="bg-gray-200">
+            <tr className="bg-gradient-to-r from-gray-500 to-gray-300 text-black">
               <th className="py-2 px-4 border-b">Pabrik</th>
               <th className="py-2 px-4 border-b">Periode</th>
               <th className="py-2 px-4 border-b">Batas Pengisian</th>
@@ -339,7 +342,10 @@ export default function KinerjaPage() {
                   today > batasPengisian ? "SELESAI" : "BELUM SELESAI";
 
                 return (
-                  <tr key={session.id} className="hover:bg-gray-50 text-center">
+                  <tr
+                    key={session.id}
+                    className="hover:bg-gray-200 text-center"
+                  >
                     <td className="py-2 px-4 border-b">
                       {pabrikNames[session.pabrikGulaId] ||
                         "Nama Pabrik Tidak Ditemukan"}
@@ -368,7 +374,7 @@ export default function KinerjaPage() {
                       <div className="flex justify-center items-center gap-2 mx-auto">
                         {isAdmin && (
                           <button
-                            className="bg-gray-400 p-2 rounded-lg flex items-center justify-center hover:bg-gray-500"
+                            className="bg-yellow-400 p-2 rounded-lg flex items-center justify-center hover:bg-yellow-500"
                             onClick={() => {
                               setEditData({
                                 id: session.id,
@@ -377,7 +383,7 @@ export default function KinerjaPage() {
                               setIsEditModalOpen(true);
                             }}
                           >
-                            <AiFillEdit className="text-black" />
+                            <AiFillEdit className="text-white" />
                           </button>
                         )}
 
@@ -385,8 +391,8 @@ export default function KinerjaPage() {
                           href={`/kinerja/${session.id}/sumber-daya`}
                           className="flex gap-2"
                         >
-                          <button className="bg-gray-400 p-2 rounded-lg flex items-center justify-center hover:bg-gray-500">
-                            <AiFillRead className="text-black" />
+                          <button className="bg-blue-400 p-2 rounded-lg flex items-center justify-center hover:bg-blue-500">
+                            <AiFillRead className="text-white" />
                           </button>
                         </Link>
                         {isAdmin && (
@@ -511,7 +517,7 @@ export default function KinerjaPage() {
               <div className="flex justify-end gap-2">
                 <button
                   type="button"
-                  className="px-4 py-2 bg-gray-500 text-white rounded-lg"
+                  className="px-4 py-2 bg-red-500 hover:bg-red-600  text-white rounded-lg"
                   onClick={() => setIsModalOpen(false)} // Close modal on cancel
                   disabled={isSubmitting}
                 >
@@ -519,7 +525,7 @@ export default function KinerjaPage() {
                 </button>
                 <button
                   type="submit"
-                  className={`px-4 py-2 rounded-lg ${
+                  className={`px-4 py-2 rounded-lg hover:bg-green-700 ${
                     isSubmitting ? "bg-gray-500" : "bg-green-600"
                   } text-white`}
                   disabled={isSubmitting}

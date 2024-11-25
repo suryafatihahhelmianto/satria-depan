@@ -131,8 +131,10 @@ export default function RendemenPage() {
     <div className="min-h-screen bg-gray-100">
       <div className="flex items-center justify-between mb-8">
         <Link href={"/rendemen/input"} className="flex items-center gap-2">
-          <AiFillPlusCircle className="text-2xl text-gray-500 cursor-pointer" />
-          <h1 className="cursor-pointer">Tambah Prediksi Rendemen</h1>
+          <AiFillPlusCircle className="text-2xl text-green-800 hover:text-green-900 cursor-pointer" />
+          <h1 className="cursor-pointer hover:text-green-600 rounded-s">
+            Tambah Prediksi Rendemen
+          </h1>
         </Link>
         <div className="flex justify-end font-bold gap-2 text-xl">
           <Link
@@ -159,9 +161,9 @@ export default function RendemenPage() {
         <p className="text-red-500">Error: {error}</p>
       ) : (
         <div className="overflow-x-auto shadow-lg rounded-lg border">
-          <table className="min-w-full bg-white border border-gray-200">
+          <table className="min-w-full  border border-gray-200">
             <thead>
-              <tr className="bg-gray-200">
+              <tr className="bg-gradient-to-r from-gray-500 to-gray-300 text-black">
                 <th className="py-2 px-4 border-b">Pabrik</th>
                 <th className="py-2 px-4 border-b">Tanggal Prediksi</th>
                 <th className="py-2 px-4 border-b">Blok Kebun</th>
@@ -180,7 +182,7 @@ export default function RendemenPage() {
                 sessions.map((session) => (
                   <tr
                     key={session.tanggal}
-                    className="hover:bg-gray-50 text-center"
+                    className="hover:bg-gray-200 text-center"
                   >
                     <td className="py-2 px-4 border-b">
                       {session.pabrikGula.namaPabrik}
@@ -198,7 +200,7 @@ export default function RendemenPage() {
                           className="flex gap-2"
                           href={`/rendemen/${session.id}`}
                         >
-                          <button className="bg-gray-400 p-2 rounded-lg flex items-center justify-center hover:bg-gray-500">
+                          <button className="bg-blue-300 p-2 rounded-lg flex items-center justify-center hover:bg-blue-500">
                             <AiOutlineSearch />
                           </button>
                         </Link>

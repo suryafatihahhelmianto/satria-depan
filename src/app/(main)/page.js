@@ -274,7 +274,8 @@ export default function HomePage() {
                 {/* Bar indikator */}
                 <div className="relative w-32 2xl:w-52 h-6 rounded-full bg-gradient-to-r from-red-500 via-yellow-500 to-green-500">
                   <div
-                    className="absolute top-1/2 transform -translate-y-1/2 -translate-x-1/2 border-2 border-gray-700 bg-transparent"
+                    className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 border-2 border-gray-700 bg-transparent 
+                    w-3/4 sm:w-1/2 md:w-1/3 lg:w-1/4 h-auto"
                     style={{
                       left: `${
                         rataRataRendemen <= 4
