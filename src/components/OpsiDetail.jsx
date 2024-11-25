@@ -47,10 +47,13 @@ export default function OpsiDetail() {
   return (
     <div>
       <div className="flex justify-center mb-8">
-        <h1 className="font-bold text-2xl">
-          Detail Pengisian Pabrik {namaPabrik} - Periode {periode}
+        <h1 className="font-bold text-4xl">
+          Detail Pengisian Pabrik{" "}
+          <span className="text-green-800">{namaPabrik}</span> - Periode{" "}
+          <span className="text-green-800">{periode}</span>
         </h1>
       </div>
+
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 sm:gap-6 md:gap-8 text-center">
         <Link
           href={`/detail/${id ? id : ""}/sumber-daya`} // Add ID to URL if present
