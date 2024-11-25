@@ -70,14 +70,14 @@ export default function Navbar({ isSidebarOpen, toggleSidebar }) {
           <div className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg py-2 z-10">
             <Link
               href="/biodata"
-              className="block px-4 py-2 text-gray-800 hover:bg-gray-100  items-center"
+              className="flex px-4 py-2 text-gray-800 hover:bg-gray-100  items-center"
             >
               <BsFillPersonFill className="mr-2" /> Biodata
             </Link>
             <hr />
             <Link
               href="/pengaturan"
-              className="block px-4 py-2 text-gray-800 hover:bg-gray-100  items-center"
+              className="flex px-4 py-2 text-gray-800 hover:bg-gray-100  items-center"
             >
               <BsFillGearFill className="mr-2" /> Pengaturan
             </Link>
@@ -88,7 +88,7 @@ export default function Navbar({ isSidebarOpen, toggleSidebar }) {
                   "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
                 window.location.href = "/landing";
               }}
-              className="block w-full text-left px-4 py-2 text-red-600 hover:bg-red-100  items-center"
+              className="flex w-full text-left px-4 py-2 text-red-600 hover:bg-red-100  items-center"
             >
               <BsBoxArrowRight className="mr-2" /> Logout
             </button>
