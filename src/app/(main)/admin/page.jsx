@@ -6,6 +6,7 @@ import { fetchData, postData, putData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
 import { AiFillPlusCircle } from "react-icons/ai";
 import Skeleton from "@/components/common/Skeleton";
+import { FaSpinner } from "react-icons/fa";
 
 export default function PenggunaPage() {
   const [loading, setLoading] = useState(true);
@@ -23,6 +24,11 @@ export default function PenggunaPage() {
     nomorHp: "",
     pabrikGulaId: 0,
   });
+
+  // State untuk loading, error, dan success
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
     fetchUsers();
@@ -86,6 +92,7 @@ export default function PenggunaPage() {
   const closeModal = () => {
     setModalOpen(false);
     setSelectedUserId(null);
+    setErrorMessage(""); // Clear error when closing modal
   };
 
   const handleClickOutside = (e) => {
@@ -116,6 +123,7 @@ export default function PenggunaPage() {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     const token = getCookie("token");
+    setIsLoading(true); // Start loading
 
     const dataToSend = {
       ...formData,
@@ -145,10 +153,21 @@ export default function PenggunaPage() {
           headers: { Authorization: `Bearer ${token}` },
         });
       }
+      setSuccessMessage(
+        isEditMode
+          ? "Pengguna berhasil diperbarui"
+          : "Pengguna berhasil ditambahkan"
+      );
       closeModal();
       fetchUsers();
     } catch (error) {
       console.error("Error saving user: ", error);
+      setErrorMessage(
+        // "Terjadi kesalahan saat menyimpan data pengguna.",
+        error.response.data.message
+      );
+    } finally {
+      setIsLoading(false); // End loading
     }
   };
 
@@ -180,6 +199,13 @@ export default function PenggunaPage() {
 
   return (
     <div className="p-6">
+      {/* Success message */}
+      {successMessage && (
+        <div className="mb-4 text-green-500 font-semibold">
+          {successMessage}
+        </div>
+      )}
+
       <div className="flex items-center gap-2 my-5">
         <AiFillPlusCircle
           className="text-2xl text-green-500 hover:text-green-700 cursor-pointer"
@@ -192,6 +218,7 @@ export default function PenggunaPage() {
           Tambah Pengguna
         </h1>
       </div>
+
       <h1 className="text-2xl font-bold mb-6">Data Pengguna</h1>
       <div className="overflow-x-auto shadow-lg rounded-lg border">
         <table className="w-full text-left border-collapse border border-gray-300">
@@ -258,6 +285,11 @@ export default function PenggunaPage() {
               {isEditMode ? "Edit Pengguna" : "Tambah Pengguna Baru"}
             </h2>
             <form className="space-y-4" onSubmit={handleFormSubmit}>
+              {errorMessage && (
+                <div className="mb-4 text-red-500 font-semibold">
+                  {errorMessage}
+                </div>
+              )}
               <div>
                 <label htmlFor="nama">Nama</label>
                 <input
@@ -352,7 +384,13 @@ export default function PenggunaPage() {
                 type="submit"
                 className="w-full bg-green-400 text-white py-2 rounded-lg hover:bg-green-500"
               >
-                {isEditMode ? "Simpan Perubahan" : "Daftar"}
+                {isLoading ? (
+                  <FaSpinner className="animate-spin mx-auto" />
+                ) : isEditMode ? (
+                  "Simpan Perubahan"
+                ) : (
+                  "Daftar"
+                )}
               </button>
             </form>
           </div>

@@ -49,8 +49,8 @@ export default function DataSosial() {
         },
         data,
       });
-      fetchSosialData();
-      console.log("Update successful");
+      // fetchSosialData();
+      // console.log("Update successful");
     } catch (error) {
       console.error("Error updating field: ", error);
     }

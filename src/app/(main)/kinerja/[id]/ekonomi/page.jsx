@@ -60,7 +60,7 @@ export default function DataKinerja() {
         data,
       });
       console.log("Update successful");
-      fetchEkonomi();
+      // fetchEkonomi();
       setIsFormDirty(false);
     } catch (error) {
       console.error("Error updating field: ", error);
