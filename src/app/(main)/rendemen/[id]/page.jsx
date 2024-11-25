@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { fetchData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
+import { formatNumberToIndonesian } from "@/tools/formatNumber";
 
 export default function DetailPage() {
   const pathname = usePathname();
@@ -68,7 +69,7 @@ export default function DetailPage() {
                 <label className="block text-gray-700">Brix</label>
                 <p className="bg-green-100 w-full p-2 rounded">
                   {detailData.brix !== undefined
-                    ? detailData.brix
+                    ? formatNumberToIndonesian(detailData.brix)
                     : "Data tidak tersedia"}
                 </p>
               </div>
@@ -77,7 +78,7 @@ export default function DetailPage() {
                 <label className="block text-gray-700">Pol</label>
                 <p className="bg-green-100 w-full p-2 rounded">
                   {detailData.pol !== undefined
-                    ? detailData.pol
+                    ? formatNumberToIndonesian(detailData.pol)
                     : "Data tidak tersedia"}
                 </p>
               </div>
@@ -88,7 +89,7 @@ export default function DetailPage() {
                 </label>
                 <p className="bg-green-100 w-full p-2 rounded">
                   {detailData.hk !== undefined
-                    ? detailData.hk
+                    ? formatNumberToIndonesian(detailData.hk)
                     : "Data tidak tersedia"}
                 </p>
               </div>
@@ -97,7 +98,7 @@ export default function DetailPage() {
                 <label className="block text-gray-700">Nilai Nira (NN)</label>
                 <p className="bg-green-100 w-full p-2 rounded">
                   {detailData.nn !== undefined
-                    ? detailData.nn
+                    ? formatNumberToIndonesian(detailData.nn)
                     : "Data tidak tersedia"}
                 </p>
               </div>
@@ -108,7 +109,7 @@ export default function DetailPage() {
                 </label>
                 <p className="bg-green-100 w-full p-2 rounded">
                   {detailData.fk !== undefined
-                    ? detailData.fk
+                    ? formatNumberToIndonesian(detailData.fk)
                     : "Data tidak tersedia"}
                 </p>
               </div>
@@ -121,7 +122,7 @@ export default function DetailPage() {
                 </h3>
                 <div className="bg-green-100 p-8 rounded-b-lg">
                   <p className="text-center text-6xl font-bold">
-                    {detailData.nilaiRendemen}%
+                    {formatNumberToIndonesian(detailData.nilaiRendemen)}%
                   </p>
                 </div>
               </div>

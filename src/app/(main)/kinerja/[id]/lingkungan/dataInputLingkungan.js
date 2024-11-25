@@ -1,6 +1,6 @@
 export const dataL1 = [
   { isSubtitle: true, label: "Amonia (NH3) (ppm)" },
-  { isSubtitle: true, label: "Desa Kerticala" },
+  { isSubtitle: true, label: "Desa 1" },
 
   {
     label: "Pengukuran 1",
@@ -18,7 +18,7 @@ export const dataL1 = [
     onSubmit: () => handleUpdate("amoniaDesaA2", formData.amoniaDesaA2),
     locked: lockedStatus["amoniaDesaA2"],
   },
-  { isSubtitle: true, label: "Desa Sumber Kulon" },
+  { isSubtitle: true, label: "Desa 2" },
   {
     label: "Pengukuran 1",
     inputType: "number",
@@ -36,7 +36,7 @@ export const dataL1 = [
     locked: lockedStatus["amoniaDesaB2"],
   },
   { isSubtitle: true, label: "Hidrogen Sulfida (H2S) (ppm)" },
-  { isSubtitle: true, label: "Desa Kerticala" },
+  { isSubtitle: true, label: "Desa 1" },
   {
     label: "Pengukuran 1",
     inputType: "number",
@@ -53,7 +53,7 @@ export const dataL1 = [
     onSubmit: () => handleUpdate("sulfidaDesaA2", formData.sulfidaDesaA2),
     locked: lockedStatus["sulfidaDesaA2"],
   },
-  { isSubtitle: true, label: "Desa Sumber Kulon" },
+  { isSubtitle: true, label: "Desa 2" },
   {
     label: "Pengukuran 1",
     inputType: "number",
@@ -73,7 +73,7 @@ export const dataL1 = [
 ];
 
 export const dataL2 = [
-  { isSubtitle: true, label: "Desa Kerticala" },
+  { isSubtitle: true, label: "Desa 1" },
 
   {
     label: "Pengukuran 1",
@@ -89,7 +89,7 @@ export const dataL2 = [
     onChange: (e) => handleInputChange("debuDesaA2", e.target.value),
     onSubmit: () => handleUpdate("debuDesaA2", formData.debuDesaA2),
   },
-  { isSubtitle: true, label: "Desa Sumber Kulon" },
+  { isSubtitle: true, label: "Desa 2" },
   {
     label: "Pengukuran 1",
     inputType: "number",
@@ -147,7 +147,7 @@ export const dataL4 = [
     onSubmit: () => handleUpdate("bisingProduksi2", formData.bisingProduksi2),
   },
   { isSubtitle: true, label: "Kebisingan Lokal" },
-  { isSubtitle: true, label: "Desa Kerticala" },
+  { isSubtitle: true, label: "Desa 1" },
   {
     label: "Pengukuran 1",
     inputType: "number",
@@ -162,7 +162,7 @@ export const dataL4 = [
     onChange: (e) => handleInputChange("bisingDesaA2", e.target.value),
     onSubmit: () => handleUpdate("bisingDesaA2", formData.bisingDesaA2),
   },
-  { isSubtitle: true, label: "Desa Sumber Kulon" },
+  { isSubtitle: true, label: "Desa 2" },
   {
     label: "Pengukuran 1",
     inputType: "number",
@@ -319,7 +319,7 @@ export const dataL6 = [
   },
   {
     isSubtitle: true,
-    label: "Desa Kerticala",
+    label: "Desa 1",
   },
   {
     label: "Pengukuran 1",
@@ -338,7 +338,7 @@ export const dataL6 = [
 
   {
     isSubtitle: true,
-    label: "Desa Sumber Kulon",
+    label: "Desa 2",
   },
   {
     label: "Pengukuran 1",
@@ -360,7 +360,7 @@ export const dataL6 = [
   },
   {
     isSubtitle: true,
-    label: "Desa Kerticala",
+    label: "Desa 1",
   },
   {
     label: "Pengukuran 1",
@@ -378,7 +378,7 @@ export const dataL6 = [
   },
   {
     isSubtitle: true,
-    label: "Desa Sumber Kulon",
+    label: "Desa 2",
   },
   {
     label: "Pengukuran 1",
@@ -401,7 +401,7 @@ export const dataL6 = [
   },
   {
     isSubtitle: true,
-    label: "Desa Kerticala",
+    label: "Desa 1",
   },
   {
     label: "Pengukuran 1",
@@ -419,7 +419,7 @@ export const dataL6 = [
   },
   {
     isSubtitle: true,
-    label: "Desa Sumber Kulon",
+    label: "Desa 2",
   },
   {
     label: "Pengukuran 1",
@@ -441,7 +441,7 @@ export const dataL6 = [
   },
   {
     isSubtitle: true,
-    label: "Desa Kerticala",
+    label: "Desa 1",
   },
 
   {
@@ -460,7 +460,7 @@ export const dataL6 = [
   },
   {
     isSubtitle: true,
-    label: "Desa Sumber Kulon",
+    label: "Desa 2",
   },
 
   {

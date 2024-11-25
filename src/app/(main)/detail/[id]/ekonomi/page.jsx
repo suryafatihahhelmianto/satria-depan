@@ -3,6 +3,7 @@
 import OpsiDetail from "@/components/OpsiDetail";
 import SpiderGraph from "@/components/SpiderGraph";
 import { fetchData } from "@/tools/api";
+import { formatNumberToIndonesian } from "@/tools/formatNumber";
 import { getCookie } from "@/tools/getCookie";
 import { usePathname } from "next/navigation";
 import React, { useState, useEffect } from "react";
@@ -126,7 +127,7 @@ export default function DetailPage() {
                   {data.simbol}
                 </td>
                 <td className="px-6 py-4 border-b border-gray-200 text-center text-gray-800 font-semibold">
-                  {data.nilai}
+                  {formatNumberToIndonesian(data.nilai)}
                 </td>
                 <td className="px-6 py-4 border-b border-gray-200 text-center">
                   {/* Bar horizontal untuk prioritas indikator */}
@@ -138,7 +139,7 @@ export default function DetailPage() {
                       }}
                     ></div>
                     <span className="ml-2 text-gray-700 font-medium">
-                      {data.nilai}
+                      {formatNumberToIndonesian(data.nilai)}
                     </span>
                   </div>
                 </td>

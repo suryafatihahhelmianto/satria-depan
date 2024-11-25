@@ -266,7 +266,7 @@ export default function LingkunganPage() {
 
   const dataL1 = [
     { isSubtitle: true, label: "Amonia (NH3) (ppm)" },
-    { isSubtitle: true, label: "Desa Kerticala" },
+    { isSubtitle: true, label: "Desa 1" },
 
     {
       label: "Pengukuran 1",
@@ -286,7 +286,7 @@ export default function LingkunganPage() {
       locked: lockedStatus["amoniaDesaA2"],
       fieldName: "amoniaDesaA2",
     },
-    { isSubtitle: true, label: "Desa Sumber Kulon" },
+    { isSubtitle: true, label: "Desa 2" },
     {
       label: "Pengukuran 1",
       inputType: "number",
@@ -306,7 +306,7 @@ export default function LingkunganPage() {
       fieldName: "amoniaDesaB2",
     },
     { isSubtitle: true, label: "Hidrogen Sulfida (H2S) (ppm)" },
-    { isSubtitle: true, label: "Desa Kerticala" },
+    { isSubtitle: true, label: "Desa 1" },
     {
       label: "Pengukuran 1",
       inputType: "number",
@@ -325,7 +325,7 @@ export default function LingkunganPage() {
       locked: lockedStatus["sulfidaDesaA2"],
       fieldName: "sulfidaDesaA2",
     },
-    { isSubtitle: true, label: "Desa Sumber Kulon" },
+    { isSubtitle: true, label: "Desa 2" },
     {
       label: "Pengukuran 1",
       inputType: "number",
@@ -347,7 +347,7 @@ export default function LingkunganPage() {
   ];
 
   const dataL2 = [
-    { isSubtitle: true, label: "Desa Kerticala" },
+    { isSubtitle: true, label: "Desa 1" },
 
     {
       label: "Pengukuran 1",
@@ -367,7 +367,7 @@ export default function LingkunganPage() {
       locked: lockedStatus["debuDesaA2"],
       fieldName: "debuDesaA2",
     },
-    { isSubtitle: true, label: "Desa Sumber Kulon" },
+    { isSubtitle: true, label: "Desa 2" },
     {
       label: "Pengukuran 1",
       inputType: "number",
@@ -439,7 +439,7 @@ export default function LingkunganPage() {
       fieldName: "bisingProduksi2",
     },
     { isSubtitle: true, label: "Kebisingan Lokal" },
-    { isSubtitle: true, label: "Desa Kerticala" },
+    { isSubtitle: true, label: "Desa 1" },
     {
       label: "Pengukuran 1",
       inputType: "number",
@@ -458,7 +458,7 @@ export default function LingkunganPage() {
       locked: lockedStatus["bisingDesaA2"],
       fieldName: "bisingDesaA2",
     },
-    { isSubtitle: true, label: "Desa Sumber Kulon" },
+    { isSubtitle: true, label: "Desa 2" },
     {
       label: "Pengukuran 1",
       inputType: "number",
@@ -653,7 +653,7 @@ export default function LingkunganPage() {
     },
     {
       isSubtitle: true,
-      label: "Desa Kerticala",
+      label: "Desa 1",
     },
     {
       label: "Pengukuran 1",
@@ -676,7 +676,7 @@ export default function LingkunganPage() {
 
     {
       isSubtitle: true,
-      label: "Desa Sumber Kulon",
+      label: "Desa 2",
     },
     {
       label: "Pengukuran 1",
@@ -702,7 +702,7 @@ export default function LingkunganPage() {
     },
     {
       isSubtitle: true,
-      label: "Desa Kerticala",
+      label: "Desa 1",
     },
     {
       label: "Pengukuran 1",
@@ -724,7 +724,7 @@ export default function LingkunganPage() {
     },
     {
       isSubtitle: true,
-      label: "Desa Sumber Kulon",
+      label: "Desa 2",
     },
     {
       label: "Pengukuran 1",
@@ -749,7 +749,7 @@ export default function LingkunganPage() {
     },
     {
       isSubtitle: true,
-      label: "Desa Kerticala",
+      label: "Desa 1",
     },
     {
       label: "Pengukuran 1",
@@ -771,7 +771,7 @@ export default function LingkunganPage() {
     },
     {
       isSubtitle: true,
-      label: "Desa Sumber Kulon",
+      label: "Desa 2",
     },
     {
       label: "Pengukuran 1",
@@ -797,7 +797,7 @@ export default function LingkunganPage() {
     },
     {
       isSubtitle: true,
-      label: "Desa Kerticala",
+      label: "Desa 1",
     },
 
     {
@@ -820,7 +820,7 @@ export default function LingkunganPage() {
     },
     {
       isSubtitle: true,
-      label: "Desa Sumber Kulon",
+      label: "Desa 2",
     },
 
     {

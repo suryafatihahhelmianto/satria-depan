@@ -3,6 +3,7 @@
 import OpsiDetail from "@/components/OpsiDetail";
 import SpiderGraph from "@/components/SpiderGraph";
 import { fetchData } from "@/tools/api";
+import { formatNumberToIndonesian } from "@/tools/formatNumber";
 import { getCookie } from "@/tools/getCookie";
 import { usePathname } from "next/navigation";
 import React, { useState, useEffect } from "react";
@@ -14,6 +15,14 @@ export default function HasilPage() {
 
   const [dataHasil, setDataHasil] = useState([]);
   const [dataSpiderHasil, setDataSpiderHasil] = useState([]);
+
+  const getKategori = (nilai) => {
+    if (nilai >= 0 && nilai <= 25) return "Tidak Berkelanjutan";
+    if (nilai > 25 && nilai <= 50) return "Kurang Berkelanjutan";
+    if (nilai > 50 && nilai <= 75) return "Cukup Berkelanjutan";
+    if (nilai > 75 && nilai <= 100) return "Berkelanjutan";
+    return "Tidak Diketahui";
+  };
 
   useEffect(() => {
     const fetchHasilKinerja = async () => {
@@ -34,35 +43,37 @@ export default function HasilPage() {
           {
             dimensi: "Sumberdaya (D)",
             nilai: response.nilaiDimenSDAM?.toFixed(1),
-            kategori: "Kurang Berkelanjutan",
+            kategori: getKategori(response.nilaiDimenSDAM),
           },
           {
             dimensi: "Ekonomi (E)",
             nilai: response.nilaiDimenEkono?.toFixed(1),
-            kategori: "Kurang Berkelanjutan",
+            kategori: getKategori(response.nilaiDimenEkono),
           },
           {
             dimensi: "Lingkungan (L)",
             nilai: response.nilaiDimenLingku?.toFixed(1),
-            kategori: "Berkelanjutan",
+            kategori: getKategori(response.nilaiDimenLingku),
           },
           {
             dimensi: "Sosial (S)",
             nilai: response.nilaiDimenSosial?.toFixed(1),
-            kategori: "Cukup Berkelanjutan",
+            kategori: getKategori(response.nilaiDimenSosial),
           },
           {
             dimensi: "Total Nilai Kinerja",
             nilai: response.nilaiKinerja?.toFixed(1),
-            kategori: "Berkelanjutan",
+            kategori: getKategori(response.nilaiKinerja),
           },
         ];
 
-        // Prepare data for the SpiderGraph
-        const spiderData = dataTable.map((item) => ({
-          subject: item.dimensi,
-          A: item.nilai,
-        }));
+        // Prepare data for the SpiderGraph (exclude "Total Nilai Kinerja")
+        const spiderData = dataTable
+          .filter((item) => item.dimensi !== "Total Nilai Kinerja")
+          .map((item) => ({
+            subject: item.dimensi,
+            A: item.nilai,
+          }));
 
         setDataHasil(dataTable);
         setDataSpiderHasil(spiderData);
@@ -107,7 +118,7 @@ export default function HasilPage() {
                   {row.dimensi}
                 </td>
                 <td className="px-6 py-4 border-b border-gray-200 text-center text-gray-800 font-semibold">
-                  {row.nilai}
+                  {formatNumberToIndonesian(row.nilai)}
                 </td>
                 <td
                   className={`px-6 py-4 border-b border-gray-200 text-center font-medium ${
@@ -115,6 +126,8 @@ export default function HasilPage() {
                       ? "text-green-600"
                       : row.kategori === "Cukup Berkelanjutan"
                       ? "text-yellow-600"
+                      : row.kategori === "Kurang Berkelanjutan"
+                      ? "text-orange-600"
                       : "text-red-600"
                   }`}
                 >

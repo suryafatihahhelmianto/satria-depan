@@ -14,6 +14,7 @@ import {
 } from "react-icons/ai";
 import Skeleton from "@/components/common/Skeleton";
 import { getCookie } from "@/tools/getCookie";
+import { formatNumberToIndonesian } from "@/tools/formatNumber";
 
 export default function RendemenPage() {
   const [loading, setLoading] = useState(true);
@@ -189,7 +190,7 @@ export default function RendemenPage() {
                     </td>
                     <td className="py-2 px-4 border-b">{session.blokKebun}</td>
                     <td className="py-2 px-4 border-b">
-                      {session.nilaiRendemen}
+                      {formatNumberToIndonesian(session.nilaiRendemen)}
                     </td>
                     <td className="py-2 px-4 border-b text-center">
                       <div className="flex justify-center items-center gap-2 mx-auto">

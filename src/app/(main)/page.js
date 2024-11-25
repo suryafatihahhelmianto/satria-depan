@@ -14,6 +14,7 @@ import { getCookie } from "@/tools/getCookie";
 import "react-circular-progressbar/dist/styles.css";
 import "react-datepicker/dist/react-datepicker.css";
 import GridCardSkeleton from "@/components/common/GridCardSkeleton";
+import { formatNumberToIndonesian } from "@/tools/formatNumber";
 
 const getKategori = (nilaiKinerja) => {
   if (nilaiKinerja >= 0 && nilaiKinerja <= 25) {
@@ -194,7 +195,10 @@ export default function HomePage() {
               >
                 <CircularProgressbar
                   value={selectedYearData?.nilaiKinerja.toFixed(2) || 0}
-                  text={`${selectedYearData?.nilaiKinerja.toFixed(2) || 0}%`}
+                  text={`${
+                    formatNumberToIndonesian(selectedYearData?.nilaiKinerja) ||
+                    0
+                  }%`}
                   styles={buildStyles({
                     pathColor: "#4CAF50",
                     textColor: "#4CAF50",
@@ -264,7 +268,7 @@ export default function HomePage() {
               <div className="flex flex-col items-center justify-center mb-6 h-full">
                 {/* Tampilkan nilai rata-rata rendemen */}
                 <div className="text-5xl font-bold mb-4">
-                  {rataRataRendemen || 0}%
+                  {formatNumberToIndonesian(rataRataRendemen) || 0}%
                 </div>
 
                 {/* Bar indikator */}
@@ -322,7 +326,7 @@ export default function HomePage() {
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 mt-6">
         <div className="bg-white p-4 rounded-lg shadow-md">
           <h2 className="text-xl font-semibold mb-2 text-center">
-            Kinerja Keberlanjutan Rantai Pasok{" "}
+            Kinerja Keberlanjutan Rantai Pasok PG{" "}
             {selectedFactory ? selectedFactory.namaPabrik : "Pabrik"}{" "}
             {/* {selectedYear} */}
           </h2>
