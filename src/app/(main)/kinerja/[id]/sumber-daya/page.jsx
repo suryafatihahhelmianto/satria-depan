@@ -42,7 +42,7 @@ export default function SumberDayaPage() {
 
     luasBL: 0, // dataD8
     luasPST41: 0, // dataD8
-    PS864: 0, // dataD8
+    luasPS864: 0, // dataD8
     luasTotal: 0, // dataD8
 
     tingkatMekanisasi: 0, // dataD9
@@ -88,9 +88,9 @@ export default function SumberDayaPage() {
         },
         data,
       });
-      fetchSDAMData();
-      router.refresh();
-      console.log("Update successful (sdam)");
+      // fetchSDAMData();
+      // router.refresh();
+      // console.log("Update successful (sdam)");
     } catch (error) {
       console.error("Error updating field (sdam): ", error);
     }
@@ -166,7 +166,7 @@ export default function SumberDayaPage() {
 
         luasBL: response.luasBL, // dataD8
         luasPST41: response.luasPST41, // dataD8
-        PS864: response.PS864, // dataD8
+        luasPS864: response.luasPS864, // dataD8
         luasTotal: response.luasTotal, // dataD8
 
         tingkatMekanisasi: response.tingkatMekanisasi, // dataD9
@@ -385,11 +385,11 @@ export default function SumberDayaPage() {
     {
       label: "Luas PS864",
       inputType: "number",
-      value: formData.PS864,
-      onChange: (e) => handleInputChange("PS864", e.target.value),
-      onSubmit: () => handleUpdate("PS864", formData.PS864),
-      locked: lockedStatus["PS864"],
-      fieldName: "PS864",
+      value: formData.luasPS864,
+      onChange: (e) => handleInputChange("luasPS864", e.target.value),
+      onSubmit: () => handleUpdate("luasPS864", formData.luasPS864),
+      locked: lockedStatus["luasPS864"],
+      fieldName: "luasPS864",
     },
     {
       label: "Total Luas Lahan yang ditanam Tahun Ini",

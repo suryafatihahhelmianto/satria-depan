@@ -17,6 +17,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/img/logo-satria-keren.png" type="image/png" />
+      </head>
       <body className={`${poppins.className} bg-gray-100`}>{children}</body>
     </html>
   );
