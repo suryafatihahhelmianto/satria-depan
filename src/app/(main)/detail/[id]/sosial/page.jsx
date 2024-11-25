@@ -38,36 +38,42 @@ export default function DetailPage() {
             indikator: "Dukungan Kelembagaan terhadap Rantai Pasok ",
             simbol: "S1",
             nilai: (response.dukunganLembaga * 100).toFixed(1),
+            leverage: response.leverageDukunganLembaga,
           },
           {
             id: 2,
             indikator: "Ketersediaan Infrastruktur sebagai Penunjang Aktivitas",
             simbol: "S2",
             nilai: (response.tersediaaInfrast * 100).toFixed(1),
+            leverage: response.leverageTersediaaInfrast,
           },
           {
             id: 3,
             indikator: "Manfaat Corporate Sosial Responsibility bagi Sosial",
             simbol: "S3",
             nilai: (response.manfaatSosial * 100).toFixed(1),
+            leverage: response.leverageManfaatSosial,
           },
           {
             id: 4,
             indikator: "Keluhan Limbah Rantai Pasok Industri",
             simbol: "S4",
             nilai: (response.keluhanLimbah * 100).toFixed(1),
+            leverage: response.leverageKeluhanLimbah,
           },
           {
             id: 5,
             indikator: "Penyerapan Tenaga Kerja Lokal",
             simbol: "S5",
             nilai: (response.penyerapLokal * 100).toFixed(1),
+            leverage: response.leveragePenyerapLokal,
           },
           {
             id: 6,
             indikator: "Peningkatan Keikutsertaan Stakeholder Kemitraan",
             simbol: "S6",
             nilai: (response.ikutMitra * 100).toFixed(1),
+            leverage: response.leverageIkutMitra,
           },
         ];
 
@@ -135,11 +141,11 @@ export default function DetailPage() {
                     <div
                       className="bg-ijoTebu h-2"
                       style={{
-                        width: `${(data.nilai / 100) * 90}px`, // Panjang bar diatur proporsional, bisa disesuaikan
+                        width: `${(data.leverage / 100) * 90}px`, // Panjang bar diatur proporsional, bisa disesuaikan
                       }}
                     ></div>
                     <span className="ml-2 text-gray-700 font-medium">
-                      {formatNumberToIndonesian(data.nilai)}
+                      {formatNumberToIndonesian(data.leverage)}
                     </span>
                   </div>
                 </td>

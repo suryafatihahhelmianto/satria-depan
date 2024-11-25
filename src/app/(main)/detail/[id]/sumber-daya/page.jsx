@@ -31,6 +31,8 @@ export default function DetailPage() {
           }
         );
 
+        console.log("ini respon detail sdam: ", response);
+
         // Prepare data for the table
         const dataTable = [
           {
@@ -38,48 +40,56 @@ export default function DetailPage() {
             indikator: "Kemudahan Akses Sumber Daya Tenaga Kerja",
             simbol: "D1",
             nilai: (response.aksesTenagKerja * 100).toFixed(1),
+            leverage: response.leverageAksesTenagKerja,
           },
           {
             id: 2,
             indikator: "Tingkat Luas Tanam TRI",
             simbol: "D2",
             nilai: (response.luasTanamTRI * 100).toFixed(1),
+            leverage: response.leverageLuasTanamTRI,
           },
           {
             id: 3,
             indikator: "Kompetensi Tenaga Kerja",
             simbol: "D3",
             nilai: (response.kompeTenagKerja * 100).toFixed(1),
+            leverage: response.leverageKompeTenagKerja,
           },
           {
             id: 4,
             indikator: "Kualitas Bahan Baku",
             simbol: "D4",
             nilai: (response.kualiBahanBaku * 100).toFixed(1),
+            leverage: response.leverageKualiBahanBaku,
           },
           {
             id: 5,
             indikator: "Overall Recovery",
             simbol: "D5",
             nilai: (response.efesiensPabrik * 100).toFixed(1),
+            leverage: response.leverageEfesiensPabrik,
           },
           {
             id: 6,
             indikator: "Kecukupan Bahan Baku",
             simbol: "D6",
             nilai: (response.cukupBahanBaku * 100).toFixed(1),
+            leverage: response.leverageCukupBahanBaku,
           },
           {
             id: 7,
             indikator: "Tingkat Ratoon Tebu",
             simbol: "D7",
             nilai: (response.tingkatRatoon * 100).toFixed(1),
+            leverage: response.leverageTingkatRatoon,
           },
           {
             id: 8,
             indikator: "Varietas Tebu yang Responsif Terhadap Kondisi Lahan",
             simbol: "D8",
             nilai: (response.varieTebuRespon * 100).toFixed(1),
+            leverage: response.leverageVarieTebuRespon,
           },
           {
             id: 9,
@@ -87,12 +97,14 @@ export default function DetailPage() {
               "Tingkat Penggunaan Mekanisasi yang Tepat dan Sesuai Kebutuhan",
             simbol: "D9",
             nilai: (response.tingkatMekanis * 100).toFixed(1),
+            leverage: response.leverageTingkatMekanis,
           },
           {
             id: 10,
             indikator: "Teknologi Pengolahan Raw Sugar",
             simbol: "D10",
             nilai: (response.teknoOlahGula * 100).toFixed(1),
+            leverage: response.leverageTeknoOlahGula,
           },
         ];
 
@@ -160,11 +172,11 @@ export default function DetailPage() {
                     <div
                       className="bg-ijoTebu h-2"
                       style={{
-                        width: `${(data.nilai / 100) * 90}px`, // Panjang bar diatur proporsional, bisa disesuaikan
+                        width: `${(data.leverage / 100) * 90}px`, // Panjang bar diatur proporsional, bisa disesuaikan
                       }}
                     ></div>
                     <span className="ml-2 text-gray-700 font-medium">
-                      {formatNumberToIndonesian(data.nilai)}
+                      {formatNumberToIndonesian(data.leverage)}
                     </span>
                   </div>
                 </td>

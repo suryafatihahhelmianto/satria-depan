@@ -38,42 +38,49 @@ export default function DetailPage() {
             indikator: "Tingkat Bau",
             simbol: "L1",
             nilai: (response.tingkatBau * 100).toFixed(1),
+            leverage: response.leverageTingkatBau,
           },
           {
             id: 2,
             indikator: "Tingkat Debu",
             simbol: "L2",
             nilai: (response.tingkatDebu * 100).toFixed(1),
+            leverage: response.leverageTingkatDebu,
           },
           {
             id: 3,
             indikator: "Emisi Listrik",
             simbol: "L3",
             nilai: (response.emisiListrik * 100).toFixed(1),
+            leverage: response.leverageEmisiListrik,
           },
           {
             id: 4,
             indikator: "Kebisingan",
             simbol: "L4",
             nilai: (response.kebisingan * 100).toFixed(1),
+            leverage: response.leverageKebisingan,
           },
           {
             id: 5,
             indikator: "Air Muka Tanah",
             simbol: "L5",
             nilai: (response.airMukaan * 100).toFixed(1),
+            leverage: response.leverageAirMukaan,
           },
           {
             id: 6,
             indikator: "Udara Ambien",
             simbol: "L6",
             nilai: (response.udaraAmbien * 100).toFixed(1),
+            leverage: response.leverageUdaraAmbien,
           },
           {
             id: 7,
             indikator: "Udara Ruangan",
             simbol: "L7",
             nilai: (response.udaraRuang * 100).toFixed(1),
+            leverage: response.leverageUdaraRuang,
           },
         ];
 
@@ -141,11 +148,11 @@ export default function DetailPage() {
                     <div
                       className="bg-ijoTebu h-2"
                       style={{
-                        width: `${(data.nilai / 100) * 90}px`, // Panjang bar diatur proporsional, bisa disesuaikan
+                        width: `${(data.leverage / 100) * 90}px`, // Panjang bar diatur proporsional, bisa disesuaikan
                       }}
                     ></div>
                     <span className="ml-2 text-gray-700 font-medium">
-                      {formatNumberToIndonesian(data.nilai)}
+                      {formatNumberToIndonesian(data.leverage)}
                     </span>
                   </div>
                 </td>

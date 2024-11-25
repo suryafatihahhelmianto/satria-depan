@@ -38,36 +38,42 @@ export default function DetailPage() {
             indikator: "Tingkat Risiko",
             simbol: "E1",
             nilai: (response.tingkatRisiko * 100).toFixed(1),
+            leverage: response.leverageTingkatRisiko,
           },
           {
             id: 2,
             indikator: "Hilangnya Produksi",
             simbol: "E2",
             nilai: (response.hilangProduksi * 100).toFixed(1),
+            leverage: response.leverageHilangProduksi,
           },
           {
             id: 3,
             indikator: "Kesenjangan Keuntungan",
             simbol: "E3",
             nilai: (response.kesenjanganKeuntungan * 100).toFixed(1),
+            leverage: response.leverageKesenjanganKeuntungan,
           },
           {
             id: 4,
             indikator: "Harga Patokan Petani",
             simbol: "E4",
             nilai: (response.hargaPatokPetan * 100).toFixed(1),
+            leverage: response.leverageHargaPatokPetan,
           },
           {
             id: 5,
             indikator: "Tingkat Ketangkasan",
             simbol: "E5",
             nilai: (response.tingkatKetangkasan * 100).toFixed(1),
+            leverage: response.leverageTingkatKetangkasan,
           },
           {
             id: 6,
             indikator: "Return on Investment (ROI)",
             simbol: "E6",
             nilai: (response.returnOnInvestment * 100).toFixed(1),
+            leverage: response.leverageReturnOnInvestment,
           },
         ];
 
@@ -135,11 +141,11 @@ export default function DetailPage() {
                     <div
                       className="bg-ijoTebu h-2"
                       style={{
-                        width: `${(data.nilai / 100) * 90}px`, // Panjang bar diatur proporsional, bisa disesuaikan
+                        width: `${(data.leverage / 100) * 90}px`, // Panjang bar diatur proporsional, bisa disesuaikan
                       }}
                     ></div>
                     <span className="ml-2 text-gray-700 font-medium">
-                      {formatNumberToIndonesian(data.nilai)}
+                      {formatNumberToIndonesian(data.leverage)}
                     </span>
                   </div>
                 </td>
