@@ -4,11 +4,12 @@ import { useState, useEffect, useCallback } from "react";
 import { fetchData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
 import KinerjaTable from "@/components/table/KinerjaTable"; // Import the KinerjaTable component
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Skeleton from "@/components/common/Skeleton";
 import { useUser } from "@/context/UserContext";
 
 export default function DataKinerja() {
+  const router = useRouter();
   const { isAdmin, role } = useUser();
   const pathname = usePathname();
   const idMatch = pathname.match(/\/kinerja\/([a-zA-Z0-9]+)/);
@@ -33,9 +34,12 @@ export default function DataKinerja() {
 
   const [lockedStatus, setLockedStatus] = useState({});
   const [loading, setLoading] = useState(true);
+  const [isFormDirty, setIsFormDirty] = useState(false);
+  const [currentPath, setCurrentPath] = useState(pathname);
 
   const handleInputChange = (field, value) => {
     setFormData({ ...formData, [field]: value });
+    setIsFormDirty(true);
   };
 
   const handleUpdate = async (field, value) => {
@@ -57,6 +61,7 @@ export default function DataKinerja() {
       });
       console.log("Update successful");
       fetchEkonomi();
+      setIsFormDirty(false);
     } catch (error) {
       console.error("Error updating field: ", error);
     }
@@ -73,7 +78,6 @@ export default function DataKinerja() {
         },
         data: dataToSend,
       });
-      console.log("Response dari server: ", response);
     } catch (error) {
       console.error("Error calculating dimensions: ", error);
     }
@@ -114,6 +118,39 @@ export default function DataKinerja() {
   useEffect(() => {
     fetchEkonomi();
   }, [fetchEkonomi]);
+
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      if (isFormDirty) {
+        e.preventDefault();
+        e.returnValue = "";
+      }
+    };
+
+    const handleRouteChange = () => {
+      if (isFormDirty) {
+        const confirm = window.confirm(
+          "Ada perubahan pada data yang belum disimpan. Apakah Anda yakin ingin meninggalkan halaman ini?"
+        );
+        if (!confirm) {
+          router.push(currentPath);
+          return;
+        }
+        setIsFormDirty(false);
+      }
+      setCurrentPath(pathname);
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    if (currentPath !== pathname) {
+      handleRouteChange();
+    }
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [isFormDirty, pathname, currentPath, router]);
 
   if (loading) {
     return (

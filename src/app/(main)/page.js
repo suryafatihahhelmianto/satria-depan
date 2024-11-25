@@ -179,7 +179,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 xl:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-2 gap-4">
         <div className="bg-white p-4 md:p-6 rounded-lg shadow-md flex flex-col items-center">
           <div className="w-full mb-4">
             <h1 className="text-xl font-semibold">
@@ -263,16 +263,16 @@ export default function HomePage() {
             <h1 className="text-xl font-semibold">Nilai Prediksi Rendemen</h1>
           </div>
 
-          <div className="flex flex-col md:flex-row justify-around gap-5 w-full h-full">
+          <div className="flex flex-col sm:flex-row justify-around gap-5 w-full h-full">
             <div className="flex flex-col items-center justify-center mb-6 h-full">
               <div className="flex flex-col items-center justify-center mb-6 h-full">
                 {/* Tampilkan nilai rata-rata rendemen */}
-                <div className="text-5xl font-bold mb-4">
+                <div className="text-3xl xl:text-5xl font-bold mb-4">
                   {formatNumberToIndonesian(rataRataRendemen) || 0}%
                 </div>
 
                 {/* Bar indikator */}
-                <div className="relative w-full md:w-60 h-9 rounded-full bg-gradient-to-r from-red-500 via-yellow-500 to-green-500">
+                <div className="relative w-32 2xl:w-52 h-6 rounded-full bg-gradient-to-r from-red-500 via-yellow-500 to-green-500">
                   <div
                     className="absolute top-1/2 transform -translate-y-1/2 -translate-x-1/2 border-2 border-gray-700 bg-transparent"
                     style={{

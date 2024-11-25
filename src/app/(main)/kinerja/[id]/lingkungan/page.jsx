@@ -948,12 +948,16 @@ export default function LingkunganPage() {
                 title="Tingkat Gangguan Bau Agroindustri pada Masyarakat (L1)"
                 rows={dataL1}
                 isAdmin={isAdmin}
+                type={"lingkungan"}
+                sesiId={sesiId}
               />
 
               <KinerjaTable
                 title="Tingkat Gangguan Debu Agroindustri pada Masyarakat (L2)"
                 rows={dataL2}
                 isAdmin={isAdmin}
+                type={"lingkungan"}
+                sesiId={sesiId}
               />
             </div>
           )}
@@ -963,6 +967,8 @@ export default function LingkunganPage() {
               title="Emisi Listrik (L3)"
               rows={dataL3}
               isAdmin={isAdmin}
+              type={"lingkungan"}
+              sesiId={sesiId}
             />
           )}
 
@@ -972,6 +978,8 @@ export default function LingkunganPage() {
                 title="Kebisingan (L4)"
                 rows={dataL4}
                 isAdmin={isAdmin}
+                type={"lingkungan"}
+                sesiId={sesiId}
               />
 
               {/* <KinerjaTable title="Kualitas Air Permukaan (L5)" rows={dataL5} /> */}
@@ -987,11 +995,15 @@ export default function LingkunganPage() {
                 title="Kualitas Udara Ambien (L6)"
                 rows={dataL6}
                 isAdmin={isAdmin}
+                type={"lingkungan"}
+                sesiId={sesiId}
               />
               <KinerjaTable
                 title="Kualitas Udara Ruang Kerja (L7)"
                 rows={dataL7}
                 isAdmin={isAdmin}
+                type={"lingkungan"}
+                sesiId={sesiId}
               />
             </div>
           )}
