@@ -203,7 +203,10 @@ export default function TableInputRow({
                   <AiFillCheckCircle />
                 )
               ) : (
-                <AiFillExclamationCircle className="animate-pulse text-red-500" />
+                <div className="flex flex-col gap-2 justify-center items-center">
+                  <AiFillExclamationCircle className="animate-pulse text-red-500" />
+                  <span className="text-sm text-red-400">Simpan</span>
+                </div>
               )}
             </button>
           )}

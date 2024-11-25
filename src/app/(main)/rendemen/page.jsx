@@ -137,12 +137,12 @@ export default function RendemenPage() {
         <div className="flex justify-end font-bold gap-2 text-xl">
           <Link
             href={"/rendemen/statistics"}
-            className="bg-gray-400 hover:bg-gray-500 hover:cursor-pointer p-2 rounded-lg flex items-center"
+            className="bg-green-800 hover:bg-green-900 text-white hover:cursor-pointer p-2 rounded-lg flex items-center"
           >
             <AiOutlineLineChart />
           </Link>
           <button
-            className="flex items-center gap-2 bg-gray-400 hover:bg-gray-500 hover:cursor-pointer p-2 rounded-lg"
+            className="flex items-center gap-2 bg-green-800 hover:bg-green-900 text-white hover:cursor-pointer p-2 rounded-lg"
             onClick={fetchCSVData}
           >
             <p>Unduh</p>

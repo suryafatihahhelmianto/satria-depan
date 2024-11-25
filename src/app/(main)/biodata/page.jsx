@@ -58,7 +58,7 @@ export default function BiodataPage() {
             </div> */}
             <h2 className="text-2xl font-bold text-green-800">{user.name}</h2>
             <p className="text-sm text-green-600">{user.level}</p>
-            <div className="mt-6 flex gap-4">
+            {/* <div className="mt-6 flex gap-4">
               <button className="p-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -90,7 +90,7 @@ export default function BiodataPage() {
                   <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
                 </svg>
               </button>
-            </div>
+            </div> */}
           </div>
           <div className="md:w-2/3 p-8">
             <h3 className="text-xl font-semibold text-green-800 mb-4">

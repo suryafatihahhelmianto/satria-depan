@@ -167,8 +167,8 @@ export default function HomePage() {
                 key={factory.id}
                 className={`flex items-center cursor-pointer rounded-md p-2 transition-colors duration-300 ${
                   selectedFactory?.id === factory.id
-                    ? "bg-gray-600 text-white"
-                    : "bg-gray-300 text-gray-800"
+                    ? "bg-green-800 text-white"
+                    : "bg-gray-300 hover:bg-gray-400 text-gray-800"
                 }`}
                 onClick={() => handleFactoryChange(factory)}
               >

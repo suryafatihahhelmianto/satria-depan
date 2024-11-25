@@ -22,7 +22,12 @@ export default function KinerjaPage() {
 
   const [pabrikList, setPabrikList] = useState([]);
   const [loading, setLoading] = useState(true); // State untuk loading
+
+  const [success, setSuccess] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
   const [error, setError] = useState(null); // State untuk menyimpan error jika ada
+
   const [isModalOpen, setIsModalOpen] = useState(false); // State untuk mengontrol modal
   const [isEditModalOpen, setIsEditModalOpen] = useState(false); // Modal edit
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -78,7 +83,7 @@ export default function KinerjaPage() {
       }
     } catch (error) {
       console.error("Error fetching session and pabrik names: ", error);
-      setError(error.message); // Set error state
+      setError(error.response.data.message); // Set error state
     } finally {
       setLoading(false); // Set loading to false in the finally block
     }
@@ -182,9 +187,11 @@ export default function KinerjaPage() {
       setFormData({ pabrikId: 0, periode: "", batasPengisian: "" });
       setIsModalOpen(false);
       fetchSessionAndPabrikNames();
+      setSuccess("Sesi Pengisian berhasil dibuat");
       // fetchSessions(); // Refresh sesi setelah menambah
     } catch (error) {
       console.error("Error creating session: ", error);
+      setError(error.response.data.message);
     } finally {
       setIsSubmitting(false);
     }
@@ -254,9 +261,9 @@ export default function KinerjaPage() {
     );
   }
 
-  if (error) {
-    return <p>{error}</p>;
-  }
+  // if (error) {
+  //   return <p>{error}</p>;
+  // }
 
   // Generate an array of years for the dropdown
   const currentYear = new Date().getFullYear();
@@ -283,12 +290,12 @@ export default function KinerjaPage() {
         <div className="flex w-full justify-end font-bold gap-2 text-xl">
           <Link
             href={"/kinerja/statistics"}
-            className="bg-gray-400 hover:bg-gray-500 hover:cursor-pointer p-2 rounded-lg flex items-center"
+            className="bg-green-800 hover:bg-green-900 hover:cursor-pointer text-white p-2 rounded-lg flex items-center"
           >
             <AiOutlineLineChart />
           </Link>
           <button
-            className="flex items-center gap-2 bg-gray-400 hover:bg-gray-500 hover:cursor-pointer p-2 rounded-lg"
+            className="flex items-center gap-2 bg-green-800 hover:bg-green-900 text-white hover:cursor-pointer p-2 rounded-lg"
             onClick={fetchCSVKinerja}
           >
             <p>Unduh</p>
@@ -297,6 +304,14 @@ export default function KinerjaPage() {
         </div>
       </div>
 
+      {success && (
+        <div className="mb-4 flex items-center space-x-2">
+          <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-md shadow-md">
+            <p className="font-bold">{success}</p>
+            {/* <p>Your operation was successful!</p> */}
+          </div>
+        </div>
+      )}
       <div className="overflow-x-auto shadow-lg rounded-lg border">
         <table className="min-w-full bg-white border border-gray-200">
           <thead>
@@ -513,6 +528,14 @@ export default function KinerjaPage() {
                 </button>
               </div>
             </form>
+            {error && (
+              <div className="mb-4 flex items-center space-x-2 mt-4">
+                <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md shadow-md">
+                  <p className="font-bold">{error}</p>
+                  {/* <p>Something went wrong. Please try again.</p> */}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}

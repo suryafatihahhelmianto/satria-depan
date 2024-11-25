@@ -100,7 +100,7 @@ export default function KinerjaTableBulan({ data, isAdmin, type, sesiId }) {
 
       <div className="overflow-x-auto mt-4">
         <table className="min-w-full bg-white">
-          <thead className="bg-[#75B798] text-white">
+          <thead className="bg-gradient-to-r from-green-500 to-green-600 text-white">
             <tr>
               <th className="px-4 py-3 text-left border-b border-gray-200">
                 Parameter
@@ -175,7 +175,12 @@ export default function KinerjaTableBulan({ data, isAdmin, type, sesiId }) {
                             {submitLoadingStates[parameterData.fieldName] ? (
                               <AiOutlineLoading className="animate-spin" />
                             ) : (
-                              <AiFillExclamationCircle />
+                              <div className="flex flex-col gap-2 justify-center items-center">
+                                <AiFillExclamationCircle />
+                                <span className="text-sm text-red-400">
+                                  Simpan
+                                </span>
+                              </div>
                             )}
                           </button>
                         )}
