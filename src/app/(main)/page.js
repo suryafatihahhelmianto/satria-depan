@@ -244,12 +244,12 @@ export default function HomePage() {
                   }`}
                 >
                   <p>
-                    {nilaiKinerjaKeberlanjutan[0]?.status === "BELUM_FINAL" ? (
+                    {nilaiKinerjaKeberlanjutan[0]?.status === "FINAL" ? (
+                      "SELESAI"
+                    ) : (
                       <div className="text-center">
                         <span>BELUM SELESAI</span>
                       </div>
-                    ) : (
-                      "SELESAI"
                     )}
                   </p>
                 </div>
