@@ -301,7 +301,7 @@ export default function KinerjaPage() {
             className="flex items-center gap-2 bg-green-800 hover:bg-green-900 text-white hover:cursor-pointer p-2 rounded-lg"
             onClick={fetchCSVKinerja}
           >
-            <p>Unduh</p>
+            <p className="text-sm">Unduh</p>
             <AiOutlineDownload />
           </button>
         </div>
@@ -318,7 +318,7 @@ export default function KinerjaPage() {
       <div className="overflow-x-auto shadow-lg rounded-lg border">
         <table className="min-w-full bg-white border border-gray-200">
           <thead>
-            <tr className="bg-gradient-to-r from-gray-500 to-gray-300 text-black">
+            <tr className="bg-gradient-to-r from-ijoWasis to-ijoDash text-white">
               <th className="py-2 px-4 border-b">Pabrik</th>
               <th className="py-2 px-4 border-b">Periode</th>
               <th className="py-2 px-4 border-b">Batas Pengisian</th>
