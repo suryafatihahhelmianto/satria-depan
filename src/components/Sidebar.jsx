@@ -114,7 +114,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
               </div>
 
               {/* Tulisan di bawah logo */}
-              <span className="mt-2 text-3xl font-extrabold text-center">
+              <span className="mt-3 text-4xl font-extrabold text-center">
                 <span className="text-green-700">Satria</span>
                 <span className="text-white">Keren</span>
               </span>
