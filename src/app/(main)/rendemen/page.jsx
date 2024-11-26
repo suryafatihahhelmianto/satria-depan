@@ -15,8 +15,10 @@ import {
 import Skeleton from "@/components/common/Skeleton";
 import { getCookie } from "@/tools/getCookie";
 import { formatNumberToIndonesian } from "@/tools/formatNumber";
+import { useUser } from "@/context/UserContext";
 
 export default function RendemenPage() {
+  const { role, isAdmin } = useUser();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [sessions, setSessions] = useState([]); // State untuk menyimpan data sesi
@@ -204,12 +206,14 @@ export default function RendemenPage() {
                             <AiOutlineSearch />
                           </button>
                         </Link>
-                        <button
-                          onClick={() => handleDelete(session.id)}
-                          className="bg-red-500 p-2 rounded-lg flex items-center justify-center hover:bg-red-600 text-white"
-                        >
-                          <AiFillDelete />
-                        </button>
+                        {isAdmin && (
+                          <button
+                            onClick={() => handleDelete(session.id)}
+                            className="bg-red-500 p-2 rounded-lg flex items-center justify-center hover:bg-red-600 text-white"
+                          >
+                            <AiFillDelete />
+                          </button>
+                        )}
                       </div>
                     </td>
                   </tr>

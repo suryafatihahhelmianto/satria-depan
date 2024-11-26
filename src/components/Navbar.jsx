@@ -8,8 +8,10 @@ import {
   BsBoxArrowRight,
 } from "react-icons/bs";
 import { AiOutlineMenu } from "react-icons/ai";
+import { useUser } from "@/context/UserContext";
 
 export default function Navbar({ isSidebarOpen, toggleSidebar }) {
+  const { user } = useUser();
   const [isMounted, setIsMounted] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
@@ -58,12 +60,15 @@ export default function Navbar({ isSidebarOpen, toggleSidebar }) {
 
       {/* User Profile Button (aligned to the right) */}
       <div className="relative ml-auto" ref={dropdownRef}>
-        <button
-          onClick={() => setShowDropdown(!showDropdown)}
-          className="rounded-full border text-gray-500 text-4xl p-1 hover:bg-gray-200"
-        >
-          <BsFillPersonFill />
-        </button>
+        <div className="flex gap-2 items-center justify-center">
+          <button
+            onClick={() => setShowDropdown(!showDropdown)}
+            className="rounded-full border text-gray-500 text-4xl p-1 hover:bg-gray-200"
+          >
+            <BsFillPersonFill />
+          </button>
+          <h1>{user.name}</h1>
+        </div>
 
         {/* Dropdown Menu */}
         {showDropdown && (
