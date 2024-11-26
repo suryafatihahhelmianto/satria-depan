@@ -237,7 +237,7 @@ export default function SumberDayaPage() {
       label: "Produktivitas Tenaga Kerja",
     },
     {
-      label: "Jumlah Jam Kerja Efektif Pegawai (Jam/Minggu)",
+      label: "Jam Henti A (%)",
       inputType: "number",
       value: formData.jumlahJamKerjaEfektif,
       onChange: (e) =>
@@ -248,7 +248,7 @@ export default function SumberDayaPage() {
       fieldName: "jumlahJamKerjaEfektif",
     },
     {
-      label: "Total Jam Kerja Pegawai (Jam/Minggu)",
+      label: "Jam Henti B (%)",
       inputType: "number",
       value: formData.totalJamKerja,
       onChange: (e) => handleInputChange("totalJamKerja", e.target.value),
