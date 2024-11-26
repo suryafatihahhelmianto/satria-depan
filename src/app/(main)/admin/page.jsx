@@ -223,7 +223,7 @@ export default function PenggunaPage() {
       <div className="overflow-x-auto shadow-lg rounded-lg border">
         <table className="w-full text-left border-collapse border border-gray-300">
           <thead className="bg-gray-200">
-            <tr className="bg-gradient-to-r from-gray-500 to-gray-300 text-black">
+            <tr className="bg-gradient-to-r from-ijoWasis to-ijoDash text-white">
               <th className="py-2 px-4">Pabrik</th>
               <th className="py-2 px-4">Nama</th>
               <th className="py-2 px-4">Jabatan</th>

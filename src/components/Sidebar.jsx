@@ -97,29 +97,43 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
         {/* Sidebar Title */}
         <Link href="/" className="mb-12 flex justify-center items-center">
           {isOpen ? (
-            <div className="flex gap-2">
-              <Image
-                src={"/img/logo-satria-keren.png"}
-                alt="logo-satria-keren"
-                width={30}
-                height={30}
-              />
+            <div className="flex flex-col items-center gap-2">
+              {/* Logo di atas tulisan */}
+              <div className="relative flex items-center justify-center">
+                {/* Bulatan yang membungkus logo */}
+                <div className="absolute w-16 h-16 rounded-full bg-white animate-spin-slow"></div>
 
-              <span className="text-3xl font-extrabold">
+                {/* Logo */}
+                <Image
+                  src={"/img/logo-satria-keren.png"}
+                  alt="logo-satria-keren"
+                  width={50}
+                  height={50}
+                  className="relative"
+                />
+              </div>
+
+              {/* Tulisan di bawah logo */}
+              <span className="mt-2 text-3xl font-extrabold text-center">
                 <span className="text-green-700">Satria</span>
                 <span className="text-white">Keren</span>
               </span>
             </div>
           ) : (
-            // <span className="text-4xl font-extrabold text-green-700">S</span>
-            <span>
-              <Image
-                src={"/img/logo-satria-keren.png"}
-                alt="logo-satria-keren"
-                width={50}
-                height={50}
-              />
-            </span>
+            <div className="relative flex items-center justify-center">
+              {/* Bulatan pertama dengan animasi berputar */}
+              <div className="absolute w-12 h-12 rounded-full bg-white border-4 border-white animate-spin-slow"></div>
+
+              {/* Logo */}
+              <span className="relative z-10">
+                <Image
+                  src={"/img/logo-satria-keren.png"}
+                  alt="logo-satria-keren"
+                  width={50}
+                  height={50}
+                />
+              </span>
+            </div>
           )}
         </Link>
 

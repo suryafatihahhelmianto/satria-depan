@@ -163,7 +163,7 @@ export default function RendemenPage() {
         <div className="overflow-x-auto shadow-lg rounded-lg border">
           <table className="min-w-full  border border-gray-200">
             <thead>
-              <tr className="bg-gradient-to-r from-gray-500 to-gray-300 text-black">
+              <tr className="bg-gradient-to-r from-ijoWasis to-ijoDash text-white">
                 <th className="py-2 px-4 border-b">Pabrik</th>
                 <th className="py-2 px-4 border-b">Tanggal Prediksi</th>
                 <th className="py-2 px-4 border-b">Blok Kebun</th>

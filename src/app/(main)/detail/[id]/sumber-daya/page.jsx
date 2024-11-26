@@ -172,7 +172,7 @@ export default function DetailPage() {
                     <div
                       className="bg-ijoTebu h-2"
                       style={{
-                        width: `${(data.leverage / 100) * 90}px`, // Panjang bar diatur proporsional, bisa disesuaikan
+                        width: `${(data.leverage / 20) * 90}px`, // Panjang bar diatur proporsional, bisa disesuaikan
                       }}
                     ></div>
                     <span className="ml-2 text-gray-700 font-medium">
