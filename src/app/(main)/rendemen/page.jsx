@@ -147,7 +147,7 @@ export default function RendemenPage() {
             className="flex items-center gap-2 bg-green-800 hover:bg-green-900 text-white hover:cursor-pointer p-2 rounded-lg"
             onClick={fetchCSVData}
           >
-            <p>Unduh</p>
+            <p className="text-sm">Unduh</p>
             <AiOutlineDownload />
           </button>
         </div>

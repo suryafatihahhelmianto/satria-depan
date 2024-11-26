@@ -272,7 +272,7 @@ export default function DataSosial() {
       fieldName: "luasLahanYangDitanami",
     },
     {
-      label: "Luas Lahan yang Avalist Tahun Ini (ha)",
+      label: "Luas Lahan yang Avalist Tahun Lalu (ha)",
       inputType: "number",
       value: formData.luasLahanTahunLalu,
       onChange: (e) =>
@@ -283,7 +283,7 @@ export default function DataSosial() {
       fieldName: "luasLahanTahunLalu",
     },
     {
-      label: "Total Luas Lahan yang Ditanami Tahun Ini (ha)",
+      label: "Total Luas Lahan yang Ditanami Tahun Lalu (ha)",
       inputType: "number",
       value: formData.luasLahanYangDitanamiTahunLalu,
       onChange: (e) =>
