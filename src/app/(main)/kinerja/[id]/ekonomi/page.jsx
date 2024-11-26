@@ -323,16 +323,7 @@ export default function DataKinerja() {
 
   return (
     <div className="min-h-screen bg-gray-100 mb-24">
-      {[
-        "ADMIN",
-        "TANAMAN",
-        "FABRIKASI",
-        "QUALITYCONTROL",
-        "INSTALASI",
-        "KEPALAPABRIK",
-        "TUK",
-        "SDM",
-      ].includes(role) && (
+      {["ADMIN", "KEPALAPABRIK"].includes(role) && (
         <KinerjaTable
           title="Tingkat Risiko Rantai Pasok (E1)"
           rows={rowsE1}
