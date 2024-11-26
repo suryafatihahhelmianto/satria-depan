@@ -36,7 +36,7 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, isLoading }) => {
         <div className="flex justify-end space-x-3">
           <button
             onClick={onClose}
-            className="px-5 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
+            className="px-5 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-red-400 hover:text-white transition"
             disabled={isLoading} // Nonaktifkan tombol saat loading
           >
             Periksa Kembali
