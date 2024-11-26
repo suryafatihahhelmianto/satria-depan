@@ -209,7 +209,7 @@ export default function SumberDayaPage() {
 
   const dataD2 = [
     {
-      label: "Tingkat Luas Tanam TRI (%)",
+      label: "Luas Tanam TRI (ha)",
       inputType: "number",
       value: formData.luasTanamTRITahunIni,
       onChange: (e) =>
@@ -220,7 +220,7 @@ export default function SumberDayaPage() {
       fieldName: "luasTanamTRITahunIni",
     },
     {
-      label: "Total Luas Lahan yang Ditanami Tahun Ini",
+      label: "Total Luas Lahan yang Ditanami Tahun Ini (ha)",
       inputType: "number",
       value: formData.luasTotalTahunIni,
       onChange: (e) => handleInputChange("luasTotalTahunIni", e.target.value),
@@ -301,7 +301,7 @@ export default function SumberDayaPage() {
       fieldName: "rendemenTebu",
     },
     {
-      label: "mbs",
+      label: "Tingkat Manis Bersih Segar",
       inputType: "dropdown",
       value: formData.mbs,
       options: [
