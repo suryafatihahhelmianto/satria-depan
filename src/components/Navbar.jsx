@@ -67,7 +67,7 @@ export default function Navbar({ isSidebarOpen, toggleSidebar }) {
           <span className="rounded-full border text-gray-500 text-4xl p-1 hover:bg-gray-200">
             <BsFillPersonFill />
           </span>
-          <h1>{user.name}</h1>
+          <h1>{user?.name}</h1>
         </button>
 
         {/* Dropdown Menu */}
