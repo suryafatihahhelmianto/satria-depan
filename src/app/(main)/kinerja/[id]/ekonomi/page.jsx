@@ -25,6 +25,7 @@ export default function DataKinerja() {
     rendemenNPP: 0,
     rendemenGula: 0,
     kesenjanganRantai: 0,
+    kesenjanganPabrik: 0,
     hargaAcuan: 0,
     hargaLelang: 0,
     shsTahunIni: 0,
@@ -265,13 +266,13 @@ export default function DataKinerja() {
     {
       label: "Keuntungan Pabrik per Ton Tebu (Rp)",
       inputType: "number",
-      value: formData.kesenjanganRantai,
+      value: formData.kesenjanganPabrik,
       onChange: (e) =>
-        setFormData({ ...formData, kesenjanganRantai: e.target.value }),
+        setFormData({ ...formData, kesenjanganPabrik: e.target.value }),
       onSubmit: () =>
-        handleUpdate("kesenjanganRantai", formData.kesenjanganRantai),
-      locked: lockedStatus["kesenjanganRantai"],
-      fieldName: "kesenjanganRantai",
+        handleUpdate("kesenjanganPabrik", formData.kesenjanganPabrik),
+      locked: lockedStatus["kesenjanganPabrik"],
+      fieldName: "kesenjanganPabrik",
     },
   ];
 
