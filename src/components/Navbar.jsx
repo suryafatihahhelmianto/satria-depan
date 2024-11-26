@@ -60,15 +60,15 @@ export default function Navbar({ isSidebarOpen, toggleSidebar }) {
 
       {/* User Profile Button (aligned to the right) */}
       <div className="relative ml-auto" ref={dropdownRef}>
-        <div className="flex gap-2 items-center justify-center">
-          <button
-            onClick={() => setShowDropdown(!showDropdown)}
-            className="rounded-full border text-gray-500 text-4xl p-1 hover:bg-gray-200"
-          >
+        <button
+          onClick={() => setShowDropdown(!showDropdown)}
+          className="flex gap-2 items-center justify-center hover:bg-gray-200 p-1 rounded-md"
+        >
+          <span className="rounded-full border text-gray-500 text-4xl p-1 hover:bg-gray-200">
             <BsFillPersonFill />
-          </button>
+          </span>
           <h1>{user.name}</h1>
-        </div>
+        </button>
 
         {/* Dropdown Menu */}
         {showDropdown && (
