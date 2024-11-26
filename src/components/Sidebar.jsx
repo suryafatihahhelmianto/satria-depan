@@ -13,6 +13,7 @@ import {
 import { GoGoal } from "react-icons/go";
 import { useUser } from "@/context/UserContext";
 import { BsBoxArrowRight, BsGearFill, BsPersonFill } from "react-icons/bs";
+import Image from "next/image";
 
 export default function Sidebar({ isOpen, toggleSidebar }) {
   const { isAdmin, role } = useUser();
@@ -32,22 +33,22 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
 
   const navLinks = [
     {
-      name: "Home Page",
+      name: "Beranda",
       path: "/",
       icon: <AiFillHome size={20} />,
     },
     role !== "DIREKSI" && {
-      name: "Kinerja Rantai Pasok",
+      name: "Kinerja",
       path: "/kinerja",
       icon: <AiOutlineBarChart size={20} />,
     },
     (role === "QUALITYCONTROL" || isAdmin) && {
-      name: "Pengukuran Rendemen",
+      name: "Rendemen",
       path: "/rendemen",
       icon: <GoGoal size={20} />,
     },
     isAdmin && {
-      name: "Data Pengguna",
+      name: "Pengguna",
       path: "/admin",
       icon: <AiOutlineUser size={20} />,
     },
@@ -96,12 +97,29 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
         {/* Sidebar Title */}
         <Link href="/" className="mb-12 flex justify-center items-center">
           {isOpen ? (
-            <span className="text-4xl font-extrabold">
-              <span className="text-green-700">Satria</span>
-              <span className="text-white">Keren</span>
-            </span>
+            <div className="flex gap-2">
+              <Image
+                src={"/img/logo-satria-keren.png"}
+                alt="logo-satria-keren"
+                width={30}
+                height={30}
+              />
+
+              <span className="text-3xl font-extrabold">
+                <span className="text-green-700">Satria</span>
+                <span className="text-white">Keren</span>
+              </span>
+            </div>
           ) : (
-            <span className="text-4xl font-extrabold text-green-700">S</span>
+            // <span className="text-4xl font-extrabold text-green-700">S</span>
+            <span>
+              <Image
+                src={"/img/logo-satria-keren.png"}
+                alt="logo-satria-keren"
+                width={50}
+                height={50}
+              />
+            </span>
           )}
         </Link>
 

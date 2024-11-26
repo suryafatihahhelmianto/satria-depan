@@ -26,6 +26,8 @@ export default function DataSosial() {
     tidakTetapTotal: 0,
     luasLahan: 0,
     luasLahanYangDitanami: 0,
+    luasLahanTahunLalu: 0,
+    luasLahanYangDitanamiTahunLalu: 0,
   });
 
   const [lockedStatus, setLockedStatus] = useState({});
@@ -269,6 +271,34 @@ export default function DataSosial() {
       locked: lockedStatus["luasLahanYangDitanami"],
       fieldName: "luasLahanYangDitanami",
     },
+    {
+      label: "Luas Lahan yang Avalist Tahun Ini (Ha)",
+      inputType: "number",
+      value: formData.luasLahanTahunLalu,
+      onChange: (e) =>
+        setFormData({ ...formData, luasLahanTahunLalu: e.target.value }),
+      onSubmit: () =>
+        handleUpdate("luasLahanTahunLalu", formData.luasLahanTahunLalu),
+      locked: lockedStatus["luasLahanTahunLalu"],
+      fieldName: "luasLahanTahunLalu",
+    },
+    {
+      label: "Total Luas Lahan yang Ditanami Tahun Ini (Ha)",
+      inputType: "number",
+      value: formData.luasLahanYangDitanamiTahunLalu,
+      onChange: (e) =>
+        setFormData({
+          ...formData,
+          luasLahanYangDitanamiTahunLalu: e.target.value,
+        }),
+      onSubmit: () =>
+        handleUpdate(
+          "luasLahanYangDitanamiTahunLalu",
+          formData.luasLahanYangDitanamiTahunLalu
+        ),
+      locked: lockedStatus["luasLahanYangDitanamiTahunLalu"],
+      fieldName: "luasLahanYangDitanamiTahunLalu",
+    },
   ];
 
   return (
@@ -283,7 +313,7 @@ export default function DataSosial() {
         />
       )}
 
-      {["ADMIN", "TANAMAN", "KEPALAPABRIK", "TUK", "SDM"].includes(role) && (
+      {["ADMIN", "SDM"].includes(role) && (
         <KinerjaTable
           title="Ketersediaan Infrastruktur sebagai Penunjang Aktivitas (S2)"
           rows={rowsS2}
@@ -293,7 +323,7 @@ export default function DataSosial() {
         />
       )}
 
-      {["ADMIN", "KEPALAPABRIK", "TUK", "SDM"].includes(role) && (
+      {["ADMIN", "SDM"].includes(role) && (
         <KinerjaTable
           title="Manfaat Corporate Social Responsibility bagi Sosial (S3)"
           rows={rowsS3}
