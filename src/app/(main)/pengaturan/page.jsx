@@ -142,10 +142,7 @@ const PengaturanPage = () => {
   }
 
   return (
-    <div
-      className="min-h-screen bg-cover bg-center"
-      style={{ backgroundImage: `url('../img/tanaman.png')` }}
-    >
+    <div className="min-h-screen bg-cover bg-center">
       <div className="flex flex-col items-center p-8">
         <p className="flex mb-4 p-4 bg-red-500 text-white rounded-lg animate-pulse shadow-lg">
           <AiOutlineWarning className="text-2xl mr-3" />
