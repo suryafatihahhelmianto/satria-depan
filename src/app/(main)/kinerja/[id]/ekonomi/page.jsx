@@ -182,7 +182,7 @@ export default function DataKinerja() {
 
   const rowsE2 = [
     {
-      label: "Kehilangan Pol Ampas",
+      label: "Kehilangan Pol Ampas (%)",
       inputType: "number",
       value: formData.polAmpas,
       onChange: (e) => setFormData({ ...formData, polAmpas: e.target.value }),
@@ -191,7 +191,7 @@ export default function DataKinerja() {
       fieldName: "polAmpas",
     },
     {
-      label: "Kehilangan Pol Blotong",
+      label: "Kehilangan Pol Blotong (%)",
       inputType: "number",
       value: formData.polBlotong,
       onChange: (e) => setFormData({ ...formData, polBlotong: e.target.value }),
@@ -200,7 +200,7 @@ export default function DataKinerja() {
       fieldName: "polBlotong",
     },
     {
-      label: "Kehilangan Pol Tetes",
+      label: "Kehilangan Pol Tetes (%)",
       inputType: "number",
       value: formData.polTetes,
       onChange: (e) => setFormData({ ...formData, polTetes: e.target.value }),
@@ -209,7 +209,7 @@ export default function DataKinerja() {
       fieldName: "polTetes",
     },
     {
-      label: "Kehilangan Rendemen Kebun",
+      label: "Kehilangan Rendemen Kebun (%)",
       inputType: "number",
       value: formData.rendemenKebun,
       onChange: (e) =>
@@ -219,7 +219,7 @@ export default function DataKinerja() {
       fieldName: "rendemenKebun",
     },
     {
-      label: "Kehilangan Rendemen Gerbang",
+      label: "Kehilangan Rendemen Gerbang (%)",
       inputType: "number",
       value: formData.rendemenGerbang,
       onChange: (e) =>
@@ -229,7 +229,7 @@ export default function DataKinerja() {
       fieldName: "rendemenGerbang",
     },
     {
-      label: "Kehilangan Rendemen NPP",
+      label: "Kehilangan Rendemen NPP (%)",
       inputType: "number",
       value: formData.rendemenNPP,
       onChange: (e) =>
@@ -239,7 +239,7 @@ export default function DataKinerja() {
       fieldName: "rendemenNPP",
     },
     {
-      label: "Kehilangan Rendemen Gula",
+      label: "Kehilangan Rendemen Gula (%)",
       inputType: "number",
       value: formData.rendemenGula,
       onChange: (e) =>
@@ -252,7 +252,18 @@ export default function DataKinerja() {
 
   const rowsE3 = [
     {
-      label: "Kesenjangan Keuntungan Stakeholder Rantai Pasok",
+      label: "Keuntungan Petani per Ton Tebu (Rp)",
+      inputType: "number",
+      value: formData.kesenjanganRantai,
+      onChange: (e) =>
+        setFormData({ ...formData, kesenjanganRantai: e.target.value }),
+      onSubmit: () =>
+        handleUpdate("kesenjanganRantai", formData.kesenjanganRantai),
+      locked: lockedStatus["kesenjanganRantai"],
+      fieldName: "kesenjanganRantai",
+    },
+    {
+      label: "Keuntungan Pabrik per Ton Tebu (Rp)",
       inputType: "number",
       value: formData.kesenjanganRantai,
       onChange: (e) =>
@@ -344,7 +355,7 @@ export default function DataKinerja() {
       {["ADMIN", "TANAMAN"].includes(role) && (
         <>
           <KinerjaTable
-            title="Kesenjangan keuntungan pelaku rantai pasok per ton gula (%) (E3)"
+            title="Kesenjangan Keuntungan Pelaku Rantai Pasok per Ton Gula (E3)"
             rows={rowsE3}
             type={"ekonomi"}
             sesiId={sesiId}

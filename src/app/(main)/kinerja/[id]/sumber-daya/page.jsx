@@ -365,7 +365,7 @@ export default function SumberDayaPage() {
 
   const dataD8 = [
     {
-      label: "Luas BL",
+      label: "Luas BL (ha)",
       inputType: "number",
       value: formData.luasBL,
       onChange: (e) => handleInputChange("luasBL", e.target.value),
@@ -374,7 +374,7 @@ export default function SumberDayaPage() {
       fieldName: "luasBL",
     },
     {
-      label: "Luas PST41",
+      label: "Luas PST41 (ha)",
       inputType: "number",
       value: formData.luasPST41,
       onChange: (e) => handleInputChange("luasPST41", e.target.value),
@@ -383,7 +383,7 @@ export default function SumberDayaPage() {
       fieldName: "luasPST41",
     },
     {
-      label: "Luas PS864",
+      label: "Luas PS864 (ha)",
       inputType: "number",
       value: formData.luasPS864,
       onChange: (e) => handleInputChange("luasPS864", e.target.value),
@@ -392,7 +392,7 @@ export default function SumberDayaPage() {
       fieldName: "luasPS864",
     },
     {
-      label: "Total Luas Lahan yang ditanam Tahun Ini",
+      label: "Total Luas Lahan yang ditanam Tahun Ini (ha)",
       inputType: "number",
       value: formData.luasTotal,
       onChange: (e) => handleInputChange("luasTotal", e.target.value),
