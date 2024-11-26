@@ -288,6 +288,10 @@ export default function LingkunganPage() {
   ];
 
   const dataL2 = [
+    {
+      isSubtitle: true,
+      label: "Tingkat Gangguan Debu Agroindustri pada Masyarakat (µg/Nm3)",
+    },
     { isSubtitle: true, label: "Desa 1" },
 
     {
@@ -360,7 +364,7 @@ export default function LingkunganPage() {
   ];
 
   const dataL4 = [
-    { isSubtitle: true, label: "Kebisingan Ruang Produksi" },
+    { isSubtitle: true, label: "Kebisingan Ruang Produksi (dB)" },
     {
       label: "Pengukuran 1",
       inputType: "number",
@@ -379,7 +383,7 @@ export default function LingkunganPage() {
       locked: lockedStatus["bisingProduksi2"],
       fieldName: "bisingProduksi2",
     },
-    { isSubtitle: true, label: "Kebisingan Lokal" },
+    { isSubtitle: true, label: "Kebisingan Terbuka (dB)" },
     { isSubtitle: true, label: "Desa 1" },
     {
       label: "Pengukuran 1",
@@ -787,7 +791,7 @@ export default function LingkunganPage() {
   const dataL7 = [
     {
       isSubtitle: true,
-      label: "NH3",
+      label: "NH3 (µg/Nm3)",
     },
     {
       label: "Pengukuran 1",
@@ -831,7 +835,7 @@ export default function LingkunganPage() {
     },
     {
       isSubtitle: true,
-      label: "NO2",
+      label: "NO2 (µg/Nm3)",
     },
     {
       label: "Pengukuran 1",
@@ -853,7 +857,7 @@ export default function LingkunganPage() {
     },
     {
       isSubtitle: true,
-      label: "SO2",
+      label: "SO2 (µg/Nm3)",
     },
     {
       label: "Pengukuran 1",

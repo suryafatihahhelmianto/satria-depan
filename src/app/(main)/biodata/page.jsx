@@ -38,7 +38,7 @@ export default function BiodataPage() {
   if (!user) return <p>No user data available</p>;
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-200 to-gray-400">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-50">
       <div className="bg-gradient-to-br from-white/30 to-white/10 backdrop-blur-xl border border-white/40 shadow-2xl rounded-2xl p-10 w-full max-w-4xl">
         {/* Header Section */}
         <div className="flex flex-col items-center text-center">

@@ -249,7 +249,7 @@ export default function DataSosial() {
 
   const rowsS6 = [
     {
-      label: "Luas Lahan yang Avalist Tahun Ini (Ha)",
+      label: "Luas Lahan yang Avalist Tahun Ini (ha)",
       inputType: "number",
       value: formData.luasLahan,
       onChange: (e) => setFormData({ ...formData, luasLahan: e.target.value }),
@@ -258,7 +258,7 @@ export default function DataSosial() {
       fieldName: "luasLahan",
     },
     {
-      label: "Total Luas Lahan yang Ditanami Tahun Ini (Ha)",
+      label: "Total Luas Lahan yang Ditanami Tahun Ini (ha)",
       inputType: "number",
       value: formData.luasLahanYangDitanami,
       onChange: (e) =>
@@ -272,7 +272,7 @@ export default function DataSosial() {
       fieldName: "luasLahanYangDitanami",
     },
     {
-      label: "Luas Lahan yang Avalist Tahun Ini (Ha)",
+      label: "Luas Lahan yang Avalist Tahun Ini (ha)",
       inputType: "number",
       value: formData.luasLahanTahunLalu,
       onChange: (e) =>
@@ -283,7 +283,7 @@ export default function DataSosial() {
       fieldName: "luasLahanTahunLalu",
     },
     {
-      label: "Total Luas Lahan yang Ditanami Tahun Ini (Ha)",
+      label: "Total Luas Lahan yang Ditanami Tahun Ini (ha)",
       inputType: "number",
       value: formData.luasLahanYangDitanamiTahunLalu,
       onChange: (e) =>

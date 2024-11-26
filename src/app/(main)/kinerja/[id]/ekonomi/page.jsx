@@ -277,7 +277,7 @@ export default function DataKinerja() {
 
   const rowsE4 = [
     {
-      label: "Harga Acuan/Referensi",
+      label: "Harga Acuan/Referensi (Rp)",
       inputType: "number",
       value: formData.hargaAcuan,
       onChange: (e) => setFormData({ ...formData, hargaAcuan: e.target.value }),
@@ -286,7 +286,7 @@ export default function DataKinerja() {
       fieldName: "hargaAcuan",
     },
     {
-      label: "Harga Lelang (rata-rata)",
+      label: "Harga Lelang (rata-rata) (Rp)",
       inputType: "number",
       value: formData.hargaLelang,
       onChange: (e) =>
@@ -299,7 +299,7 @@ export default function DataKinerja() {
 
   const rowsE5 = [
     {
-      label: "Produksi Tahun Ini",
+      label: "Produksi Tahun Ini (Ton)",
       inputType: "number",
       value: formData.shsTahunIni,
       onChange: (e) =>
@@ -309,7 +309,7 @@ export default function DataKinerja() {
       fieldName: "shsTahunIni",
     },
     {
-      label: "Produksi tahun lalu",
+      label: "Produksi tahun lalu (Ton)",
       inputType: "number",
       value: formData.shsTahunSebel,
       onChange: (e) =>
@@ -322,7 +322,7 @@ export default function DataKinerja() {
 
   const rowsE6 = [
     {
-      label: "Total Penjualan Gula",
+      label: "Return on Invesment (ROI) (%)",
       inputType: "number",
       value: formData.returnOE,
       onChange: (e) => setFormData({ ...formData, returnOE: e.target.value }),
