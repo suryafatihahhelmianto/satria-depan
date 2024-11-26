@@ -278,7 +278,7 @@ export default function KinerjaPage() {
         {isAdmin && (
           <div className="flex w-full gap-2">
             <AiFillPlusCircle
-              className="text-2xl text-green-600 hover:text-green-800 cursor-pointer"
+              className="text-2xl text-green-800 hover:text-green-900 cursor-pointer"
               onClick={() => setIsModalOpen(true)} // Buka modal saat tombol diklik
             />
             <h1
