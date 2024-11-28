@@ -32,13 +32,17 @@ const getKategori = (nilaiKinerja) => {
 
 export default function HomePage() {
   const [loading, setLoading] = useState(true);
-  const [selectedYear, setSelectedYear] = useState(2021);
+  const [selectedYear, setSelectedYear] = useState(0);
   const [factories, setFactories] = useState([]);
   const [selectedFactory, setSelectedFactory] = useState({});
   const [dashboardData, setDashboardData] = useState(null);
   const [sustainabilityData, setSustainabilityData] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [availableYears, setAvailableYears] = useState([]);
+
+  // const [nilaiKinerjaKeberlanjutan, setNilaiKinerjaKeberlanjutan] = useState(0);
+  // const [rataRataRendemen, setRataRataRendemen] = useState(0);
+  // const [informasi, setInformasi] = useState([]);
 
   const router = useRouter();
 
@@ -57,7 +61,7 @@ export default function HomePage() {
 
     try {
       const response = await fetchData(
-        `/api/sesi/tahun?pabrikId=${selectedFactory.id}`, // Sesuaikan dengan endpoint yang benar
+        `/api/sesi/tahun?pabrikId=${selectedFactory.id}`,
         {
           method: "GET",
           headers: {
@@ -66,11 +70,9 @@ export default function HomePage() {
         }
       );
 
-      // Extract tahun from the response data
-      const years = response.data; // `data` berisi array tahun dari API response
-
-      // Set available years dan pilih tahun pertama sebagai default
+      const years = response.data; // Asumsi response.data adalah array tahun
       setAvailableYears(years);
+
       if (years.length > 0) {
         setSelectedYear(years[0]); // Pilih tahun pertama sebagai default
       }
@@ -78,6 +80,7 @@ export default function HomePage() {
       console.error("Error fetching years:", error);
     }
   };
+
   const fetchFactories = async () => {
     try {
       const response = await fetchData("/api/pabrik", {
@@ -86,8 +89,11 @@ export default function HomePage() {
       });
 
       if (response.length > 0) {
-        setSelectedFactory(response[0]); // Set the first factory as default
-        fetchDashboardData(response[0].id); // Fetch dashboard data for the first factory
+        setSelectedFactory(response[0]);
+        if (availableYears.length > 0) {
+          setSelectedYear(availableYears[0]);
+          fetchDashboardData(response[0].id); // Pastikan selectedYear sudah valid
+        }
       }
 
       setFactories(response);
@@ -108,6 +114,10 @@ export default function HomePage() {
       );
 
       setDashboardData(response);
+      console.log("ini response: ", response);
+      // setNilaiKinerjaKeberlanjutan(response.nilaiKinerjaKeberlanjutan[0]);
+      // setRataRataRendemen(response.rataRataRendemen || 0);
+      // setInformasi(response.informasi || []);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching dashboard data:", error);
@@ -143,19 +153,12 @@ export default function HomePage() {
   };
 
   useEffect(() => {
-    // Cek apakah selectedYear ada dalam availableYears, jika tidak, pilih tahun pertama yang ada
-    if (availableYears.length > 0 && !availableYears.includes(selectedYear)) {
-      setSelectedYear(availableYears[0]); // Pilih tahun pertama sebagai fallback
-    }
-    fetchDashboardData(selectedFactory.id);
-  }, [availableYears, selectedYear]);
-
-  useEffect(() => {
     fetchFactories();
   }, []);
 
   useEffect(() => {
     fetchYears();
+    fetchDashboardData(selectedFactory.id);
   }, [selectedFactory]);
 
   useEffect(() => {
@@ -245,18 +248,30 @@ export default function HomePage() {
                 onClick={handleDetailClick}
                 className="w-40 h-40 md:w-52 md:h-52 mb-2 hover:cursor-pointer"
               >
-                <CircularProgressbar
-                  value={selectedYearData?.nilaiKinerja.toFixed(2) || 0}
-                  text={`${
-                    formatNumberToIndonesian(selectedYearData?.nilaiKinerja) ||
-                    0
-                  }%`}
-                  styles={buildStyles({
-                    pathColor: "#4CAF50",
-                    textColor: "#4CAF50",
-                    trailColor: "#d6d6d6",
-                  })}
-                />
+                {selectedYear === 0 ? (
+                  <p>Loading</p>
+                ) : (
+                  <CircularProgressbar
+                    // value={selectedYearData?.nilaiKinerja.toFixed(2) || 0}
+                    value={
+                      nilaiKinerjaKeberlanjutan[0].nilaiKinerja.toFixed(2) || 0
+                    }
+                    // text={`${
+                    //   formatNumberToIndonesian(selectedYearData?.nilaiKinerja) ||
+                    //   0
+                    // }%`}
+                    text={`${
+                      formatNumberToIndonesian(
+                        nilaiKinerjaKeberlanjutan[0].nilaiKinerja
+                      ) || 0
+                    }%`}
+                    styles={buildStyles({
+                      pathColor: "#4CAF50",
+                      textColor: "#4CAF50",
+                      trailColor: "#d6d6d6",
+                    })}
+                  />
+                )}
               </div>
               <div className="flex items-center justify-center">
                 <p className="mt-2 text-gray-700 text-center font-semibold">
