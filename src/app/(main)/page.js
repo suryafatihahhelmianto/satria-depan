@@ -32,7 +32,7 @@ const getKategori = (nilaiKinerja) => {
 
 export default function HomePage() {
   const [loading, setLoading] = useState(true);
-  const [selectedYear, setSelectedYear] = useState(0);
+  const [selectedYear, setSelectedYear] = useState(null);
   const [factories, setFactories] = useState([]);
   const [selectedFactory, setSelectedFactory] = useState({});
   const [dashboardData, setDashboardData] = useState(null);
@@ -89,11 +89,8 @@ export default function HomePage() {
       });
 
       if (response.length > 0) {
-        setSelectedFactory(response[0]);
-        if (availableYears.length > 0) {
-          setSelectedYear(availableYears[0]);
-          fetchDashboardData(response[0].id); // Pastikan selectedYear sudah valid
-        }
+        setSelectedFactory(response[0]); // Set the first factory as default
+        fetchDashboardData(response[0].id); // Fetch dashboard data for the first factory
       }
 
       setFactories(response);
@@ -158,11 +155,7 @@ export default function HomePage() {
 
   useEffect(() => {
     fetchYears();
-    fetchDashboardData(selectedFactory.id);
-  }, [selectedFactory]);
-
-  useEffect(() => {
-    if (selectedFactory.id) {
+    if (selectedFactory.id && selectedYear !== null) {
       fetchDashboardData(selectedFactory.id);
     }
   }, [selectedFactory, selectedYear, selectedDate]);
@@ -248,30 +241,26 @@ export default function HomePage() {
                 onClick={handleDetailClick}
                 className="w-40 h-40 md:w-52 md:h-52 mb-2 hover:cursor-pointer"
               >
-                {selectedYear === 0 ? (
-                  <p>Loading</p>
-                ) : (
-                  <CircularProgressbar
-                    // value={selectedYearData?.nilaiKinerja.toFixed(2) || 0}
-                    value={
-                      nilaiKinerjaKeberlanjutan[0].nilaiKinerja.toFixed(2) || 0
-                    }
-                    // text={`${
-                    //   formatNumberToIndonesian(selectedYearData?.nilaiKinerja) ||
-                    //   0
-                    // }%`}
-                    text={`${
-                      formatNumberToIndonesian(
-                        nilaiKinerjaKeberlanjutan[0].nilaiKinerja
-                      ) || 0
-                    }%`}
-                    styles={buildStyles({
-                      pathColor: "#4CAF50",
-                      textColor: "#4CAF50",
-                      trailColor: "#d6d6d6",
-                    })}
-                  />
-                )}
+                <CircularProgressbar
+                  // value={selectedYearData?.nilaiKinerja.toFixed(2) || 0}
+                  value={
+                    nilaiKinerjaKeberlanjutan[0].nilaiKinerja.toFixed(2) || 0
+                  }
+                  // text={`${
+                  //   formatNumberToIndonesian(selectedYearData?.nilaiKinerja) ||
+                  //   0
+                  // }%`}
+                  text={`${
+                    formatNumberToIndonesian(
+                      nilaiKinerjaKeberlanjutan[0].nilaiKinerja
+                    ) || 0
+                  }%`}
+                  styles={buildStyles({
+                    pathColor: "#4CAF50",
+                    textColor: "#4CAF50",
+                    trailColor: "#d6d6d6",
+                  })}
+                />
               </div>
               <div className="flex items-center justify-center">
                 <p className="mt-2 text-gray-700 text-center font-semibold">
