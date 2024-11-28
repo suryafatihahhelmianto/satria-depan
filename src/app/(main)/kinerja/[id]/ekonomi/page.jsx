@@ -253,7 +253,7 @@ export default function DataKinerja() {
 
   const rowsE3 = [
     {
-      label: "Keuntungan Petani per Ton Tebu (Rp)",
+      label: "Keuntungan Petani per Ton Tebu (%)",
       inputType: "number",
       value: formData.kesenjanganRantai,
       onChange: (e) =>
@@ -264,7 +264,7 @@ export default function DataKinerja() {
       fieldName: "kesenjanganRantai",
     },
     {
-      label: "Keuntungan Pabrik per Ton Tebu (Rp)",
+      label: "Keuntungan Pabrik per Ton Tebu (%)",
       inputType: "number",
       value: formData.kesenjanganPabrik,
       onChange: (e) =>

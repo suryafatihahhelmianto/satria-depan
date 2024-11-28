@@ -132,17 +132,20 @@ export default function RendemenPage() {
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="flex items-center justify-between mb-8">
-        <Link href={"/rendemen/input"} className="flex items-center gap-2">
-          <AiFillPlusCircle className="text-2xl text-green-800 hover:text-green-900 cursor-pointer" />
-          <h1 className="cursor-pointer hover:text-green-600 rounded-s">
-            Tambah Prediksi Rendemen
-          </h1>
-        </Link>
+        <div className="flex items-center gap-1 p-4 hover:bg-gray-100 hover:rounded-lg hover:shadow-md transition-all">
+          <Link href={"/rendemen/input"} className="flex items-center gap-2">
+            <AiFillPlusCircle className="text-2xl text-green-800 hover:text-green-900 cursor-pointer" />
+            <h1 className="cursor-pointer hover:text-green-600 rounded-s">
+              Tambah Prediksi Rendemen
+            </h1>
+          </Link>
+        </div>
         <div className="flex justify-end font-bold gap-2 text-xl">
           <Link
             href={"/rendemen/statistics"}
-            className="bg-green-800 hover:bg-green-900 text-white hover:cursor-pointer p-2 rounded-lg flex items-center"
+            className="gap-2 bg-green-800 hover:bg-green-900 text-white hover:cursor-pointer p-2 rounded-lg flex items-center"
           >
+            <p className="text-sm">Lihat Trend</p>
             <AiOutlineLineChart />
           </Link>
           <button
