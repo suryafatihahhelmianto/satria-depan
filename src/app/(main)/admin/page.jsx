@@ -208,11 +208,11 @@ export default function PenggunaPage() {
 
       <div className="flex items-center gap-2 my-5">
         <AiFillPlusCircle
-          className="text-2xl text-green-500 hover:text-green-700 cursor-pointer"
+          className="text-2xl text-green-800 hover:text-green-900 cursor-pointer"
           onClick={() => openModal()}
         />
         <h1
-          className="cursor-pointer hover:text-green-600"
+          className="cursor-pointer hover:text-green-800"
           onClick={() => openModal()}
         >
           Tambah Pengguna
