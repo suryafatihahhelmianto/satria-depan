@@ -111,7 +111,6 @@ export default function HomePage() {
       );
 
       setDashboardData(response);
-      console.log("ini response: ", response);
       // setNilaiKinerjaKeberlanjutan(response.nilaiKinerjaKeberlanjutan[0]);
       // setRataRataRendemen(response.rataRataRendemen || 0);
       // setInformasi(response.informasi || []);
