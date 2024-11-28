@@ -57,7 +57,7 @@ export default function HomePage() {
 
     try {
       const response = await fetchData(
-        `/api/sesi/daftar?pabrikId=${selectedFactory.id}`,
+        `/api/sesi/tahun?pabrikId=${selectedFactory.id}`, // Sesuaikan dengan endpoint yang benar
         {
           method: "GET",
           headers: {
@@ -66,13 +66,10 @@ export default function HomePage() {
         }
       );
 
-      // Ekstrak tahun dari tanggal mulai sesi
-      const years = Array.from(
-        new Set(
-          response.sesi.map((item) => new Date(item.tanggalMulai).getFullYear())
-        )
-      ).sort((a, b) => b - a); // Mengurutkan tahun dari terbesar ke terkecil
+      // Extract tahun from the response data
+      const years = response.data; // `data` berisi array tahun dari API response
 
+      // Set available years dan pilih tahun pertama sebagai default
       setAvailableYears(years);
       if (years.length > 0) {
         setSelectedYear(years[0]); // Pilih tahun pertama sebagai default
@@ -81,7 +78,6 @@ export default function HomePage() {
       console.error("Error fetching years:", error);
     }
   };
-
   const fetchFactories = async () => {
     try {
       const response = await fetchData("/api/pabrik", {
@@ -147,6 +143,14 @@ export default function HomePage() {
   };
 
   useEffect(() => {
+    // Cek apakah selectedYear ada dalam availableYears, jika tidak, pilih tahun pertama yang ada
+    if (availableYears.length > 0 && !availableYears.includes(selectedYear)) {
+      setSelectedYear(availableYears[0]); // Pilih tahun pertama sebagai fallback
+    }
+    fetchDashboardData(selectedFactory.id);
+  }, [availableYears, selectedYear]);
+
+  useEffect(() => {
     fetchFactories();
   }, []);
 
@@ -175,15 +179,28 @@ export default function HomePage() {
   const { nilaiKinerjaKeberlanjutan, rataRataRendemen, informasi } =
     dashboardData;
 
-  const histogramData = nilaiKinerjaKeberlanjutan.map((data) => ({
-    year: data.tahun,
-    "Index Total": data.nilaiKinerja,
-    "Dimensi Ekonomi": data.dimensiEkonomi,
-    "Dimensi Sosial": data.dimensiSosial,
-    "Dimensi Lingkungan": data.dimensiLingkungan,
-    "Dimensi Sumber Daya": data.dimensiSDAM,
-  }));
+  // const histogramData = nilaiKinerjaKeberlanjutan.map((data) => ({
+  //   year: data.tahun,
+  //   "Index Total": data.nilaiKinerja,
+  //   "Dimensi Ekonomi": data.dimensiEkonomi,
+  //   "Dimensi Sosial": data.dimensiSosial,
+  //   "Dimensi Lingkungan": data.dimensiLingkungan,
+  //   "Dimensi Sumber Daya": data.dimensiSDAM,
+  // }));
+  // const histogramData = nilaiKinerjaKeberlanjutan
+  //   ? {
+  //       year: nilaiKinerjaKeberlanjutan.tahun,
+  //       "Index Total": nilaiKinerjaKeberlanjutan.nilaiKinerja,
+  //       "Dimensi Ekonomi": nilaiKinerjaKeberlanjutan.dimensiEkonomi,
+  //       "Dimensi Sosial": nilaiKinerjaKeberlanjutan.dimensiSosial,
+  //       "Dimensi Lingkungan": nilaiKinerjaKeberlanjutan.dimensiLingkungan,
+  //       "Dimensi Sumber Daya": nilaiKinerjaKeberlanjutan.dimensiSDAM,
+  //     }
+  //   : []; // Atau bisa null, tergantung bagaimana Anda ingin menangani ketidakadaan data
 
+  // const selectedYearData = nilaiKinerjaKeberlanjutan.find(
+  //   (data) => data.tahun === parseInt(selectedYear)
+  // );
   const selectedYearData = nilaiKinerjaKeberlanjutan.find(
     (data) => data.tahun === parseInt(selectedYear)
   );
@@ -387,11 +404,30 @@ export default function HomePage() {
                 Bagian TUK belum mengisi data
               </li>
             </ul> */}
-            <ul className="text-gray-700 space-y-3">
+            {/* <ul className="text-gray-700 space-y-3">
               {informasi.map((info, index) => (
                 <li key={index} className="flex items-center">
                   <BsFillCircleFill className="text-red-500 mr-3 animate-pulse" />
                   {info}
+                </li>
+              ))}
+            </ul> */}
+            <ul className="text-gray-700 space-y-3">
+              {informasi.map((info, index) => (
+                <li key={index} className="flex items-center">
+                  <BsFillCircleFill className="text-red-500 mr-3 animate-pulse" />
+                  {/* Access and display specific properties of the object */}
+                  <div>
+                    <p className="font-bold">
+                      Bagian {info.role} Belum Mengisi
+                    </p>{" "}
+                    {/* Render role */}
+                    {/* <ul className="ml-4">
+                      {info.unfilledColumns.map((column, colIndex) => (
+                        <li key={colIndex}>{column}</li>
+                      ))}
+                    </ul> */}
+                  </div>
                 </li>
               ))}
             </ul>

@@ -17,7 +17,7 @@ export default function AppLayout({ children }) {
       <div
         className={`transition-all duration-300 w-full p-8 ${
           isSidebarOpen ? "lg:ml-[300px]" : "lg:ml-[100px]"
-        } mt-24`}
+        } md:mt-24`}
       >
         {children}
       </div>
