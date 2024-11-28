@@ -8,11 +8,13 @@ import SkeletonCardBig from "@/components/common/SkeletonCardBig";
 import { motion } from "framer-motion";
 import { FaBuilding, FaPhoneAlt, FaUserTie } from "react-icons/fa";
 import { BsPersonCircle } from "react-icons/bs";
+import Image from "next/image";
 
 export default function BiodataPage() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [animate, setAnimate] = useState(false); // State to control animation
+  const [isFlipped, setIsFlipped] = useState(false);
+  const [animate, setAnimate] = useState(false);
 
   const fetchUserData = async () => {
     const cookie = getCookie("token");
@@ -35,143 +37,133 @@ export default function BiodataPage() {
     fetchUserData();
   }, []);
 
-  const handleAvatarClick = () => {
-    if (!animate) {
-      setAnimate(true);
-    }
-  };
-
   if (loading) return <SkeletonCardBig />;
   if (!user) return <p>No user data available</p>;
 
-  // Animation Variants
+  const flipVariants = {
+    flipped: { rotateY: 180 },
+    unflipped: { rotateY: 0 },
+  };
+
   const avatarVariants = {
     initial: { scale: 1 },
-    animate: {
-      scale: [1, 1.6, 1],
-      transition: {
-        duration: 1,
-        ease: "easeInOut",
-      },
-    },
+    animate: { scale: [1, 1.2, 1], transition: { duration: 0.5 } },
   };
 
   const lineVariants = {
-    hidden: { opacity: 0, scale: 0 },
-    visible: {
-      opacity: [1, 0], // Fade out at the end
-      scale: 1.5,
-      rotate: 360,
-      transition: {
-        duration: 1, // Match duration with reset
-        ease: "easeOut",
-      },
-    },
+    hidden: { scale: 0, opacity: 0 },
+    visible: { scale: 1, opacity: 1, transition: { duration: 0.5 } },
   };
 
-  const confettiStyles = [...Array(30)].map((_, i) => ({
-    top: `${Math.random() * 100}%`,
+  const handleAvatarClick = () => {
+    setAnimate(true);
+  };
+
+  const confettiStyles = Array.from({ length: 50 }, () => ({
     left: `${Math.random() * 100}%`,
-    animationDelay: `${Math.random() * 0.5}s`,
+    top: `${Math.random() * 100}%`,
+    transform: `scale(${Math.random()})`,
+    opacity: Math.random(),
   }));
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-200 relative overflow-hidden">
-      <div className="bg-gradient-to-br from-white/50 to-white/10 backdrop-blur-lg border border-gray-300 shadow-2xl rounded-2xl p-8 w-full max-w-4xl relative">
-        {/* Confetti */}
-        {animate &&
-          confettiStyles.map((style, i) => (
-            <div
-              key={i}
-              className="absolute w-2 h-2 rounded-full bg-gradient-to-r from-green-400 to-blue-500"
-              style={{
-                ...style,
-                animation: "confetti 1.5s ease-out forwards",
-              }}
-            ></div>
-          ))}
-
-        {/* Header Section */}
-        <div className="flex flex-col items-center text-center relative">
-          <motion.div
-            className="relative"
-            onClick={handleAvatarClick}
-            variants={avatarVariants}
-            animate={animate ? "animate" : "initial"}
-            onAnimationComplete={() => setAnimate(false)} // Reset after animation completes
+      <motion.div
+        className="relative w-full max-w-4xl h-[600px] perspective"
+        onClick={() => setIsFlipped(!isFlipped)}
+        style={{ perspective: "1000px" }}
+      >
+        <motion.div
+          className="absolute w-full h-full transform-style-3d"
+          variants={flipVariants}
+          animate={isFlipped ? "flipped" : "unflipped"}
+          transition={{ duration: 0.8, ease: "easeInOut" }}
+          style={{
+            transformStyle: "preserve-3d",
+            position: "relative",
+          }}
+        >
+          {/* FRONT SIDE */}
+          <div
+            className="absolute w-full h-full bg-gradient-to-br from-white/50 to-white/10 backdrop-blur-lg border border-gray-300 shadow-lg rounded-2xl flex flex-col items-center justify-center p-8"
+            style={{ backfaceVisibility: "hidden" }}
           >
-            <BsPersonCircle className="text-green-600 text-8xl mb-4 cursor-pointer" />
-            {animate && (
-              <>
-                <motion.div
-                  className="absolute -top-12 -left-12 w-48 h-48 rounded-full border-4 border-green-500"
-                  variants={lineVariants}
-                  initial="hidden"
-                  animate="visible"
-                />
-                <motion.div
-                  className="absolute -top-16 -left-16 w-64 h-64 rounded-full border-4 border-blue-500 opacity-60"
-                  variants={lineVariants}
-                  initial="hidden"
-                  animate="visible"
-                />
-              </>
-            )}
-          </motion.div>
-          <h2 className="text-3xl font-bold text-green-800">{user.name}</h2>
-          <p className="text-lg text-gray-600">{user.level}</p>
-        </div>
+            <motion.div
+              className="relative"
+              onClick={handleAvatarClick}
+              variants={avatarVariants}
+              animate={animate ? "animate" : "initial"}
+              onAnimationComplete={() => setAnimate(false)}
+            >
+              <BsPersonCircle className="text-green-600 text-8xl mb-4 cursor-pointer" />
+            </motion.div>
+            <h2 className="text-3xl font-bold text-green-800">{user.name}</h2>
+            <p className="text-lg text-gray-600">{user.level}</p>
+            <div className="mt-10 space-y-6 w-full">
+              <div className="flex items-center p-5 bg-white/30 rounded-lg shadow hover:shadow-lg transition">
+                <FaUserTie className="text-green-500 text-2xl mr-4" />
+                <div>
+                  <p className="text-sm text-gray-500">Posisi</p>
+                  <p className="text-lg font-medium text-gray-800">
+                    {user.level}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center p-5 bg-white/30 rounded-lg shadow hover:shadow-lg transition">
+                <FaBuilding className="text-green-500 text-2xl mr-4" />
+                <div>
+                  <p className="text-sm text-gray-500">Nama Pabrik</p>
+                  <p className="text-lg font-medium text-gray-800">
+                    {user?.dataUser?.pabrikGula?.namaPabrik || "Pabrik Admin"}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center p-5 bg-white/30 rounded-lg shadow hover:shadow-lg transition">
+                <FaPhoneAlt className="text-green-500 text-2xl mr-4" />
+                <div>
+                  <p className="text-sm text-gray-500">Nomor HP</p>
+                  <p className="text-lg font-medium text-gray-800">
+                    {user.dataUser?.nomorHp || "Not Available"}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="mt-10 w-full">
+              <Link href={"/pengaturan"}>
+                <button className="w-full bg-gradient-to-r from-green-400 to-green-600 text-white py-3 px-6 rounded-full shadow-lg hover:opacity-90 transition">
+                  Edit Profile
+                </button>
+              </Link>
+            </div>
+          </div>
 
-        {/* User Info Section */}
-        <div className="mt-10 space-y-6">
-          <div className="flex items-center p-5 bg-white/30 rounded-lg shadow hover:shadow-lg transition">
-            <FaUserTie className="text-green-500 text-2xl mr-4" />
-            <div>
-              <p className="text-sm text-gray-500">Posisi</p>
-              <p className="text-lg font-medium text-gray-800">{user.level}</p>
+          {/* BACK SIDE */}
+          <div
+            className="absolute w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 border border-gray-300 shadow-lg rounded-2xl flex items-center justify-center p-8"
+            style={{
+              transform: "rotateY(180deg)",
+              backfaceVisibility: "hidden",
+            }}
+          >
+            <div className="w-full h-full flex flex-col items-center justify-center">
+              <Image
+                src="/img/logo-satria-keren.png"
+                alt="Logo"
+                width={400}
+                height={400}
+              />
+              <div className="mt-8 text-center">
+                <p className="text-gray-700">
+                  Thank you for being a part of our community!
+                </p>
+                <p className="text-gray-700 mt-2">
+                  Flip the card to view your profile information.
+                </p>
+              </div>
             </div>
           </div>
-          <div className="flex items-center p-5 bg-white/30 rounded-lg shadow hover:shadow-lg transition">
-            <FaBuilding className="text-green-500 text-2xl mr-4" />
-            <div>
-              <p className="text-sm text-gray-500">Nama Pabrik</p>
-              <p className="text-lg font-medium text-gray-800">
-                {user?.dataUser?.pabrikGula?.namaPabrik || "Pabrik Admin"}
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center p-5 bg-white/30 rounded-lg shadow hover:shadow-lg transition">
-            <FaPhoneAlt className="text-green-500 text-2xl mr-4" />
-            <div>
-              <p className="text-sm text-gray-500">Nomor HP</p>
-              <p className="text-lg font-medium text-gray-800">
-                {user.dataUser?.nomorHp || "Not Available"}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Edit Button */}
-        <div className="mt-10">
-          <Link href={"/pengaturan"}>
-            <button className="w-full bg-gradient-to-r from-green-400 to-green-600 text-white py-3 px-6 rounded-full shadow-lg hover:opacity-90 transition">
-              Edit Profile
-            </button>
-          </Link>
-        </div>
-      </div>
-      <style jsx>{`
-        @keyframes confetti {
-          0% {
-            transform: translateY(0) rotate(0);
-            opacity: 1;
-          }
-          100% {
-            transform: translateY(200px) rotate(360deg);
-            opacity: 0;
-          }
-        }
-      `}</style>
+        </motion.div>
+      </motion.div>
     </div>
   );
 }
