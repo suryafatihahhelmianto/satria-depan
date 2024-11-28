@@ -38,21 +38,24 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
       path: "/",
       icon: <AiFillHome size={20} />,
     },
-    role !== "DIREKSI" && {
-      name: "Kinerja",
-      path: "/kinerja",
-      icon: <AiOutlineBarChart size={20} />,
-    },
-    (role === "QUALITYCONTROL" || isAdmin) && {
-      name: "Rendemen",
-      path: "/rendemen",
-      icon: <GoGoal size={20} />,
-    },
-    isAdmin && {
-      name: "Pengguna",
-      path: "/admin",
-      icon: <AiOutlineUser size={20} />,
-    },
+    !isMobile &&
+      role !== "DIREKSI" && {
+        name: "Kinerja",
+        path: "/kinerja",
+        icon: <AiOutlineBarChart size={20} />,
+      },
+    !isMobile &&
+      (role === "QUALITYCONTROL" || isAdmin) && {
+        name: "Rendemen",
+        path: "/rendemen",
+        icon: <GoGoal size={20} />,
+      },
+    !isMobile &&
+      isAdmin && {
+        name: "Pengguna",
+        path: "/admin",
+        icon: <AiOutlineUser size={20} />,
+      },
   ].filter(Boolean);
 
   const getLinkStyle = (path) => {
