@@ -275,26 +275,29 @@ export default function KinerjaPage() {
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="flex items-center justify-between gap-2 mb-8">
-        {isAdmin && (
-          <div className="flex w-full gap-2">
-            <AiFillPlusCircle
-              className="text-2xl text-green-800 hover:text-green-900 cursor-pointer"
-              onClick={() => setIsModalOpen(true)} // Buka modal saat tombol diklik
-            />
-            <h1
-              className="cursor-pointer hover:text-green-900"
-              onClick={() => setIsModalOpen(true)}
-            >
-              Tambah Form Pengukuran Kinerja
-            </h1>
-          </div>
-        )}
+        <div className="flex items-center gap-1 p-4 w-full max-w-sm hover:bg-gray-100 hover:rounded-lg hover:shadow-md transition-all">
+          {isAdmin && (
+            <div className="flex w-full gap-2">
+              <AiFillPlusCircle
+                className="text-2xl text-green-800 hover:text-green-900 cursor-pointer"
+                onClick={() => setIsModalOpen(true)} // Buka modal saat tombol diklik
+              />
+              <h1
+                className="cursor-pointer hover:text-green-900"
+                onClick={() => setIsModalOpen(true)}
+              >
+                Tambah Form Pengukuran Kinerja
+              </h1>
+            </div>
+          )}
+        </div>
 
         <div className="flex w-full justify-end font-bold gap-2 text-xl">
           <Link
             href={"/kinerja/statistics"}
-            className="bg-green-800 hover:bg-green-900 hover:cursor-pointer text-white p-2 rounded-lg flex items-center"
+            className="gap-2 bg-green-800 hover:bg-green-900 hover:cursor-pointer text-white p-2 rounded-lg flex items-center"
           >
+            <p className="text-sm">Lihat Trend</p>
             <AiOutlineLineChart />
           </Link>
           <button
@@ -427,6 +430,11 @@ export default function KinerjaPage() {
                   value={editData.batasPengisian}
                   onChange={handleEditInputChange}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                  min={(() => {
+                    const tomorrow = new Date();
+                    tomorrow.setDate(tomorrow.getDate() + 1);
+                    return tomorrow.toISOString().split("T")[0];
+                  })()} // Hitung tanggal minimal "besok"
                   required
                 />
               </div>

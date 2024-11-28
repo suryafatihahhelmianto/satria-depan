@@ -85,7 +85,7 @@ export default function BiodataPage() {
         >
           {/* FRONT SIDE */}
           <div
-            className="absolute w-full h-full bg-gradient-to-br from-white/50 to-white/10 backdrop-blur-lg border border-gray-300 shadow-lg rounded-2xl flex flex-col items-center justify-center p-8"
+            className="absolute w-full h-full max-w-4xl min-h-[700px] bg-gradient-to-br from-white/50 to-white/10 backdrop-blur-lg border border-gray-300 shadow-lg rounded-2xl flex flex-col items-center justify-center p-12"
             style={{ backfaceVisibility: "hidden" }}
           >
             <motion.div
@@ -139,7 +139,7 @@ export default function BiodataPage() {
 
           {/* BACK SIDE */}
           <div
-            className="absolute w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 border border-gray-300 shadow-lg rounded-2xl flex items-center justify-center p-8"
+            className="absolute w-full h-full max-w-4xl min-h-[700px] bg-gradient-to-br from-gray-100 to-white border border-gray-300 shadow-lg rounded-2xl flex items-center justify-center p-12"
             style={{
               transform: "rotateY(180deg)",
               backfaceVisibility: "hidden",
@@ -149,14 +149,14 @@ export default function BiodataPage() {
               <Image
                 src="/img/logo-satria-keren.png"
                 alt="Logo"
-                width={400}
-                height={400}
+                width={500}
+                height={500}
               />
               <div className="mt-8 text-center">
                 <p className="text-gray-700">
                   Thank you for being a part of our community!
                 </p>
-                <p className="text-gray-700 mt-2">
+                <p className="text-gray-800 mt-2 animate-pulse">
                   Flip the card to view your profile information.
                 </p>
               </div>
