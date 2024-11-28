@@ -42,27 +42,27 @@ export default function HasilPage() {
         const dataTable = [
           {
             dimensi: "Sumberdaya (D)",
-            nilai: response.nilaiDimenSDAM?.toFixed(1),
+            nilai: response.nilaiDimenSDAM?.toFixed(2),
             kategori: getKategori(response.nilaiDimenSDAM),
           },
           {
             dimensi: "Ekonomi (E)",
-            nilai: response.nilaiDimenEkono?.toFixed(1),
+            nilai: response.nilaiDimenEkono?.toFixed(2),
             kategori: getKategori(response.nilaiDimenEkono),
           },
           {
             dimensi: "Lingkungan (L)",
-            nilai: response.nilaiDimenLingku?.toFixed(1),
+            nilai: response.nilaiDimenLingku?.toFixed(2),
             kategori: getKategori(response.nilaiDimenLingku),
           },
           {
             dimensi: "Sosial (S)",
-            nilai: response.nilaiDimenSosial?.toFixed(1),
+            nilai: response.nilaiDimenSosial?.toFixed(2),
             kategori: getKategori(response.nilaiDimenSosial),
           },
           {
             dimensi: "Total Nilai Kinerja",
-            nilai: response.nilaiKinerja?.toFixed(1),
+            nilai: response.nilaiKinerja?.toFixed(2),
             kategori: getKategori(response.nilaiKinerja),
           },
         ];
