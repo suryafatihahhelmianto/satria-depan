@@ -65,6 +65,8 @@ export default function RendemenStatisticsPage() {
           response.data.map((entry) => ({
             day: new Date(entry.tanggal).getDate(),
             rendemen: entry.nilaiRendemen,
+            // Dummy data for the second line (red line)
+            rendemenDummy: Math.random() * 10 + 2, // Random data between 2 and 12
           }))
         );
       } catch (err) {
@@ -104,7 +106,7 @@ export default function RendemenStatisticsPage() {
           <div className="bg-white rounded-lg shadow p-6">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-semibold">
-                Historis Rendemen (Prediksi)
+                Trend Historis Nilai Rendemen Hasil Prediksi
               </h2>
               <div className="flex gap-2">
                 <select
@@ -161,7 +163,15 @@ export default function RendemenStatisticsPage() {
                     dataKey="rendemen"
                     stroke="#00C49F"
                     activeDot={{ r: 8 }}
-                    name="Rendemen Prediksi"
+                    name="Rendemen Pabrik Y (Dummy)"
+                  />
+                  {/* Line kedua berwarna merah (dummy data) */}
+                  <Line
+                    type="monotone"
+                    dataKey="rendemenDummy"
+                    stroke="red"
+                    activeDot={{ r: 8 }}
+                    name="Rendemen Pabrik X (Dummy)"
                   />
                 </LineChart>
               </ResponsiveContainer>

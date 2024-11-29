@@ -107,7 +107,7 @@ export default function LoginPage() {
         </div>
         <h2 className="text-green-600 text-lg font-medium">
           Selamat datang di{" "}
-          <strong className="text-green-800">SATRIA KEREN</strong>
+          <strong className="text-green-800">SATRIA-KEREN</strong>
         </h2>
       </div>
 

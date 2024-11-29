@@ -37,6 +37,8 @@ export default function KinerjaStatisticsPage() {
           response.data.map((entry) => ({
             tahun: entry.tahun, // Using the `tahun` from the response
             nilaiIndeks: entry.instrumenNilai.nilaiKinerja, // Access `nilaiKinerja` from `instrumenNilai`
+            // Dummy data for the second line (red line)
+            nilaiIndeksDummy: Math.random() * 10 + 5, // Random data between 5 and 15
           }))
         );
       } catch (err) {
@@ -99,6 +101,14 @@ export default function KinerjaStatisticsPage() {
                     stroke="#00C49F"
                     activeDot={{ r: 8 }}
                     name="Nilai Indeks Kinerja"
+                  />
+                  {/* Line kedua berwarna merah (dummy data) */}
+                  <Line
+                    type="monotone"
+                    dataKey="nilaiIndeksDummy"
+                    stroke="red"
+                    activeDot={{ r: 8 }}
+                    name="Nilai Indeks Dummy"
                   />
                 </LineChart>
               </ResponsiveContainer>

@@ -110,6 +110,29 @@ export default function HomePage() {
         }
       );
 
+      const updatedInformasi = response.informasi.map((item) => {
+        let updatedRole = item.role;
+
+        // Ganti 'QUALITYCONTROL' dengan 'QUALITY CONTROL'
+        if (updatedRole === "QUALITYCONTROL") {
+          updatedRole = "QUALITY CONTROL";
+        }
+
+        // Ganti 'KEPALAPABRIK' dengan 'GENERAL MANAGER / KEPALA PABRIK'
+        if (updatedRole === "KEPALAPABRIK") {
+          updatedRole = "GENERAL MANAGER / KEPALA PABRIK";
+        }
+
+        if (updatedRole === "SDM") {
+          updatedRole = "SDM dan UMUM";
+        }
+
+        // Kembalikan objek dengan role yang sudah dimodifikasi
+        return { ...item, role: updatedRole };
+      });
+
+      response.informasi = updatedInformasi;
+
       setDashboardData(response);
       // setNilaiKinerjaKeberlanjutan(response.nilaiKinerjaKeberlanjutan[0]);
       // setRataRataRendemen(response.rataRataRendemen || 0);
@@ -421,9 +444,11 @@ export default function HomePage() {
                   <BsFillCircleFill className="text-red-500 mr-3 animate-pulse" />
                   {/* Access and display specific properties of the object */}
                   <div>
-                    <p className="font-bold">
-                      Bagian {info.role} Belum Mengisi
-                    </p>{" "}
+                    <p className="font-bold text-l animate-pulse">
+                      {info.role === "GENERAL MANAGER / KEPALA PABRIK"
+                        ? `${info.role} Belum Mengisi Data!`
+                        : `Kepala Bagian ${info.role} Belum Mengisi Data!`}
+                    </p>
                     {/* Render role */}
                     {/* <ul className="ml-4">
                       {info.unfilledColumns.map((column, colIndex) => (

@@ -366,7 +366,9 @@ export default function PenggunaPage() {
                   <option value="">Pilih Jabatan</option>
                   <option value="ADMIN">ADMIN</option>
                   <option value="DIREKSI">DIREKSI</option>
-                  <option value="KEPALAPABRIK">KEPALA PABRIK</option>
+                  <option value="KEPALAPABRIK">
+                    GENERAL MANAGER / KEPALA PABRIK
+                  </option>
                   <option value="QUALITYCONTROL">
                     KEPALA BAGIAN QUALITY CONTROL
                   </option>
