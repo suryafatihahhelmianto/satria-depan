@@ -206,7 +206,7 @@ export default function PenggunaPage() {
         </div>
       )}
 
-      <div className="flex items-center gap-2 my-5">
+      <div className="flex items-center gap-1 p-4 hover:bg-gray-100 hover:rounded-lg hover:shadow-md transition-all max-w-fit">
         <AiFillPlusCircle
           className="text-2xl text-green-800 hover:text-green-900 cursor-pointer"
           onClick={() => openModal()}
@@ -274,14 +274,14 @@ export default function PenggunaPage() {
           className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-start pt-32"
           onClick={handleClickOutside}
         >
-          <div className="bg-gray-50 p-8 rounded-lg shadow-lg w-96 relative max-h-[60vh] overflow-y-auto mt-16">
+          <div className="bg-gray-50 p-8 rounded-lg shadow-lg w-[40rem] relative max-h-[60vh] overflow-y-auto mt-16">
             <button
-              className="absolute top-2 right-2 text-black font-bold"
+              className="absolute top-2 right-2 text-black hover:text-red-500 font-bold"
               onClick={closeModal}
             >
               X
             </button>
-            <h2 className="text-black font-bold text-center mb-4">
+            <h2 className="text-black font-bold text-center mb-4 text-xl">
               {isEditMode ? "Edit Pengguna" : "Tambah Pengguna Baru"}
             </h2>
             <form className="space-y-4" onSubmit={handleFormSubmit}>
@@ -328,20 +328,32 @@ export default function PenggunaPage() {
                     formData.password.length > 0 &&
                     (!/[A-Z]/.test(formData.password) ||
                       !/[!@#$%^&*(),.?":{}|<>]/.test(formData.password) ||
+                      !/[0-9]/.test(formData.password) ||
                       formData.password.length < 8)
                       ? "bg-red-100 border-2 border-red-500"
                       : "bg-gray-200"
                   }`}
                 />
-                {formData.password.length > 0 &&
-                  (!/[A-Z]/.test(formData.password) ||
-                    !/[!@#$%^&*(),.?":{}|<>]/.test(formData.password) ||
-                    formData.password.length < 8) && (
-                    <p className="text-red-500 text-sm mt-1">
-                      Password harus memiliki minimal 8 karakter, huruf kapital,
-                      dan simbol.
-                    </p>
-                  )}
+
+                {/* Pesan kesalahan untuk setiap aturan */}
+                {formData.password.length > 0 && (
+                  <div className="text-red-500 text-sm mt-1">
+                    {!/[A-Z]/.test(formData.password) && (
+                      <p>
+                        - Password harus mengandung minimal 1 huruf kapital.
+                      </p>
+                    )}
+                    {!/[!@#$%^&*(),.?":{}|<>]/.test(formData.password) && (
+                      <p>- Password harus mengandung minimal 1 simbol.</p>
+                    )}
+                    {!/[0-9]/.test(formData.password) && (
+                      <p>- Password harus mengandung minimal 1 angka.</p>
+                    )}
+                    {formData.password.length < 8 && (
+                      <p>- Password harus memiliki minimal 8 karakter.</p>
+                    )}
+                  </div>
+                )}
               </div>
               <div>
                 <label htmlFor="jabatan">Jabatan</label>
@@ -412,7 +424,7 @@ export default function PenggunaPage() {
 
               <button
                 type="submit"
-                className="w-full bg-green-400 text-white py-2 rounded-lg hover:bg-green-500"
+                className="w-full bg-gradient-to-r from-green-400 to-green-600 text-white py-2 rounded-lg hover:bg-green-800"
               >
                 {isLoading ? (
                   <FaSpinner className="animate-spin mx-auto" />
