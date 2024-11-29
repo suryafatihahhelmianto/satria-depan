@@ -324,8 +324,24 @@ export default function PenggunaPage() {
                       ? "Kosongkan jika tidak ingin diubah"
                       : "Password"
                   }
-                  className="w-full px-4 py-2 rounded-lg bg-gray-200 focus:outline-none"
+                  className={`w-full px-4 py-2 rounded-lg focus:outline-none ${
+                    formData.password.length > 0 &&
+                    (!/[A-Z]/.test(formData.password) ||
+                      !/[!@#$%^&*(),.?":{}|<>]/.test(formData.password) ||
+                      formData.password.length < 8)
+                      ? "bg-red-100 border-2 border-red-500"
+                      : "bg-gray-200"
+                  }`}
                 />
+                {formData.password.length > 0 &&
+                  (!/[A-Z]/.test(formData.password) ||
+                    !/[!@#$%^&*(),.?":{}|<>]/.test(formData.password) ||
+                    formData.password.length < 8) && (
+                    <p className="text-red-500 text-sm mt-1">
+                      Password harus memiliki minimal 8 karakter, huruf kapital,
+                      dan simbol.
+                    </p>
+                  )}
               </div>
               <div>
                 <label htmlFor="jabatan">Jabatan</label>
