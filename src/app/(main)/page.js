@@ -52,8 +52,8 @@ export default function HomePage() {
   };
 
   const handleYearChange = (event) => {
-    setSelectedYear(event.target.value);
-    // fetchDashboardData(selectedFactory.id);
+    const year = parseInt(event.target.value);
+    setSelectedYear(year);
   };
 
   const fetchYears = async () => {
@@ -154,10 +154,14 @@ export default function HomePage() {
 
   useEffect(() => {
     fetchYears();
+  }, [selectedFactory]);
+
+  useEffect(() => {
     if (selectedFactory.id && selectedYear !== null) {
+      console.log("Fetching data with", selectedFactory.id, selectedYear);
       fetchDashboardData(selectedFactory.id);
     }
-  }, [selectedFactory, selectedYear, selectedDate]);
+  }, [selectedFactory.id, selectedYear, selectedDate]);
 
   if (loading) {
     return (
