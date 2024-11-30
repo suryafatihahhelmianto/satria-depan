@@ -70,14 +70,18 @@ export default function HomePage() {
         }
       );
 
-      const years = response.data; // Asumsi response.data adalah array tahun
+      const years = response.data;
       setAvailableYears(years);
 
       if (years.length > 0) {
-        setSelectedYear(years[0]); // Pilih tahun pertama sebagai default
+        setSelectedYear(years[0]);
+      } else {
+        setSelectedYear(null);
       }
     } catch (error) {
       console.error("Error fetching years:", error);
+      setAvailableYears([]);
+      setSelectedYear(null);
     }
   };
 
@@ -261,82 +265,90 @@ export default function HomePage() {
             </h1>
           </div>
 
-          <div className="flex flex-col md:flex-row justify-around gap-5 w-full h-full">
-            <div className="flex flex-col items-center justify-end mb-6 h-full">
-              <div
-                onClick={handleDetailClick}
-                className="w-40 h-40 md:w-52 md:h-52 mb-2 hover:cursor-pointer"
-              >
-                <CircularProgressbar
-                  // value={selectedYearData?.nilaiKinerja.toFixed(2) || 0}
-                  value={
-                    nilaiKinerjaKeberlanjutan[0].nilaiKinerja.toFixed(2) || 0
-                  }
-                  // text={`${
-                  //   formatNumberToIndonesian(selectedYearData?.nilaiKinerja) ||
-                  //   0
-                  // }%`}
-                  text={`${
-                    formatNumberToIndonesian(
-                      nilaiKinerjaKeberlanjutan[0].nilaiKinerja
-                    ) || 0
-                  }%`}
-                  styles={buildStyles({
-                    pathColor: "#4CAF50",
-                    textColor: "#4CAF50",
-                    trailColor: "#d6d6d6",
-                  })}
-                />
-              </div>
-              <div className="flex items-center justify-center">
-                <p className="mt-2 text-gray-700 text-center font-semibold">
-                  {getKategori(selectedYearData?.nilaiKinerja)}
-                </p>
-                <InfoButton />
-              </div>
-            </div>
-
-            <div className="border-t-2 md:border-l-2 md:border-t-0 border-gray-300 w-full md:w-0 h-0 md:h-full my-4 md:my-0"></div>
-
-            <div>
-              <div className="font-semibold mb-4">
-                <h1>Periode Perhitungan:</h1>
-                <select
-                  value={selectedYear}
-                  onChange={handleYearChange}
-                  className="bg-white border border-gray-300 rounded-md p-2 text-lg"
-                >
-                  {availableYears.map((year) => (
-                    <option key={year} value={year}>
-                      {year}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <p className="font-bold text-gray-700 mb-4">
-                Status Perhitungan:
-              </p>
-              <div className="flex justify-center space-x-4">
+          {availableYears.length > 0 ? (
+            <div className="flex flex-col md:flex-row justify-around gap-5 w-full h-full">
+              <div className="flex flex-col items-center justify-end mb-6 h-full">
                 <div
-                  className={`flex items-center justify-center w-24 h-24 rounded-full text-white font-bold ${
-                    nilaiKinerjaKeberlanjutan[0]?.status === "FINAL"
-                      ? `bg-green-500`
-                      : `bg-red-500`
-                  }`}
+                  onClick={handleDetailClick}
+                  className="w-40 h-40 md:w-52 md:h-52 mb-2 hover:cursor-pointer"
                 >
-                  <p>
-                    {nilaiKinerjaKeberlanjutan[0]?.status === "FINAL" ? (
-                      "SELESAI"
-                    ) : (
-                      <div className="text-center">
-                        <span>BELUM SELESAI</span>
-                      </div>
-                    )}
+                  <CircularProgressbar
+                    // value={selectedYearData?.nilaiKinerja.toFixed(2) || 0}
+                    value={
+                      nilaiKinerjaKeberlanjutan[0].nilaiKinerja.toFixed(2) || 0
+                    }
+                    // text={`${
+                    //   formatNumberToIndonesian(selectedYearData?.nilaiKinerja) ||
+                    //   0
+                    // }%`}
+                    text={`${
+                      formatNumberToIndonesian(
+                        nilaiKinerjaKeberlanjutan[0].nilaiKinerja
+                      ) || 0
+                    }%`}
+                    styles={buildStyles({
+                      pathColor: "#4CAF50",
+                      textColor: "#4CAF50",
+                      trailColor: "#d6d6d6",
+                    })}
+                  />
+                </div>
+                <div className="flex items-center justify-center">
+                  <p className="mt-2 text-gray-700 text-center font-semibold">
+                    {getKategori(selectedYearData?.nilaiKinerja)}
                   </p>
+                  <InfoButton />
+                </div>
+              </div>
+
+              <div className="border-t-2 md:border-l-2 md:border-t-0 border-gray-300 w-full md:w-0 h-0 md:h-full my-4 md:my-0"></div>
+
+              <div>
+                <div className="font-semibold mb-4">
+                  <h1>Periode Perhitungan:</h1>
+                  <select
+                    value={selectedYear}
+                    onChange={handleYearChange}
+                    className="bg-white border border-gray-300 rounded-md p-2 text-lg"
+                  >
+                    {availableYears.map((year) => (
+                      <option key={year} value={year}>
+                        {year}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <p className="font-bold text-gray-700 mb-4">
+                  Status Perhitungan:
+                </p>
+                <div className="flex justify-center space-x-4">
+                  <div
+                    className={`flex items-center justify-center w-24 h-24 rounded-full text-white font-bold ${
+                      nilaiKinerjaKeberlanjutan[0]?.status === "FINAL"
+                        ? `bg-green-500`
+                        : `bg-red-500`
+                    }`}
+                  >
+                    <p>
+                      {nilaiKinerjaKeberlanjutan[0]?.status === "FINAL" ? (
+                        "SELESAI"
+                      ) : (
+                        <div className="text-center">
+                          <span>BELUM SELESAI</span>
+                        </div>
+                      )}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center h-64">
+              <p className="text-xl text-gray-600 text-center">
+                Belum ada sesi pengisian untuk pabrik ini.
+              </p>
+            </div>
+          )}
         </div>
 
         <div className="bg-white p-4 md:p-6 rounded-lg shadow-md flex flex-col items-center">
