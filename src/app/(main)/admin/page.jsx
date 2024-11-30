@@ -274,7 +274,7 @@ export default function PenggunaPage() {
           className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-start pt-32"
           onClick={handleClickOutside}
         >
-          <div className="bg-gray-50 p-8 rounded-lg shadow-lg w-[40rem] relative max-h-[60vh] overflow-y-auto mt-16">
+          <div className="bg-gray-50 p-8 rounded-lg shadow-lg w-full sm:w-[30rem] md:w-[40rem] lg:w-[25rem] xl:w-[45rem] relative max-h-[60vh] overflow-y-auto mt-16">
             <button
               className="absolute top-2 right-2 text-black hover:text-red-500 font-bold"
               onClick={closeModal}

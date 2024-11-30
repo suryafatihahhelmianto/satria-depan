@@ -16,7 +16,6 @@ import { getCookie } from "@/tools/getCookie";
 import SkeletonCardBig from "@/components/common/SkeletonCardBig";
 
 export default function KinerjaStatisticsPage() {
-  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [chartData, setChartData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -31,16 +30,10 @@ export default function KinerjaStatisticsPage() {
           },
         });
 
-        console.log("Ini respon statistik kinerja: ", response.data);
-        // Transform data from API response
-        setChartData(
-          response.data.map((entry) => ({
-            tahun: entry.tahun, // Using the `tahun` from the response
-            nilaiIndeks: entry.instrumenNilai.nilaiKinerja, // Access `nilaiKinerja` from `instrumenNilai`
-            // Dummy data for the second line (red line)
-            nilaiIndeksDummy: Math.random() * 10 + 5, // Random data between 5 and 15
-          }))
-        );
+        console.log("Respon statistik kinerja:", response.data);
+
+        // Set data langsung dari respons API
+        setChartData(response.data);
       } catch (err) {
         setError("Gagal memuat data kinerja.");
       } finally {
@@ -49,7 +42,7 @@ export default function KinerjaStatisticsPage() {
     };
 
     fetchKinerjaData();
-  }, [selectedYear]);
+  }, []);
 
   if (loading) {
     return (
@@ -63,9 +56,20 @@ export default function KinerjaStatisticsPage() {
     return <p>{error}</p>;
   }
 
+  if (chartData.length === 0) {
+    return <p className="text-center text-gray-500">Data tidak tersedia</p>;
+  }
+
+  // Ambil nama-nama pabrik untuk membuat garis
+  const pabrikNames = Object.keys(chartData[0] || {}).filter(
+    (key) => key !== "tahun"
+  );
+
+  // Warna tetap untuk pabrik
+  const COLORS = ["#FF5733", "#33C4FF", "#FF33A6", "#33FF57", "#FFC300"];
+
   return (
     <div className="min-h-screen flex">
-      {/* Konten Utama */}
       <div className="flex-1">
         <main className="p-6">
           <div className="bg-white rounded-lg shadow p-6">
@@ -74,45 +78,35 @@ export default function KinerjaStatisticsPage() {
             </div>
 
             {/* Grafik */}
-            {chartData.length === 0 ? (
-              <p className="text-center text-gray-500">Data tidak tersedia</p>
-            ) : (
-              <ResponsiveContainer width="100%" height={400}>
-                <LineChart data={chartData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis
-                    dataKey="tahun"
-                    tickFormatter={(tickItem, index) =>
-                      index % 1 === 0 ? tickItem : ""
-                    }
-                    domain={["dataMin", "dataMax"]}
-                    interval={0}
-                  />
-                  <YAxis
-                    domain={[0, "dataMax"]}
-                    tickCount={10}
-                    allowDecimals={false}
-                  />
-                  <Tooltip labelFormatter={(label) => `Tahun ${label}`} />
-                  <Legend />
+            <ResponsiveContainer width="100%" height={400}>
+              <LineChart data={chartData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis
+                  dataKey="tahun"
+                  tickFormatter={(tickItem) => `Tahun ${tickItem}`}
+                  domain={["dataMin", "dataMax"]}
+                />
+                <YAxis
+                  domain={[0, "dataMax"]}
+                  tickCount={10}
+                  allowDecimals={false}
+                />
+                <Tooltip labelFormatter={(label) => `Tahun ${label}`} />
+                <Legend />
+
+                {/* Buat Line untuk setiap pabrik */}
+                {pabrikNames.map((pabrikName, index) => (
                   <Line
+                    key={pabrikName}
                     type="monotone"
-                    dataKey="nilaiIndeks"
-                    stroke="#00C49F"
+                    dataKey={pabrikName}
+                    name={`Nilai Indeks - ${pabrikName}`}
+                    stroke={COLORS[index % COLORS.length]} // Warna tetap
                     activeDot={{ r: 8 }}
-                    name="Nilai Indeks Kinerja"
                   />
-                  {/* Line kedua berwarna merah (dummy data) */}
-                  <Line
-                    type="monotone"
-                    dataKey="nilaiIndeksDummy"
-                    stroke="red"
-                    activeDot={{ r: 8 }}
-                    name="Nilai Indeks Dummy"
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            )}
+                ))}
+              </LineChart>
+            </ResponsiveContainer>
           </div>
         </main>
       </div>
