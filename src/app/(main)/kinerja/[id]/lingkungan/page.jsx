@@ -383,7 +383,7 @@ export default function LingkunganPage() {
       locked: lockedStatus["bisingProduksi2"],
       fieldName: "bisingProduksi2",
     },
-    { isSubtitle: true, label: "Kebisingan Terbuka (dB)" },
+    { isSubtitle: true, label: "Kebisingan Ruang Terbuka (dB)" },
     { isSubtitle: true, label: "Desa 1" },
     {
       label: "Pengukuran 1",

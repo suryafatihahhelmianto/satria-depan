@@ -8,7 +8,6 @@ import {
   BsBoxArrowRight,
 } from "react-icons/bs";
 import { AiOutlineMenu } from "react-icons/ai";
-import { GiSugarCane } from "react-icons/gi";
 import { useUser } from "@/context/UserContext";
 
 export default function Navbar({ isSidebarOpen, toggleSidebar }) {
