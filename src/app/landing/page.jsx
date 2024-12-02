@@ -149,9 +149,9 @@ export default function LandingPage() {
                   </h3>
                 </div>
                 <p className="text-gray-600">
-                  Manfaatkan analitik prediktif untuk memperkirakan hasil panen
-                  dengan akurasi tinggi. Optimalkan perencanaan produksi dan
-                  keputusan berbasis data yang andal.
+                  Memanfaatkan analitik prediktif untuk memperkirakan rendemen
+                  gula tebu dengan akurasi tinggi. Mengoptimalkan perencanaan
+                  produksi dan keputusan berbasis data yang andal.
                 </p>
               </div>
             </motion.div>
