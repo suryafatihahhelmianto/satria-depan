@@ -85,7 +85,7 @@ export default function LandingPage() {
             animate={{ opacity: 1, transition: { duration: 1, delay: 0.5 } }}
           >
             <p className="text-lg sm:text-xl max-w-2xl font-medium drop-shadow-md">
-              Sistem Analitik dan Teknologi Rajawali-IPB untuk Inovasi Agro
+              Sistem Analitik dan Teknologi Rajawali-IPB untuk Inovasi Agro:
             </p>
             <p className="text-md sm:text-lg max-w-2xl font-medium drop-shadow-md">
               Pengukuran Kinerja Keberlanjutan Rantai Pasok dan Prediksi

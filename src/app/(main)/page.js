@@ -235,7 +235,7 @@ export default function HomePage() {
     <div className="p-4 md:p-6 bg-gray-100 min-h-screen">
       <div className="flex flex-col md:flex-row md:justify-between mb-6">
         <h1 className="text-2xl md:text-3xl font-semibold mb-4 md:mb-0 text-green-700">
-          Kondisi Pabrik {selectedFactory.namaPabrik || "Pabrik"} saat ini
+          Kondisi PG {selectedFactory.namaPabrik || "Pabrik"} saat ini
         </h1>
         <div className="mb-4 flex flex-col md:flex-row md:items-center gap-2">
           <label className="block text-lg font-semibold">Pilih Pabrik:</label>

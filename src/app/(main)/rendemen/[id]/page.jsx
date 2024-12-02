@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { fetchData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
 import { formatNumberToIndonesian } from "@/tools/formatNumber";
+import { formatTanggal } from "@/tools/formatTanggal";
 
 export default function DetailPage() {
   const pathname = usePathname();
@@ -55,7 +56,9 @@ export default function DetailPage() {
       <div className="flex-1">
         <main className="p-6">
           <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-xl font-semibold mb-6">Detail Rendemen</h2>
+            <h2 className="text-xl font-semibold mb-6">
+              Detail Rendemen <span>{formatTanggal(detailData.tanggal)}</span>
+            </h2>
 
             <div className="space-y-4">
               <div>

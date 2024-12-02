@@ -48,7 +48,7 @@ export default function OpsiDimensi() {
     <div>
       <div className="flex justify-center mb-8">
         <h1 className="font-bold text-4xl">
-          Pengisian Kinerja Pabrik{" "}
+          Pengisian Kinerja PG{" "}
           <span className="text-green-700">{namaPabrik}</span> - Periode{" "}
           <span className="text-green-700">{periode}</span>
         </h1>
