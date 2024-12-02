@@ -678,6 +678,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("karbonDesaB1", e.target.value),
       onSubmit: () => handleUpdate("karbonDesaB1", formData.karbonDesaB1),
       locked: lockedStatus["karbonDesaB1"],
+      fieldName: "karbonDesaB1",
     },
     {
       label: "Pengukuran 2",
@@ -686,6 +687,7 @@ export default function LingkunganPage() {
       onChange: (e) => handleInputChange("karbonDesaB2", e.target.value),
       onSubmit: () => handleUpdate("karbonDesaB2", formData.karbonDesaB2),
       locked: lockedStatus["karbonDesaB2"],
+      fieldName: "karbonDesaB2",
     },
 
     {

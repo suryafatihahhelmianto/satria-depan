@@ -79,11 +79,31 @@ export default function TableInputRow({
   const [isLoading, setIsLoading] = useState(false);
   const [buttonLoading, setButtonLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [localLocked, setLocalLocked] = useState(locked);
 
   const router = useRouter();
 
+  const resetState = async () => {
+    try {
+      setButtonLoading(true);
+      await fetchData(`/api/logs/unlock/${type}/${sesiId}/${fieldName}`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${getCookie("token")}`,
+        },
+      });
+      setIsSubmitted(false);
+      setLocalLocked(false);
+    } catch (error) {
+      console.error("Error unlocking field: ", error);
+      alert("Gagal mengubah status pengisian data");
+    } finally {
+      setButtonLoading(false);
+    }
+  };
+
   const handleOpenModal = () => {
-    if (!locked) {
+    if (!localLocked) {
       setIsModalOpen(true);
     }
   };
@@ -92,50 +112,23 @@ export default function TableInputRow({
     setIsModalOpen(false);
   };
 
-  // const handleConfirmSubmit = () => {
-  //   setIsLoading(true);
-  //   onSubmit();
-  //   setIsSubmitted(true);
-  //   handleCloseModal();
-  //   router.refresh();
-  // };
-
   const handleConfirmSubmit = async () => {
     try {
-      setIsLoading(true); // Memulai loading
-      await onSubmit(); // Pastikan onSubmit adalah fungsi async yang menunggu penyelesaian fetchLingkungan
+      setIsLoading(true);
+      await onSubmit();
+      setIsSubmitted(true);
+      setLocalLocked(true);
     } catch (error) {
       console.error("Error while submitting:", error);
     } finally {
-      setIsLoading(false); // Menghentikan loading
-      setIsSubmitted(true); // Menandakan bahwa form sudah disubmit
+      setIsLoading(false);
       handleCloseModal();
-      router.refresh(); // Memperbarui state halaman
+      router.refresh();
     }
   };
 
   const handleUnlock = async () => {
-    try {
-      setIsLoading(true);
-      setButtonLoading(true);
-      const response = await fetchData(
-        `/api/logs/unlock/${type}/${sesiId}/${fieldName}`,
-        {
-          method: "PATCH",
-          headers: {
-            Authorization: `Bearer ${getCookie("token")}`,
-          },
-        }
-      );
-      setIsLoading(false);
-      setButtonLoading(false);
-      window.location.reload();
-      // router.replace(router.asPath)
-    } catch (error) {
-      console.error("Error unlocking field: ", error);
-      alert("Gagal mengubah status pengisian data");
-      setIsLoading(false);
-    }
+    await resetState();
   };
 
   const renderInput = () => {
@@ -146,9 +139,9 @@ export default function TableInputRow({
             type="text"
             value={value}
             onChange={onChange}
-            disabled={locked || isLoading || isSubmitted} // Tambahkan kondisi isLoading untuk menonaktifkan input
+            disabled={localLocked || isLoading || isSubmitted} // Tambahkan kondisi isLoading untuk menonaktifkan input
             className={`p-2 border rounded-md w-full focus:outline-none focus:ring ${
-              locked || isLoading
+              localLocked || isLoading
                 ? "bg-gray-300"
                 : "bg-gray-100 focus:ring-green-300"
             }`}
@@ -160,9 +153,9 @@ export default function TableInputRow({
             type="number"
             value={value}
             onChange={onChange}
-            disabled={locked || isLoading || isSubmitted} // Tambahkan kondisi isLoading untuk menonaktifkan input
+            disabled={localLocked || isLoading || isSubmitted} // Tambahkan kondisi isLoading untuk menonaktifkan input
             className={`p-2 border rounded-md w-full focus:outline-none focus:ring ${
-              locked || isLoading
+              localLocked || isLoading
                 ? "bg-gray-300"
                 : "bg-gray-100 focus:ring-green-300"
             }`}
@@ -173,9 +166,9 @@ export default function TableInputRow({
           <select
             value={value}
             onChange={onChange}
-            disabled={locked || isLoading || isSubmitted} // Tambahkan kondisi isLoading untuk menonaktifkan input
+            disabled={localLocked || isLoading || isSubmitted} // Tambahkan kondisi isLoading untuk menonaktifkan input
             className={`p-2 border rounded-md w-full focus:outline-none ${
-              locked || isLoading
+              localLocked || isLoading
                 ? "bg-gray-300"
                 : "bg-gray-100 focus:ring focus:ring-green-300"
             }`}
@@ -204,10 +197,10 @@ export default function TableInputRow({
         <td className="px-4 py-2 border border-gray-200">{renderInput()}</td>
         <td
           className={`px-4 py-2 border border-gray-200 text-center ${
-            locked ? "bg-gray-100 opacity-50" : ""
+            localLocked ? "bg-gray-100 opacity-50" : ""
           }`}
         >
-          {locked ? (
+          {localLocked ? (
             <div className="flex justify-center w-full">
               <AiFillCheckCircle className="text-green-500 text-center rounded-full text-3xl" />
             </div>
@@ -238,15 +231,15 @@ export default function TableInputRow({
         {isAdmin && (
           <td
             className={`px-4 py-2 border border-gray-200 text-center rounded-r-md ${
-              locked ? "opacity-100 bg-blue-50" : "opacity-50 bg-gray-200"
+              localLocked ? "opacity-100 bg-blue-50" : "opacity-50 bg-gray-200"
             }`}
           >
             <button
               type="button"
               onClick={handleUnlock}
-              disabled={!locked || isLoading} // Tombol unlock juga nonaktif saat isLoading
+              disabled={!localLocked || buttonLoading}
               className={`p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition ${
-                isLoading ? "cursor-not-allowed" : ""
+                buttonLoading ? "cursor-not-allowed" : ""
               }`}
             >
               {buttonLoading ? (

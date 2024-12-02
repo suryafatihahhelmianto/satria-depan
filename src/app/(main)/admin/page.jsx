@@ -285,11 +285,6 @@ export default function PenggunaPage() {
               {isEditMode ? "Edit Pengguna" : "Tambah Pengguna Baru"}
             </h2>
             <form className="space-y-4" onSubmit={handleFormSubmit}>
-              {errorMessage && (
-                <div className="mb-4 text-red-500 font-semibold">
-                  {errorMessage}
-                </div>
-              )}
               <div>
                 <label htmlFor="nama">Nama</label>
                 <input
@@ -423,6 +418,11 @@ export default function PenggunaPage() {
                   </p>
                 )}
               </div>
+              {errorMessage && (
+                <div className="mb-4 text-red-500 font-semibold">
+                  {errorMessage}
+                </div>
+              )}
 
               <button
                 type="submit"

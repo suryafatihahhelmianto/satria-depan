@@ -39,7 +39,7 @@ export default function Navbar({ isSidebarOpen, toggleSidebar }) {
 
   return (
     <div
-      className={`fixed top-0 w-full border-b z-50 p-6 bg-green-50 justify-between items-center hidden lg:flex transition-all duration-300 ease-in-out ${
+      className={`fixed top-0 w-full border-b z-50 p-6 bg-green-50 justify-between items-center hidden md:flex lg:flex transition-all duration-300 ease-in-out ${
         isSidebarOpen ? "lg:flex lg:ml-[300px]" : "lg:ml-0 w-full"
       }`}
       style={{

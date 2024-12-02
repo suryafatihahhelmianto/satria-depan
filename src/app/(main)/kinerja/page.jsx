@@ -344,6 +344,9 @@ export default function KinerjaPage() {
                 const status =
                   today > batasPengisian ? "SELESAI" : "BELUM SELESAI";
 
+                const statusPengisian =
+                  session.status === "FINAL" ? "SELESAI" : "BELUM SELESAI";
+
                 return (
                   <tr
                     key={session.id}
@@ -365,12 +368,19 @@ export default function KinerjaPage() {
                     <td className={`py-2 px-4 border-b `}>
                       <div
                         className={`${
-                          status === "BELUM SELESAI"
+                          session.status === "BELUM_FINAL"
                             ? "bg-red-600 px-2 py-1 rounded-lg text-white"
                             : "bg-green-600 px-2 py-1 rounded-lg text-white"
                         }`}
+                        // className={`${
+                        //   status === "BELUM SELESAI"
+                        //     ? "bg-red-600 px-2 py-1 rounded-lg text-white"
+                        //     : "bg-green-600 px-2 py-1 rounded-lg text-white"
+                        // }`}
                       >
-                        <h1>{status}</h1>
+                        {/* <h1>{status}</h1> */}
+                        {/* <h1>{session.status}</h1> */}
+                        <h1>{statusPengisian}</h1>
                       </div>
                     </td>
                     <td className="py-2 px-4 border-b text-center">

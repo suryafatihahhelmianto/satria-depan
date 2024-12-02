@@ -89,7 +89,7 @@ export default function LandingPage() {
             </p>
             <p className="text-md sm:text-lg max-w-2xl font-medium drop-shadow-md">
               Pengukuran Kinerja Keberlanjutan Rantai Pasok dan Prediksi
-              Rendemen
+              Rendemen Agro Industri Gula Tebu
             </p>
           </motion.div>
 
