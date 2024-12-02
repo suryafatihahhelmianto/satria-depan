@@ -374,7 +374,7 @@ export default function SumberDayaPage() {
       fieldName: "luasBL",
     },
     {
-      label: "Luas PST41 (ha)",
+      label: "Luas PSJT941 (ha)",
       inputType: "number",
       value: formData.luasPST41,
       onChange: (e) => handleInputChange("luasPST41", e.target.value),

@@ -23,6 +23,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
   // Handle resize untuk mendeteksi perangkat
   useEffect(() => {
     const handleResize = () => {
+      // setIsMobile(window.innerWidth < 426); // Jika lebar layar < 768px, dianggap mobile
       setIsMobile(window.innerWidth < 768); // Jika lebar layar < 768px, dianggap mobile
       // setIsMobile(window.innerWidth < 1028); // Jika lebar layar < 768px, dianggap mobile
     };
