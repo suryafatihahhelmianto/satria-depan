@@ -1,0 +1,6 @@
+{
+    "theme_color":"#00d5ff",
+    "background_color":"#ffffff",
+    "icons":[
+        {"purpose":"maskable",
+        "sizes":"512x512","src":"icon512_maskable.png","type":"image/png"},{"purpose":"any","sizes":"512x512","src":"icon512_rounded.png","type":"image/png"}],"orientation":"any","display":"standalone","dir":"auto","lang":"en-US","name":"Satria-Keren","short_name":"Satria-Keren","start_url":"/","scope":"/"}

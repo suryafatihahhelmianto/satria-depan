@@ -12,6 +12,12 @@ export const metadata = {
   title: "Satria Keren",
   description:
     "Sistem Analitik dan Teknologi Rajawali-IPB untuk Inovasi Agro: Pengukuran Kinerja Keberlanjutan Rantai Pasok dan Prediksi Rendemen",
+  // themeColor: "#ffffff", // Warna tema untuk browser
+  manifest: "/manifest.json", // Lokasi file manifest.json
+  // icons: {
+  //   icon: "/img/logo-satria-keren.png", // Ikon utama
+  //   apple: "/img/logo-satria-keren.png", // Ikon untuk perangkat Apple
+  // },
 };
 
 export default function RootLayout({ children }) {

@@ -48,9 +48,8 @@ export default function OpsiDimensi() {
     <div>
       <div className="flex justify-center mb-8">
         <h1 className="font-bold text-4xl">
-          Pengisian Kinerja PG{" "}
-          <span className="text-green-700">{namaPabrik}</span> - Periode{" "}
-          <span className="text-green-700">{periode}</span>
+          Pengisian Data PG <span className="text-green-700">{namaPabrik}</span>{" "}
+          - Periode <span className="text-green-700">{periode}</span>
         </h1>
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 md:gap-8 text-center">

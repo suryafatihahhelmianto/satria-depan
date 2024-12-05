@@ -257,20 +257,20 @@ export default function DataSosial() {
       locked: lockedStatus["luasLahan"],
       fieldName: "luasLahan",
     },
-    {
-      label: "Total Luas Lahan yang Ditanami Tahun Ini (ha)",
-      inputType: "number",
-      value: formData.luasLahanYangDitanami,
-      onChange: (e) =>
-        setFormData({
-          ...formData,
-          luasLahanYangDitanami: e.target.value,
-        }),
-      onSubmit: () =>
-        handleUpdate("luasLahanYangDitanami", formData.luasLahanYangDitanami),
-      locked: lockedStatus["luasLahanYangDitanami"],
-      fieldName: "luasLahanYangDitanami",
-    },
+    // {
+    //   label: "Total Luas Lahan yang Ditanami Tahun Ini (ha)",
+    //   inputType: "number",
+    //   value: formData.luasLahanYangDitanami,
+    //   onChange: (e) =>
+    //     setFormData({
+    //       ...formData,
+    //       luasLahanYangDitanami: e.target.value,
+    //     }),
+    //   onSubmit: () =>
+    //     handleUpdate("luasLahanYangDitanami", formData.luasLahanYangDitanami),
+    //   locked: lockedStatus["luasLahanYangDitanami"],
+    //   fieldName: "luasLahanYangDitanami",
+    // },
     {
       label: "Luas Lahan yang Avalist Tahun Lalu (ha)",
       inputType: "number",
@@ -282,23 +282,23 @@ export default function DataSosial() {
       locked: lockedStatus["luasLahanTahunLalu"],
       fieldName: "luasLahanTahunLalu",
     },
-    {
-      label: "Total Luas Lahan yang Ditanami Tahun Lalu (ha)",
-      inputType: "number",
-      value: formData.luasLahanYangDitanamiTahunLalu,
-      onChange: (e) =>
-        setFormData({
-          ...formData,
-          luasLahanYangDitanamiTahunLalu: e.target.value,
-        }),
-      onSubmit: () =>
-        handleUpdate(
-          "luasLahanYangDitanamiTahunLalu",
-          formData.luasLahanYangDitanamiTahunLalu
-        ),
-      locked: lockedStatus["luasLahanYangDitanamiTahunLalu"],
-      fieldName: "luasLahanYangDitanamiTahunLalu",
-    },
+    // {
+    //   label: "Total Luas Lahan yang Ditanami Tahun Lalu (ha)",
+    //   inputType: "number",
+    //   value: formData.luasLahanYangDitanamiTahunLalu,
+    //   onChange: (e) =>
+    //     setFormData({
+    //       ...formData,
+    //       luasLahanYangDitanamiTahunLalu: e.target.value,
+    //     }),
+    //   onSubmit: () =>
+    //     handleUpdate(
+    //       "luasLahanYangDitanamiTahunLalu",
+    //       formData.luasLahanYangDitanamiTahunLalu
+    //     ),
+    //   locked: lockedStatus["luasLahanYangDitanamiTahunLalu"],
+    //   fieldName: "luasLahanYangDitanamiTahunLalu",
+    // },
   ];
 
   return (
