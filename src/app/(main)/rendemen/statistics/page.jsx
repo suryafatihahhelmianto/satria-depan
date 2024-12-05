@@ -37,12 +37,25 @@ export default function RendemenStatisticsPage() {
     { value: 11, label: "Desember" },
   ];
 
+  const COLORS = {
+    "Tersana Baru": "#FF5733",
+    Jatitujuh: "#33A1FF",
+  };
+
   const handleMonthChange = (event) => {
     setSelectedMonth(parseInt(event.target.value));
   };
 
   const handleYearChange = (event) => {
     setSelectedYear(parseInt(event.target.value));
+  };
+
+  // Fungsi untuk mengatur data default 0
+  const setDefaultMissingData = (data, key) => {
+    return data.map((entry) => ({
+      ...entry,
+      [key]: entry[key] !== null && entry[key] !== undefined ? entry[key] : 0,
+    }));
   };
 
   useEffect(() => {
@@ -60,15 +73,35 @@ export default function RendemenStatisticsPage() {
           }
         );
 
-        console.log("ini respon statistik: ", response.data);
-        setChartData(
-          response.data.map((entry) => ({
-            day: new Date(entry.tanggal).getDate(),
-            rendemen: entry.nilaiRendemen,
-            // Dummy data for the second line (red line)
-            rendemenDummy: Math.random() * 10 + 2, // Random data between 2 and 12
-          }))
+        const responseData = response.data; // Data dari backend
+        const pabrikNames = Object.keys(responseData);
+        const allDays = Array.from(
+          { length: new Date(selectedYear, selectedMonth + 1, 0).getDate() },
+          (_, i) => i + 1
         );
+
+        // Normalisasi data untuk semua hari
+        let normalizedData = [];
+        allDays.forEach((day) => {
+          const entry = { day };
+
+          pabrikNames.forEach((pabrik) => {
+            const dataForPabrik = responseData[pabrik];
+            const dataForDay = dataForPabrik.find(
+              (d) => new Date(d.tanggal).getDate() === day
+            );
+            entry[pabrik] = dataForDay ? dataForDay.nilaiRendemen : null;
+          });
+
+          normalizedData.push(entry);
+        });
+
+        // Mengisi nilai default 0 untuk data yang hilang
+        pabrikNames.forEach((pabrik) => {
+          normalizedData = setDefaultMissingData(normalizedData, pabrik);
+        });
+
+        setChartData(normalizedData);
       } catch (err) {
         setError("Gagal memuat data rendemen.");
       } finally {
@@ -158,21 +191,16 @@ export default function RendemenStatisticsPage() {
                   />
                   <Tooltip labelFormatter={(label) => `Tanggal ${label}`} />
                   <Legend />
-                  <Line
-                    type="monotone"
-                    dataKey="rendemen"
-                    stroke="#00C49F"
-                    activeDot={{ r: 8 }}
-                    name="Rendemen Pabrik Y (Dummy)"
-                  />
-                  {/* Line kedua berwarna merah (dummy data) */}
-                  <Line
-                    type="monotone"
-                    dataKey="rendemenDummy"
-                    stroke="red"
-                    activeDot={{ r: 8 }}
-                    name="Rendemen Pabrik X (Dummy)"
-                  />
+                  {Object.keys(COLORS).map((pabrik) => (
+                    <Line
+                      key={pabrik}
+                      type="monotone"
+                      dataKey={pabrik}
+                      stroke={COLORS[pabrik]}
+                      activeDot={{ r: 8 }}
+                      name={`Rendemen ${pabrik}`}
+                    />
+                  ))}
                 </LineChart>
               </ResponsiveContainer>
             )}
