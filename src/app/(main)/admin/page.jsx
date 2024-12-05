@@ -143,7 +143,7 @@ export default function PenggunaPage() {
 
     try {
       if (isEditMode) {
-        await fetchData(`/api/users/edit/${selectedUserId}`, {
+        const response = await fetchData(`/api/users/edit/${selectedUserId}`, {
           method: "PUT",
           data: dataToSend,
           headers: { Authorization: `Bearer ${token}` },
@@ -158,14 +158,15 @@ export default function PenggunaPage() {
           ? "Pengguna berhasil diperbarui"
           : "Pengguna berhasil ditambahkan"
       );
+
       closeModal();
       fetchUsers();
     } catch (error) {
       console.error("Error saving user: ", error);
-      setErrorMessage(
-        // "Terjadi kesalahan saat menyimpan data pengguna.",
-        error.response.data.message
-      );
+      // setErrorMessage(
+      //   // "Terjadi kesalahan saat menyimpan data pengguna.",
+      //   error
+      // );
     } finally {
       setIsLoading(false); // End loading
     }
