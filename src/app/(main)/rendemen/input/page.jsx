@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import {
   FaLeaf,
   FaCalendarAlt,
+  FaRegCalendarAlt,
   FaDna,
   FaSeedling,
   FaThermometerHalf,
@@ -27,6 +28,7 @@ export default function RendemenInputPage() {
   });
   const [predictionValue, setPredictionValue] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
   const router = useRouter();
 
@@ -35,9 +37,18 @@ export default function RendemenInputPage() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
+    setIsConfirmModalOpen(true);
+  };
+
+  const handleCancelCalculate = () => {
+    setIsConfirmModalOpen(false);
+  };
+
+  const handleConfirmCalculate = async () => {
     setIsLoading(true);
+    setIsConfirmModalOpen(false);
 
     const {
       blokKebun,
@@ -72,7 +83,6 @@ export default function RendemenInputPage() {
       });
 
       setPredictionValue(response.newRendemen.nilaiRendemen);
-      // router.push("/rendemen");
     } catch (error) {
       console.error("Error submitting data: ", error);
     } finally {
@@ -81,222 +91,269 @@ export default function RendemenInputPage() {
   };
 
   return (
-    <div className="py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl">
-        <div className="md:flex">
-          <div className="p-8 w-full">
-            <div className="uppercase tracking-wide text-sm text-indigo-500 font-semibold mb-1">
-              Input Data
-            </div>
-            <h2 className="block mt-1 text-lg leading-tight font-medium text-black">
-              Rendemen Tebu
-            </h2>
-            <p className="mt-2 text-gray-500">
-              Masukkan data rendemen tebu untuk analisis.
+    <div className="min-h-screen bg-grey-200 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
+        <div className="p-10">
+          <div className="text-center mb-10">
+            <h1 className="text-4xl font-bold text-green-800 mb-2">
+              Input Data Rendemen Tebu
+            </h1>
+            <p className="text-xl text-green-600">
+              Masukkan data rendemen tebu untuk analisis prediksi.
             </p>
-            <form onSubmit={handleSubmit} className="mt-6 space-y-6">
-              <div>
-                <label className="text-sm font-medium text-gray-700 flex items-center">
-                  <FaVial className="mr-2 text-indigo-500" />
-                  Blok Kebun
-                </label>
-                <input
-                  type="text"
-                  name="blokKebun"
-                  value={formData.blokKebun}
-                  onChange={handleInputChange}
-                  placeholder="Masukkan nilai Blok"
-                  className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                />
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-700 flex items-center">
-                  <FaLeaf className="mr-2 text-green-500" />
-                  Jenis
-                </label>
-                <select
-                  name="jenis"
-                  value={formData.jenis}
-                  onChange={handleInputChange}
-                  className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                >
-                  <option value="">Pilih Jenis</option>
-                  <option value="0">Mandiri</option>
-                  <option value="1">PC</option>
-                  <option value="2">R1</option>
-                  <option value="3">R2</option>
-                  <option value="4">R3</option>
-                  <option value="5">RC</option>
-                  <option value="6">TRS I KM B</option>
-                  <option value="7">TRS I KM C</option>
-                  <option value="8">TRS I KM E</option>
-                  <option value="9">TRS II KM B</option>
-                  <option value="10">TRS II KM C</option>
-                  <option value="11">TRS II KM D</option>
-                  <option value="12">TRS II KM E</option>
-                  <option value="13">TRS II KM K</option>
-                  <option value="14">TRT I KM B</option>
-                  <option value="15">TRT I KM K</option>
-                  <option value="16">TRT II KM B</option>
-                  <option value="17">TRT II KM C</option>
-                  <option value="18">TRT II KM K</option>
-                  <option value="19">TRT III KM C</option>
-                </select>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-700 flex items-center">
-                  <FaCalendarAlt className="mr-2 text-blue-500" />
-                  Masa Tanam
-                </label>
-                <select
-                  name="masaTanam"
-                  value={formData.masaTanam}
-                  onChange={handleInputChange}
-                  className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                >
-                  <option value="">Pilih Masa Tanam</option>
-                  <option value="1">10A</option>
-                  <option value="2">10B</option>
-                  <option value="3">11A</option>
-                  <option value="4">11B</option>
-                  <option value="5">12A</option>
-                  <option value="6">12B</option>
-                  <option value="7">13A</option>
-                  <option value="8">5A</option>
-                  <option value="9">5B</option>
-                  <option value="10">6A</option>
-                  <option value="11">6B</option>
-                  <option value="12">7A</option>
-                  <option value="13">7B</option>
-                  <option value="14">8A</option>
-                  <option value="15">8B</option>
-                  <option value="16">9A</option>
-                  <option value="17">9B</option>
-                </select>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-700 flex items-center">
-                  <FaDna className="mr-2 text-purple-500" />
-                  Varietas
-                </label>
-                <select
-                  name="varietas"
-                  value={formData.varietas}
-                  onChange={handleInputChange}
-                  className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                >
-                  <option value="">Pilih Varietas</option>
-                  <option value="0">BL</option>
-                  <option value="1">CENING</option>
-                  <option value="2">GMP1</option>
-                  <option value="3">GMP2</option>
-                  <option value="4">GMP3</option>
-                  <option value="5">KK</option>
-                  <option value="6">KENTUNG</option>
-                  <option value="7">LAMPUNG3</option>
-                  <option value="8">PA8213</option>
-                  <option value="9">PA8218</option>
-                  <option value="10">PA822</option>
-                  <option value="11">PA822 (KB II)</option>
-                  <option value="12">PA828</option>
-                  <option value="13">PA1301</option>
-                  <option value="14">PA1303</option>
-                  <option value="15">PA1401</option>
-                  <option value="16">PA1601</option>
-                  <option value="17">PA197</option>
-                  <option value="18">PS851</option>
-                  <option value="19">PS862</option>
-                  <option value="20">PS864</option>
-                  <option value="21">PS865</option>
-                  <option value="22">PS881</option>
-                  <option value="23">PS882</option>
-                  <option value="24">PSJK922</option>
-                  <option value="25">PSJT941</option>
-                </select>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-700 flex items-center">
-                  <FaSeedling className="mr-2 text-yellow-500" />
-                  Kemasakan
-                </label>
-                <select
-                  name="kemasakan"
-                  value={formData.kemasakan}
-                  onChange={handleInputChange}
-                  className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                >
-                  <option value="">Pilih Kemasakan</option>
-                  <option value="0">Awal</option>
-                  <option value="1">Awal Tengah</option>
-                  <option value="2">Tengah</option>
-                  <option value="3">Tengah Lambat</option>
-                </select>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-700 flex items-center">
-                  <FaThermometerHalf className="mr-2 text-red-500" />
-                  Brix
-                </label>
-                <input
-                  type="number"
-                  name="brix"
-                  value={formData.brix}
-                  onChange={handleInputChange}
-                  placeholder="Masukkan nilai Brix"
-                  className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                />
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-700 flex items-center">
-                  <FaVial className="mr-2 text-indigo-500" />
-                  Pol
-                </label>
-                <input
-                  type="number"
-                  name="pol"
-                  value={formData.pol}
-                  onChange={handleInputChange}
-                  placeholder="Masukkan nilai Pol"
-                  className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                />
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-700 flex items-center">
-                  <FaCloudRain className="mr-2 text-blue-500" />
-                  Curah Hujan
-                </label>
-                <input
-                  type="number"
-                  name="curahHujan"
-                  value={formData.curahHujan}
-                  onChange={handleInputChange}
-                  placeholder="Masukkan nilai curah hujan"
-                  className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                />
-              </div>
-              <div>
-                <button
-                  type="submit"
-                  className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  disabled={isLoading}
-                >
-                  {isLoading ? "Menghitung..." : "Submit Data"}
-                </button>
-              </div>
-            </form>
-            {predictionValue !== null && (
-              <div className="mt-8 bg-gradient-to-r from-green-400 to-green-500 rounded-xl p-6 text-center">
-                <h3 className="text-xl font-semibold text-white mb-2">
-                  Nilai Prediksi
-                </h3>
-                <p className="text-6xl font-bold text-white">
-                  {predictionValue}%
-                </p>
-              </div>
-            )}
           </div>
+          <form onSubmit={handleSubmit} className="space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <InputField
+                icon={<FaSeedling className="text-green-500 text-2xl" />}
+                label="Blok Kebun"
+                name="blokKebun"
+                value={formData.blokKebun}
+                onChange={handleInputChange}
+                placeholder="Masukkan nilai Blok"
+              />
+              <SelectField
+                icon={<FaLeaf className="text-green-500 text-2xl" />}
+                label="Jenis"
+                name="jenis"
+                value={formData.jenis}
+                onChange={handleInputChange}
+                options={[
+                  { value: "", label: "Pilih Jenis" },
+                  { value: "0", label: "Mandiri" },
+                  { value: "1", label: "PC" },
+                  { value: "2", label: "R1" },
+                  { value: "3", label: "R2" },
+                  { value: "4", label: "R3" },
+                  { value: "5", label: "RC" },
+                  { value: "6", label: "TRS I KM B" },
+                  { value: "7", label: "TRS I KM C" },
+                  { value: "8", label: "TRS I KM E" },
+                  { value: "9", label: "TRS II KM B" },
+                  { value: "10", label: "TRS II KM C" },
+                  { value: "11", label: "TRS II KM D" },
+                  { value: "12", label: "TRS II KM E" },
+                  { value: "13", label: "TRS II KM K" },
+                  { value: "14", label: "TRT I KM B" },
+                  { value: "15", label: "TRT I KM K" },
+                  { value: "16", label: "TRT II KM B" },
+                  { value: "17", label: "TRT II KM C" },
+                  { value: "18", label: "TRT II KM K" },
+                  { value: "19", label: "TRT III KM C" },
+                ]}
+                placeholder="Pilih Jenis"
+                styles={{
+                  control: (base) => ({
+                    ...base,
+                    minHeight: "35px", // Kontrol lebih kecil
+                    fontSize: "12px", // Font lebih kecil
+                  }),
+                  menu: (base) => ({
+                    ...base,
+                    display: "grid",
+                    gridTemplateColumns: "repeat(3, minmax(0, 1fr))", // Atur jadi 3 kolom
+                    gap: "4px", // Jarak antar opsi lebih kecil
+                    maxHeight: "150px", // Dropdown lebih pendek
+                    overflowY: "auto", // Scroll jika terlalu panjang
+                    padding: "4px", // Padding antar opsi
+                  }),
+                  option: (base) => ({
+                    ...base,
+                    padding: "6px 8px", // Opsi lebih kecil
+                    fontSize: "12px", // Ukuran font opsi
+                  }),
+                }}
+              />
+
+              <SelectField
+                icon={<FaCalendarAlt className="text-green-500 text-2xl" />}
+                label="Masa Tanam"
+                name="masaTanam"
+                value={formData.masaTanam}
+                onChange={handleInputChange}
+                options={[
+                  { value: "", label: "Pilih Masa Tanam" },
+                  { value: "1", label: "10A" },
+                  { value: "2", label: "10B" },
+                  { value: "3", label: "11A" },
+                  { value: "4", label: "11B" },
+                  { value: "5", label: "12A" },
+                  { value: "6", label: "12B" },
+                  { value: "7", label: "13A" },
+                  { value: "8", label: "5A" },
+                  { value: "9", label: "5B" },
+                  { value: "10", label: "6A" },
+                  { value: "11", label: "6B" },
+                  { value: "12", label: "7A" },
+                  { value: "13", label: "7B" },
+                  { value: "14", label: "8A" },
+                  { value: "15", label: "8B" },
+                  { value: "16", label: "9A" },
+                  { value: "17", label: "9B" },
+                ]}
+              />
+
+              <SelectField
+                icon={<FaDna className="text-green-500 text-2xl" />}
+                label="Varietas"
+                name="varietas"
+                value={formData.varietas}
+                onChange={handleInputChange}
+                options={[
+                  { value: "", label: "Pilih Varietas" },
+                  { value: "0", label: "BL" },
+                  { value: "1", label: "CENING" },
+                  { value: "2", label: "GMP1" },
+                  { value: "3", label: "GMP2" },
+                  { value: "4", label: "GMP3" },
+                  { value: "5", label: "KK" },
+                  { value: "6", label: "KENTUNG" },
+                  { value: "7", label: "LAMPUNG3" },
+                  { value: "8", label: "PA8213" },
+                  { value: "9", label: "PA8218" },
+                  { value: "10", label: "PA822" },
+                  { value: "11", label: "PA822 (KB II)" },
+                  { value: "12", label: "PA828" },
+                  { value: "13", label: "PA1301" },
+                  { value: "14", label: "PA1303" },
+                  { value: "15", label: "PA1401" },
+                  { value: "16", label: "PA1601" },
+                  { value: "17", label: "PA197" },
+                  { value: "18", label: "PS851" },
+                  { value: "19", label: "PS862" },
+                  { value: "20", label: "PS864" },
+                  { value: "21", label: "PS865" },
+                  { value: "22", label: "PS881" },
+                  { value: "23", label: "PS882" },
+                  { value: "24", label: "PSJK922" },
+                  { value: "25", label: "PSJT941" },
+                ]}
+              />
+
+              <SelectField
+                icon={<FaRegCalendarAlt className="text-green-500 text-2xl" />}
+                label="Kemasakan"
+                name="kemasakan"
+                value={formData.kemasakan}
+                onChange={handleInputChange}
+                options={[
+                  { value: "", label: "Pilih Kemasakan" },
+                  { value: "0", label: "Awal" },
+                  { value: "1", label: "Awal Tengah" },
+                  { value: "2", label: "Tengah" },
+                  { value: "3", label: "Tengah Lambat" },
+                ]}
+              />
+              <InputField
+                icon={<FaThermometerHalf className="text-green-500 text-2xl" />}
+                label="Brix"
+                name="brix"
+                value={formData.brix}
+                onChange={handleInputChange}
+                placeholder="Masukkan nilai Brix"
+                type="number"
+              />
+              <InputField
+                icon={<FaVial className="text-green-500 text-2xl" />}
+                label="Pol"
+                name="pol"
+                value={formData.pol}
+                onChange={handleInputChange}
+                placeholder="Masukkan nilai Pol"
+                type="number"
+              />
+              <InputField
+                icon={<FaCloudRain className="text-green-500 text-2xl" />}
+                label="Curah Hujan"
+                name="curahHujan"
+                value={formData.curahHujan}
+                onChange={handleInputChange}
+                placeholder="Masukkan nilai curah hujan"
+                type="number"
+              />
+            </div>
+            <div className="mt-10">
+              <button
+                type="submit"
+                className="w-full flex justify-center items-center py-4 px-6 border border-transparent rounded-full shadow-sm text-xl font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-300"
+                disabled={isLoading}
+              >
+                {isLoading ? "Menghitung..." : "Hitung Prediksi"}
+              </button>
+            </div>
+          </form>
+          {predictionValue !== null && (
+            <div className="mt-12 bg-gradient-to-r from-green-400 to-green-600 rounded-2xl p-8 text-center">
+              <h3 className="text-2xl font-semibold text-white mb-4">
+                Nilai Prediksi Rendemen
+              </h3>
+              <p className="text-7xl font-bold text-white">
+                {predictionValue}%
+              </p>
+            </div>
+          )}
         </div>
       </div>
+      {isConfirmModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-10 rounded-2xl w-full max-w-lg">
+            <h2 className="text-3xl font-bold mb-6 text-green-800">
+              Konfirmasi Pengiriman
+            </h2>
+            <p className="mb-8 text-xl text-green-600">
+              Apakah data sudah sesuai? Silakan periksa kembali sebelum
+              melanjutkan perhitungan.
+            </p>
+            <div className="flex justify-end gap-6">
+              <button
+                onClick={handleCancelCalculate}
+                className="px-8 py-3 bg-red-500 text-white rounded-full text-lg hover:bg-red-600 transition duration-300"
+              >
+                Batal
+              </button>
+              <button
+                onClick={handleConfirmCalculate}
+                className="px-8 py-3 bg-green-500 text-white rounded-full text-lg hover:bg-green-600 transition duration-300"
+                disabled={isLoading}
+              >
+                {isLoading ? "Menghitung..." : "Hitung!"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
+
+const InputField = ({ icon, label, ...props }) => (
+  <div>
+    <label className="text-lg font-medium text-green-700 flex items-center mb-2">
+      {icon}
+      <span className="ml-2">{label}</span>
+    </label>
+    <input
+      {...props}
+      className="mt-1 block w-full py-3 px-4 border border-green-300 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-lg"
+    />
+  </div>
+);
+
+const SelectField = ({ icon, label, options, ...props }) => (
+  <div>
+    <label className="text-lg font-medium text-green-700 flex items-center mb-2">
+      {icon}
+      <span className="ml-2">{label}</span>
+    </label>
+    <select
+      {...props}
+      className="mt-1 block w-full py-3 px-4 border border-green-300 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-lg"
+    >
+      {options.map((option) => (
+        <option key={option.value} value={option.value}>
+          {option.label}
+        </option>
+      ))}
+    </select>
+  </div>
+);

@@ -384,38 +384,60 @@ export default function KinerjaPage() {
                       </div>
                     </td>
                     <td className="py-2 px-4 border-b text-center">
-                      <div className="flex justify-center items-center gap-2 mx-auto">
-                        {isAdmin && (
-                          <button
-                            className="bg-yellow-400 p-2 rounded-lg flex items-center justify-center hover:bg-yellow-500"
-                            onClick={() => {
-                              setEditData({
-                                id: session.id,
-                                batasPengisian: session.batasPengisian,
-                              });
-                              setIsEditModalOpen(true);
-                            }}
-                          >
-                            <AiFillEdit className="text-white" />
-                          </button>
-                        )}
+                      <div className="flex justify-center items-center gap-2 mx-auto ">
+                        <div className="relative group">
+                          {isAdmin && (
+                            <button
+                              className="bg-yellow-400 p-2 rounded-lg flex items-center justify-center hover:bg-yellow-500"
+                              onClick={() => {
+                                setEditData({
+                                  id: session.id,
+                                  batasPengisian: session.batasPengisian,
+                                });
+                                setIsEditModalOpen(true);
+                              }}
+                            >
+                              <AiFillEdit className="text-white" />
+                            </button>
+                          )}
+                          {isAdmin && (
+                            <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 bg-black text-white text-xs px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                              Edit
+                            </span>
+                          )}
+                        </div>
 
-                        <Link
-                          href={`/kinerja/${session.id}/sumber-daya`}
-                          className="flex gap-2"
-                        >
-                          <button className="bg-blue-400 p-2 rounded-lg flex items-center justify-center hover:bg-blue-500">
-                            <AiFillRead className="text-white" />
-                          </button>
-                        </Link>
-                        {isAdmin && (
-                          <button
-                            className="bg-red-500 p-2 rounded-lg flex items-center justify-center hover:bg-red-600 text-white"
-                            onClick={() => handleDelete(session.id)}
+                        <div className="relative group">
+                          <Link
+                            href={`/kinerja/${session.id}/sumber-daya`}
+                            className="flex gap-2"
                           >
-                            <AiFillDelete />
-                          </button>
-                        )}
+                            <button className="bg-blue-400 p-2 rounded-lg flex items-center justify-center hover:bg-blue-500">
+                              <AiFillRead className="text-white" />
+                            </button>
+                          </Link>
+                          {isAdmin && (
+                            <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 bg-black text-white text-xs px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                              Detail
+                            </span>
+                          )}
+                        </div>
+
+                        <div className="relative group">
+                          {isAdmin && (
+                            <button
+                              className="bg-red-500 p-2 rounded-lg flex items-center justify-center hover:bg-red-600 text-white"
+                              onClick={() => handleDelete(session.id)}
+                            >
+                              <AiFillDelete />
+                            </button>
+                          )}
+                          {isAdmin && (
+                            <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 bg-black text-white text-xs px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                              Hapus
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </td>
                   </tr>

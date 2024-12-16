@@ -242,18 +242,29 @@ export default function PenggunaPage() {
                   <td className="py-2 px-4 border">{user.jabatan}</td>
                   <td className="py-2 px-4 border">
                     <div className="flex gap-2">
-                      <button
-                        className="p-2 bg-yellow-500 rounded hover:bg-yellow-600"
-                        onClick={() => openModal(user)}
-                      >
-                        <FaEdit className="text-white" />
-                      </button>
-                      <button
-                        className="p-2 bg-red-500 rounded hover:bg-red-600"
-                        onClick={() => handleDelete(user.id)}
-                      >
-                        <FaTrash className="text-white" />
-                      </button>
+                      <div className="relative group">
+                        <button
+                          className="p-2 bg-yellow-500 rounded hover:bg-yellow-600"
+                          onClick={() => openModal(user)}
+                        >
+                          <FaEdit className="text-white" />
+                        </button>
+                        <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 bg-black text-white text-xs px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                          Edit
+                        </span>
+                      </div>
+
+                      <div className="relative group">
+                        <button
+                          className="p-2 bg-red-500 rounded hover:bg-red-600"
+                          onClick={() => handleDelete(user.id)}
+                        >
+                          <FaTrash className="text-white" />
+                        </button>
+                        <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 bg-black text-white text-xs px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                          Hapus
+                        </span>
+                      </div>
                     </div>
                   </td>
                 </tr>

@@ -18,10 +18,20 @@ import { formatNumberToIndonesian } from "@/tools/formatNumber";
 import { useUser } from "@/context/UserContext";
 
 export default function RendemenPage() {
+  const ITEMS_PER_PAGE = 15;
+  const [currentPage, setCurrentPage] = useState(1);
   const { role, isAdmin } = useUser();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [sessions, setSessions] = useState([]); // State untuk menyimpan data sesi
+  const currentData = sessions.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+  const totalPages = Math.ceil(sessions.length / ITEMS_PER_PAGE);
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   // Fungsi untuk mem-fetch data dari API
   const fetchSessions = async () => {
@@ -201,22 +211,35 @@ export default function RendemenPage() {
                     </td>
                     <td className="py-2 px-4 border-b text-center">
                       <div className="flex justify-center items-center gap-2 mx-auto">
-                        <Link
-                          className="flex gap-2"
-                          href={`/rendemen/${session.id}`}
-                        >
-                          <button className="bg-blue-300 p-2 rounded-lg flex items-center justify-center hover:bg-blue-500">
-                            <AiOutlineSearch />
-                          </button>
-                        </Link>
-                        {isAdmin && (
-                          <button
-                            onClick={() => handleDelete(session.id)}
-                            className="bg-red-500 p-2 rounded-lg flex items-center justify-center hover:bg-red-600 text-white"
+                        <div className="relative group">
+                          <Link
+                            className="flex gap-2"
+                            href={`/rendemen/${session.id}`}
                           >
-                            <AiFillDelete />
-                          </button>
-                        )}
+                            <button className="bg-blue-300 p-2 rounded-lg flex items-center justify-center hover:bg-blue-500">
+                              <AiOutlineSearch />
+                            </button>
+                          </Link>
+                          <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 bg-black text-white text-xs px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                            Detail
+                          </span>
+                        </div>
+
+                        <div className="relative group">
+                          {isAdmin && (
+                            <button
+                              onClick={() => handleDelete(session.id)}
+                              className="bg-red-500 p-2 rounded-lg flex items-center justify-center hover:bg-red-600 text-white"
+                            >
+                              <AiFillDelete />
+                            </button>
+                          )}
+                          {isAdmin && (
+                            <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 bg-black text-white text-xs px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                              Hapus
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </td>
                   </tr>
@@ -224,6 +247,24 @@ export default function RendemenPage() {
               )}
             </tbody>
           </table>
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex justify-center mt-4 gap-2">
+              {Array.from({ length: totalPages }, (_, index) => (
+                <button
+                  key={index}
+                  onClick={() => handlePageChange(index + 1)}
+                  className={`px-3 py-1 rounded-lg ${
+                    currentPage === index + 1
+                      ? "bg-green-600 text-white"
+                      : "bg-gray-200 hover:bg-gray-300"
+                  }`}
+                >
+                  {index + 1}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>
