@@ -204,6 +204,7 @@ export default function SumberDayaPage() {
         ),
       locked: lockedStatus["kemudahanAksesTenagaKerja"],
       fieldName: "kemudahanAksesTenagaKerja",
+      capt: "MAS WASIS GANTENG!",
     },
   ];
 

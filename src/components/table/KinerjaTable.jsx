@@ -44,20 +44,32 @@ export default function KinerjaTable({ title, rows, isAdmin, type, sesiId }) {
                 </tr>
               ) : (
                 // Normal row with input
-                <TableInputRow
-                  key={index}
-                  label={row.label}
-                  inputType={row.inputType}
-                  value={row.value}
-                  options={row.options}
-                  onChange={row.onChange}
-                  onSubmit={row.onSubmit}
-                  locked={row.locked}
-                  isAdmin={isAdmin}
-                  type={type}
-                  sesiId={sesiId}
-                  fieldName={row.fieldName}
-                />
+                <tr key={index} className="group relative">
+                  <td className="px-4 py-3 text-sm font-medium text-gray-700">
+                    {row.label}
+                  </td>
+                  <td className="px-4 py-3">
+                    <TableInputRow
+                      label={row.label}
+                      inputType={row.inputType}
+                      value={row.value}
+                      options={row.options}
+                      onChange={row.onChange}
+                      onSubmit={row.onSubmit}
+                      locked={row.locked}
+                      isAdmin={isAdmin}
+                      type={type}
+                      sesiId={sesiId}
+                      fieldName={row.fieldName}
+                    />
+                  </td>
+                  {/* Tooltip */}
+                  {row.capt && (
+                    <div className="absolute top-1/2 left-full ml-2 transform -translate-y-1/2 bg-black text-white text-xs px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity">
+                      {row.capt}
+                    </div>
+                  )}
+                </tr>
               )
             )}
           </tbody>
