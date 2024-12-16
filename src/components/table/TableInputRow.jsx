@@ -195,7 +195,7 @@ export default function TableInputRow({
               <AiOutlineInfoCircle className="ml-2 text-green-500" />
             </div>
             <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 bg-black text-white text-xs px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-              MAS WASISSSSS!
+              {fieldName}
             </span>
           </div>
         </td>
@@ -239,20 +239,25 @@ export default function TableInputRow({
               localLocked ? "opacity-100 bg-blue-50" : "opacity-50 bg-gray-200"
             }`}
           >
-            <button
-              type="button"
-              onClick={handleUnlock}
-              disabled={!localLocked || buttonLoading}
-              className={`p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition ${
-                buttonLoading ? "cursor-not-allowed" : ""
-              }`}
-            >
-              {buttonLoading ? (
-                <AiOutlineLoading className="animate-spin" />
-              ) : (
-                <AiOutlineUnlock className="text-2xl" />
-              )}
-            </button>
+            <div className="relative group">
+              <button
+                type="button"
+                onClick={handleUnlock}
+                disabled={!localLocked || buttonLoading}
+                className={`p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition ${
+                  buttonLoading ? "cursor-not-allowed" : ""
+                }`}
+              >
+                {buttonLoading ? (
+                  <AiOutlineLoading className="animate-spin" />
+                ) : (
+                  <AiOutlineUnlock className="text-2xl" />
+                )}
+              </button>
+              <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 z-50 bg-black text-white text-xs px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                Unlock
+              </span>
+            </div>
           </td>
         )}
       </tr>
