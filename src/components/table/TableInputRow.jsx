@@ -189,9 +189,14 @@ export default function TableInputRow({
     <>
       <tr className={`border-b hover:bg-gray-50 transition`}>
         <td className="px-4 py-2 border border-gray-200 rounded-l-md">
-          <div className="flex items-center">
-            {label}
-            <AiOutlineInfoCircle className="ml-2 text-green-500" />
+          <div className="relative group">
+            <div className="flex items-center">
+              {label}
+              <AiOutlineInfoCircle className="ml-2 text-green-500" />
+            </div>
+            <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 bg-black text-white text-xs px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+              MAS WASISSSSS!
+            </span>
           </div>
         </td>
         <td className="px-4 py-2 border border-gray-200">{renderInput()}</td>
