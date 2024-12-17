@@ -39,7 +39,7 @@ export default function KinerjaTable({ title, rows, isAdmin, type, sesiId }) {
                     colSpan="3"
                     className="px-4 py-3 font-semibold text-gray-700 border-b border-gray-300"
                   >
-                    {row.capt}
+                    {row.label}
                   </td>
                 </tr>
               ) : (
