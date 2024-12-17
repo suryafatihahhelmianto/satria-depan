@@ -194,7 +194,7 @@ export default function DetailPage() {
                 <label className="block text-gray-700">Curah Hujan</label>
                 <p className="bg-green-100 w-full p-2 rounded">
                   {detailData.curahHujan !== undefined
-                    ? formatNumberToIndonesian(detailData.pol)
+                    ? formatNumberToIndonesian(detailData.curahHujan)
                     : "Data tidak tersedia"}
                 </p>
               </div>
