@@ -31,8 +31,6 @@ export default function DetailPage() {
           }
         );
 
-        console.log("ini respon detail sdam: ", response);
-
         // Prepare data for the table
         const dataTable = [
           {

@@ -70,8 +70,6 @@ export default function DataSosial() {
         },
         data: dataToSend,
       });
-
-      console.log("Response dari server: ", response);
     } catch (error) {
       console.error("Error calculating dimensions: ", error);
     }

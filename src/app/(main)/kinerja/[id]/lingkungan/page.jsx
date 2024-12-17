@@ -141,8 +141,6 @@ export default function LingkunganPage() {
         },
         data: dataToSend,
       });
-
-      console.log("Response dari server (lingkungan): ", response);
     } catch (error) {
       console.error("Error calculating dimensions (lingkungan): ", error);
     }
@@ -156,8 +154,6 @@ export default function LingkunganPage() {
           Authorization: `Bearer ${getCookie("token")}`,
         },
       });
-
-      console.log("Response dari server (lingkungan): ", response);
 
       setFormData((prevState) => ({
         ...prevState, // Pertahankan data lama

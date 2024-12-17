@@ -117,8 +117,6 @@ export default function KinerjaPage() {
         },
       });
 
-      console.log("csv response: ", csvResponse);
-
       const kinerjaData = await csvResponse.data;
 
       const headers = [

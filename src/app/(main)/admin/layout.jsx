@@ -9,7 +9,6 @@ export default function AdminLayout({ children }) {
   const router = useRouter();
 
   useEffect(() => {
-    console.log("ini role: ", role);
     if (!loading && role !== "ADMIN") {
       // Redirect non-admin users to a different page
       router.push("/");

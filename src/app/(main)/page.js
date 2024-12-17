@@ -185,7 +185,6 @@ export default function HomePage() {
 
   useEffect(() => {
     if (selectedFactory.id && selectedYear !== null) {
-      console.log("Fetching data with", selectedFactory.id, selectedYear);
       fetchDashboardData(selectedFactory.id);
     }
   }, [selectedFactory.id, selectedYear, selectedDate]);
