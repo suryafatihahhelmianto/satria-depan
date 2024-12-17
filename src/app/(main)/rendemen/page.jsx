@@ -49,7 +49,6 @@ export default function RendemenPage() {
 
       const data = await response.data;
 
-      console.log("ini data rendemen: ", data);
       setSessions(data); // Simpan data dari API ke state sessions
       setLoading(false);
     } catch (err) {

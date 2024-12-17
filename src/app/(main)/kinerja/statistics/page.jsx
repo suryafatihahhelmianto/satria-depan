@@ -30,8 +30,6 @@ export default function KinerjaStatisticsPage() {
           },
         });
 
-        console.log("Respon statistik kinerja:", response.data);
-
         // Set data langsung dari respons API
         setChartData(response.data);
       } catch (err) {
