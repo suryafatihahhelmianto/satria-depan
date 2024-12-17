@@ -305,7 +305,7 @@ export default function HomePage() {
                   <div className="relative group">
                     <InfoButton />
                     <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 bg-black text-white text-xs px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                      Keterangan
+                      Click Me!
                     </span>
                   </div>
                 </div>
