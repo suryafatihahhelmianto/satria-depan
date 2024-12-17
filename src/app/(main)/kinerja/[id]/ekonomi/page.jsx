@@ -184,7 +184,7 @@ export default function DataKinerja() {
 
   const rowsE2 = [
     {
-      label: "Kehilangan Pol Ampas (%)",
+      label: "Pol Ampas (%)",
       inputType: "number",
       value: formData.polAmpas,
       onChange: (e) => setFormData({ ...formData, polAmpas: e.target.value }),
@@ -194,7 +194,7 @@ export default function DataKinerja() {
       capt: "Rata-rata pol ampas hingga hari terakhir giling",
     },
     {
-      label: "Kehilangan Pol Blotong (%)",
+      label: "Pol Blotong (%)",
       inputType: "number",
       value: formData.polBlotong,
       onChange: (e) => setFormData({ ...formData, polBlotong: e.target.value }),
@@ -204,7 +204,7 @@ export default function DataKinerja() {
       capt: "Rata-rata pol blotong hingga hari terakhir giling",
     },
     {
-      label: "Kehilangan Pol Tetes (%)",
+      label: "Pol Tetes (%)",
       inputType: "number",
       value: formData.polTetes,
       onChange: (e) => setFormData({ ...formData, polTetes: e.target.value }),
@@ -214,7 +214,7 @@ export default function DataKinerja() {
       capt: "Rata-rata pol tetes hingga hari terakhir giling",
     },
     {
-      label: "Kehilangan Rendemen Kebun (%)",
+      label: "Rendemen Kebun (%)",
       inputType: "number",
       value: formData.rendemenKebun,
       onChange: (e) =>
@@ -225,7 +225,7 @@ export default function DataKinerja() {
       capt: "Rata-rata rendemen kebun hingga hari terakhir giling.",
     },
     {
-      label: "Kehilangan Rendemen Gerbang (%)",
+      label: "Rendemen Gerbang (%)",
       inputType: "number",
       value: formData.rendemenGerbang,
       onChange: (e) =>
@@ -236,7 +236,7 @@ export default function DataKinerja() {
       capt: "Rata-rata rendemen gerbang hingga hari terakhir giling.",
     },
     {
-      label: "Kehilangan Rendemen NPP (%)",
+      label: "Rendemen NPP (%)",
       inputType: "number",
       value: formData.rendemenNPP,
       onChange: (e) =>
@@ -247,7 +247,7 @@ export default function DataKinerja() {
       capt: "Rata-rata rendemen NPP hingga hari terakhir giling",
     },
     {
-      label: "Kehilangan Rendemen Gula (%)",
+      label: "Rendemen Gula (%)",
       inputType: "number",
       value: formData.rendemenGula,
       onChange: (e) =>
