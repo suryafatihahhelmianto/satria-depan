@@ -81,16 +81,18 @@ const PengaturanPage = () => {
     try {
       const token = getCookie("token");
 
+      const data = {
+        currentPassword: passwordLama,
+        newPassword: passwordBaru,
+      };
+
       const response = await fetchData("/api/users/change-password", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          currentPassword: passwordLama,
-          newPassword: passwordBaru,
-        }),
+        data,
       });
 
       if (response.error) {
@@ -120,8 +122,6 @@ const PengaturanPage = () => {
         },
       });
       setUser(response);
-
-      console.log("ini response user: ", response);
     } catch (error) {
       console.error("Error fetching user data", error);
     } finally {
