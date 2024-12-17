@@ -135,8 +135,6 @@ export default function PenggunaPage() {
       dataToSend.pabrikGulaId = 99;
     }
 
-    console.log("Data to send:", dataToSend);
-
     if (isEditMode && !dataToSend.password) {
       delete dataToSend.password;
     }

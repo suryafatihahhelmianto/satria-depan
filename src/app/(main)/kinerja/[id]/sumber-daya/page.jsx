@@ -110,8 +110,6 @@ export default function SumberDayaPage() {
         },
         data: formData,
       });
-
-      console.log("Response dari server: ", response);
     } catch (error) {
       console.error("Error calculating dimensions: ", error);
     }
