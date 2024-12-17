@@ -41,7 +41,7 @@ export default function GratitudePage() {
           transition={{ delay: 1, duration: 1 }}
           className="mt-8 text-right text-xl font-semibold text-gray-800"
         >
-          - TIM DEVELOPER
+          - TIM DEVELOPER (Lebih banyak mas wasis)
         </motion.div>
       </motion.div>
     </div>
