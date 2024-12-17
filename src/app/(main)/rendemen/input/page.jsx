@@ -83,6 +83,7 @@ export default function RendemenInputPage() {
       });
 
       setPredictionValue(response.newRendemen.nilaiRendemen);
+      router.push("/rendemen");
     } catch (error) {
       console.error("Error submitting data: ", error);
     } finally {
