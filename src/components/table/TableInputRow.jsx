@@ -74,6 +74,7 @@ export default function TableInputRow({
   type,
   sesiId,
   fieldName,
+  capt,
 }) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);

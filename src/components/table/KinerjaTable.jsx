@@ -57,6 +57,7 @@ export default function KinerjaTable({ title, rows, isAdmin, type, sesiId }) {
                   type={type}
                   sesiId={sesiId}
                   fieldName={row.fieldName}
+                  capt={row.capt}
                 />
               )
             )}

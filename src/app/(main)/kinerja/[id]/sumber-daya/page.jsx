@@ -247,6 +247,7 @@ export default function SumberDayaPage() {
         handleUpdate("jumlahJamKerjaEfektif", formData.jumlahJamKerjaEfektif),
       locked: lockedStatus["jumlahJamKerjaEfektif"],
       fieldName: "jumlahJamKerjaEfektif",
+      capt: "Wasis",
     },
     {
       label: "Jam Henti B (%)",
