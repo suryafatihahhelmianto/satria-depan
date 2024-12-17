@@ -16,11 +16,11 @@ export default function GratitudePage() {
         </h1>
         <div className="space-y-4 text-center text-gray-700">
           <p>In lines of code and pixels bright,</p>
-          <p>We've woven dreams from day to night.</p>
+          <p>We have woven dreams from day to night.</p>
           <p>Your trust, a canvas for our art,</p>
-          <p>Has touched each developer's heart.</p>
+          <p>Has touched each developer&apos;s heart.</p>
           <br />
-          <p>Through challenges, we've grown and learned,</p>
+          <p>Through challenges, we have grown and learned,</p>
           <p>Each problem solved, each function turned.</p>
           <p>Your vision guided every click,</p>
           <p>As we built your site, brick by brick.</p>
@@ -28,7 +28,7 @@ export default function GratitudePage() {
           <p>For this chance to create and build,</p>
           <p>Our gratitude cannot be stilled.</p>
           <p>We thank you for this journey shared,</p>
-          <p>And all the moments that we've cared.</p>
+          <p>And all the moments that we&apos;ve cared.</p>
           <br />
           <p>As your website stands tall and proud,</p>
           <p>We hope its success rings out loud.</p>
@@ -41,7 +41,7 @@ export default function GratitudePage() {
           transition={{ delay: 1, duration: 1 }}
           className="mt-8 text-right text-xl font-semibold text-gray-800"
         >
-          - TIM DEVELOPER (Lebih banyak mas wasis)
+          - Salam Cinta Tim Developer (Wasis CS ea)
         </motion.div>
       </motion.div>
     </div>
