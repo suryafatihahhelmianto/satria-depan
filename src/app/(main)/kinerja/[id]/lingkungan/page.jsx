@@ -217,6 +217,7 @@ export default function LingkunganPage() {
       onSubmit: () => handleUpdate("amoniaDesaA1", formData.amoniaDesaA1),
       locked: lockedStatus["amoniaDesaA1"],
       fieldName: "amoniaDesaA1",
+      capt: "Hasil pengukuran ke-1 kandungan amonia",
     },
     {
       label: "Pengukuran 2",
@@ -226,6 +227,7 @@ export default function LingkunganPage() {
       onSubmit: () => handleUpdate("amoniaDesaA2", formData.amoniaDesaA2),
       locked: lockedStatus["amoniaDesaA2"],
       fieldName: "amoniaDesaA2",
+      capt: "Hasil pengukuran ke-2 kandungan amonia",
     },
     { isSubtitle: true, label: "Desa 2" },
     {
@@ -236,6 +238,7 @@ export default function LingkunganPage() {
       onSubmit: () => handleUpdate("amoniaDesaB1", formData.amoniaDesaB1),
       locked: lockedStatus["amoniaDesaB1"],
       fieldName: "amoniaDesaB1",
+      capt: "Hasil pengukuran ke-1 kandungan amonia",
     },
     {
       label: "Pengukuran 2",
@@ -245,6 +248,7 @@ export default function LingkunganPage() {
       onSubmit: () => handleUpdate("amoniaDesaB2", formData.amoniaDesaB2),
       locked: lockedStatus["amoniaDesaB2"],
       fieldName: "amoniaDesaB2",
+      capt: "Hasil pengukuran ke-2 kandungan amonia",
     },
     { isSubtitle: true, label: "Hidrogen Sulfida (H2S) (ppm)" },
     { isSubtitle: true, label: "Desa 1" },
@@ -256,6 +260,7 @@ export default function LingkunganPage() {
       onSubmit: () => handleUpdate("sulfidaDesaA1", formData.sulfidaDesaA1),
       locked: lockedStatus["sulfidaDesaA1"],
       fieldName: "sulfidaDesaA1",
+      capt: "Hasil pengukuran ke-1 kandungan hidrogen sulfida",
     },
     {
       label: "Pengukuran 2",
@@ -265,6 +270,7 @@ export default function LingkunganPage() {
       onSubmit: () => handleUpdate("sulfidaDesaA2", formData.sulfidaDesaA2),
       locked: lockedStatus["sulfidaDesaA2"],
       fieldName: "sulfidaDesaA2",
+      capt: "Hasil pengukuran ke-2 kandungan hidrogen sulfida",
     },
     { isSubtitle: true, label: "Desa 2" },
     {
@@ -275,6 +281,7 @@ export default function LingkunganPage() {
       onSubmit: () => handleUpdate("sulfidaDesaB1", formData.sulfidaDesaB1),
       locked: lockedStatus["sulfidaDesaB1"],
       fieldName: "sulfidaDesaB1",
+      capt: "Hasil pengukuran ke-1 kandungan hidrogen sulfida",
     },
     {
       label: "Pengukuran 2",
@@ -284,6 +291,7 @@ export default function LingkunganPage() {
       onSubmit: () => handleUpdate("sulfidaDesaB2", formData.sulfidaDesaB2),
       locked: lockedStatus["sulfidaDesaB2"],
       fieldName: "sulfidaDesaB2",
+      capt: "Hasil pengukuran ke-2 kandungan hidrogen sulfida",
     },
   ];
 
@@ -302,6 +310,7 @@ export default function LingkunganPage() {
       onSubmit: () => handleUpdate("debuDesaA1", formData.debuDesaA1),
       locked: lockedStatus["debuDesaA1"],
       fieldName: "debuDesaA1",
+      capt: "Hasil pengukuran ke-1 kandungan debu",
     },
     {
       label: "Pengukuran 2",
@@ -311,6 +320,7 @@ export default function LingkunganPage() {
       onSubmit: () => handleUpdate("debuDesaA2", formData.debuDesaA2),
       locked: lockedStatus["debuDesaA2"],
       fieldName: "debuDesaA2",
+      capt: "Hasil pengukuran ke-2 kandungan debu",
     },
     { isSubtitle: true, label: "Desa 2" },
     {
@@ -321,6 +331,7 @@ export default function LingkunganPage() {
       onSubmit: () => handleUpdate("debuDesaB1", formData.debuDesaB1),
       locked: lockedStatus["debuDesaB1"],
       fieldName: "debuDesaB1",
+      capt: "Hasil pengukuran ke-1 kandungan debu",
     },
     {
       label: "Pengukuran 2",
@@ -330,6 +341,7 @@ export default function LingkunganPage() {
       onSubmit: () => handleUpdate("debuDesaB2", formData.debuDesaB2),
       locked: lockedStatus["debuDesaB2"],
       fieldName: "debuDesaB2",
+      capt: "Hasil pengukuran ke-2 kandungan debu",
     },
   ];
 
@@ -342,6 +354,7 @@ export default function LingkunganPage() {
       onSubmit: () => handleUpdate("konsumsiListrik", formData.konsumsiListrik),
       locked: lockedStatus["konsumsiListrik"],
       fieldName: "konsumsiListrik",
+      capt: "Rata-rata konsumsi listrik yang digunakan untuk produksi per ton tebu",
     },
     {
       label: "Jumlah Tebu (Ton)",
@@ -351,6 +364,7 @@ export default function LingkunganPage() {
       onSubmit: () => handleUpdate("jumlahTonTebu", formData.jumlahTonTebu),
       locked: lockedStatus["jumlahTonTebu"],
       fieldName: "jumlahTonTebu",
+      capt: "Jumlah tebu yang digunakan untuk input produksi",
     },
     {
       label: "SHS (%Tebu)",
@@ -360,6 +374,7 @@ export default function LingkunganPage() {
       onSubmit: () => handleUpdate("shs", formData.shs),
       locked: lockedStatus["shs"],
       fieldName: "shs",
+      capt: "Presentase SHS tebu yang dihasilkan",
     },
   ];
 
@@ -373,6 +388,7 @@ export default function LingkunganPage() {
       onSubmit: () => handleUpdate("bisingProduksi1", formData.bisingProduksi1),
       locked: lockedStatus["bisingProduksi1"],
       fieldName: "bisingProduksi1",
+      capt: "Hasil pengukuran ke-1 kebisingan ruang produksi",
     },
     {
       label: "Pengukuran 2",
@@ -382,6 +398,7 @@ export default function LingkunganPage() {
       onSubmit: () => handleUpdate("bisingProduksi2", formData.bisingProduksi2),
       locked: lockedStatus["bisingProduksi2"],
       fieldName: "bisingProduksi2",
+      capt: "Hasil pengukuran ke-2 kebisingan ruang produksi",
     },
     { isSubtitle: true, label: "Kebisingan Ruang Terbuka (dB)" },
     { isSubtitle: true, label: "Desa 1" },
@@ -393,6 +410,7 @@ export default function LingkunganPage() {
       onSubmit: () => handleUpdate("bisingDesaA1", formData.bisingDesaA1),
       locked: lockedStatus["bisingDesaA1"],
       fieldName: "bisingDesaA1",
+      capt: "Hasil pengukuran ke-1 kebisingan ruang terbuka",
     },
     {
       label: "Pengukuran 2",
@@ -402,6 +420,7 @@ export default function LingkunganPage() {
       onSubmit: () => handleUpdate("bisingDesaA2", formData.bisingDesaA2),
       locked: lockedStatus["bisingDesaA2"],
       fieldName: "bisingDesaA2",
+      capt: "Hasil pengukuran ke-2 kebisingan ruang terbuka",
     },
     { isSubtitle: true, label: "Desa 2" },
     {
@@ -412,6 +431,7 @@ export default function LingkunganPage() {
       onSubmit: () => handleUpdate("bisingDesaB1", formData.bisingDesaB1),
       locked: lockedStatus["bisingDesaB1"],
       fieldName: "bisingDesaB1",
+      capt: "Hasil pengukuran ke-1 kebisingan ruang terbuka",
     },
     {
       label: "Pengukuran 2",
@@ -421,6 +441,7 @@ export default function LingkunganPage() {
       onSubmit: () => handleUpdate("bisingDesaB2", formData.bisingDesaB2),
       locked: lockedStatus["bisingDesaB2"],
       fieldName: "bisingDesaB2",
+      capt: "Hasil pengukuran ke-2 kebisingan ruang terbuka",
     },
   ];
 
@@ -437,6 +458,7 @@ export default function LingkunganPage() {
       onSubmit: () => handleUpdate("totalResiduJuni", formData.totalResiduJuni),
       locked: lockedStatus["totalResiduJuni"],
       fieldName: "totalResiduJuni",
+      capt: "Hasil pengukuran ke-1 total residu terlarut",
     },
     {
       label: "BOD5 (mg/L)",
@@ -446,6 +468,7 @@ export default function LingkunganPage() {
       onSubmit: () => handleUpdate("bodJuni", formData.bodJuni),
       locked: lockedStatus["bodJuni"],
       fieldName: "bodJuni",
+      capt: "Hasil pengukuran ke-2 total residu terlarut",
     },
     {
       label: "COD (mg/L)",
@@ -455,6 +478,7 @@ export default function LingkunganPage() {
       onSubmit: () => handleUpdate("codJuni", formData.codJuni),
       locked: lockedStatus["codJuni"],
       fieldName: "codJuni",
+      capt: "Hasil pengukuran ke-3 total residu terlarut",
     },
     {
       label: "Sulfida (mg/L)",
@@ -464,6 +488,7 @@ export default function LingkunganPage() {
       onSubmit: () => handleUpdate("sulfidaJuni", formData.sulfidaJuni),
       locked: lockedStatus["sulfidaJuni"],
       fieldName: "sulfidaJuni",
+      capt: "",
     },
     {
       isSubtitle: true,
