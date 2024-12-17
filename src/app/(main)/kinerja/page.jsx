@@ -398,11 +398,9 @@ export default function KinerjaPage() {
                               <AiFillEdit className="text-white" />
                             </button>
                           )}
-                          {isAdmin && (
-                            <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 bg-black text-white text-xs px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                              Edit
-                            </span>
-                          )}
+                          <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 bg-black text-white text-xs px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                            Edit
+                          </span>
                         </div>
 
                         <div className="relative group">
@@ -414,11 +412,9 @@ export default function KinerjaPage() {
                               <AiFillRead className="text-white" />
                             </button>
                           </Link>
-                          {isAdmin && (
-                            <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 bg-black text-white text-xs px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                              Detail
-                            </span>
-                          )}
+                          <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 bg-black text-white text-xs px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                            Detail
+                          </span>
                         </div>
 
                         <div className="relative group">
@@ -430,11 +426,9 @@ export default function KinerjaPage() {
                               <AiFillDelete />
                             </button>
                           )}
-                          {isAdmin && (
-                            <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 bg-black text-white text-xs px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                              Hapus
-                            </span>
-                          )}
+                          <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 bg-black text-white text-xs px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                            Hapus
+                          </span>
                         </div>
                       </div>
                     </td>

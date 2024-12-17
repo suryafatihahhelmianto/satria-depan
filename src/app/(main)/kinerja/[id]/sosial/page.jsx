@@ -209,7 +209,7 @@ export default function DataSosial() {
 
   const rowsS5 = [
     {
-      label: "PKWT Tenaga Kerja Majalengka Indramayu (orang)",
+      label: "PKWT Tenaga Kerja Lokal (orang)",
       inputType: "number",
       value: formData.tetapMajaIndra,
       onChange: (e) =>
@@ -217,7 +217,7 @@ export default function DataSosial() {
       onSubmit: () => handleUpdate("tetapMajaIndra", formData.tetapMajaIndra),
       locked: lockedStatus["tetapMajaIndra"],
       fieldName: "tetapMajaIndra",
-      capt: "Tenaga kerja kontrak yang berasal dari Majalengka Indramayu",
+      capt: "Tenaga kerja kontrak yang berasal dari warga lokal sekitar pabrik",
     },
     {
       label: "PKWT Total (orang)",
@@ -230,7 +230,7 @@ export default function DataSosial() {
       capt: "Keseluruhan tenaga kerja kontrak",
     },
     {
-      label: "PKWTT Tenaga Kerja Majalengka Indramayu (orang)",
+      label: "PKWTT Tenaga Kerja Lokal (orang)",
       inputType: "number",
       value: formData.tidakMajaIndra,
       onChange: (e) =>
@@ -238,7 +238,7 @@ export default function DataSosial() {
       onSubmit: () => handleUpdate("tidakMajaIndra", formData.tidakMajaIndra),
       locked: lockedStatus["tidakMajaIndra"],
       fieldName: "tidakMajaIndra",
-      capt: "Tenaga kerja tetap yang berasal dari Majalengka Indramayu",
+      capt: "Tenaga kerja tetap yang berasal dari warga lokal sekitar pabrik",
     },
     {
       label: "PKWTT Total (orang)",
