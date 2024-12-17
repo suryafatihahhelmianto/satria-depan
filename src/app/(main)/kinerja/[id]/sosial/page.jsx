@@ -139,6 +139,7 @@ export default function DataSosial() {
       onSubmit: () => handleUpdate("rantaiPasok", formData.rantaiPasok),
       locked: lockedStatus["rantaiPasok"],
       fieldName: "rantaiPasok",
+      capt: "Tingkat kebermanfaatan kelembagaan dalam pendukung efesinesi dan efektivitas setiap rantai pasok agroindustri",
     },
   ];
 
@@ -159,6 +160,7 @@ export default function DataSosial() {
       onSubmit: () => handleUpdate("sediaAktivita", formData.sediaAktivita),
       locked: lockedStatus["sediaAktivita"],
       fieldName: "sediaAktivita",
+      capt: "Tingkat ketersediaan infrastruktur jalan, listrik, dan moda transportasi untuk memperlancar kegiatan rantai pasok dan aktivitas masyarakat",
     },
   ];
 
@@ -182,6 +184,7 @@ export default function DataSosial() {
       onSubmit: () => handleUpdate("tingkatManfaat", formData.tingkatManfaat),
       locked: lockedStatus["tingkatManfaat"],
       fieldName: "tingkatManfaat",
+      capt: "Tingkat kebermanfaatan kegiatan CSR bagi masyarakat dan perusahaan",
     },
   ];
 
@@ -202,6 +205,7 @@ export default function DataSosial() {
       onSubmit: () => handleUpdate("tingkatLimbah", formData.tingkatLimbah),
       locked: lockedStatus["tingkatLimbah"],
       fieldName: "tingkatLimbah",
+      capt: "Tingkat keluhan dari masyarakat terkait pembuangan limbah",
     },
   ];
 
@@ -215,6 +219,7 @@ export default function DataSosial() {
       onSubmit: () => handleUpdate("tetapMajaIndra", formData.tetapMajaIndra),
       locked: lockedStatus["tetapMajaIndra"],
       fieldName: "tetapMajaIndra",
+      capt: "Tenaga kerja kontrak yang berasal dari Majalengka Indramayu",
     },
     {
       label: "PKWT Total (orang)",
@@ -224,6 +229,7 @@ export default function DataSosial() {
       onSubmit: () => handleUpdate("tetapTotal", formData.tetapTotal),
       locked: lockedStatus["tetapTotal"],
       fieldName: "tetapTotal",
+      capt: "Keseluruhan tenaga kerja kontrak",
     },
     {
       label: "PKWTT Tenaga Kerja Majalengka Indramayu (orang)",
@@ -234,6 +240,7 @@ export default function DataSosial() {
       onSubmit: () => handleUpdate("tidakMajaIndra", formData.tidakMajaIndra),
       locked: lockedStatus["tidakMajaIndra"],
       fieldName: "tidakMajaIndra",
+      capt: "Tenaga kerja tetap yang berasal dari Majalengka Indramayu",
     },
     {
       label: "PKWTT Total (orang)",
@@ -244,6 +251,7 @@ export default function DataSosial() {
       onSubmit: () => handleUpdate("tidakTetapTotal", formData.tidakTetapTotal),
       locked: lockedStatus["tidakTetapTotal"],
       fieldName: "tidakTetapTotal",
+      capt: "Keseluruhan tenaga kerja tetap",
     },
   ];
 
@@ -256,6 +264,7 @@ export default function DataSosial() {
       onSubmit: () => handleUpdate("luasLahan", formData.luasLahan),
       locked: lockedStatus["luasLahan"],
       fieldName: "luasLahan",
+      capt: "Lahan yang diberikan pinajaman dari perusahaan pada tahun ini",
     },
     // {
     //   label: "Total Luas Lahan yang Ditanami Tahun Ini (ha)",
@@ -281,6 +290,7 @@ export default function DataSosial() {
         handleUpdate("luasLahanTahunLalu", formData.luasLahanTahunLalu),
       locked: lockedStatus["luasLahanTahunLalu"],
       fieldName: "luasLahanTahunLalu",
+      capt: "Lahan yang diberikan pinajaman dari perusahaan pada tahun lalu",
     },
     // {
     //   label: "Total Luas Lahan yang Ditanami Tahun Lalu (ha)",

@@ -204,7 +204,7 @@ export default function SumberDayaPage() {
         ),
       locked: lockedStatus["kemudahanAksesTenagaKerja"],
       fieldName: "kemudahanAksesTenagaKerja",
-      capt: "MAS WASIS GANTENG!",
+      capt: "Tingkat kemudahan perusahaan mendapatkan tenaga kerja yang sesuai dengan kebutuhan bisnis",
     },
   ];
 
@@ -219,6 +219,7 @@ export default function SumberDayaPage() {
         handleUpdate("luasTanamTRITahunIni", formData.luasTanamTRITahunIni),
       locked: lockedStatus["luasTanamTRITahunIni"],
       fieldName: "luasTanamTRITahunIni",
+      capt: "Luas lahan Tebu Rakyat Intensifikasi yang digunakan sebagai sumber bahan baku pada tahun ini",
     },
     {
       label: "Total Luas Lahan yang Ditanami Tahun Ini (ha)",
@@ -229,6 +230,7 @@ export default function SumberDayaPage() {
         handleUpdate("luasTotalTahunIni", formData.luasTotalTahunIni),
       locked: lockedStatus["luasTotalTahunIni"],
       fieldName: "luasTotalTahunIni",
+      capt: "Keseluruhan luas lahan yang digunakan sebagai sumber bahan baku pada tahun ini",
     },
   ];
 
@@ -247,7 +249,7 @@ export default function SumberDayaPage() {
         handleUpdate("jumlahJamKerjaEfektif", formData.jumlahJamKerjaEfektif),
       locked: lockedStatus["jumlahJamKerjaEfektif"],
       fieldName: "jumlahJamKerjaEfektif",
-      capt: "Wasis",
+      capt: "jam henti karena kekurangan bahan baku",
     },
     {
       label: "Jam Henti B (%)",
@@ -257,6 +259,7 @@ export default function SumberDayaPage() {
       onSubmit: () => handleUpdate("totalJamKerja", formData.totalJamKerja),
       locked: lockedStatus["totalJamKerja"],
       fieldName: "totalJamKerja",
+      capt: "jam henti karena kerusakan atau gangguan teknis pada peralatan pabrik",
     },
     {
       isSubtitle: true,
@@ -270,6 +273,7 @@ export default function SumberDayaPage() {
       onSubmit: () => handleUpdate("jamTerlaksana", formData.jamTerlaksana),
       locked: lockedStatus["jamTerlaksana"],
       fieldName: "jamTerlaksana",
+      capt: "Jumlah jam pelatihan terhadap karyawan yang dilakukan",
     },
     {
       label: "Jam Total (Jam/Tahun)",
@@ -279,6 +283,7 @@ export default function SumberDayaPage() {
       onSubmit: () => handleUpdate("jamTotal", formData.jamTotal),
       locked: lockedStatus["jamTotal"],
       fieldName: "jamTotal",
+      capt: "Jam pelatihan terhadap karyawan yang dilakukan",
     },
   ];
 
@@ -292,6 +297,7 @@ export default function SumberDayaPage() {
         handleUpdate("produktivitasTebu", formData.produktivitasTebu),
       locked: lockedStatus["produktivitasTebu"],
       fieldName: "produktivitasTebu",
+      capt: "Rata-rata rendemen tebu dalam satu tahun produksi",
     },
     {
       label: "Rendemen Tebu (%)",
@@ -301,6 +307,7 @@ export default function SumberDayaPage() {
       onSubmit: () => handleUpdate("rendemenTebu", formData.rendemenTebu),
       locked: lockedStatus["rendemenTebu"],
       fieldName: "rendemenTebu",
+      capt: "Rata-rata rendemen tebu dalam satu tahun produksi",
     },
     {
       label: "Tingkat Manis Bersih Segar",
@@ -317,6 +324,7 @@ export default function SumberDayaPage() {
       onSubmit: () => handleUpdate("mbs", formData.mbs),
       locked: lockedStatus["mbs"],
       fieldName: "mbs",
+      capt: "Penilaian kondisi manis, bersih, dan segar tebu dalam satu tahun produksi",
     },
   ];
 
@@ -329,6 +337,7 @@ export default function SumberDayaPage() {
       onSubmit: () => handleUpdate("overallRecovery", formData.overallRecovery),
       locked: lockedStatus["overallRecovery"],
       fieldName: "overallRecovery",
+      capt: "Tingkat efesiensi alat dan mesin produksi untuk menghasilkan gula",
     },
   ];
 
@@ -341,6 +350,7 @@ export default function SumberDayaPage() {
       onSubmit: () => handleUpdate("kis", formData.kis),
       locked: lockedStatus["kis"],
       fieldName: "kis",
+      capt: "KIS (Kapasitas giling include)",
     },
     {
       label: "KES (TCD)",
@@ -350,6 +360,7 @@ export default function SumberDayaPage() {
       onSubmit: () => handleUpdate("kes", formData.kes),
       locked: lockedStatus["kes"],
       fieldName: "kes",
+      capt: "KES (Kapasitas giling exclude)",
     },
   ];
 
@@ -362,6 +373,7 @@ export default function SumberDayaPage() {
       onSubmit: () => handleUpdate("ratoonTebu", formData.ratoonTebu),
       locked: lockedStatus["ratoonTebu"],
       fieldName: "ratoonTebu",
+      capt: "Tingkat ratoon tebu yang digunakan untuk produksi gula",
     },
   ];
 
@@ -374,6 +386,7 @@ export default function SumberDayaPage() {
       onSubmit: () => handleUpdate("luasBL", formData.luasBL),
       locked: lockedStatus["luasBL"],
       fieldName: "luasBL",
+      capt: "Luas lahan yang ditanami oleh varitetas BL",
     },
     {
       label: "Luas PSJT941 (ha)",
@@ -383,6 +396,7 @@ export default function SumberDayaPage() {
       onSubmit: () => handleUpdate("luasPST41", formData.luasPST41),
       locked: lockedStatus["luasPST41"],
       fieldName: "luasPST41",
+      capt: "Luas lahan yang ditanami oleh varietas PSJT 941",
     },
     {
       label: "Luas PS864/PS862 (ha)",
@@ -392,6 +406,7 @@ export default function SumberDayaPage() {
       onSubmit: () => handleUpdate("luasPS864", formData.luasPS864),
       locked: lockedStatus["luasPS864"],
       fieldName: "luasPS864",
+      capt: "Luas lahan yang ditanami oleh varietas PS864 atau PS862",
     },
     {
       label: "Total Luas Lahan yang ditanam Tahun Ini (ha)",
@@ -401,6 +416,7 @@ export default function SumberDayaPage() {
       onSubmit: () => handleUpdate("luasTotal", formData.luasTotal),
       locked: lockedStatus["luasTotal"],
       fieldName: "luasTotal",
+      capt: "Luas total lahan yang ditanam",
     },
   ];
 
@@ -421,6 +437,7 @@ export default function SumberDayaPage() {
         handleUpdate("tingkatMekanisasi", formData.tingkatMekanisasi),
       locked: lockedStatus["tingkatMekanisasi"],
       fieldName: "tingkatMekanisasi",
+      capt: "Ketersediaan mesin dan alat untuk mendukung budidaya dalam peningkatan kadar gula",
     },
   ];
 
@@ -443,6 +460,7 @@ export default function SumberDayaPage() {
         ),
       locked: lockedStatus["teknologiPengolahanRawSugar"],
       fieldName: "teknologiPengolahanRawSugar",
+      capt: "Ketersediaan teknologi pengolahan raw sugar untuk menerima raw sugar dan pemenuhan kapasitas",
     },
   ];
 
