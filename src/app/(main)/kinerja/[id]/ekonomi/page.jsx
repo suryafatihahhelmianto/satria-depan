@@ -178,6 +178,7 @@ export default function DataKinerja() {
       onSubmit: () => handleUpdate("nilaiRisiko", formData.nilaiRisiko),
       locked: lockedStatus["nilaiRisiko"],
       fieldName: "nilaiRisiko",
+      capt: "Risiko keseluruhan rantai pasok agroindustri dalam rangka keberlanjutan industri",
     },
   ];
 
@@ -190,6 +191,7 @@ export default function DataKinerja() {
       onSubmit: () => handleUpdate("polAmpas", formData.polAmpas),
       locked: lockedStatus["polAmpas"],
       fieldName: "polAmpas",
+      capt: "Rata-rata pol ampas hingga hari terakhir giling",
     },
     {
       label: "Kehilangan Pol Blotong (%)",
@@ -199,6 +201,7 @@ export default function DataKinerja() {
       onSubmit: () => handleUpdate("polBlotong", formData.polBlotong),
       locked: lockedStatus["polBlotong"],
       fieldName: "polBlotong",
+      capt: "Rata-rata pol blotong hingga hari terakhir giling",
     },
     {
       label: "Kehilangan Pol Tetes (%)",
@@ -208,6 +211,7 @@ export default function DataKinerja() {
       onSubmit: () => handleUpdate("polTetes", formData.polTetes),
       locked: lockedStatus["polTetes"],
       fieldName: "polTetes",
+      capt: "Rata-rata pol tetes hingga hari terakhir giling",
     },
     {
       label: "Kehilangan Rendemen Kebun (%)",
@@ -218,6 +222,7 @@ export default function DataKinerja() {
       onSubmit: () => handleUpdate("rendemenKebun", formData.rendemenKebun),
       locked: lockedStatus["rendemenKebun"],
       fieldName: "rendemenKebun",
+      capt: "Rata-rata rendemen kebun hingga hari terakhir giling.",
     },
     {
       label: "Kehilangan Rendemen Gerbang (%)",
@@ -228,6 +233,7 @@ export default function DataKinerja() {
       onSubmit: () => handleUpdate("rendemenGerbang", formData.rendemenGerbang),
       locked: lockedStatus["rendemenGerbang"],
       fieldName: "rendemenGerbang",
+      capt: "Rata-rata rendemen gerbang hingga hari terakhir giling.",
     },
     {
       label: "Kehilangan Rendemen NPP (%)",
@@ -238,6 +244,7 @@ export default function DataKinerja() {
       onSubmit: () => handleUpdate("rendemenNPP", formData.rendemenNPP),
       locked: lockedStatus["rendemenNPP"],
       fieldName: "rendemenNPP",
+      capt: "Rata-rata rendemen NPP hingga hari terakhir giling",
     },
     {
       label: "Kehilangan Rendemen Gula (%)",
@@ -248,6 +255,7 @@ export default function DataKinerja() {
       onSubmit: () => handleUpdate("rendemenGula", formData.rendemenGula),
       locked: lockedStatus["rendemenGula"],
       fieldName: "rendemenGula",
+      capt: "Rata-rata rendemen gula hingga hari terakhir giling ",
     },
   ];
 
@@ -262,6 +270,7 @@ export default function DataKinerja() {
         handleUpdate("kesenjanganRantai", formData.kesenjanganRantai),
       locked: lockedStatus["kesenjanganRantai"],
       fieldName: "kesenjanganRantai",
+      capt: "Rata-rata keuntungan yang diperolah petani per ton dalam satu tahun produksi",
     },
     {
       label: "Keuntungan Pabrik per Ton Tebu (%)",
@@ -273,6 +282,7 @@ export default function DataKinerja() {
         handleUpdate("kesenjanganPabrik", formData.kesenjanganPabrik),
       locked: lockedStatus["kesenjanganPabrik"],
       fieldName: "kesenjanganPabrik",
+      capt: "Rata-rata keuntungan yang diperolah petani per ton dalam satu tahun produksi",
     },
   ];
 
@@ -285,6 +295,7 @@ export default function DataKinerja() {
       onSubmit: () => handleUpdate("hargaAcuan", formData.hargaAcuan),
       locked: lockedStatus["hargaAcuan"],
       fieldName: "hargaAcuan",
+      capt: "Rata-rata harga acuan yang ditetapkan  dalam satu tahun produksi",
     },
     {
       label: "Harga Lelang (rata-rata) (Rp)",
@@ -295,6 +306,7 @@ export default function DataKinerja() {
       onSubmit: () => handleUpdate("hargaLelang", formData.hargaLelang),
       locked: lockedStatus["hargaLelang"],
       fieldName: "hargaLelang",
+      capt: "Rata-rata harga lelang gula yang ditetapkan dalam satu tahun produksi",
     },
   ];
 
@@ -308,6 +320,7 @@ export default function DataKinerja() {
       onSubmit: () => handleUpdate("shsTahunIni", formData.shsTahunIni),
       locked: lockedStatus["shsTahunIni"],
       fieldName: "shsTahunIni",
+      capt: "Total produksi gula pada tahun ini",
     },
     {
       label: "Produksi tahun lalu (Ton)",
@@ -318,6 +331,7 @@ export default function DataKinerja() {
       onSubmit: () => handleUpdate("shsTahunSebel", formData.shsTahunSebel),
       locked: lockedStatus["shsTahunSebel"],
       fieldName: "shsTahunSebel",
+      capt: "Total produksi gula pada tahun lalu",
     },
   ];
 
@@ -330,6 +344,7 @@ export default function DataKinerja() {
       onSubmit: () => handleUpdate("returnOE", formData.returnOE),
       locked: lockedStatus["returnOE"],
       fieldName: "returnOE",
+      capt: "Presentase besarnya keuntungan yang diperoleh dari berbagai investasi yang telah dilakukan",
     },
   ];
 
