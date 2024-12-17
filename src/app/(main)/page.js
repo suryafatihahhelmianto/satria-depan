@@ -268,36 +268,47 @@ export default function HomePage() {
           {availableYears.length > 0 ? (
             <div className="flex flex-col md:flex-row justify-around gap-5 w-full h-full">
               <div className="flex flex-col items-center justify-end mb-6 h-full">
-                <div
-                  onClick={handleDetailClick}
-                  className="w-40 h-40 md:w-52 md:h-52 mb-2 hover:cursor-pointer"
-                >
-                  <CircularProgressbar
-                    // value={selectedYearData?.nilaiKinerja.toFixed(2) || 0}
-                    value={
-                      nilaiKinerjaKeberlanjutan[0].nilaiKinerja.toFixed(2) || 0
-                    }
-                    // text={`${
-                    //   formatNumberToIndonesian(selectedYearData?.nilaiKinerja) ||
-                    //   0
-                    // }%`}
-                    text={`${
-                      formatNumberToIndonesian(
-                        nilaiKinerjaKeberlanjutan[0].nilaiKinerja
-                      ) || 0
-                    }%`}
-                    styles={buildStyles({
-                      pathColor: "#4CAF50",
-                      textColor: "#4CAF50",
-                      trailColor: "#d6d6d6",
-                    })}
-                  />
+                <div className="relative group">
+                  <div
+                    onClick={handleDetailClick}
+                    className="w-40 h-40 md:w-52 md:h-52 mb-2 hover:cursor-pointer"
+                  >
+                    <CircularProgressbar
+                      // value={selectedYearData?.nilaiKinerja.toFixed(2) || 0}
+                      value={
+                        nilaiKinerjaKeberlanjutan[0].nilaiKinerja.toFixed(2) ||
+                        0
+                      }
+                      // text={`${
+                      //   formatNumberToIndonesian(selectedYearData?.nilaiKinerja) ||
+                      //   0
+                      // }%`}
+                      text={`${
+                        formatNumberToIndonesian(
+                          nilaiKinerjaKeberlanjutan[0].nilaiKinerja
+                        ) || 0
+                      }%`}
+                      styles={buildStyles({
+                        pathColor: "#4CAF50",
+                        textColor: "#4CAF50",
+                        trailColor: "#d6d6d6",
+                      })}
+                    />
+                  </div>
+                  <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 bg-black text-white text-xs px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                    Lihat Detail
+                  </span>
                 </div>
                 <div className="flex items-center justify-center">
                   <p className="mt-2 text-gray-700 text-center font-semibold">
                     {getKategori(selectedYearData?.nilaiKinerja)}
                   </p>
-                  <InfoButton />
+                  <div className="relative group">
+                    <InfoButton />
+                    <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 bg-black text-white text-xs px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                      Keterangan
+                    </span>
+                  </div>
                 </div>
               </div>
 

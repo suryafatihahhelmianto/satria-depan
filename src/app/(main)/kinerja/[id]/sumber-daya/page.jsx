@@ -373,7 +373,7 @@ export default function SumberDayaPage() {
       onSubmit: () => handleUpdate("ratoonTebu", formData.ratoonTebu),
       locked: lockedStatus["ratoonTebu"],
       fieldName: "ratoonTebu",
-      capt: "Tingkat ratoon tebu yang digunakan untuk produksi gula",
+      capt: "Jumlah keprasan tanaman tebu pada tahun diukur, ditulis sebagai angka keprasan ke- (1, 2, 3 dst), Angka yang diisikan adalah keprasan ke-berapa yang menghasilkan tanaman tebu terbanyak.",
     },
   ];
 
