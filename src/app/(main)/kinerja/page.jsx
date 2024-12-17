@@ -161,6 +161,64 @@ export default function KinerjaPage() {
     }
   };
 
+  const fetchExcelKinerja = async () => {
+    try {
+      const excelResponse = await fetchData("/api/sesi/excel", {
+        headers: {
+          Authorization: `Bearer ${getCookie("token")}`,
+        },
+      });
+
+      const kinerjaData = await excelResponse.data;
+
+      const headers = [
+        "Nama Pabrik",
+        "Periode",
+        "Nilai Dimensi Ekonomi",
+        "Nilai Dimensi Lingkungan",
+        "Nilai Dimensi Sosial",
+        "Nilai Dimensi SDAM",
+        "Nilai Indeks Kinerja",
+        "Status Pengisian",
+      ];
+
+      const rows = kinerjaData.map((item) => [
+        item.namaPabrik || "Tidak diketahui", // Nama pabrik
+        item.periode,
+        item.nilaiDimensiEkonomi,
+        item.nilaiDimensiLingkungan,
+        item.nilaiDimensiSosial,
+        item.nilaiDimensiSDAM,
+        item.nilaiIndeksKinerja,
+        item.status,
+      ]);
+
+      // Konversi data ke format Excel
+      const workbook = XLSX.utils.book_new();
+      const worksheet = XLSX.utils.json_to_sheet(rows, { header: headers });
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+
+      // Buat file Blob Excel
+      const excelBlob = XLSX.write(workbook, {
+        bookType: "xlsx",
+        type: "binary",
+      });
+
+      // Buat elemen <a> untuk mengunduh file
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(
+        new Blob([excelBlob], { type: "application/octet-stream" })
+      );
+      link.setAttribute("download", "data_kinerja.xlsx"); // Nama file Excel
+      document.body.appendChild(link);
+      link.click(); // Klik otomatis
+      document.body.removeChild(link); // Hapus elemen setelah unduhan
+    } catch (error) {
+      console.error("Error saat mengunduh data Excel:", error);
+      alert("Gagal mengunduh data Excel.");
+    }
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));

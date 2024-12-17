@@ -31,8 +31,6 @@ export default function OpsiDetail() {
         },
       });
 
-      console.log("ini respon: ", response);
-
       setPeriode(new Date(response.data.tanggalMulai).getFullYear());
       setNamaPabrik(response.data.pabrikGula.namaPabrik);
     } catch (error) {
