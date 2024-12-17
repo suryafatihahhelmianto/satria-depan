@@ -234,11 +234,9 @@ export default function RendemenPage() {
                               <AiFillDelete />
                             </button>
                           )}
-                          {isAdmin && (
-                            <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 bg-black text-white text-xs px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                              Hapus
-                            </span>
-                          )}
+                          <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 bg-black text-white text-xs px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                            Hapus
+                          </span>
                         </div>
                       </div>
                     </td>

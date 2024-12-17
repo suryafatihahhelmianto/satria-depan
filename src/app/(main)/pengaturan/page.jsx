@@ -253,7 +253,7 @@ const PengaturanPage = () => {
               </button>
             </div>
 
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-sm text-red-400 mb-4 animate-pulse">
               Password minimal 8 karakter (kombinasi huruf besar dan kecil,
               karakter #*/&^~)
             </p>
