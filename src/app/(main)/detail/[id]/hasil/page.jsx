@@ -125,7 +125,7 @@ export default function HasilPage() {
                     row.kategori === "Berkelanjutan"
                       ? "text-green-600"
                       : row.kategori === "Cukup Berkelanjutan"
-                      ? "text-yellow-600"
+                      ? "text-green-600"
                       : row.kategori === "Kurang Berkelanjutan"
                       ? "text-orange-600"
                       : "text-red-600"
