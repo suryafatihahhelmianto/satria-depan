@@ -115,6 +115,77 @@ export default function RendemenPage() {
     }
   };
 
+  const fetchXLSData = async () => {
+    try {
+      const xlsResponse = await fetchData("/api/rendemen/csv", {
+        headers: {
+          Authorization: `Bearer ${getCookie("token")}`,
+        },
+      });
+
+      const rendemenData = await xlsResponse.data;
+
+      // Header untuk file .xls
+      const headers = [
+        "Tanggal Prediksi",
+        "Nama Pabrik",
+        "Blok Kebun",
+        "Brix",
+        "FK",
+        "HK",
+        "NN",
+        "Pol",
+        "Nilai Prediksi Rendemen",
+      ];
+
+      // Format baris data
+      const rows = rendemenData.map((item) => [
+        new Date(item.tanggal).toLocaleDateString("id-ID"), // Format tanggal
+        item.namaPabrik || "Tidak diketahui", // Nama pabrik
+        item.blokKebun, // Blok kebun
+        item.brix, // Nilai Brix
+        item.fk, // Nilai FK
+        item.hk, // Nilai HK
+        item.nn, // Nilai NN
+        item.pol, // Nilai Pol
+        item.nilaiPrediksiRendemen, // Nilai prediksi rendemen
+      ]);
+
+      // Buat HTML table untuk file .xls
+      const tableContent =
+        `<table>` +
+        `<thead><tr>${headers
+          .map((h) => `<th>${h}</th>`)
+          .join("")}</tr></thead>` +
+        `<tbody>${rows
+          .map(
+            (row) =>
+              `<tr>${row.map((cell) => `<td>${cell}</td>`).join("")}</tr>`
+          )
+          .join("")}</tbody>` +
+        `</table>`;
+
+      // Buat file Blob .xls
+      const blob = new Blob(
+        [
+          `<html xmlns:x="urn:schemas-microsoft-com:office:excel">${tableContent}</html>`,
+        ],
+        { type: "application/vnd.ms-excel" }
+      );
+
+      // Buat elemen <a> untuk mengunduh file
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.setAttribute("download", "data_rendemen.xls"); // Nama file .xls
+      document.body.appendChild(link);
+      link.click(); // Klik otomatis
+      document.body.removeChild(link); // Hapus elemen setelah unduhan
+    } catch (error) {
+      console.error("Error saat mengunduh data XLS:", error);
+      alert("Gagal mengunduh data XLS.");
+    }
+  };
+
   const handleDelete = async (id) => {
     if (confirm("Apakah Anda yakin ingin menghapus data ini?")) {
       try {
@@ -161,7 +232,14 @@ export default function RendemenPage() {
             className="flex items-center gap-2 bg-green-800 hover:bg-green-900 text-white hover:cursor-pointer p-2 rounded-lg"
             onClick={fetchCSVData}
           >
-            <p className="text-sm">Unduh</p>
+            <p className="text-sm">Unduh CSV</p>
+            <AiOutlineDownload />
+          </button>
+          <button
+            className="flex items-center gap-2 bg-green-800 hover:bg-green-900 text-white hover:cursor-pointer p-2 rounded-lg"
+            onClick={fetchXLSData}
+          >
+            <p className="text-sm">Unduh XLS</p>
             <AiOutlineDownload />
           </button>
         </div>

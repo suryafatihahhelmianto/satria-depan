@@ -163,14 +163,25 @@ export default function KinerjaPage() {
 
   const fetchExcelKinerja = async () => {
     try {
-      const excelResponse = await fetchData("/api/sesi/excel", {
+      // Fetch data dari API
+      const excelResponse = await fetchData("/api/sesi/csv", {
         headers: {
           Authorization: `Bearer ${getCookie("token")}`,
         },
       });
 
-      const kinerjaData = await excelResponse.data;
+      const kinerjaData = excelResponse.data;
 
+      // XML header dan deklarasi workbook
+      const xmlHeader = `<?xml version="1.0"?>
+      <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+                xmlns:o="urn:schemas-microsoft-com:office:office"
+                xmlns:x="urn:schemas-microsoft-com:office:excel"
+                xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">
+        <Worksheet ss:Name="Kinerja">
+          <Table>`;
+
+      // Tambahkan header ke XML
       const headers = [
         "Nama Pabrik",
         "Periode",
@@ -181,41 +192,54 @@ export default function KinerjaPage() {
         "Nilai Indeks Kinerja",
         "Status Pengisian",
       ];
+      const headerRow =
+        `<Row>` +
+        headers
+          .map((h) => `<Cell><Data ss:Type="String">${h}</Data></Cell>`)
+          .join("") +
+        `</Row>`;
 
-      const rows = kinerjaData.map((item) => [
-        item.namaPabrik || "Tidak diketahui", // Nama pabrik
-        item.periode,
-        item.nilaiDimensiEkonomi,
-        item.nilaiDimensiLingkungan,
-        item.nilaiDimensiSosial,
-        item.nilaiDimensiSDAM,
-        item.nilaiIndeksKinerja,
-        item.status,
-      ]);
+      // Tambahkan data ke XML
+      const dataRows = kinerjaData
+        .map((item) => {
+          const cells = [
+            item.namaPabrik || "Tidak diketahui",
+            item.periode,
+            item.nilaiDimensiEkonomi,
+            item.nilaiDimensiLingkungan,
+            item.nilaiDimensiSosial,
+            item.nilaiDimensiSDAM,
+            item.nilaiIndeksKinerja,
+            item.status,
+          ].map(
+            (value) =>
+              `<Cell><Data ss:Type="${
+                typeof value === "number" ? "Number" : "String"
+              }">${value}</Data></Cell>`
+          );
+          return `<Row>${cells.join("")}</Row>`;
+        })
+        .join("");
 
-      // Konversi data ke format Excel
-      const workbook = XLSX.utils.book_new();
-      const worksheet = XLSX.utils.json_to_sheet(rows, { header: headers });
-      XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+      // Akhiri XML
+      const xmlFooter = `</Table>
+        </Worksheet>
+      </Workbook>`;
 
-      // Buat file Blob Excel
-      const excelBlob = XLSX.write(workbook, {
-        bookType: "xlsx",
-        type: "binary",
-      });
+      // Gabungkan semua bagian XML
+      const xmlContent = xmlHeader + headerRow + dataRows + xmlFooter;
 
-      // Buat elemen <a> untuk mengunduh file
+      // Buat dan unduh file XML
+      const blob = new Blob([xmlContent], { type: "application/vnd.ms-excel" });
       const link = document.createElement("a");
-      link.href = URL.createObjectURL(
-        new Blob([excelBlob], { type: "application/octet-stream" })
-      );
-      link.setAttribute("download", "data_kinerja.xlsx"); // Nama file Excel
+      link.href = URL.createObjectURL(blob);
+      link.setAttribute("download", "data_kinerja.xls"); // Gunakan .xls agar Excel mengenali file
       document.body.appendChild(link);
-      link.click(); // Klik otomatis
-      document.body.removeChild(link); // Hapus elemen setelah unduhan
+      link.click();
+      document.body.removeChild(link);
     } catch (error) {
-      console.error("Error saat mengunduh data Excel:", error);
-      alert("Gagal mengunduh data Excel.");
+      console.error("Error saat mengunduh data Excel XML:", error);
+      alert("Gagal mengunduh data Excel XML.");
     }
   };
 
@@ -360,7 +384,14 @@ export default function KinerjaPage() {
             className="flex items-center gap-2 bg-green-800 hover:bg-green-900 text-white hover:cursor-pointer p-2 rounded-lg"
             onClick={fetchCSVKinerja}
           >
-            <p className="text-sm">Unduh</p>
+            <p className="text-sm">Unduh CSV</p>
+            <AiOutlineDownload />
+          </button>
+          <button
+            className="flex items-center gap-2 bg-green-800 hover:bg-green-900 text-white hover:cursor-pointer p-2 rounded-lg"
+            onClick={fetchExcelKinerja}
+          >
+            <p className="text-sm">Unduh XLS</p>
             <AiOutlineDownload />
           </button>
         </div>
