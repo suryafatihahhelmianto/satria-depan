@@ -10,6 +10,7 @@ import {
   FaThermometerHalf,
   FaVial,
   FaCloudRain,
+  FaInfoCircle,
 } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { fetchData } from "@/tools/api";
@@ -97,10 +98,13 @@ export default function RendemenInputPage() {
         <div className="p-10">
           <div className="text-center mb-10">
             <h1 className="text-4xl font-bold text-green-800 mb-2">
-              Input Data Rendemen Tebu
+              Input Data Prediksi Rendemen Gula Tebu
             </h1>
-            <p className="text-xl text-green-600">
+            {/* <p className="text-xl text-green-600">
               Masukkan data rendemen tebu untuk analisis prediksi.
+            </p> */}
+            <p className="text-xl text-green-600">
+              Masukkan data untuk prediksi rendemen gula tebu.
             </p>
           </div>
           <form onSubmit={handleSubmit} className="space-y-8">
@@ -187,34 +191,33 @@ export default function RendemenInputPage() {
                 options={[
                   { value: "", label: "Pilih Varietas" },
                   { value: "0", label: "BL" },
-                  { value: "1", label: "Bl" },
-                  { value: "2", label: "Cening" },
-                  { value: "3", label: "GMP1" },
-                  { value: "4", label: "GMP2" },
-                  { value: "5", label: "GMP3" },
-                  { value: "6", label: "KDS3" },
-                  { value: "7", label: "KENTUNG" },
-                  { value: "8", label: "KK" },
-                  { value: "9", label: "LAMPUNG3" },
-                  { value: "10", label: "PA0213" },
-                  { value: "11", label: "PA0214" },
-                  { value: "12", label: "PA022" },
-                  { value: "13", label: "PA028" },
-                  { value: "14", label: "PA1101" },
-                  { value: "15", label: "PA1204" },
-                  { value: "16", label: "PA1301" },
-                  { value: "17", label: "PA1303" },
-                  { value: "18", label: "PA1401" },
-                  { value: "19", label: "PA1601" },
-                  { value: "20", label: "PA197" },
-                  { value: "21", label: "PS851" },
-                  { value: "22", label: "PS862" },
-                  { value: "23", label: "PS864" },
-                  { value: "24", label: "PS865" },
-                  { value: "25", label: "PS881" },
-                  { value: "26", label: "PS882" },
-                  { value: "27", label: "PSJK922" },
-                  { value: "28", label: "PSJT941" },
+                  { value: "1", label: "Cening" },
+                  { value: "2", label: "GMP1" },
+                  { value: "3", label: "GMP2" },
+                  { value: "4", label: "GMP3" },
+                  { value: "5", label: "KDS3" },
+                  { value: "6", label: "KENTUNG" },
+                  { value: "7", label: "KK" },
+                  { value: "8", label: "LAMPUNG3" },
+                  { value: "9", label: "PA0213" },
+                  { value: "10", label: "PA0214" },
+                  { value: "11", label: "PA022" },
+                  { value: "12", label: "PA028" },
+                  { value: "13", label: "PA1101" },
+                  { value: "14", label: "PA1204" },
+                  { value: "15", label: "PA1301" },
+                  { value: "16", label: "PA1303" },
+                  { value: "17", label: "PA1401" },
+                  { value: "18", label: "PA1601" },
+                  { value: "19", label: "PA197" },
+                  { value: "20", label: "PS851" },
+                  { value: "21", label: "PS862" },
+                  { value: "22", label: "PS864" },
+                  { value: "23", label: "PS865" },
+                  { value: "24", label: "PS881" },
+                  { value: "25", label: "PS882" },
+                  { value: "26", label: "PSJK922" },
+                  { value: "27", label: "PSJT941" },
                 ]}
               />
 
@@ -244,6 +247,7 @@ export default function RendemenInputPage() {
               <InputField
                 icon={<FaCloudRain className="text-green-500 text-2xl" />}
                 label="Curah Hujan"
+                info="Total curah hujan dari mulai tanam sampai pengukuran brix."
                 name="curahHujan"
                 value={formData.curahHujan}
                 onChange={handleInputChange}
@@ -305,11 +309,21 @@ export default function RendemenInputPage() {
   );
 }
 
-const InputField = ({ icon, label, ...props }) => (
+const InputField = ({ icon, label, info, ...props }) => (
   <div>
     <label className="text-lg font-medium text-green-700 flex items-center mb-2">
       {icon}
-      <span className="ml-2">{label}</span>
+      <span className="mx-2">{label}</span>
+      {info && (
+        <div className="relative">
+          <span className="text-green-500 cursor-pointer group">
+            <FaInfoCircle />
+            <div className="absolute bottom-full mb-2 left-0 w-64 bg-white text-green-700 text-sm rounded-lg shadow-lg p-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-300 z-10">
+              {info}
+            </div>
+          </span>
+        </div>
+      )}
     </label>
     <input
       {...props}
