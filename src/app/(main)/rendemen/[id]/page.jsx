@@ -182,14 +182,14 @@ export default function DetailPage() {
                 </p>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="block text-gray-700">Pol</label>
                 <p className="bg-green-100 w-full p-2 rounded">
                   {detailData.pol !== undefined
                     ? formatNumberToIndonesian(detailData.pol)
                     : "Data tidak tersedia"}
                 </p>
-              </div>
+              </div> */}
               <div>
                 <label className="block text-gray-700">Curah Hujan</label>
                 <p className="bg-green-100 w-full p-2 rounded">

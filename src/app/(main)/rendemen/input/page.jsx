@@ -23,7 +23,7 @@ export default function RendemenInputPage() {
     varietas: "",
     kemasakan: "",
     brix: "",
-    pol: "",
+    // pol: "",
     curahHujan: "",
   });
   const [predictionValue, setPredictionValue] = useState(null);
@@ -57,7 +57,7 @@ export default function RendemenInputPage() {
       varietas,
       kemasakan,
       brix,
-      pol,
+      // pol,
       curahHujan,
     } = formData;
 
@@ -68,7 +68,7 @@ export default function RendemenInputPage() {
       varietas: parseFloat(varietas),
       kemasakan: parseFloat(kemasakan),
       brix: parseFloat(brix),
-      pol: parseFloat(pol),
+      // pol: parseFloat(pol),
       curahHujan: parseFloat(curahHujan),
     };
 
@@ -252,15 +252,6 @@ export default function RendemenInputPage() {
                 value={formData.brix}
                 onChange={handleInputChange}
                 placeholder="Masukkan nilai Brix"
-                type="number"
-              />
-              <InputField
-                icon={<FaVial className="text-green-500 text-2xl" />}
-                label="Pol"
-                name="pol"
-                value={formData.pol}
-                onChange={handleInputChange}
-                placeholder="Masukkan nilai Pol"
                 type="number"
               />
               <InputField
