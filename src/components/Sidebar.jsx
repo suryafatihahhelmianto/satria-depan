@@ -9,6 +9,7 @@ import {
   AiOutlineUser,
   AiOutlineMenu,
   AiOutlineClose,
+  AiFillDashboard,
   AiFillCalculator,
 } from "react-icons/ai";
 import { GoGoal } from "react-icons/go";
@@ -35,10 +36,15 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
   }, []);
 
   const navLinks = [
-    {
+    !isMobile && {
       name: "Beranda",
       path: "/",
       icon: <AiFillHome size={20} />,
+    },
+    isMobile && {
+      name: "Kinerja Keberlanjutan Rantai Pasok",
+      path: "/",
+      icon: <AiFillDashboard size={20} />,
     },
     !isMobile &&
       role !== "DIREKSI" && {
@@ -53,7 +59,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
         icon: <GoGoal size={20} />,
       },
     {
-      name: "Kalkulator Rendemen",
+      name: "Kalkulator Prediksi Rendemen",
       path: "/kalkulator",
       icon: <AiFillCalculator size={20} />,
     },

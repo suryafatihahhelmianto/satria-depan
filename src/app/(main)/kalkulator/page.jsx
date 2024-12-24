@@ -13,8 +13,6 @@ import {
   FaInfoCircle,
 } from "react-icons/fa";
 import { useRouter } from "next/navigation";
-import { fetchData } from "@/tools/api";
-import { getCookie } from "@/tools/getCookie";
 
 export default function KalkulatorPage() {
   const [formData, setFormData] = useState({
@@ -29,7 +27,7 @@ export default function KalkulatorPage() {
   const [predictionValue, setPredictionValue] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const router = useRouter();
+  //const router = useRouter(); // Removed
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -39,69 +37,29 @@ export default function KalkulatorPage() {
   const handleConfirmCalculate = async () => {
     setIsLoading(true);
 
-    const {
-      blokKebun,
-      jenis,
-      masaTanam,
-      varietas,
-      kemasakan,
-      brix,
-      curahHujan,
-    } = formData;
+    // Simulate API call delay
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    const data = {
-      blokKebun,
-      jenis: parseFloat(jenis),
-      masaTanam: parseFloat(masaTanam),
-      varietas: parseFloat(varietas),
-      kemasakan: parseFloat(kemasakan),
-      brix: parseFloat(brix),
-      curahHujan: parseFloat(curahHujan),
-    };
+    // Set fixed prediction value
+    setPredictionValue(9.12);
 
-    try {
-      const response = await fetch("/api/rendemen/input", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${getCookie("token")}`,
-          "Content-Type": "application/json",
-        },
-        data,
-      });
-
-      const result = await response.json();
-      setPredictionValue(result.nilaiRendemen);
-      console.log("Prediction Value:", result);
-    } catch (error) {
-      console.error("Error fetching prediction data: ", error);
-    } finally {
-      setIsLoading(false);
-    }
+    setIsLoading(false);
   };
 
   return (
-    <div className="min-h-screen bg-grey-200 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto bg-ijoDash rounded-2xl shadow-xl overflow-hidden">
-        <div className="p-10">
+    <div className="min-h-screen bg-grey-200 py-6 px-2 sm:py-12 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto bg-ijoDash rounded-lg sm:rounded-2xl shadow-xl overflow-hidden">
+        <div className="p-4 sm:p-6 md:p-10">
           <div className="text-center mb-10">
-            <h1 className="text-4xl font-bold text-black mb-2">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black mb-2">
               Kalkulator Rendemen
             </h1>
-            {/* <p className="text-xl text-gren-600">
-              Masukkan data rendemen tebu untuk analisis prediksi.
-            </p> */}
-            <p className="text-xl text-black">
+            <p className="text-base sm:text-lg md:text-xl text-black">
               Hitung prediksi rendemen tanpa disimpan ke dalam sistem.
             </p>
           </div>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleConfirmCalculate();
-            }}
-            className="space-y-8"
-          >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <form onSubmit={(e) => e.preventDefault()} className="space-y-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
               <InputField
                 icon={<FaSeedling className="text-orange-500 text-2xl" />}
                 label="Blok Kebun"
@@ -253,8 +211,9 @@ export default function KalkulatorPage() {
             </div>
             <div className="mt-10">
               <button
-                type="submit"
-                className={`w-full flex justify-center items-center py-4 px-6 border border-transparent rounded-full shadow-sm text-xl font-medium text-white ${
+                type="button"
+                onClick={handleConfirmCalculate}
+                className={`w-full flex justify-center items-center py-3 sm:py-4 px-4 sm:px-6 border border-transparent rounded-full shadow-sm text-lg sm:text-xl font-medium text-white ${
                   isLoading
                     ? "bg-orange-500 cursor-not-allowed"
                     : "bg-orange-500 hover:bg-orange-700"
@@ -266,11 +225,11 @@ export default function KalkulatorPage() {
             </div>
           </form>
           {predictionValue !== null && (
-            <div className="mt-12 bg-gradient-to-r from-green-400 to-green-600 rounded-2xl p-8 text-center">
-              <h3 className="text-2xl font-semibold text-white mb-4">
+            <div className="mt-8 sm:mt-12 bg-gradient-to-r from-ijoDash to-ijoWasis rounded-lg sm:rounded-2xl p-4 sm:p-6 md:p-8 text-center">
+              <h3 className="text-xl sm:text-2xl font-semibold text-white mb-2 sm:mb-4">
                 Nilai Prediksi Rendemen
               </h3>
-              <p className="text-7xl font-bold text-white">
+              <p className="text-4xl sm:text-5xl md:text-7xl font-bold text-white">
                 {predictionValue}%
               </p>
             </div>
@@ -299,7 +258,7 @@ const InputField = ({ icon, label, info, ...props }) => (
     </label>
     <input
       {...props}
-      className="mt-1 block w-full py-3 px-4 border border-green-300 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-lg"
+      className="mt-1 block w-full py-2 sm:py-3 px-3 sm:px-4 border border-green-300 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-base sm:text-lg"
     />
   </div>
 );
@@ -312,7 +271,7 @@ const SelectField = ({ icon, label, options, ...props }) => (
     </label>
     <select
       {...props}
-      className="mt-1 block w-full py-3 px-4 border border-green-300 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-lg"
+      className="mt-1 block w-full py-2 sm:py-3 px-3 sm:px-4 border border-green-300 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-base sm:text-lg"
     >
       {options.map((option) => (
         <option key={option.value} value={option.value}>
