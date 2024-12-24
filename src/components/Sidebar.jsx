@@ -9,6 +9,7 @@ import {
   AiOutlineUser,
   AiOutlineMenu,
   AiOutlineClose,
+  AiFillCalculator,
 } from "react-icons/ai";
 import { GoGoal } from "react-icons/go";
 import { useUser } from "@/context/UserContext";
@@ -47,10 +48,15 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
       },
     !isMobile &&
       (role === "QUALITYCONTROL" || isAdmin) && {
-        name: "Rendemen",
+        name: "Prediksi Rendemen",
         path: "/rendemen",
         icon: <GoGoal size={20} />,
       },
+    {
+      name: "Kalkulator Rendemen",
+      path: "/kalkulator",
+      icon: <AiFillCalculator size={20} />,
+    },
     !isMobile &&
       isAdmin && {
         name: "Pengguna",

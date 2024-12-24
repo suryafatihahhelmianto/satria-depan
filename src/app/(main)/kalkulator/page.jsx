@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 import { fetchData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
 
-export default function RendemenInputPage() {
+export default function KalkulatorPage() {
   const [formData, setFormData] = useState({
     blokKebun: "",
     jenis: "",
@@ -24,12 +24,10 @@ export default function RendemenInputPage() {
     varietas: "",
     kemasakan: "",
     brix: "",
-    // pol: "",
     curahHujan: "",
   });
   const [predictionValue, setPredictionValue] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
   const router = useRouter();
 
@@ -38,18 +36,8 @@ export default function RendemenInputPage() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setIsConfirmModalOpen(true);
-  };
-
-  const handleCancelCalculate = () => {
-    setIsConfirmModalOpen(false);
-  };
-
   const handleConfirmCalculate = async () => {
     setIsLoading(true);
-    setIsConfirmModalOpen(false);
 
     const {
       blokKebun,
@@ -58,23 +46,21 @@ export default function RendemenInputPage() {
       varietas,
       kemasakan,
       brix,
-      // pol,
       curahHujan,
     } = formData;
 
     const data = {
-      blokKebun: blokKebun,
+      blokKebun,
       jenis: parseFloat(jenis),
       masaTanam: parseFloat(masaTanam),
       varietas: parseFloat(varietas),
       kemasakan: parseFloat(kemasakan),
       brix: parseFloat(brix),
-      // pol: parseFloat(pol),
       curahHujan: parseFloat(curahHujan),
     };
 
     try {
-      const response = await fetchData(`/api/rendemen/input`, {
+      const response = await fetch("/api/rendemen/input", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${getCookie("token")}`,
@@ -83,10 +69,11 @@ export default function RendemenInputPage() {
         data,
       });
 
-      setPredictionValue(response.newRendemen.nilaiRendemen);
-      router.push("/rendemen");
+      const result = await response.json();
+      setPredictionValue(result.nilaiRendemen);
+      console.log("Prediction Value:", result);
     } catch (error) {
-      console.error("Error submitting data: ", error);
+      console.error("Error fetching prediction data: ", error);
     } finally {
       setIsLoading(false);
     }
@@ -94,34 +81,38 @@ export default function RendemenInputPage() {
 
   return (
     <div className="min-h-screen bg-grey-200 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
+      <div className="max-w-4xl mx-auto bg-ijoDash rounded-2xl shadow-xl overflow-hidden">
         <div className="p-10">
           <div className="text-center mb-10">
-            <h1 className="text-4xl font-bold text-green-800 mb-2">
-              Input Data Prediksi Rendemen Gula Tebu
+            <h1 className="text-4xl font-bold text-black mb-2">
+              Kalkulator Rendemen
             </h1>
-            {/* <p className="text-xl text-green-600">
+            {/* <p className="text-xl text-gren-600">
               Masukkan data rendemen tebu untuk analisis prediksi.
             </p> */}
-            <p className="text-xl text-green-600">
-              Masukkan data untuk prediksi rendemen gula tebu.
+            <p className="text-xl text-black">
+              Hitung prediksi rendemen tanpa disimpan ke dalam sistem.
             </p>
           </div>
-          <form onSubmit={handleSubmit} className="space-y-8">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleConfirmCalculate();
+            }}
+            className="space-y-8"
+          >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <InputField
-                icon={<FaSeedling className="text-green-500 text-2xl" />}
+                icon={<FaSeedling className="text-orange-500 text-2xl" />}
                 label="Blok Kebun"
-                info="Nama blok kebun berdasarkan pembagian wilayah atau area di dalam kebun yang sudah disepakati"
                 name="blokKebun"
                 value={formData.blokKebun}
                 onChange={handleInputChange}
                 placeholder="Masukkan nilai Blok"
               />
               <SelectField
-                icon={<FaLeaf className="text-green-500 text-2xl" />}
+                icon={<FaLeaf className="text-orange-500 text-2xl" />}
                 label="Jenis"
-                info="Jenis mengacu pada kategori tanaman yang ditanam, misalnya Plain Cane (PC), Ratoon Cane (RC) 1, 2, dst"
                 name="jenis"
                 value={formData.jenis}
                 onChange={handleInputChange}
@@ -158,9 +149,8 @@ export default function RendemenInputPage() {
               />
 
               <SelectField
-                icon={<FaCalendarAlt className="text-green-500 text-2xl" />}
+                icon={<FaCalendarAlt className="text-orange-500 text-2xl" />}
                 label="Masa Tanam"
-                info="Periode waktu ketika tebu ditanam.Dituliskan 5A, 6B, dst yang menunjukkan bulan tebu ditanam"
                 name="masaTanam"
                 value={formData.masaTanam}
                 onChange={handleInputChange}
@@ -186,9 +176,8 @@ export default function RendemenInputPage() {
               />
 
               <SelectField
-                icon={<FaDna className="text-green-500 text-2xl" />}
+                icon={<FaDna className="text-orange-500 text-2xl" />}
                 label="Varietas"
-                info="Jenis dari tanaman tebu yang ditanam"
                 name="varietas"
                 value={formData.varietas}
                 onChange={handleInputChange}
@@ -226,9 +215,8 @@ export default function RendemenInputPage() {
               />
 
               <SelectField
-                icon={<FaRegCalendarAlt className="text-green-500 text-2xl" />}
+                icon={<FaRegCalendarAlt className="text-orange-500 text-2xl" />}
                 label="Kemasakan"
-                info="Tingkat kematangan tanaman tebu yang optimal untuk dipanen"
                 name="kemasakan"
                 value={formData.kemasakan}
                 onChange={handleInputChange}
@@ -241,17 +229,19 @@ export default function RendemenInputPage() {
                 ]}
               />
               <InputField
-                icon={<FaThermometerHalf className="text-green-500 text-2xl" />}
+                icon={
+                  <FaThermometerHalf className="text-orange-500 text-2xl" />
+                }
                 label="Brix"
-                info="Ukuran konsentrasi zat padat berupa gula pada tanaman tebu dalam 100 gram larutan"
                 name="brix"
                 value={formData.brix}
                 onChange={handleInputChange}
                 placeholder="Masukkan nilai Brix"
                 type="number"
+                step="0.1"
               />
               <InputField
-                icon={<FaCloudRain className="text-green-500 text-2xl" />}
+                icon={<FaCloudRain className="text-orange-500 text-2xl" />}
                 label="Curah Hujan"
                 info="Total curah hujan dari mulai tanam sampai pengukuran brix."
                 name="curahHujan"
@@ -264,7 +254,11 @@ export default function RendemenInputPage() {
             <div className="mt-10">
               <button
                 type="submit"
-                className="w-full flex justify-center items-center py-4 px-6 border border-transparent rounded-full shadow-sm text-xl font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-300"
+                className={`w-full flex justify-center items-center py-4 px-6 border border-transparent rounded-full shadow-sm text-xl font-medium text-white ${
+                  isLoading
+                    ? "bg-orange-500 cursor-not-allowed"
+                    : "bg-orange-500 hover:bg-orange-700"
+                }`}
                 disabled={isLoading}
               >
                 {isLoading ? "Menghitung..." : "Hitung Prediksi"}
@@ -283,48 +277,20 @@ export default function RendemenInputPage() {
           )}
         </div>
       </div>
-      {isConfirmModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-10 rounded-2xl w-full max-w-lg">
-            <h2 className="text-3xl font-bold mb-6 text-green-800">
-              Konfirmasi Pengiriman
-            </h2>
-            <p className="mb-8 text-xl text-green-600">
-              Apakah data sudah sesuai? Silakan periksa kembali sebelum
-              melanjutkan perhitungan.
-            </p>
-            <div className="flex justify-end gap-6">
-              <button
-                onClick={handleCancelCalculate}
-                className="px-8 py-3 bg-red-500 text-white rounded-full text-lg hover:bg-red-600 transition duration-300"
-              >
-                Batal
-              </button>
-              <button
-                onClick={handleConfirmCalculate}
-                className="px-8 py-3 bg-green-500 text-white rounded-full text-lg hover:bg-green-600 transition duration-300"
-                disabled={isLoading}
-              >
-                {isLoading ? "Menghitung..." : "Hitung!"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
 
 const InputField = ({ icon, label, info, ...props }) => (
   <div>
-    <label className="text-lg font-medium text-green-700 flex items-center mb-2">
+    <label className="text-lg font-medium text-black flex items-center mb-2">
       {icon}
       <span className="mx-2">{label}</span>
       {info && (
         <div className="relative">
-          <span className="text-green-500 cursor-pointer group">
-            <FaInfoCircle className="text-green-900" />
-            <div className="absolute bottom-full mb-2 left-0 w-64 bg-gray-600 text-white text-sm rounded-lg shadow-lg p-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-300 z-10">
+          <span className="text- cursor-pointer group">
+            <FaInfoCircle />
+            <div className="absolute bottom-full mb-2 left-0 w-64 bg-white text-black text-sm rounded-lg shadow-lg p-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-300 z-10">
               {info}
             </div>
           </span>
@@ -338,21 +304,11 @@ const InputField = ({ icon, label, info, ...props }) => (
   </div>
 );
 
-const SelectField = ({ icon, label, options, info, ...props }) => (
+const SelectField = ({ icon, label, options, ...props }) => (
   <div>
-    <label className="text-lg font-medium text-green-700 flex items-center mb-2">
+    <label className="text-lg font-medium text-black flex items-center mb-2">
       {icon}
-      <span className="mx-2">{label}</span>
-      {info && (
-        <div className="relative">
-          <span className="text-green-500 cursor-pointer group">
-            <FaInfoCircle className="text-green-900" />
-            <div className="absolute bottom-full mb-2 left-0 w-64 bg-gray-600 text-white text-sm rounded-lg shadow-lg p-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-300 z-10">
-              {info}
-            </div>
-          </span>
-        </div>
-      )}
+      <span className="ml-2">{label}</span>
     </label>
     <select
       {...props}
