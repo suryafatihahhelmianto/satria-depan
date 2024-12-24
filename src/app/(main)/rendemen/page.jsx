@@ -70,6 +70,7 @@ export default function RendemenPage() {
 
       // Konversi data JSON ke format CSV
       const headers = [
+        "No",
         "Tanggal Prediksi",
         "Nama Pabrik",
         "Blok Kebun",
@@ -256,6 +257,7 @@ export default function RendemenPage() {
           <table className="min-w-full  border border-gray-200">
             <thead>
               <tr className="bg-gradient-to-r from-ijoWasis to-ijoDash text-white">
+                <th className="py-2 px-4 border-b">No</th>
                 <th className="py-2 px-4 border-b">Pabrik</th>
                 <th className="py-2 px-4 border-b">Tanggal Prediksi</th>
                 <th className="py-2 px-4 border-b">Blok Kebun</th>
@@ -271,11 +273,14 @@ export default function RendemenPage() {
                   </td>
                 </tr>
               ) : (
-                sessions.map((session) => (
+                sessions.map((session, index) => (
                   <tr
                     key={session.tanggal}
                     className="hover:bg-gray-200 text-center"
                   >
+                    <td className="py-2 px-4 border-b">
+                      {index + 1} {/* Nomor urut dimulai dari 1 */}
+                    </td>
                     <td className="py-2 px-4 border-b">
                       {session.pabrikGula.namaPabrik}
                     </td>
