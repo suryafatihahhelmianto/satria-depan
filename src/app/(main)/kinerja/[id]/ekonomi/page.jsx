@@ -368,7 +368,8 @@ export default function DataKinerja() {
           isAdmin={isAdmin}
         />
       )}
-      {["ADMIN", "TANAMAN"].includes(role) && (
+
+      {["ADMIN", "TUK"].includes(role) && (
         <>
           <KinerjaTable
             title="Kesenjangan Keuntungan Pelaku Rantai Pasok per Ton Gula (E3)"
@@ -377,6 +378,10 @@ export default function DataKinerja() {
             sesiId={sesiId}
             isAdmin={isAdmin}
           />
+        </>
+      )}
+      {["ADMIN", "TANAMAN"].includes(role) && (
+        <>
           <KinerjaTable
             title="Harga Patokan Petani (E4)"
             rows={rowsE4}

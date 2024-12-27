@@ -512,7 +512,7 @@ export default function SumberDayaPage() {
         />
       )}
 
-      {["ADMIN", "INSTALASI"].includes(role) && (
+      {["ADMIN", "QUALITYCONTROL"].includes(role) && (
         <KinerjaTable
           title="Overall Recovery (D5)"
           rows={dataD5}
@@ -522,7 +522,7 @@ export default function SumberDayaPage() {
         />
       )}
 
-      {["ADMIN", "TANAMAN"].includes(role) && (
+      {["ADMIN", "INSTALASI"].includes(role) && (
         <>
           <KinerjaTable
             title="Kecukupan Bahan Baku (D6)"

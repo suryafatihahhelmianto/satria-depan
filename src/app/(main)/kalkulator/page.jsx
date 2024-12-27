@@ -15,6 +15,7 @@ import {
 import { useRouter } from "next/navigation";
 import { fetchData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
+import { formatNumberToIndonesian } from "@/tools/formatNumber";
 
 export default function KalkulatorPage() {
   const [formData, setFormData] = useState({
@@ -266,7 +267,7 @@ export default function KalkulatorPage() {
                 Nilai Prediksi Rendemen
               </h3>
               <p className="text-4xl sm:text-5xl md:text-7xl font-bold text-white">
-                {predictionValue}%
+                {formatNumberToIndonesian(predictionValue)}%
               </p>
             </div>
           )}
