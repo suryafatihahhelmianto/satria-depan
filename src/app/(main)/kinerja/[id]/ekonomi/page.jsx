@@ -380,7 +380,7 @@ export default function DataKinerja() {
           />
         </>
       )}
-      {["ADMIN", "TANAMAN"].includes(role) && (
+      {["ADMIN", "TUK"].includes(role) && (
         <>
           <KinerjaTable
             title="Harga Patokan Petani (E4)"

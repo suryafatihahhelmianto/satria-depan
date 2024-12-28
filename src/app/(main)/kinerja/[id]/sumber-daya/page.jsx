@@ -285,6 +285,62 @@ export default function SumberDayaPage() {
     },
   ];
 
+  const dataD3qc = [
+    {
+      isSubtitle: true,
+      label: "Produktivitas Tenaga Kerja",
+    },
+    {
+      label: "Jam Henti A (%)",
+      inputType: "number",
+      value: formData.jumlahJamKerjaEfektif,
+      onChange: (e) =>
+        handleInputChange("jumlahJamKerjaEfektif", e.target.value),
+      onSubmit: () =>
+        handleUpdate("jumlahJamKerjaEfektif", formData.jumlahJamKerjaEfektif),
+      locked: lockedStatus["jumlahJamKerjaEfektif"],
+      fieldName: "jumlahJamKerjaEfektif",
+      capt: "jam henti karena kekurangan bahan baku",
+    },
+    {
+      label: "Jam Henti B (%)",
+      inputType: "number",
+      value: formData.totalJamKerja,
+      onChange: (e) => handleInputChange("totalJamKerja", e.target.value),
+      onSubmit: () => handleUpdate("totalJamKerja", formData.totalJamKerja),
+      locked: lockedStatus["totalJamKerja"],
+      fieldName: "totalJamKerja",
+      capt: "jam henti karena kerusakan atau gangguan teknis pada peralatan pabrik",
+    },
+  ];
+
+  const dataD3sdm = [
+    {
+      isSubtitle: true,
+      label: "Presentase Jam Pelatihan Terlaksana",
+    },
+    {
+      label: "Jam Terlaksana (Jam/Tahun)",
+      inputType: "number",
+      value: formData.jamTerlaksana,
+      onChange: (e) => handleInputChange("jamTerlaksana", e.target.value),
+      onSubmit: () => handleUpdate("jamTerlaksana", formData.jamTerlaksana),
+      locked: lockedStatus["jamTerlaksana"],
+      fieldName: "jamTerlaksana",
+      capt: "Jumlah jam pelatihan terhadap karyawan yang dilakukan",
+    },
+    {
+      label: "Jam Total (Jam/Tahun)",
+      inputType: "number",
+      value: formData.jamTotal,
+      onChange: (e) => handleInputChange("jamTotal", e.target.value),
+      onSubmit: () => handleUpdate("jamTotal", formData.jamTotal),
+      locked: lockedStatus["jamTotal"],
+      fieldName: "jamTotal",
+      capt: "Jam pelatihan terhadap karyawan yang dilakukan",
+    },
+  ];
+
   const dataD4 = [
     {
       label: "Produktivitas Tebu (Ton/Ha)",
@@ -492,10 +548,28 @@ export default function SumberDayaPage() {
         />
       )}
 
-      {["ADMIN", "SDM"].includes(role) && (
+      {["ADMIN"].includes(role) && (
         <KinerjaTable
           title="Kompetensi Tenaga Kerja (D3)"
           rows={dataD3}
+          isAdmin={isAdmin}
+          type={"sdam"}
+          sesiId={sesiId}
+        />
+      )}
+      {["QUALITYCONTROL"].includes(role) && (
+        <KinerjaTable
+          title="Kompetensi Tenaga Kerja (D3)"
+          rows={dataD3qc}
+          isAdmin={isAdmin}
+          type={"sdam"}
+          sesiId={sesiId}
+        />
+      )}
+      {["SDM"].includes(role) && (
+        <KinerjaTable
+          title="Kompetensi Tenaga Kerja (D3)"
+          rows={dataD3sdm}
           isAdmin={isAdmin}
           type={"sdam"}
           sesiId={sesiId}
