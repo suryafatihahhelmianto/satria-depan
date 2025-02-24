@@ -63,14 +63,17 @@ export default function KalkulatorPage() {
               <InputField
                 icon={<FaSeedling className="text-orange-500 text-2xl" />}
                 label="Blok Kebun"
+                info="Nama blok kebun berdasarkan pembagian wilayah atau area di dalam kebun yang sudah disepakati"
                 name="blokKebun"
                 value={formData.blokKebun}
                 onChange={handleInputChange}
                 placeholder="Masukkan nilai Blok"
               />
+
               <SelectField
                 icon={<FaLeaf className="text-orange-500 text-2xl" />}
                 label="Jenis"
+                info="Jenis mengacu pada kategori tanaman yang ditanam, misalnya Plain Cane (PC), Ratoon Cane (RC) 1, 2, dst"
                 name="jenis"
                 value={formData.jenis}
                 onChange={handleInputChange}
@@ -109,6 +112,7 @@ export default function KalkulatorPage() {
               <SelectField
                 icon={<FaCalendarAlt className="text-orange-500 text-2xl" />}
                 label="Masa Tanam"
+                info="Periode waktu ketika tebu ditanam.Dituliskan 5A, 6B, dst yang menunjukkan bulan tebu ditanam"
                 name="masaTanam"
                 value={formData.masaTanam}
                 onChange={handleInputChange}
@@ -136,6 +140,7 @@ export default function KalkulatorPage() {
               <SelectField
                 icon={<FaDna className="text-orange-500 text-2xl" />}
                 label="Varietas"
+                info="Jenis dari tanaman tebu yang ditanam"
                 name="varietas"
                 value={formData.varietas}
                 onChange={handleInputChange}
@@ -175,6 +180,7 @@ export default function KalkulatorPage() {
               <SelectField
                 icon={<FaRegCalendarAlt className="text-orange-500 text-2xl" />}
                 label="Kemasakan"
+                info="Tingkat kematangan tanaman tebu yang optimal untuk dipanen"
                 name="kemasakan"
                 value={formData.kemasakan}
                 onChange={handleInputChange}
@@ -191,6 +197,7 @@ export default function KalkulatorPage() {
                   <FaThermometerHalf className="text-orange-500 text-2xl" />
                 }
                 label="Brix"
+                info="Ukuran konsentrasi zat padat berupa gula pada tanaman tebu dalam 100 gram larutan"
                 name="brix"
                 value={formData.brix}
                 onChange={handleInputChange}
@@ -263,11 +270,21 @@ const InputField = ({ icon, label, info, ...props }) => (
   </div>
 );
 
-const SelectField = ({ icon, label, options, ...props }) => (
+const SelectField = ({ icon, label, info, options, ...props }) => (
   <div>
     <label className="text-lg font-medium text-black flex items-center mb-2">
       {icon}
-      <span className="ml-2">{label}</span>
+      <span className="mx-2">{label}</span>
+      {info && (
+        <div className="relative">
+          <span className="text- cursor-pointer group">
+            <FaInfoCircle />
+            <div className="absolute bottom-full mb-2 left-0 w-64 bg-white text-black text-sm rounded-lg shadow-lg p-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-300 z-10">
+              {info}
+            </div>
+          </span>
+        </div>
+      )}
     </label>
     <select
       {...props}

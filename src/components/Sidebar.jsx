@@ -36,15 +36,10 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
   }, []);
 
   const navLinks = [
-    !isMobile && {
+    {
       name: "Beranda",
       path: "/",
       icon: <AiFillHome size={20} />,
-    },
-    isMobile && {
-      name: "Kinerja Keberlanjutan Rantai Pasok",
-      path: "/",
-      icon: <AiFillDashboard size={20} />,
     },
     !isMobile &&
       role !== "DIREKSI" && {

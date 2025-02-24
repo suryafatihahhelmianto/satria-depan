@@ -118,6 +118,7 @@ export default function RendemenInputPage() {
                 onChange={handleInputChange}
                 placeholder="Masukkan nilai Blok"
               />
+
               <SelectField
                 icon={<FaLeaf className="text-green-500 text-2xl" />}
                 label="Jenis"
