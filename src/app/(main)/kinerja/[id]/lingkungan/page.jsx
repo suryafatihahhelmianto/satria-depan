@@ -373,6 +373,41 @@ export default function LingkunganPage() {
       capt: "Presentase SHS tebu yang dihasilkan",
     },
   ];
+  const dataL3instalasi = [
+    {
+      label: "Konsumsi Listrik (Kwh/Ton Tebu)",
+      inputType: "number",
+      value: formData.konsumsiListrik,
+      onChange: (e) => handleInputChange("konsumsiListrik", e.target.value),
+      onSubmit: () => handleUpdate("konsumsiListrik", formData.konsumsiListrik),
+      locked: lockedStatus["konsumsiListrik"],
+      fieldName: "konsumsiListrik",
+      capt: "Rata-rata konsumsi listrik yang digunakan untuk produksi per ton tebu",
+    },
+    {
+      label: "Jumlah Tebu (Ton)",
+      inputType: "number",
+      value: formData.jumlahTonTebu,
+      onChange: (e) => handleInputChange("jumlahTonTebu", e.target.value),
+      onSubmit: () => handleUpdate("jumlahTonTebu", formData.jumlahTonTebu),
+      locked: lockedStatus["jumlahTonTebu"],
+      fieldName: "jumlahTonTebu",
+      capt: "Jumlah tebu yang digunakan untuk input produksi",
+    },
+  ];
+
+  const dataL3fabrikasi = [
+    {
+      label: "SHS (%Tebu)",
+      inputType: "number",
+      value: formData.shs,
+      onChange: (e) => handleInputChange("shs", e.target.value),
+      onSubmit: () => handleUpdate("shs", formData.shs),
+      locked: lockedStatus["shs"],
+      fieldName: "shs",
+      capt: "Presentase SHS tebu yang dihasilkan",
+    },
+  ];
 
   const dataL4 = [
     { isSubtitle: true, label: "Kebisingan Ruang Produksi (dB)" },
@@ -964,10 +999,28 @@ export default function LingkunganPage() {
             </div>
           )}
 
-          {["ADMIN", "INSTALASI"].includes(role) && (
+          {["ADMIN"].includes(role) && (
             <KinerjaTable
               title="Emisi Listrik (L3)"
               rows={dataL3}
+              isAdmin={isAdmin}
+              type={"lingkungan"}
+              sesiId={sesiId}
+            />
+          )}
+          {["INSTALASI"].includes(role) && (
+            <KinerjaTable
+              title="Emisi Listrik (L3)"
+              rows={dataL3instalasi}
+              isAdmin={isAdmin}
+              type={"lingkungan"}
+              sesiId={sesiId}
+            />
+          )}
+          {["FABRIKASI"].includes(role) && (
+            <KinerjaTable
+              title="Emisi Listrik (L3)"
+              rows={dataL3fabrikasi}
               isAdmin={isAdmin}
               type={"lingkungan"}
               sesiId={sesiId}

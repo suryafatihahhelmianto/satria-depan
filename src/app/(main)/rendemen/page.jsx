@@ -16,40 +16,49 @@ import Skeleton from "@/components/common/Skeleton";
 import { getCookie } from "@/tools/getCookie";
 import { formatNumberToIndonesian } from "@/tools/formatNumber";
 import { useUser } from "@/context/UserContext";
+import { FaArrowLeft } from "react-icons/fa";
 
 export default function RendemenPage() {
-  const ITEMS_PER_PAGE = 15;
+  const ITEMS_PER_PAGE = 5;
+  const [itemsPerPage, setItemsPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
   const { role, isAdmin } = useUser();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [sessions, setSessions] = useState([]); // State untuk menyimpan data sesi
-  const currentData = sessions.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
-  );
-  const totalPages = Math.ceil(sessions.length / ITEMS_PER_PAGE);
+
+  const [totalPages, setTotalPages] = useState(0);
+
+  // const currentData = sessions.slice(
+  //   (currentPage - 1) * ITEMS_PER_PAGE,
+  //   currentPage * ITEMS_PER_PAGE
+  // );
+  // const totalPages = Math.ceil(sessions.length / ITEMS_PER_PAGE);
   const handlePageChange = (page) => {
     setCurrentPage(page);
+    fetchSessions(page); // Panggil ulang data dengan halaman baru
   };
 
   // Fungsi untuk mem-fetch data dari API
-  const fetchSessions = async () => {
+  const fetchSessions = async (page = currentPage, pageSize = itemsPerPage) => {
     try {
       setLoading(true);
-      const token = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("token="))
-        ?.split("=")[1];
-      const response = await fetchData("/api/rendemen/list", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const token = getCookie("token");
 
-      const data = await response.data;
+      // Tambahkan parameter page dan pageSize
+      const response = await fetchData(
+        `/api/rendemen/list?page=${page}&pageSize=${pageSize}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const { data, pagination } = await response; // Sesuaikan dengan respons API
 
       setSessions(data); // Simpan data dari API ke state sessions
+      setTotalPages(pagination.totalPages); // Simpan total halaman dari API
       setLoading(false);
     } catch (err) {
       setError(err.message);
@@ -206,7 +215,7 @@ export default function RendemenPage() {
   };
 
   useEffect(() => {
-    fetchSessions(); // Panggil fungsi fetchSessions saat komponen di-mount
+    fetchSessions(1, itemsPerPage); // Panggil fungsi fetchSessions saat komponen di-mount
   }, []);
 
   // Render tampilan
@@ -279,7 +288,8 @@ export default function RendemenPage() {
                     className="hover:bg-gray-200 text-center"
                   >
                     <td className="py-2 px-4 border-b">
-                      {index + 1} {/* Nomor urut dimulai dari 1 */}
+                      {/* {index + 1 + (currentPage - 1) * ITEMS_PER_PAGE} */}
+                      {index + 1 + (currentPage - 1) * itemsPerPage}
                     </td>
                     <td className="py-2 px-4 border-b">
                       {session.pabrikGula.namaPabrik}
@@ -328,23 +338,108 @@ export default function RendemenPage() {
             </tbody>
           </table>
           {/* Pagination */}
-          {totalPages > 1 && (
+          {/* {totalPages > 1 && ( */}
+          {
             <div className="flex justify-center mt-4 gap-2">
-              {Array.from({ length: totalPages }, (_, index) => (
-                <button
-                  key={index}
-                  onClick={() => handlePageChange(index + 1)}
-                  className={`px-3 py-1 rounded-lg ${
-                    currentPage === index + 1
-                      ? "bg-green-600 text-white"
-                      : "bg-gray-200 hover:bg-gray-300"
-                  }`}
+              {/* Tombol Previous */}
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                className={`px-4 py-2 rounded-lg border ${
+                  currentPage === 1
+                    ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                    : "bg-white hover:bg-gray-100 border-gray-300 text-gray-700"
+                }`}
+              >
+                {/* <FaArrowLeft /> */}
+                Sebelumnya
+              </button>
+              {/* Nomor Halaman */}
+              {Array.from({ length: totalPages }).map((_, index) => {
+                const page = index + 1;
+                const isFirstPage = page === 1;
+                const isLastPage = page === totalPages;
+                const isNearCurrentPage = Math.abs(page - currentPage) <= 1;
+
+                if (isFirstPage || isLastPage || isNearCurrentPage) {
+                  return (
+                    <button
+                      key={page}
+                      onClick={() => handlePageChange(page)}
+                      className={`px-4 py-2 rounded-lg border ${
+                        currentPage === page
+                          ? "bg-green-600 text-white border-green-600"
+                          : "bg-white hover:bg-gray-100 border-gray-300 text-gray-700"
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  );
+                }
+
+                // Tampilkan "..." jika ada jeda antar halaman
+                const showEllipsisBefore =
+                  page < currentPage && page === currentPage - 2;
+                const showEllipsisAfter =
+                  page > currentPage && page === currentPage + 2;
+
+                if (showEllipsisBefore || showEllipsisAfter) {
+                  return (
+                    <span
+                      key={`ellipsis-${page}`}
+                      className="px-4 py-2 text-gray-500 cursor-default"
+                    >
+                      ...
+                    </span>
+                  );
+                }
+
+                return null; // Jangan render tombol lainnya
+              })}
+              {/* Tombol Next */}
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className={`px-4 py-2 rounded-lg border ${
+                  currentPage === totalPages
+                    ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                    : "bg-white hover:bg-gray-100 border-gray-300 text-gray-700"
+                }`}
+              >
+                Berikutnya
+              </button>
+              <div className="flex justify-center items-center mt-4 gap-2">
+                <label
+                  htmlFor="itemsPerPage"
+                  className="mr-2 text-sm font-medium text-gray-700"
                 >
-                  {index + 1}
-                </button>
-              ))}
+                  Jumlah rendemen per halaman:
+                </label>
+                <select
+                  id="itemsPerPage"
+                  value={itemsPerPage}
+                  onChange={(e) => {
+                    const newItemsPerPage = parseInt(e.target.value, 10);
+                    setItemsPerPage(newItemsPerPage); // Ubah jumlah item per halaman
+                    setCurrentPage(1); // Reset ke halaman pertama
+                    fetchSessions(1, newItemsPerPage); // Fetch data dengan halaman pertama dan itemsPerPage baru
+                  }}
+                  className="px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm"
+                >
+                  {[5, 10, 20, 50].map((size) => (
+                    <option key={size} value={size}>
+                      {size}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
-          )}
+          }
+          <div className="text-center my-4">
+            <p>
+              Halaman {currentPage} dari {totalPages}
+            </p>
+          </div>
         </div>
       )}
     </div>

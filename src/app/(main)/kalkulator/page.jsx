@@ -13,6 +13,9 @@ import {
   FaInfoCircle,
 } from "react-icons/fa";
 import { useRouter } from "next/navigation";
+import { fetchData } from "@/tools/api";
+import { getCookie } from "@/tools/getCookie";
+import { formatNumberToIndonesian } from "@/tools/formatNumber";
 
 export default function KalkulatorPage() {
   const [formData, setFormData] = useState({
@@ -27,8 +30,6 @@ export default function KalkulatorPage() {
   const [predictionValue, setPredictionValue] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  //const router = useRouter(); // Removed
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -37,13 +38,42 @@ export default function KalkulatorPage() {
   const handleConfirmCalculate = async () => {
     setIsLoading(true);
 
-    // Simulate API call delay
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    const {
+      blokKebun,
+      jenis,
+      masaTanam,
+      varietas,
+      kemasakan,
+      brix,
+      curahHujan,
+    } = formData;
 
-    // Set fixed prediction value
-    setPredictionValue(9.12);
+    const data = {
+      blokKebun: blokKebun,
+      jenis: parseFloat(jenis),
+      masaTanam: parseFloat(masaTanam),
+      varietas: parseFloat(varietas),
+      kemasakan: parseFloat(kemasakan),
+      brix: parseFloat(brix),
+      curahHujan: parseFloat(curahHujan),
+    };
 
-    setIsLoading(false);
+    try {
+      const response = await fetchData(`/api/rendemen/input/calculator`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${getCookie("token")}`,
+          "Content-Type": "application/json",
+        },
+        data,
+      });
+
+      setPredictionValue(response.nilaiRendemen);
+    } catch (error) {
+      console.error("Error submitting data: ", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -216,7 +246,14 @@ export default function KalkulatorPage() {
                 type="number"
               />
             </div>
-            <div className="mt-10">
+
+            {/* Loading Spinner */}
+            <div className="relative mt-10">
+              {isLoading && (
+                <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50 rounded-full z-10">
+                  <div className="w-8 h-8 border-4 border-t-orange-500 border-orange-200 rounded-full animate-spin"></div>
+                </div>
+              )}
               <button
                 type="button"
                 onClick={handleConfirmCalculate}
@@ -237,7 +274,7 @@ export default function KalkulatorPage() {
                 Nilai Prediksi Rendemen
               </h3>
               <p className="text-4xl sm:text-5xl md:text-7xl font-bold text-white">
-                {predictionValue}%
+                {formatNumberToIndonesian(predictionValue)}%
               </p>
             </div>
           )}

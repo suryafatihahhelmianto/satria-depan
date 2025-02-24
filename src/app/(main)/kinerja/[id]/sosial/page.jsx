@@ -359,7 +359,7 @@ export default function DataSosial() {
           sesiId={sesiId}
         />
       )}
-      {["ADMIN", "TUK"].includes(role) && (
+      {["ADMIN", "TANAMAN"].includes(role) && (
         <KinerjaTable
           title="Peningkatan Keikutsertaan Stakeholder Kemitraan (S6)"
           rows={rowsS6}
