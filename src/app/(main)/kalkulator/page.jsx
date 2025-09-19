@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   FaLeaf,
   FaCalendarAlt,
@@ -8,11 +8,11 @@ import {
   FaDna,
   FaSeedling,
   FaThermometerHalf,
-  FaVial,
   FaCloudRain,
   FaInfoCircle,
+  FaExclamationTriangle,
+  FaTimes,
 } from "react-icons/fa";
-import { useRouter } from "next/navigation";
 import { fetchData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
 import { formatNumberToIndonesian } from "@/tools/formatNumber";
@@ -29,13 +29,42 @@ export default function KalkulatorPage() {
   });
   const [predictionValue, setPredictionValue] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showValidationModal, setShowValidationModal] = useState(false);
+  const [validationErrors, setValidationErrors] = useState([]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const validateInputs = () => {
+    const errors = [];
+    const brixValue = Number.parseFloat(formData.brix);
+    const curahHujanValue = Number.parseFloat(formData.curahHujan);
+
+    if (isNaN(brixValue) || brixValue < 0 || brixValue > 30) {
+      errors.push("Nilai Brix harus antara 0 dan 30");
+    }
+
+    if (
+      isNaN(curahHujanValue) ||
+      curahHujanValue < 0 ||
+      curahHujanValue > 5000
+    ) {
+      errors.push("Nilai Curah Hujan harus antara 0 dan 5000 mm");
+    }
+
+    return errors;
+  };
+
   const handleConfirmCalculate = async () => {
+    const errors = validateInputs();
+    if (errors.length > 0) {
+      setValidationErrors(errors);
+      setShowValidationModal(true);
+      return;
+    }
+
     setIsLoading(true);
 
     const {
@@ -50,12 +79,12 @@ export default function KalkulatorPage() {
 
     const data = {
       blokKebun: blokKebun,
-      jenis: parseFloat(jenis),
-      masaTanam: parseFloat(masaTanam),
-      varietas: parseFloat(varietas),
-      kemasakan: parseFloat(kemasakan),
-      brix: parseFloat(brix),
-      curahHujan: parseFloat(curahHujan),
+      jenis: Number.parseFloat(jenis),
+      masaTanam: Number.parseFloat(masaTanam),
+      varietas: Number.parseFloat(varietas),
+      kemasakan: Number.parseFloat(kemasakan),
+      brix: Number.parseFloat(brix),
+      curahHujan: Number.parseFloat(curahHujan),
     };
 
     try {
@@ -116,22 +145,22 @@ export default function KalkulatorPage() {
                 styles={{
                   control: (base) => ({
                     ...base,
-                    minHeight: "35px", // Kontrol lebih kecil
-                    fontSize: "12px", // Font lebih kecil
+                    minHeight: "35px",
+                    fontSize: "12px",
                   }),
                   menu: (base) => ({
                     ...base,
                     display: "grid",
-                    gridTemplateColumns: "repeat(3, minmax(0, 1fr))", // Atur jadi 3 kolom
-                    gap: "4px", // Jarak antar opsi lebih kecil
-                    maxHeight: "150px", // Dropdown lebih pendek
-                    overflowY: "auto", // Scroll jika terlalu panjang
-                    padding: "4px", // Padding antar opsi
+                    gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+                    gap: "4px",
+                    maxHeight: "150px",
+                    overflowY: "auto",
+                    padding: "4px",
                   }),
                   option: (base) => ({
                     ...base,
-                    padding: "6px 8px", // Opsi lebih kecil
-                    fontSize: "12px", // Ukuran font opsi
+                    padding: "6px 8px",
+                    fontSize: "12px",
                   }),
                 }}
               />
@@ -240,7 +269,6 @@ export default function KalkulatorPage() {
               />
             </div>
 
-            {/* Loading Spinner */}
             <div className="relative mt-10">
               {isLoading && (
                 <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50 rounded-full z-10">
@@ -273,6 +301,49 @@ export default function KalkulatorPage() {
           )}
         </div>
       </div>
+
+      {showValidationModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center">
+                <FaExclamationTriangle className="text-red-500 text-2xl mr-3" />
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Data Tidak Valid
+                </h3>
+              </div>
+              <button
+                onClick={() => setShowValidationModal(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <FaTimes className="text-xl" />
+              </button>
+            </div>
+
+            <div className="mb-6">
+              <p className="text-gray-700 mb-3">
+                Terdapat nilai yang tidak valid pada input berikut:
+              </p>
+              <ul className="list-disc list-inside space-y-1">
+                {validationErrors.map((error, index) => (
+                  <li key={index} className="text-red-600 text-sm">
+                    {error}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="flex justify-end space-x-3">
+              <button
+                onClick={() => setShowValidationModal(false)}
+                className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
+              >
+                Kembali dan Edit
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
