@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   FaLeaf,
   FaCalendarAlt,
@@ -29,6 +29,8 @@ export default function RendemenInputPage() {
   const [predictionValue, setPredictionValue] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [isValidationModalOpen, setIsValidationModalOpen] = useState(false);
+  const [validationErrors, setValidationErrors] = useState([]);
 
   const router = useRouter();
 
@@ -37,13 +39,44 @@ export default function RendemenInputPage() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const validateInputs = () => {
+    const errors = [];
+    const brixValue = Number.parseFloat(formData.brix);
+    const curahHujanValue = Number.parseFloat(formData.curahHujan);
+
+    if (isNaN(brixValue) || brixValue < 0 || brixValue > 30) {
+      errors.push("Nilai Brix harus antara 0-30");
+    }
+
+    if (
+      isNaN(curahHujanValue) ||
+      curahHujanValue < 0 ||
+      curahHujanValue > 5000
+    ) {
+      errors.push("Nilai Curah Hujan harus antara 0-5000mm");
+    }
+
+    return errors;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    const errors = validateInputs();
+    if (errors.length > 0) {
+      setValidationErrors(errors);
+      setIsValidationModalOpen(true);
+      return;
+    }
     setIsConfirmModalOpen(true);
   };
 
   const handleCancelCalculate = () => {
     setIsConfirmModalOpen(false);
+  };
+
+  const handleCloseValidationModal = () => {
+    setIsValidationModalOpen(false);
+    setValidationErrors([]);
   };
 
   const handleConfirmCalculate = async () => {
@@ -63,13 +96,13 @@ export default function RendemenInputPage() {
 
     const data = {
       blokKebun: blokKebun,
-      jenis: parseFloat(jenis),
-      masaTanam: parseFloat(masaTanam),
-      varietas: parseFloat(varietas),
-      kemasakan: parseFloat(kemasakan),
-      brix: parseFloat(brix),
-      pol: parseFloat(pol),
-      curahHujan: parseFloat(curahHujan),
+      jenis: Number.parseFloat(jenis),
+      masaTanam: Number.parseFloat(masaTanam),
+      varietas: Number.parseFloat(varietas),
+      kemasakan: Number.parseFloat(kemasakan),
+      brix: Number.parseFloat(brix),
+      pol: Number.parseFloat(pol),
+      curahHujan: Number.parseFloat(curahHujan),
     };
 
     try {
@@ -145,22 +178,22 @@ export default function RendemenInputPage() {
                 styles={{
                   control: (base) => ({
                     ...base,
-                    minHeight: "35px", // Kontrol lebih kecil
-                    fontSize: "12px", // Font lebih kecil
+                    minHeight: "35px",
+                    fontSize: "12px",
                   }),
                   menu: (base) => ({
                     ...base,
                     display: "grid",
-                    gridTemplateColumns: "repeat(3, minmax(0, 1fr))", // Atur jadi 3 kolom
-                    gap: "4px", // Jarak antar opsi lebih kecil
-                    maxHeight: "150px", // Dropdown lebih pendek
-                    overflowY: "auto", // Scroll jika terlalu panjang
-                    padding: "4px", // Padding antar opsi
+                    gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+                    gap: "4px",
+                    maxHeight: "150px",
+                    overflowY: "auto",
+                    padding: "4px",
                   }),
                   option: (base) => ({
                     ...base,
-                    padding: "6px 8px", // Opsi lebih kecil
-                    fontSize: "12px", // Ukuran font opsi
+                    padding: "6px 8px",
+                    fontSize: "12px",
                   }),
                 }}
               />
@@ -317,6 +350,35 @@ export default function RendemenInputPage() {
                 disabled={isLoading}
               >
                 {isLoading ? "Menghitung..." : "Hitung!"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {isValidationModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-10 rounded-2xl w-full max-w-lg">
+            <h2 className="text-3xl font-bold mb-6 text-red-800">
+              Data Tidak Valid
+            </h2>
+            <div className="mb-8">
+              <p className="text-xl text-red-600 mb-4">
+                Terdapat nilai yang tidak sesuai:
+              </p>
+              <ul className="list-disc list-inside space-y-2">
+                {validationErrors.map((error, index) => (
+                  <li key={index} className="text-lg text-red-500">
+                    {error}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="flex justify-end">
+              <button
+                onClick={handleCloseValidationModal}
+                className="px-8 py-3 bg-blue-500 text-white rounded-full text-lg hover:bg-blue-600 transition duration-300"
+              >
+                Kembali dan Edit
               </button>
             </div>
           </div>

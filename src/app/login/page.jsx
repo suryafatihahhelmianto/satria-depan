@@ -137,7 +137,7 @@ export default function LoginPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            className="p-2 mb-6 border rounded-lg focus:outline-none focus:ring focus:border-green-400"
+            className="password-form p-2 mb-6 border rounded-lg focus:outline-none focus:ring focus:border-green-400"
           />
 
           {error && <p className="text-red-500">{error}</p>}
