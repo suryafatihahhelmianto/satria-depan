@@ -35,6 +35,6 @@ export function middleware(req) {
 // Konfigurasi rute mana saja yang akan dilindungi middleware
 export const config = {
   matcher: [
-    "/((?!api|login|_next/static|_next/image).*)", // Melindungi semua rute kecuali API, halaman login, dan aset statis
+    "/((?!api|login|img|_next/static|_next/image).*)", // Melindungi semua rute kecuali API, halaman login, dan aset statis
   ],
 };
