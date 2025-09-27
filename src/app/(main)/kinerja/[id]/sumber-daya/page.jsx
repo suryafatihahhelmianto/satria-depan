@@ -19,35 +19,35 @@ export default function SumberDayaPage() {
   const sesiId = idMatch ? idMatch[1] : null;
 
   const [formData, setFormData] = useState({
-    kemudahanAksesTenagaKerja: 0, // dataD1
+    kemudahanAksesTenagaKerja: "", // dataD1
 
-    luasTanamTRITahunIni: 0, // dataD2
-    luasTotalTahunIni: 0,
+    luasTanamTRITahunIni: "", // dataD2
+    luasTotalTahunIni: "",
 
-    jumlahJamKerjaEfektif: 0,
-    totalJamKerja: 0,
-    jamTerlaksana: 0,
-    jamTotal: 0,
+    jumlahJamKerjaEfektif: "",
+    totalJamKerja: "",
+    jamTerlaksana: "",
+    jamTotal: "",
 
-    produktivitasTebu: 0, // dataD4
-    rendemenTebu: 0, // dataD4
-    mbs: 0, // dataD4
+    produktivitasTebu: "", // dataD4
+    rendemenTebu: "", // dataD4
+    mbs: "", // dataD4
 
-    overallRecovery: 0, // dataD5
+    overallRecovery: "", // dataD5
 
-    kis: 0, // dataD6
-    kes: 0, // dataD6
+    kis: "", // dataD6
+    kes: "", // dataD6
 
-    ratoonTebu: 0, // dataD7
+    ratoonTebu: "", // dataD7
 
-    luasBL: 0, // dataD8
-    luasPST41: 0, // dataD8
-    luasPS864: 0, // dataD8
-    luasTotal: 0, // dataD8
+    luasBL: "", // dataD8
+    luasPST41: "", // dataD8
+    luasPS864: "", // dataD8
+    luasTotal: "", // dataD8
 
-    tingkatMekanisasi: 0, // dataD9
+    tingkatMekanisasi: "", // dataD9
 
-    teknologiPengolahanRawSugar: 0, // dataD10
+    teknologiPengolahanRawSugar: "", // dataD10
   });
 
   const [lockedStatus, setLockedStatus] = useState({});
@@ -66,18 +66,23 @@ export default function SumberDayaPage() {
 
       const data = { sesiId };
 
-      // Periksa apakah value adalah string sebelum menggunakan .replace()
-      let numericValue = value;
-      if (typeof value === "string") {
-        numericValue = parseFloat(value.replace(",", ".")); // Ganti koma menjadi titik jika value berupa string
+      // Periksa apakah value adalah string kosong atau tidak valid
+      if (value === "" || value === null || value === undefined) {
+        data[field] = 0; // Set default value 0 untuk field kosong
       } else {
-        numericValue = parseFloat(value); // Jika value sudah angka, langsung konversi ke float
-      }
+        // Periksa apakah value adalah string sebelum menggunakan .replace()
+        let numericValue = value;
+        if (typeof value === "string") {
+          numericValue = parseFloat(value.replace(",", ".")); // Ganti koma menjadi titik jika value berupa string
+        } else {
+          numericValue = parseFloat(value); // Jika value sudah angka, langsung konversi ke float
+        }
 
-      if (!isNaN(numericValue)) {
-        data[field] = numericValue;
-      } else {
-        return; // Abaikan jika nilainya tidak valid
+        if (!isNaN(numericValue)) {
+          data[field] = numericValue;
+        } else {
+          data[field] = 0; // Set default value 0 jika nilai tidak valid
+        }
       }
 
       await fetchData(`/api/masukkan/sdam`, {
@@ -141,35 +146,35 @@ export default function SumberDayaPage() {
       setLockedStatus(lockedStatusMap);
 
       setFormData({
-        kemudahanAksesTenagaKerja: response.kemudahanAksesTenagaKerja,
+        kemudahanAksesTenagaKerja: response.kemudahanAksesTenagaKerja || "",
 
-        luasTanamTRITahunIni: response.luasTanamTRITahunIni,
-        luasTotalTahunIni: response.luasTotalTahunIni,
+        luasTanamTRITahunIni: response.luasTanamTRITahunIni || "",
+        luasTotalTahunIni: response.luasTotalTahunIni || "",
 
-        jumlahJamKerjaEfektif: response.jumlahJamKerjaEfektif,
-        totalJamKerja: response.totalJamKerja,
-        jamTerlaksana: response.jamTerlaksana,
-        jamTotal: response.jamTotal,
+        jumlahJamKerjaEfektif: response.jumlahJamKerjaEfektif || "",
+        totalJamKerja: response.totalJamKerja || "",
+        jamTerlaksana: response.jamTerlaksana || "",
+        jamTotal: response.jamTotal || "",
 
-        produktivitasTebu: response.produktivitasTebu, // dataD4
-        rendemenTebu: response.rendemenTebu, // dataD4
-        mbs: response.mbs, // dataD4
+        produktivitasTebu: response.produktivitasTebu || "", // dataD4
+        rendemenTebu: response.rendemenTebu || "", // dataD4
+        mbs: response.mbs || "", // dataD4
 
-        overallRecovery: response.overallRecovery, // dataD5
+        overallRecovery: response.overallRecovery || "", // dataD5
 
-        kis: response.kis, // dataD6
-        kes: response.kes, // dataD6
+        kis: response.kis || "", // dataD6
+        kes: response.kes || "", // dataD6
 
-        ratoonTebu: response.ratoonTebu, // dataD7
+        ratoonTebu: response.ratoonTebu || "", // dataD7
 
-        luasBL: response.luasBL, // dataD8
-        luasPST41: response.luasPST41, // dataD8
-        luasPS864: response.luasPS864, // dataD8
-        luasTotal: response.luasTotal, // dataD8
+        luasBL: response.luasBL || "", // dataD8
+        luasPST41: response.luasPST41 || "", // dataD8
+        luasPS864: response.luasPS864 || "", // dataD8
+        luasTotal: response.luasTotal || "", // dataD8
 
-        tingkatMekanisasi: response.tingkatMekanisasi, // dataD9
+        tingkatMekanisasi: response.tingkatMekanisasi || "", // dataD9
 
-        teknologiPengolahanRawSugar: response.teknologiPengolahanRawSugar, // dataD10
+        teknologiPengolahanRawSugar: response.teknologiPengolahanRawSugar || "", // dataD10
       });
       setLoading(false);
     } catch (error) {
