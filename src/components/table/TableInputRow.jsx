@@ -66,6 +66,7 @@ export default function TableInputRow({
   label,
   inputType,
   value,
+  placeholder,
   onChange,
   onSubmit,
   options,
@@ -169,6 +170,7 @@ export default function TableInputRow({
           <select
             value={value}
             onChange={onChange}
+            placeholder={placeholder}
             disabled={localLocked || isLoading || isSubmitted} // Tambahkan kondisi isLoading untuk menonaktifkan input
             className={`p-2 border rounded-md w-full focus:outline-none ${
               localLocked || isLoading

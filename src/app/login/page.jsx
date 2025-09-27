@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { fetchData } from "@/tools/api";
 import Router from "next/router"; // Import Router untuk menggunakan event
+import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
@@ -12,6 +13,7 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [loading, setLoading] = useState(false); // State untuk loading
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -130,15 +132,28 @@ export default function LoginPage() {
           <label htmlFor="password" className="text-left text-white mb-2">
             Password
           </label>
-          <input
-            type="password"
-            id="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="password-form p-2 mb-6 border rounded-lg focus:outline-none focus:ring focus:border-green-400"
-          />
+          <div className="relative mb-6">
+            <input
+              type={showPassword ? "text" : "password"}
+              id="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="p-2 w-full border rounded-lg focus:outline-none focus:ring focus:border-green-400 pr-10"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 focus:outline-none"
+            >
+              {showPassword ? (
+                <AiFillEyeInvisible size={20} />
+              ) : (
+                <AiFillEye size={20} />
+              )}
+            </button>
+          </div>
 
           {error && <p className="text-red-500">{error}</p>}
           {successMessage && <p className="text-green-500">{successMessage}</p>}
