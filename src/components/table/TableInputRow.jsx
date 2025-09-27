@@ -140,6 +140,7 @@ export default function TableInputRow({
             type="text"
             value={value}
             onChange={onChange}
+            placeholder="0"
             disabled={localLocked || isLoading || isSubmitted} // Tambahkan kondisi isLoading untuk menonaktifkan input
             className={`p-2 border rounded-md w-full focus:outline-none focus:ring ${
               localLocked || isLoading
@@ -154,6 +155,7 @@ export default function TableInputRow({
             type="number"
             value={value}
             onChange={onChange}
+            placeholder="0"
             disabled={localLocked || isLoading || isSubmitted} // Tambahkan kondisi isLoading untuk menonaktifkan input
             className={`p-2 border rounded-md w-full focus:outline-none focus:ring ${
               localLocked || isLoading

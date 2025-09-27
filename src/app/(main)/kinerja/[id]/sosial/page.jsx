@@ -16,18 +16,18 @@ export default function DataSosial() {
   const sesiId = idMatch ? idMatch[1] : null;
 
   const [formData, setFormData] = useState({
-    rantaiPasok: 0,
-    sediaAktivita: 0,
-    tingkatManfaat: 0,
-    tingkatLimbah: 0,
-    tetapMajaIndra: 0,
-    tetapTotal: 0,
-    tidakMajaIndra: 0,
-    tidakTetapTotal: 0,
-    luasLahan: 0,
-    luasLahanYangDitanami: 0,
-    luasLahanTahunLalu: 0,
-    luasLahanYangDitanamiTahunLalu: 0,
+    rantaiPasok: "",
+    sediaAktivita: "",
+    tingkatManfaat: "",
+    tingkatLimbah: "",
+    tetapMajaIndra: "",
+    tetapTotal: "",
+    tidakMajaIndra: "",
+    tidakTetapTotal: "",
+    luasLahan: "",
+    luasLahanYangDitanami: "",
+    luasLahanTahunLalu: "",
+    luasLahanYangDitanamiTahunLalu: "",
   });
 
   const [lockedStatus, setLockedStatus] = useState({});
@@ -41,7 +41,18 @@ export default function DataSosial() {
 
     try {
       const data = { sesiId };
-      data[field] = parseFloat(value);
+      
+      // Periksa apakah value adalah string kosong atau tidak valid
+      if (value === "" || value === null || value === undefined) {
+        data[field] = 0; // Set default value 0 untuk field kosong
+      } else {
+        const numericValue = parseFloat(value);
+        if (!isNaN(numericValue)) {
+          data[field] = numericValue;
+        } else {
+          data[field] = 0; // Set default value 0 jika nilai tidak valid
+        }
+      }
 
       await fetchData(`/api/masukkan/sosial`, {
         method: "PATCH",
@@ -100,7 +111,20 @@ export default function DataSosial() {
       });
       setLockedStatus(lockedStatusMap);
 
-      setFormData(response);
+      setFormData({
+        rantaiPasok: response.rantaiPasok || "",
+        sediaAktivita: response.sediaAktivita || "",
+        tingkatManfaat: response.tingkatManfaat || "",
+        tingkatLimbah: response.tingkatLimbah || "",
+        tetapMajaIndra: response.tetapMajaIndra || "",
+        tetapTotal: response.tetapTotal || "",
+        tidakMajaIndra: response.tidakMajaIndra || "",
+        tidakTetapTotal: response.tidakTetapTotal || "",
+        luasLahan: response.luasLahan || "",
+        luasLahanYangDitanami: response.luasLahanYangDitanami || "",
+        luasLahanTahunLalu: response.luasLahanTahunLalu || "",
+        luasLahanYangDitanamiTahunLalu: response.luasLahanYangDitanamiTahunLalu || "",
+      });
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);

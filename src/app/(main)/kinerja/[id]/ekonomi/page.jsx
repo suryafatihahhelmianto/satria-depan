@@ -16,21 +16,21 @@ export default function DataKinerja() {
   const sesiId = idMatch ? idMatch[1] : null;
 
   const [formData, setFormData] = useState({
-    nilaiRisiko: 0,
-    polAmpas: 0,
-    polBlotong: 0,
-    polTetes: 0,
-    rendemenKebun: 0,
-    rendemenGerbang: 0,
-    rendemenNPP: 0,
-    rendemenGula: 0,
-    kesenjanganRantai: 0,
-    kesenjanganPabrik: 0,
-    hargaAcuan: 0,
-    hargaLelang: 0,
-    shsTahunIni: 0,
-    shsTahunSebel: 0,
-    returnOE: 0,
+    nilaiRisiko: "",
+    polAmpas: "",
+    polBlotong: "",
+    polTetes: "",
+    rendemenKebun: "",
+    rendemenGerbang: "",
+    rendemenNPP: "",
+    rendemenGula: "",
+    kesenjanganRantai: "",
+    kesenjanganPabrik: "",
+    hargaAcuan: "",
+    hargaLelang: "",
+    shsTahunIni: "",
+    shsTahunSebel: "",
+    returnOE: "",
   });
 
   const [lockedStatus, setLockedStatus] = useState({});
@@ -51,7 +51,18 @@ export default function DataKinerja() {
       }
 
       const data = { sesiId };
-      data[field] = parseFloat(value);
+      
+      // Periksa apakah value adalah string kosong atau tidak valid
+      if (value === "" || value === null || value === undefined) {
+        data[field] = 0; // Set default value 0 untuk field kosong
+      } else {
+        const numericValue = parseFloat(value);
+        if (!isNaN(numericValue)) {
+          data[field] = numericValue;
+        } else {
+          data[field] = 0; // Set default value 0 jika nilai tidak valid
+        }
+      }
       await fetchData(`/api/masukkan/ekonomi`, {
         method: "PATCH",
         headers: {
@@ -109,7 +120,23 @@ export default function DataKinerja() {
       });
       setLockedStatus(lockedStatusMap);
 
-      setFormData(response);
+      setFormData({
+        nilaiRisiko: response.nilaiRisiko || "",
+        polAmpas: response.polAmpas || "",
+        polBlotong: response.polBlotong || "",
+        polTetes: response.polTetes || "",
+        rendemenKebun: response.rendemenKebun || "",
+        rendemenGerbang: response.rendemenGerbang || "",
+        rendemenNPP: response.rendemenNPP || "",
+        rendemenGula: response.rendemenGula || "",
+        kesenjanganRantai: response.kesenjanganRantai || "",
+        kesenjanganPabrik: response.kesenjanganPabrik || "",
+        hargaAcuan: response.hargaAcuan || "",
+        hargaLelang: response.hargaLelang || "",
+        shsTahunIni: response.shsTahunIni || "",
+        shsTahunSebel: response.shsTahunSebel || "",
+        returnOE: response.returnOE || "",
+      });
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);

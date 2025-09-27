@@ -11,6 +11,7 @@ export default function FieldInput({ label, value, onChange, onSubmit }) {
           type="number"
           value={value}
           onChange={onChange}
+          placeholder="0"
           className="p-2 bg-ijoIsiTabel"
         />
       </td>
