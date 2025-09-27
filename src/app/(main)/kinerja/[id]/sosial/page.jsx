@@ -125,6 +125,7 @@ export default function DataSosial() {
       label: "Dukungan Kelembagaan Terhadap Rantai Pasok",
       inputType: "dropdown",
       value: formData.rantaiPasok,
+      placeholder: "0",
       options: [
         { value: 0.2, label: "Sangat Rendah" },
         { value: 0.3, label: "Rendah" },
@@ -192,11 +193,11 @@ export default function DataSosial() {
       inputType: "dropdown",
       value: formData.tingkatLimbah,
       options: [
-        { value: 1, label: "Sangat Rendah" },
-        { value: 0.772, label: "Rendah" },
+        { value: 0.2, label: "Sangat Rendah" },
+        { value: 0.3, label: "Rendah" },
         { value: 0.491, label: "Sedang" },
-        { value: 0.3, label: "Tinggi" },
-        { value: 0.2, label: "Sangat Tinggi" },
+        { value: 0.772, label: "Tinggi" },
+        { value: 1, label: "Sangat Tinggi" },
       ],
       onChange: (e) =>
         setFormData({ ...formData, tingkatLimbah: parseFloat(e.target.value) }),

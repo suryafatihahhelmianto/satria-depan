@@ -10,6 +10,7 @@ export default function FieldInput({ label, value, onChange, onSubmit }) {
         <input
           type="number"
           value={value}
+          placeholder = {placeholder}
           onChange={onChange}
           className="p-2 bg-ijoIsiTabel"
         />

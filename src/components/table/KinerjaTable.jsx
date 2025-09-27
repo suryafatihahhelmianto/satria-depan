@@ -48,6 +48,7 @@ export default function KinerjaTable({ title, rows, isAdmin, type, sesiId }) {
                   key={index}
                   label={row.label}
                   inputType={row.inputType}
+                  placeholder={row.placeholder}
                   value={row.value}
                   options={row.options}
                   onChange={row.onChange}
