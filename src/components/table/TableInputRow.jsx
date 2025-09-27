@@ -140,7 +140,6 @@ export default function TableInputRow({
           <input
             type="text"
             value={value}
-            placeholder={placeholder}
             onChange={onChange}
             placeholder="0"
             disabled={localLocked || isLoading || isSubmitted} // Tambahkan kondisi isLoading untuk menonaktifkan input
@@ -156,7 +155,6 @@ export default function TableInputRow({
           <input
             type="number"
             value={value}
-            placeholder={placeholder}
             onChange={onChange}
             placeholder="0"
             disabled={localLocked || isLoading || isSubmitted} // Tambahkan kondisi isLoading untuk menonaktifkan input
