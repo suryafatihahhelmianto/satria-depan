@@ -214,11 +214,8 @@ export default function SumberDayaPage() {
   const dataD2 = [
     {
       label: "Luas Tanam TRI (ha)",
-      inputType: "number", // pake : bukan =
-      value: formData.luasTanamTRITahunIni ?? "",
-      placeholder: formData.luasTanamTRITahunIni
-        ? formData.luasTanamTRITahunIni.toString()
-        : "0",
+      inputType: "number",
+      value: formData.luasTanamTRITahunIni,
       onChange: (e) =>
         handleInputChange("luasTanamTRITahunIni", e.target.value),
       onSubmit: () =>
@@ -230,10 +227,7 @@ export default function SumberDayaPage() {
     {
       label: "Total Luas Lahan yang Ditanami Tahun Ini (ha)",
       inputType: "number",
-      value: formData.luasTotalTahunIni ?? "",
-      placeholder: formData.luasTanamTRITahunIni
-        ? formData.luasTanamTRITahunIni.toString()
-        : "0",
+      value: formData.luasTotalTahunIni,
       onChange: (e) => handleInputChange("luasTotalTahunIni", e.target.value),
       onSubmit: () =>
         handleUpdate("luasTotalTahunIni", formData.luasTotalTahunIni),
@@ -305,7 +299,6 @@ export default function SumberDayaPage() {
       label: "Jam Henti A (%)",
       inputType: "number",
       value: formData.jumlahJamKerjaEfektif,
-      placeholder: "0",
       onChange: (e) =>
         handleInputChange("jumlahJamKerjaEfektif", e.target.value),
       onSubmit: () =>
@@ -434,13 +427,13 @@ export default function SumberDayaPage() {
     {
       label: "Tingkat Ratoon Tebu",
       inputType: "dropdown",
-      value: formData.ratoonTebu,
+      value: formData.tingkatMekanisasi,
       options: [
-        { label: "Sangat Rendah", value: 0.2 },
-        { label: "Rendah", value: 0.3 },
-        { label: "Sedang", value: 0.491 },
-        { label: "Tinggi", value: 0.772 },
-        { label: "Sangat Tinggi", value: 1 },
+        { label: "PC", value: 0 },
+        { label: "1", value: 1 },
+        { label: "2", value: 2 },
+        { label: "3", value: 3 },
+        { label: "Lebih dari 3", value: 10 },
       ],
       onChange: (e) => handleInputChange("ratoonTebu", e.target.value),
       onSubmit: () => handleUpdate("ratoonTebu", formData.ratoonTebu),
@@ -499,11 +492,11 @@ export default function SumberDayaPage() {
       inputType: "dropdown",
       value: formData.tingkatMekanisasi,
       options: [
-        { label: "PC", value: 0 },
-        { label: "1", value: 1 },
-        { label: "2", value: 2 },
-        { label: "3", value: 3 },
-        { label: "Lebih dari 3", value: 10 },
+        { label: "Sangat Rendah", value: 0.2 },
+        { label: "Rendah", value: 0.3 },
+        { label: "Sedang", value: 0.491 },
+        { label: "Tinggi", value: 0.772 },
+        { label: "Sangat Tinggi", value: 1 },
       ],
       onChange: (e) => handleInputChange("tingkatMekanisasi", e.target.value),
       onSubmit: () =>

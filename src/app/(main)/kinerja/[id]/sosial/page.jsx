@@ -41,7 +41,7 @@ export default function DataSosial() {
 
     try {
       const data = { sesiId };
-      
+
       // Periksa apakah value adalah string kosong atau tidak valid
       if (value === "" || value === null || value === undefined) {
         data[field] = 0; // Set default value 0 untuk field kosong
@@ -123,7 +123,8 @@ export default function DataSosial() {
         luasLahan: response.luasLahan || "",
         luasLahanYangDitanami: response.luasLahanYangDitanami || "",
         luasLahanTahunLalu: response.luasLahanTahunLalu || "",
-        luasLahanYangDitanamiTahunLalu: response.luasLahanYangDitanamiTahunLalu || "",
+        luasLahanYangDitanamiTahunLalu:
+          response.luasLahanYangDitanamiTahunLalu || "",
       });
       setLoading(false);
     } catch (error) {
@@ -149,7 +150,6 @@ export default function DataSosial() {
       label: "Dukungan Kelembagaan Terhadap Rantai Pasok",
       inputType: "dropdown",
       value: formData.rantaiPasok,
-      placeholder: "0",
       options: [
         { value: 0.2, label: "Sangat Rendah" },
         { value: 0.3, label: "Rendah" },

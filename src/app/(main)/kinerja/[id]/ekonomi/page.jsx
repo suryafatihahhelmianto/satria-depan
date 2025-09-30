@@ -3,42 +3,10 @@
 import { useState, useEffect, useCallback } from "react";
 import { fetchData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
-import KinerjaTable from "@/components/table/KinerjaTable";
+import KinerjaTable from "@/components/table/KinerjaTable"; // Import the KinerjaTable component
 import { usePathname, useRouter } from "next/navigation";
 import Skeleton from "@/components/common/Skeleton";
 import { useUser } from "@/context/UserContext";
-import { FaRegSmile } from "react-icons/fa";
-
-function renderKinerjaSection({
-  role,
-  allowedRoles,
-  title,
-  rows,
-  sesiId,
-  isAdmin,
-  type = "ekonomi",
-}) {
-  if (!allowedRoles.includes(role)) {
-    return (
-      <div className="bg-gray-100 border border-dashed border-gray-300 text-gray-600 text-center p-6 rounded-2xl my-4 flex flex-col items-center gap-2">
-        <FaRegSmile className="text-3xl text-gray-500" />
-        <p>
-          Kamu tak perlu mengisi bagian <b>{title}</b>
-        </p>
-      </div>
-    );
-  }
-
-  return (
-    <KinerjaTable
-      title={title}
-      rows={rows}
-      type={type}
-      sesiId={sesiId}
-      isAdmin={isAdmin}
-    />
-  );
-}
 
 export default function DataKinerja() {
   const router = useRouter();
@@ -81,8 +49,20 @@ export default function DataKinerja() {
         console.log(`Kolom ${field} sudah terkunci, tidak bisa diupdate.`);
         return;
       }
+
       const data = { sesiId };
-      data[field] = parseFloat(value);
+
+      // Periksa apakah value adalah string kosong atau tidak valid
+      if (value === "" || value === null || value === undefined) {
+        data[field] = 0; // Set default value 0 untuk field kosong
+      } else {
+        const numericValue = parseFloat(value);
+        if (!isNaN(numericValue)) {
+          data[field] = numericValue;
+        } else {
+          data[field] = 0; // Set default value 0 jika nilai tidak valid
+        }
+      }
       await fetchData(`/api/masukkan/ekonomi`, {
         method: "PATCH",
         headers: {
@@ -91,9 +71,27 @@ export default function DataKinerja() {
         },
         data,
       });
+      console.log("Update successful");
+      // fetchEkonomi();
       setIsFormDirty(false);
     } catch (error) {
       console.error("Error updating field: ", error);
+    }
+  };
+
+  const handleCalculate = async () => {
+    try {
+      const dataToSend = { sesiId, formData };
+      const response = await fetchData("/api/dimensi/ekonomi", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${getCookie("token")}`,
+          "Content-Type": "application/json",
+        },
+        data: dataToSend,
+      });
+    } catch (error) {
+      console.error("Error calculating dimensions: ", error);
     }
   };
 
@@ -120,9 +118,7 @@ export default function DataKinerja() {
       lockedResponse.forEach((log) => {
         lockedStatusMap[log.columnName] = log.status === "LOCKED";
       });
-
       setLockedStatus(lockedStatusMap);
-      setFormData(response);
 
       setFormData({
         nilaiRisiko: response.nilaiRisiko || "",
@@ -192,7 +188,7 @@ export default function DataKinerja() {
     );
   }
 
-  // --- definisi rows tetap sama (rowsE1 ... rowsE6) ---
+  // Define rows for KinerjaTable
   const rowsE1 = [
     {
       label: "Tingkat Risiko Rantai Pasok",
@@ -379,82 +375,78 @@ export default function DataKinerja() {
     },
   ];
 
-  // --- cek apakah user punya akses ke salah satu section ---
-  const allowedSections = [
-    { roles: ["ADMIN", "KEPALAPABRIK"], rows: rowsE1 },
-    { roles: ["ADMIN", "QUALITYCONTROL"], rows: rowsE2 },
-    { roles: ["ADMIN", "TUK"], rows: rowsE3 },
-    { roles: ["ADMIN", "TUK"], rows: rowsE4 },
-    { roles: ["ADMIN", "TUK"], rows: rowsE5 },
-    { roles: ["ADMIN", "TUK"], rows: rowsE6 },
-  ];
-
-  const userCanFill = allowedSections.some((section) =>
-    section.roles.includes(role)
-  );
-
   return (
     <div className="min-h-screen bg-gray-100 mb-24">
-      {!userCanFill ? (
-        <div className="bg-gray-100 border border-dashed border-gray-300 text-gray-600 text-center p-6 rounded-2xl my-4 flex flex-col items-center gap-2">
-          <FaRegSmile className="text-3xl text-gray-500" />
-          <p>
-            Kamu <b>tak perlu mengisi bagian EKONOMI</b>
-          </p>
-        </div>
-      ) : (
+      {["ADMIN", "KEPALAPABRIK"].includes(role) && (
+        <KinerjaTable
+          title="Tingkat Risiko Rantai Pasok (E1)"
+          rows={rowsE1}
+          type={"ekonomi"}
+          sesiId={sesiId}
+          isAdmin={isAdmin}
+        />
+      )}
+      {["ADMIN", "QUALITYCONTROL"].includes(role) && (
+        <KinerjaTable
+          title="Potensi Kehilangan Produksi (E2)"
+          rows={rowsE2}
+          type={"ekonomi"}
+          sesiId={sesiId}
+          isAdmin={isAdmin}
+        />
+      )}
+
+      {["ADMIN", "TUK"].includes(role) && (
         <>
-          {renderKinerjaSection({
-            role,
-            allowedRoles: ["ADMIN", "KEPALAPABRIK"],
-            title: "Tingkat Risiko Rantai Pasok (E1)",
-            rows: rowsE1,
-            sesiId,
-            isAdmin,
-          })}
-          {renderKinerjaSection({
-            role,
-            allowedRoles: ["ADMIN", "QUALITYCONTROL"],
-            title: "Potensi Kehilangan Produksi (E2)",
-            rows: rowsE2,
-            sesiId,
-            isAdmin,
-          })}
-          {renderKinerjaSection({
-            role,
-            allowedRoles: ["ADMIN", "TUK"],
-            title:
-              "Kesenjangan Keuntungan Pelaku Rantai Pasok per Ton Gula (E3)",
-            rows: rowsE3,
-            sesiId,
-            isAdmin,
-          })}
-          {renderKinerjaSection({
-            role,
-            allowedRoles: ["ADMIN", "TUK"],
-            title: "Harga Patokan Petani (E4)",
-            rows: rowsE4,
-            sesiId,
-            isAdmin,
-          })}
-          {renderKinerjaSection({
-            role,
-            allowedRoles: ["ADMIN", "TUK"],
-            title: "Tingkat Ketangkasan (E5)",
-            rows: rowsE5,
-            sesiId,
-            isAdmin,
-          })}
-          {renderKinerjaSection({
-            role,
-            allowedRoles: ["ADMIN", "TUK"],
-            title: "Return on Investment (E6)",
-            rows: rowsE6,
-            sesiId,
-            isAdmin,
-          })}
+          <KinerjaTable
+            title="Kesenjangan Keuntungan Pelaku Rantai Pasok per Ton Gula (E3)"
+            rows={rowsE3}
+            type={"ekonomi"}
+            sesiId={sesiId}
+            isAdmin={isAdmin}
+          />
         </>
       )}
+      {["ADMIN", "TUK"].includes(role) && (
+        <>
+          <KinerjaTable
+            title="Harga Patokan Petani (E4)"
+            rows={rowsE4}
+            type={"ekonomi"}
+            sesiId={sesiId}
+            isAdmin={isAdmin}
+          />
+        </>
+      )}
+
+      {["ADMIN", "TUK"].includes(role) && (
+        <>
+          <KinerjaTable
+            title="Tingkat Ketangkasan (E5)"
+            rows={rowsE5}
+            type={"ekonomi"}
+            sesiId={sesiId}
+            isAdmin={isAdmin}
+          />
+          <KinerjaTable
+            title="Return on Investment (E6)"
+            rows={rowsE6}
+            type={"ekonomi"}
+            sesiId={sesiId}
+            isAdmin={isAdmin}
+          />
+        </>
+      )}
+
+      {/* <div className="text-center mt-6">
+        <button
+          type="button"
+          onClick={handleCalculate}
+          className="bg-green-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-800"
+        >
+          Hitung
+        </button>
+      </div> */}
     </div>
   );
 }
