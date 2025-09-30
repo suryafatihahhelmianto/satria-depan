@@ -120,7 +120,7 @@ export default function RendemenInputPage() {
               />
               <SelectField
                 icon={<FaLeaf className="text-green-500 text-2xl" />}
-                label="Jenis"
+                label="Jenis / Kategori"
                 info="Jenis mengacu pada kategori tanaman yang ditanam, misalnya Plain Cane (PC), Ratoon Cane (RC) 1, 2, dst"
                 name="jenis"
                 value={formData.jenis}

@@ -288,7 +288,7 @@ export default function DataKinerja() {
 
   const rowsE3 = [
     {
-      label: "Keuntungan Petani per Ton Tebu (%)",
+      label: "Keuntungan Petani per Ton Tebu (Rp)",
       inputType: "number",
       value: formData.kesenjanganRantai,
       onChange: (e) =>
@@ -300,7 +300,7 @@ export default function DataKinerja() {
       capt: "Rata-rata keuntungan yang diperolah petani per ton dalam satu tahun produksi",
     },
     {
-      label: "Keuntungan Pabrik per Ton Tebu (%)",
+      label: "Keuntungan Pabrik per Ton Tebu (Rp)",
       inputType: "number",
       value: formData.kesenjanganPabrik,
       onChange: (e) =>
