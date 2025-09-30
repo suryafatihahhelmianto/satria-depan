@@ -33,6 +33,11 @@ export default function DataSosial() {
   const [lockedStatus, setLockedStatus] = useState({});
   const [loading, setLoading] = useState(true);
 
+  const handleChangeAndUpdate = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    handleUpdate(field, value); // langsung PATCH ke API
+  };
+
   const handleUpdate = async (field, value) => {
     if (lockedStatus[field]) {
       console.log(`Kolom ${field} sudah terkunci, tidak bisa diupdate.`);

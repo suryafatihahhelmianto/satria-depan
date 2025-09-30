@@ -53,8 +53,9 @@ export default function SumberDayaPage() {
   const [lockedStatus, setLockedStatus] = useState({});
   const [loading, setLoading] = useState(true);
 
-  const handleInputChange = (field, value) => {
-    setFormData({ ...formData, [field]: value });
+  const handleChangeAndUpdate = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    handleUpdate(field, value); // langsung PATCH ke API
   };
 
   const handleUpdate = async (field, value) => {
@@ -91,8 +92,9 @@ export default function SumberDayaPage() {
           Authorization: `Bearer ${getCookie("token")}`,
           "Content-Type": "application/json",
         },
-        data,
+        body: JSON.stringify(data),
       });
+
       // fetchSDAMData();
       // router.refresh();
       // console.log("Update successful (sdam)");
@@ -199,12 +201,7 @@ export default function SumberDayaPage() {
         { label: "Sangat Tinggi", value: 1 },
       ],
       onChange: (e) =>
-        handleInputChange("kemudahanAksesTenagaKerja", e.target.value),
-      onSubmit: () =>
-        handleUpdate(
-          "kemudahanAksesTenagaKerja",
-          formData.kemudahanAksesTenagaKerja
-        ),
+        handleChangeAndUpdate("kemudahanAksesTenagaKerja", e.target.value),
       locked: lockedStatus["kemudahanAksesTenagaKerja"],
       fieldName: "kemudahanAksesTenagaKerja",
       capt: "Tingkat kemudahan perusahaan mendapatkan tenaga kerja yang sesuai dengan kebutuhan bisnis",
@@ -217,9 +214,7 @@ export default function SumberDayaPage() {
       inputType: "number",
       value: formData.luasTanamTRITahunIni,
       onChange: (e) =>
-        handleInputChange("luasTanamTRITahunIni", e.target.value),
-      onSubmit: () =>
-        handleUpdate("luasTanamTRITahunIni", formData.luasTanamTRITahunIni),
+        handleChangeAndUpdate("luasTanamTRITahunIni", e.target.value),
       locked: lockedStatus["luasTanamTRITahunIni"],
       fieldName: "luasTanamTRITahunIni",
       capt: "Luas lahan Tebu Rakyat Intensifikasi yang digunakan sebagai sumber bahan baku pada tahun ini",
@@ -228,9 +223,8 @@ export default function SumberDayaPage() {
       label: "Total Luas Lahan yang Ditanami Tahun Ini (ha)",
       inputType: "number",
       value: formData.luasTotalTahunIni,
-      onChange: (e) => handleInputChange("luasTotalTahunIni", e.target.value),
-      onSubmit: () =>
-        handleUpdate("luasTotalTahunIni", formData.luasTotalTahunIni),
+      onChange: (e) =>
+        handleChangeAndUpdate("luasTotalTahunIni", e.target.value),
       locked: lockedStatus["luasTotalTahunIni"],
       fieldName: "luasTotalTahunIni",
       capt: "Keseluruhan luas lahan yang digunakan sebagai sumber bahan baku pada tahun ini",
@@ -247,9 +241,7 @@ export default function SumberDayaPage() {
       inputType: "number",
       value: formData.jumlahJamKerjaEfektif,
       onChange: (e) =>
-        handleInputChange("jumlahJamKerjaEfektif", e.target.value),
-      onSubmit: () =>
-        handleUpdate("jumlahJamKerjaEfektif", formData.jumlahJamKerjaEfektif),
+        handleChangeAndUpdate("jumlahJamKerjaEfektif", e.target.value),
       locked: lockedStatus["jumlahJamKerjaEfektif"],
       fieldName: "jumlahJamKerjaEfektif",
       capt: "jam henti karena kekurangan bahan baku",
@@ -258,8 +250,7 @@ export default function SumberDayaPage() {
       label: "Jam Henti B (%)",
       inputType: "number",
       value: formData.totalJamKerja,
-      onChange: (e) => handleInputChange("totalJamKerja", e.target.value),
-      onSubmit: () => handleUpdate("totalJamKerja", formData.totalJamKerja),
+      onChange: (e) => handleChangeAndUpdate("totalJamKerja", e.target.value),
       locked: lockedStatus["totalJamKerja"],
       fieldName: "totalJamKerja",
       capt: "jam henti karena kerusakan atau gangguan teknis pada peralatan pabrik",
@@ -272,8 +263,7 @@ export default function SumberDayaPage() {
       label: "Jam Terlaksana (Jam/Tahun)",
       inputType: "number",
       value: formData.jamTerlaksana,
-      onChange: (e) => handleInputChange("jamTerlaksana", e.target.value),
-      onSubmit: () => handleUpdate("jamTerlaksana", formData.jamTerlaksana),
+      onChange: (e) => handleChangeAndUpdate("jamTerlaksana", e.target.value),
       locked: lockedStatus["jamTerlaksana"],
       fieldName: "jamTerlaksana",
       capt: "Jumlah jam pelatihan terhadap karyawan yang dilakukan",
@@ -282,8 +272,7 @@ export default function SumberDayaPage() {
       label: "Jam Total (Jam/Tahun)",
       inputType: "number",
       value: formData.jamTotal,
-      onChange: (e) => handleInputChange("jamTotal", e.target.value),
-      onSubmit: () => handleUpdate("jamTotal", formData.jamTotal),
+      onChange: (e) => handleChangeAndUpdate("jamTotal", e.target.value),
       locked: lockedStatus["jamTotal"],
       fieldName: "jamTotal",
       capt: "Jam pelatihan terhadap karyawan yang dilakukan",
@@ -300,9 +289,7 @@ export default function SumberDayaPage() {
       inputType: "number",
       value: formData.jumlahJamKerjaEfektif,
       onChange: (e) =>
-        handleInputChange("jumlahJamKerjaEfektif", e.target.value),
-      onSubmit: () =>
-        handleUpdate("jumlahJamKerjaEfektif", formData.jumlahJamKerjaEfektif),
+        handleChangeAndUpdate("jumlahJamKerjaEfektif", e.target.value),
       locked: lockedStatus["jumlahJamKerjaEfektif"],
       fieldName: "jumlahJamKerjaEfektif",
       capt: "jam henti karena kekurangan bahan baku",
@@ -311,8 +298,7 @@ export default function SumberDayaPage() {
       label: "Jam Henti B (%)",
       inputType: "number",
       value: formData.totalJamKerja,
-      onChange: (e) => handleInputChange("totalJamKerja", e.target.value),
-      onSubmit: () => handleUpdate("totalJamKerja", formData.totalJamKerja),
+      onChange: (e) => handleChangeAndUpdate("jamTotal", e.target.value),
       locked: lockedStatus["totalJamKerja"],
       fieldName: "totalJamKerja",
       capt: "jam henti karena kerusakan atau gangguan teknis pada peralatan pabrik",
@@ -328,8 +314,8 @@ export default function SumberDayaPage() {
       label: "Jam Terlaksana (Jam/Tahun)",
       inputType: "number",
       value: formData.jamTerlaksana,
-      onChange: (e) => handleInputChange("jamTerlaksana", e.target.value),
-      onSubmit: () => handleUpdate("jamTerlaksana", formData.jamTerlaksana),
+      onChange: (e) =>
+        handleChangeAndUpdate("jumlahJamKerjaEfektif", e.target.value),
       locked: lockedStatus["jamTerlaksana"],
       fieldName: "jamTerlaksana",
       capt: "Jumlah jam pelatihan terhadap karyawan yang dilakukan",
@@ -338,8 +324,7 @@ export default function SumberDayaPage() {
       label: "Jam Total (Jam/Tahun)",
       inputType: "number",
       value: formData.jamTotal,
-      onChange: (e) => handleInputChange("jamTotal", e.target.value),
-      onSubmit: () => handleUpdate("jamTotal", formData.jamTotal),
+      onChange: (e) => handleChangeAndUpdate("jamTotal", e.target.value),
       locked: lockedStatus["jamTotal"],
       fieldName: "jamTotal",
       capt: "Jam pelatihan terhadap karyawan yang dilakukan",
@@ -351,9 +336,8 @@ export default function SumberDayaPage() {
       label: "Produktivitas Tebu (Ton/Ha)",
       inputType: "number",
       value: formData.produktivitasTebu,
-      onChange: (e) => handleInputChange("produktivitasTebu", e.target.value),
-      onSubmit: () =>
-        handleUpdate("produktivitasTebu", formData.produktivitasTebu),
+      onChange: (e) =>
+        handleChangeAndUpdate("produktivitasTebu", e.target.value),
       locked: lockedStatus["produktivitasTebu"],
       fieldName: "produktivitasTebu",
       capt: "Rata-rata rendemen tebu dalam satu tahun produksi",
@@ -362,8 +346,7 @@ export default function SumberDayaPage() {
       label: "Rendemen Tebu (%)",
       inputType: "number",
       value: formData.rendemenTebu,
-      onChange: (e) => handleInputChange("rendemenTebu", e.target.value),
-      onSubmit: () => handleUpdate("rendemenTebu", formData.rendemenTebu),
+      onChange: (e) => handleChangeAndUpdate("rendemenTebu", e.target.value),
       locked: lockedStatus["rendemenTebu"],
       fieldName: "rendemenTebu",
       capt: "Rata-rata rendemen tebu dalam satu tahun produksi",
@@ -379,8 +362,7 @@ export default function SumberDayaPage() {
         { label: "Tinggi", value: 0.772 },
         { label: "Sangat Tinggi", value: 1 },
       ],
-      onChange: (e) => handleInputChange("mbs", e.target.value),
-      onSubmit: () => handleUpdate("mbs", formData.mbs),
+      onChange: (e) => handleChangeAndUpdate("mbs", e.target.value),
       locked: lockedStatus["mbs"],
       fieldName: "mbs",
       capt: "Penilaian kondisi manis, bersih, dan segar tebu dalam satu tahun produksi",
@@ -392,8 +374,7 @@ export default function SumberDayaPage() {
       label: "Overall Recovery (%)",
       inputType: "number",
       value: formData.overallRecovery,
-      onChange: (e) => handleInputChange("overallRecovery", e.target.value),
-      onSubmit: () => handleUpdate("overallRecovery", formData.overallRecovery),
+      onChange: (e) => handleChangeAndUpdate("overallRecovery", e.target.value),
       locked: lockedStatus["overallRecovery"],
       fieldName: "overallRecovery",
       capt: "Tingkat efesiensi alat dan mesin produksi untuk menghasilkan gula",
@@ -405,8 +386,7 @@ export default function SumberDayaPage() {
       label: "KIS (TCD)",
       inputType: "number",
       value: formData.kis,
-      onChange: (e) => handleInputChange("kis", e.target.value),
-      onSubmit: () => handleUpdate("kis", formData.kis),
+      onChange: (e) => handleChangeAndUpdate("kis", e.target.value),
       locked: lockedStatus["kis"],
       fieldName: "kis",
       capt: "KIS (Kapasitas giling include)",
@@ -415,8 +395,7 @@ export default function SumberDayaPage() {
       label: "KES (TCD)",
       inputType: "number",
       value: formData.kes,
-      onChange: (e) => handleInputChange("kes", e.target.value),
-      onSubmit: () => handleUpdate("kes", formData.kes),
+      onChange: (e) => handleChangeAndUpdate("kes", e.target.value),
       locked: lockedStatus["kes"],
       fieldName: "kes",
       capt: "KES (Kapasitas giling exclude)",
@@ -435,8 +414,7 @@ export default function SumberDayaPage() {
         { label: "3", value: 3 },
         { label: "Lebih dari 3", value: 10 },
       ],
-      onChange: (e) => handleInputChange("ratoonTebu", e.target.value),
-      onSubmit: () => handleUpdate("ratoonTebu", formData.ratoonTebu),
+      onChange: (e) => handleChangeAndUpdate("ratoonTebu", e.target.value),
       locked: lockedStatus["ratoonTebu"],
       fieldName: "ratoonTebu",
       capt: "Jumlah keprasan tanaman tebu pada tahun diukur, ditulis sebagai angka keprasan ke- (1, 2, 3 dst), Angka yang diisikan adalah keprasan ke-berapa yang menghasilkan tanaman tebu terbanyak.",
@@ -448,8 +426,7 @@ export default function SumberDayaPage() {
       label: "Luas BL (ha)",
       inputType: "number",
       value: formData.luasBL,
-      onChange: (e) => handleInputChange("luasBL", e.target.value),
-      onSubmit: () => handleUpdate("luasBL", formData.luasBL),
+      onChange: (e) => handleChangeAndUpdate("luasBL", e.target.value),
       locked: lockedStatus["luasBL"],
       fieldName: "luasBL",
       capt: "Luas lahan yang ditanami oleh varitetas BL",
@@ -458,8 +435,7 @@ export default function SumberDayaPage() {
       label: "Luas PSJT941 (ha)",
       inputType: "number",
       value: formData.luasPST41,
-      onChange: (e) => handleInputChange("luasPST41", e.target.value),
-      onSubmit: () => handleUpdate("luasPST41", formData.luasPST41),
+      onChange: (e) => handleChangeAndUpdate("luasPST41", e.target.value),
       locked: lockedStatus["luasPST41"],
       fieldName: "luasPST41",
       capt: "Luas lahan yang ditanami oleh varietas PSJT 941",
@@ -468,8 +444,7 @@ export default function SumberDayaPage() {
       label: "Luas PS864/PS862 (ha)",
       inputType: "number",
       value: formData.luasPS864,
-      onChange: (e) => handleInputChange("luasPS864", e.target.value),
-      onSubmit: () => handleUpdate("luasPS864", formData.luasPS864),
+      onChange: (e) => handleChangeAndUpdate("luasPS864", e.target.value),
       locked: lockedStatus["luasPS864"],
       fieldName: "luasPS864",
       capt: "Luas lahan yang ditanami oleh varietas PS864 atau PS862",
@@ -478,8 +453,7 @@ export default function SumberDayaPage() {
       label: "Total Luas Lahan yang ditanam Tahun Ini (ha)",
       inputType: "number",
       value: formData.luasTotal,
-      onChange: (e) => handleInputChange("luasTotal", e.target.value),
-      onSubmit: () => handleUpdate("luasTotal", formData.luasTotal),
+      onChange: (e) => handleChangeAndUpdate("luasTotal", e.target.value),
       locked: lockedStatus["luasTotal"],
       fieldName: "luasTotal",
       capt: "Luas total lahan yang ditanam",
@@ -498,9 +472,8 @@ export default function SumberDayaPage() {
         { label: "Tinggi", value: 0.772 },
         { label: "Sangat Tinggi", value: 1 },
       ],
-      onChange: (e) => handleInputChange("tingkatMekanisasi", e.target.value),
-      onSubmit: () =>
-        handleUpdate("tingkatMekanisasi", formData.tingkatMekanisasi),
+      onChange: (e) =>
+        handleChangeAndUpdate("tingkatMekanisasi", e.target.value),
       locked: lockedStatus["tingkatMekanisasi"],
       fieldName: "tingkatMekanisasi",
       capt: "Ketersediaan mesin dan alat untuk mendukung budidaya dalam peningkatan kadar gula",
@@ -518,12 +491,7 @@ export default function SumberDayaPage() {
         { label: "Pospatasi", value: 1 },
       ],
       onChange: (e) =>
-        handleInputChange("teknologiPengolahanRawSugar", e.target.value),
-      onSubmit: () =>
-        handleUpdate(
-          "teknologiPengolahanRawSugar",
-          formData.teknologiPengolahanRawSugar
-        ),
+        handleChangeAndUpdate("teknologiPengolahanRawSugar", e.target.value),
       locked: lockedStatus["teknologiPengolahanRawSugar"],
       fieldName: "teknologiPengolahanRawSugar",
       capt: "Ketersediaan teknologi pengolahan raw sugar untuk menerima raw sugar dan pemenuhan kapasitas",

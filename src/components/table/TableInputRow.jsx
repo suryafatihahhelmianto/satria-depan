@@ -116,7 +116,6 @@ export default function TableInputRow({
   const handleConfirmSubmit = async () => {
     try {
       setIsLoading(true);
-      await onSubmit();
       setIsSubmitted(true);
       setLocalLocked(true);
     } catch (error) {
