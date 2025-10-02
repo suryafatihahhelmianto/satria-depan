@@ -169,7 +169,7 @@ export default function HomePage() {
   const handleDetailClick = async () => {
     const sesiPengisianId = await fetchSesiPengisian();
     if (sesiPengisianId) {
-      router.push(`/detail/${sesiPengisianId}/sumber-daya`);
+      router.push(`/detail/${sesiPengisianId}/hasil`);
     } else {
       alert("Sesi pengisian tidak ditemukan");
     }
