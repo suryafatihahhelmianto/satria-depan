@@ -17,22 +17,27 @@ import {
 
 export default function KinerjaPage() {
   const { isAdmin } = useUser();
-  const [sessions, setSessions] = useState([]); // State untuk menyimpan daftar sesi
+  const [sessions, setSessions] = useState([]);
   const [pabrikNames, setPabrikNames] = useState({});
-
   const [pabrikList, setPabrikList] = useState([]);
-  const [loading, setLoading] = useState(true); // State untuk loading
-
+  const [loading, setLoading] = useState(true);
   const [success, setSuccess] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-
-  const [error, setError] = useState(null); // State untuk menyimpan error jika ada
-
-  const [isModalOpen, setIsModalOpen] = useState(false); // State untuk mengontrol modal
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false); // Modal edit
+  const [error, setError] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  // 🔽 State untuk filter pabrik
+  const [selectedPabrik, setSelectedPabrik] = useState("semua");
+
+  const currentYear = new Date().getFullYear();
+  const years = [];
+  for (let i = currentYear - 3; i <= currentYear + 1; i++) {
+    years.push(i);
+  }
+
   const [formData, setFormData] = useState({
-    pabrikId: 0, // Menggunakan pabrikId untuk menghubungkan sesi dengan pabrik
+    pabrikId: 0,
     periode: "",
     batasPengisian: "",
   });
@@ -42,6 +47,11 @@ export default function KinerjaPage() {
     batasPengisian: "",
   });
 
+  // 🔽 State untuk sorting
+  const [sortField, setSortField] = useState("periode");
+  const [sortOrder, setSortOrder] = useState("desc");
+
+  // ✅ Ambil data sesi dan nama pabrik
   const fetchSessionAndPabrikNames = async () => {
     const cookie = getCookie("token");
     try {
@@ -53,10 +63,14 @@ export default function KinerjaPage() {
       });
 
       if (response) {
-        setSessions(response.sesi);
+        const sortedSessions = response.sesi.sort(
+          (a, b) =>
+            new Date(b.tanggalMulai).getFullYear() -
+            new Date(a.tanggalMulai).getFullYear()
+        );
+        setSessions(sortedSessions);
 
-        // Ambil nama pabrik untuk setiap sesi
-        const pabrikPromises = response.sesi.map(async (session) => {
+        const pabrikPromises = sortedSessions.map(async (session) => {
           const pabrikResponse = await fetchData(
             `/api/pabrik/${session.pabrikGulaId}`,
             {
@@ -66,15 +80,10 @@ export default function KinerjaPage() {
               },
             }
           );
-          return {
-            id: session.pabrikGulaId,
-            nama: pabrikResponse.namaPabrik, // Sesuaikan dengan struktur response
-          };
+          return { id: session.pabrikGulaId, nama: pabrikResponse.namaPabrik };
         });
 
         const pabrikData = await Promise.all(pabrikPromises);
-
-        // Simpan hasil nama pabrik ke state
         const names = {};
         pabrikData.forEach((pabrik) => {
           names[pabrik.id] = pabrik.nama;
@@ -83,9 +92,11 @@ export default function KinerjaPage() {
       }
     } catch (error) {
       console.error("Error fetching session and pabrik names: ", error);
-      setError(error.response.data.message); // Set error state
+      setError(
+        error.response?.data?.message || "Terjadi kesalahan saat mengambil data"
+      );
     } finally {
-      setLoading(false); // Set loading to false in the finally block
+      setLoading(false);
     }
   };
 
@@ -94,16 +105,10 @@ export default function KinerjaPage() {
     try {
       const response = await fetchData("/api/pabrik", {
         method: "GET",
-        headers: {
-          Authorization: `Bearer ${cookie}`,
-        },
+        headers: { Authorization: `Bearer ${cookie}` },
       });
-
-      if (!response) {
-        throw new Error("Gagal mengambil daftar pabrik");
-      }
-
-      setPabrikList(response); // Simpan daftar pabrik ke state
+      if (!response) throw new Error("Gagal mengambil daftar pabrik");
+      setPabrikList(response);
     } catch (err) {
       setError(err.message);
     }
@@ -112,11 +117,8 @@ export default function KinerjaPage() {
   const fetchCSVKinerja = async () => {
     try {
       const csvResponse = await fetchData("/api/sesi/csv", {
-        headers: {
-          Authorization: `Bearer ${getCookie("token")}`,
-        },
+        headers: { Authorization: `Bearer ${getCookie("token")}` },
       });
-
       const kinerjaData = await csvResponse.data;
 
       const headers = [
@@ -129,9 +131,8 @@ export default function KinerjaPage() {
         "Nilai Indeks Kinerja",
         "Status Pengisian",
       ];
-
       const rows = kinerjaData.map((item) => [
-        item.namaPabrik || "Tidak diketahui", // Nama pabrik
+        item.namaPabrik || "Tidak diketahui",
         item.periode,
         item.nilaiDimensiEkonomi,
         item.nilaiDimensiLingkungan,
@@ -141,20 +142,16 @@ export default function KinerjaPage() {
         item.status,
       ]);
 
-      const csvContent = [headers.join(",")] // Gabungkan header dengan koma
-        .concat(rows.map((row) => row.join(","))) // Gabungkan setiap baris data
-        .join("\n"); // Gabungkan semua baris dengan newline
-
-      // Buat file Blob CSV
+      const csvContent = [headers.join(",")]
+        .concat(rows.map((row) => row.join(",")))
+        .join("\n");
       const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-
-      // Buat elemen <a> untuk mengunduh file
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
-      link.setAttribute("download", "data_kinerja.csv"); // Nama file CSV
+      link.setAttribute("download", "data_kinerja.csv");
       document.body.appendChild(link);
-      link.click(); // Klik otomatis
-      document.body.removeChild(link); // Hapus elemen setelah unduhan
+      link.click();
+      document.body.removeChild(link);
     } catch (error) {
       console.error("Error saat mengunduh data CSV:", error);
       alert("Gagal mengunduh data CSV.");
@@ -163,25 +160,18 @@ export default function KinerjaPage() {
 
   const fetchExcelKinerja = async () => {
     try {
-      // Fetch data dari API
       const excelResponse = await fetchData("/api/sesi/csv", {
-        headers: {
-          Authorization: `Bearer ${getCookie("token")}`,
-        },
+        headers: { Authorization: `Bearer ${getCookie("token")}` },
       });
-
       const kinerjaData = excelResponse.data;
 
-      // XML header dan deklarasi workbook
       const xmlHeader = `<?xml version="1.0"?>
       <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
                 xmlns:o="urn:schemas-microsoft-com:office:office"
                 xmlns:x="urn:schemas-microsoft-com:office:excel"
                 xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">
-        <Worksheet ss:Name="Kinerja">
-          <Table>`;
+        <Worksheet ss:Name="Kinerja"><Table>`;
 
-      // Tambahkan header ke XML
       const headers = [
         "Nama Pabrik",
         "Periode",
@@ -199,7 +189,6 @@ export default function KinerjaPage() {
           .join("") +
         `</Row>`;
 
-      // Tambahkan data ke XML
       const dataRows = kinerjaData
         .map((item) => {
           const cells = [
@@ -221,19 +210,13 @@ export default function KinerjaPage() {
         })
         .join("");
 
-      // Akhiri XML
-      const xmlFooter = `</Table>
-        </Worksheet>
-      </Workbook>`;
-
-      // Gabungkan semua bagian XML
+      const xmlFooter = `</Table></Worksheet></Workbook>`;
       const xmlContent = xmlHeader + headerRow + dataRows + xmlFooter;
 
-      // Buat dan unduh file XML
       const blob = new Blob([xmlContent], { type: "application/vnd.ms-excel" });
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
-      link.setAttribute("download", "data_kinerja.xls"); // Gunakan .xls agar Excel mengenali file
+      link.setAttribute("download", "data_kinerja.xls");
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -256,22 +239,18 @@ export default function KinerjaPage() {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-
     const token = getCookie("token");
     try {
       await postData("/api/sesi", formData, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
-      // Reset form dan tutup modal
       setFormData({ pabrikId: 0, periode: "", batasPengisian: "" });
       setIsModalOpen(false);
       fetchSessionAndPabrikNames();
       setSuccess("Sesi Pengisian berhasil dibuat");
-      // fetchSessions(); // Refresh sesi setelah menambah
     } catch (error) {
       console.error("Error creating session: ", error);
-      setError(error.response.data.message);
+      setError(error.response?.data?.message);
     } finally {
       setIsSubmitting(false);
     }
@@ -280,19 +259,13 @@ export default function KinerjaPage() {
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-
     const token = getCookie("token");
     try {
-      await fetchData(
-        `/api/sesi/${editData.id}`,
-
-        {
-          method: "PUT",
-          headers: { Authorization: `Bearer ${token}` },
-          data: { batasPengisian: editData.batasPengisian },
-        }
-      );
-
+      await fetchData(`/api/sesi/${editData.id}`, {
+        method: "PUT",
+        headers: { Authorization: `Bearer ${token}` },
+        data: { batasPengisian: editData.batasPengisian },
+      });
       setEditData({ id: null, batasPengisian: "" });
       setIsEditModalOpen(false);
       fetchSessionAndPabrikNames();
@@ -305,19 +278,12 @@ export default function KinerjaPage() {
 
   const handleDelete = async (id) => {
     const token = getCookie("token");
-
-    // Konfirmasi penghapusan
     if (confirm("Apakah Anda yakin ingin menghapus sesi ini?")) {
       try {
-        // Panggil API delete untuk sesi
         await fetchData(`/api/sesi/${id}`, {
           method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
-
-        // Refresh daftar sesi setelah penghapusan berhasil
         fetchSessionAndPabrikNames();
         alert("Sesi berhasil dihapus");
       } catch (error) {
@@ -327,40 +293,47 @@ export default function KinerjaPage() {
     }
   };
 
+  // 🔽 Fungsi sorting
+  const handleSort = (field) => {
+    const order = sortField === field && sortOrder === "asc" ? "desc" : "asc";
+    setSortField(field);
+    setSortOrder(order);
+
+    const sorted = [...sessions].sort((a, b) => {
+      if (field === "periode") {
+        const aYear = new Date(a.tanggalMulai).getFullYear();
+        const bYear = new Date(b.tanggalMulai).getFullYear();
+        return order === "asc" ? aYear - bYear : bYear - aYear;
+      } else if (field === "pabrik") {
+        const nameA = (pabrikNames[a.pabrikGulaId] || "").toLowerCase();
+        const nameB = (pabrikNames[b.pabrikGulaId] || "").toLowerCase();
+        return order === "asc"
+          ? nameA.localeCompare(nameB)
+          : nameB.localeCompare(nameA);
+      }
+      return 0;
+    });
+
+    setSessions(sorted);
+  };
+
   useEffect(() => {
-    // fetchSessions();
     fetchSessionAndPabrikNames();
     fetchPabrikList();
   }, []);
 
-  if (loading) {
-    return (
-      <div>
-        <Skeleton rows={3} />
-      </div>
-    );
-  }
-
-  // if (error) {
-  //   return <p>{error}</p>;
-  // }
-
-  // Generate an array of years for the dropdown
-  const currentYear = new Date().getFullYear();
-  const years = [];
-  for (let i = currentYear - 3; i <= currentYear + 1; i++) {
-    years.push(i);
-  }
+  if (loading) return <Skeleton rows={3} />;
 
   return (
     <div className="min-h-screen bg-gray-100">
+      {/* tombol tambah, download, dll */}
       <div className="flex items-center justify-between gap-2 mb-8">
         <div className="flex items-center gap-1 p-4 w-full max-w-sm hover:bg-gray-100 hover:rounded-lg hover:shadow-md transition-all">
           {isAdmin && (
             <div className="flex w-full gap-2">
               <AiFillPlusCircle
                 className="text-2xl text-green-800 hover:text-green-900 cursor-pointer"
-                onClick={() => setIsModalOpen(true)} // Buka modal saat tombol diklik
+                onClick={() => setIsModalOpen(true)}
               />
               <h1
                 className="cursor-pointer hover:text-green-900"
@@ -381,14 +354,14 @@ export default function KinerjaPage() {
             <AiOutlineLineChart />
           </Link>
           <button
-            className="flex items-center gap-2 bg-green-800 hover:bg-green-900 text-white hover:cursor-pointer p-2 rounded-lg"
+            className="flex items-center gap-2 bg-green-800 hover:bg-green-900 hover:cursor-pointer text-white p-2 rounded-lg"
             onClick={fetchCSVKinerja}
           >
             <p className="text-sm">Unduh CSV</p>
             <AiOutlineDownload />
           </button>
           <button
-            className="flex items-center gap-2 bg-green-800 hover:bg-green-900 text-white hover:cursor-pointer p-2 rounded-lg"
+            className="flex items-center gap-2 bg-green-800 hover:bg-green-900 hover:cursor-pointer text-white p-2 rounded-lg"
             onClick={fetchExcelKinerja}
           >
             <p className="text-sm">Unduh XLS</p>
@@ -401,179 +374,166 @@ export default function KinerjaPage() {
         <div className="mb-4 flex items-center space-x-2">
           <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-md shadow-md">
             <p className="font-bold">{success}</p>
-            {/* <p>Your operation was successful!</p> */}
           </div>
         </div>
       )}
+
+      {/* 🔽 Filter Pabrik */}
+      <div className="mb-4 flex items-center gap-3 ml-2">
+        <label htmlFor="filterPabrik" className="font-semibold text-gray-700">
+          Filter Pabrik:
+        </label>
+        <select
+          id="filterPabrik"
+          value={selectedPabrik}
+          onChange={(e) => setSelectedPabrik(e.target.value)}
+          className="border border-gray-300 rounded-lg px-3 py-2"
+        >
+          <option value="semua">Semua Pabrik</option>
+          {Object.entries(pabrikNames).map(([id, nama]) => (
+            <option key={id} value={id}>
+              {nama}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* tabel utama */}
       <div className="overflow-x-auto shadow-lg rounded-lg border">
         <table className="min-w-full bg-white border border-gray-200">
           <thead>
             <tr className="bg-gradient-to-r from-ijoWasis to-ijoDash text-white">
-              <th className="py-2 px-4 border-b">Pabrik</th>
-              <th className="py-2 px-4 border-b">Periode</th>
+              <th
+                className="py-2 px-4 border-b cursor-pointer hover:bg-green-700"
+                onClick={() => handleSort("pabrik")}
+              >
+                Pabrik{" "}
+                {sortField === "pabrik" && (
+                  <span>{sortOrder === "asc" ? "▲" : "▼"}</span>
+                )}
+              </th>
+              <th
+                className="py-2 px-4 border-b cursor-pointer hover:bg-green-700"
+                onClick={() => handleSort("periode")}
+              >
+                Periode{" "}
+                {sortField === "periode" && (
+                  <span>{sortOrder === "asc" ? "▲" : "▼"}</span>
+                )}
+              </th>
               <th className="py-2 px-4 border-b">Batas Pengisian</th>
-              {/* <th className="py-2 px-4 border-b">Nilai Kinerja (%)</th> */}
               <th className="py-2 px-4 border-b">Status</th>
               <th className="py-2 px-4 border-b">Aksi</th>
             </tr>
           </thead>
+
           <tbody>
-            {sessions.length === 0 ? (
+            {sessions.filter(
+              (session) =>
+                selectedPabrik === "semua" ||
+                String(session.pabrikGulaId) === String(selectedPabrik)
+            ).length === 0 ? (
               <tr>
                 <td colSpan="6" className="py-2 px-4 border-b text-center">
-                  Tidak ada sesi yang tersedia
+                  Tidak ada sesi untuk pabrik ini
                 </td>
               </tr>
             ) : (
-              sessions.map((session) => {
-                const today = new Date();
-                const batasPengisian = new Date(session.tanggalSelesai);
-                const status =
-                  today > batasPengisian ? "SELESAI" : "BELUM SELESAI";
+              sessions
+                .filter(
+                  (session) =>
+                    selectedPabrik === "semua" ||
+                    String(session.pabrikGulaId) === String(selectedPabrik)
+                )
+                .map((session) => {
+                  const batasPengisian = new Date(session.tanggalSelesai);
+                  const statusPengisian =
+                    session.status === "FINAL" ? "SELESAI" : "BELUM SELESAI";
 
-                const statusPengisian =
-                  session.status === "FINAL" ? "SELESAI" : "BELUM SELESAI";
+                  return (
+                    <tr
+                      key={session.id}
+                      className="hover:bg-gray-200 text-center"
+                    >
+                      <td className="py-2 px-4 border-b">
+                        {pabrikNames[session.pabrikGulaId] ||
+                          "Nama Pabrik Tidak Ditemukan"}
+                      </td>
+                      <td className="py-2 px-4 border-b">
+                        {new Date(session.tanggalMulai).getFullYear()}
+                      </td>
+                      <td className="py-2 px-4 border-b">
+                        {batasPengisian.toLocaleDateString("id-ID")}
+                      </td>
+                      <td className="py-2 px-4 border-b">
+                        <div
+                          className={`${
+                            session.status === "BELUM_FINAL"
+                              ? "bg-red-600 px-2 py-1 rounded-lg text-white"
+                              : "bg-green-600 px-2 py-1 rounded-lg text-white"
+                          }`}
+                        >
+                          <h1>{statusPengisian}</h1>
+                        </div>
+                      </td>
+                      <td className="py-2 px-4 border-b text-center">
+                        <div className="flex justify-center items-center gap-2 mx-auto ">
+                          <div className="relative group">
+                            {isAdmin && (
+                              <button
+                                className="bg-yellow-400 p-2 rounded-lg flex items-center justify-center hover:bg-yellow-500"
+                                onClick={() => {
+                                  setEditData({
+                                    id: session.id,
+                                    batasPengisian: session.batasPengisian,
+                                  });
+                                  setIsEditModalOpen(true);
+                                }}
+                              >
+                                <AiFillEdit className="text-white" />
+                              </button>
+                            )}
+                            <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 bg-black text-white text-xs px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                              Edit
+                            </span>
+                          </div>
 
-                return (
-                  <tr
-                    key={session.id}
-                    className="hover:bg-gray-200 text-center"
-                  >
-                    <td className="py-2 px-4 border-b">
-                      {pabrikNames[session.pabrikGulaId] ||
-                        "Nama Pabrik Tidak Ditemukan"}
-                    </td>
-                    <td className="py-2 px-4 border-b">
-                      {new Date(session.tanggalMulai).getFullYear()}
-                    </td>
-                    <td className="py-2 px-4 border-b">
-                      {batasPengisian.toLocaleDateString("id-ID")}
-                    </td>
-                    {/* <td className="py-2 px-4 border-b">
-                    {session.InstrumenNilai.nilaiKinerja || "Belum Diisi"}
-                  </td> */}
-                    <td className={`py-2 px-4 border-b `}>
-                      <div
-                        className={`${
-                          session.status === "BELUM_FINAL"
-                            ? "bg-red-600 px-2 py-1 rounded-lg text-white"
-                            : "bg-green-600 px-2 py-1 rounded-lg text-white"
-                        }`}
-                        // className={`${
-                        //   status === "BELUM SELESAI"
-                        //     ? "bg-red-600 px-2 py-1 rounded-lg text-white"
-                        //     : "bg-green-600 px-2 py-1 rounded-lg text-white"
-                        // }`}
-                      >
-                        {/* <h1>{status}</h1> */}
-                        {/* <h1>{session.status}</h1> */}
-                        <h1>{statusPengisian}</h1>
-                      </div>
-                    </td>
-                    <td className="py-2 px-4 border-b text-center">
-                      <div className="flex justify-center items-center gap-2 mx-auto ">
-                        <div className="relative group">
-                          {isAdmin && (
-                            <button
-                              className="bg-yellow-400 p-2 rounded-lg flex items-center justify-center hover:bg-yellow-500"
-                              onClick={() => {
-                                setEditData({
-                                  id: session.id,
-                                  batasPengisian: session.batasPengisian,
-                                });
-                                setIsEditModalOpen(true);
-                              }}
+                          <div className="relative group">
+                            <Link
+                              href={`/kinerja/${session.id}/sumber-daya`}
+                              className="flex gap-2"
                             >
-                              <AiFillEdit className="text-white" />
-                            </button>
-                          )}
-                          <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 bg-black text-white text-xs px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                            Edit
-                          </span>
-                        </div>
+                              <button className="bg-blue-400 p-2 rounded-lg flex items-center justify-center hover:bg-blue-500">
+                                <AiFillRead className="text-white" />
+                              </button>
+                            </Link>
+                            <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 bg-black text-white text-xs px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                              Detail
+                            </span>
+                          </div>
 
-                        <div className="relative group">
-                          <Link
-                            href={`/kinerja/${session.id}/sumber-daya`}
-                            className="flex gap-2"
-                          >
-                            <button className="bg-blue-400 p-2 rounded-lg flex items-center justify-center hover:bg-blue-500">
-                              <AiFillRead className="text-white" />
-                            </button>
-                          </Link>
-                          <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 bg-black text-white text-xs px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                            Detail
-                          </span>
+                          <div className="relative group">
+                            {isAdmin && (
+                              <button
+                                className="bg-red-500 p-2 rounded-lg flex items-center justify-center hover:bg-red-600 text-white"
+                                onClick={() => handleDelete(session.id)}
+                              >
+                                <AiFillDelete />
+                              </button>
+                            )}
+                            <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 bg-black text-white text-xs px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                              Hapus
+                            </span>
+                          </div>
                         </div>
-
-                        <div className="relative group">
-                          {isAdmin && (
-                            <button
-                              className="bg-red-500 p-2 rounded-lg flex items-center justify-center hover:bg-red-600 text-white"
-                              onClick={() => handleDelete(session.id)}
-                            >
-                              <AiFillDelete />
-                            </button>
-                          )}
-                          <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 bg-black text-white text-xs px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                            Hapus
-                          </span>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })
+                      </td>
+                    </tr>
+                  );
+                })
             )}
           </tbody>
         </table>
       </div>
-
-      {/* Modal Edit Component */}
-      {isEditModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-          <div className="bg-white p-8 rounded-lg w-full max-w-screen-sm mx-4">
-            <h2 className="text-xl font-bold mb-4">Edit Batas Pengisian</h2>
-            <form onSubmit={handleEditSubmit}>
-              <div className="mb-4">
-                <label className="block text-gray-700">Batas Pengisian</label>
-                <input
-                  type="date"
-                  name="batasPengisian"
-                  value={editData.batasPengisian}
-                  onChange={handleEditInputChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-                  min={(() => {
-                    const tomorrow = new Date();
-                    tomorrow.setDate(tomorrow.getDate() + 1);
-                    return tomorrow.toISOString().split("T")[0];
-                  })()} // Hitung tanggal minimal "besok"
-                  required
-                />
-              </div>
-              <div className="flex justify-end gap-2">
-                <button
-                  type="button"
-                  className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg"
-                  onClick={() => setIsEditModalOpen(false)}
-                >
-                  Batal
-                </button>
-                <button
-                  type="submit"
-                  className={`px-4 py-2 rounded-lg bg-green-500 hover:bg-green-600 ${
-                    isSubmitting ? "bg-gray-500" : "bg-green-600"
-                  } text-white`}
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? "Menyimpan..." : "Simpan"}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
       {/* Modal Component */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
@@ -663,6 +623,51 @@ export default function KinerjaPage() {
                 </div>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Modal Edit Component */}
+      {isEditModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+          <div className="bg-white p-8 rounded-lg w-full max-w-screen-sm mx-4">
+            <h2 className="text-xl font-bold mb-4">Edit Batas Pengisian</h2>
+            <form onSubmit={handleEditSubmit}>
+              <div className="mb-4">
+                <label className="block text-gray-700">Batas Pengisian</label>
+                <input
+                  type="date"
+                  name="batasPengisian"
+                  value={editData.batasPengisian}
+                  onChange={handleEditInputChange}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                  min={(() => {
+                    const tomorrow = new Date();
+                    tomorrow.setDate(tomorrow.getDate() + 1);
+                    return tomorrow.toISOString().split("T")[0];
+                  })()} // Hitung tanggal minimal "besok"
+                  required
+                />
+              </div>
+              <div className="flex justify-end gap-2">
+                <button
+                  type="button"
+                  className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg"
+                  onClick={() => setIsEditModalOpen(false)}
+                >
+                  Batal
+                </button>
+                <button
+                  type="submit"
+                  className={`px-4 py-2 rounded-lg bg-green-500 hover:bg-green-600 ${
+                    isSubmitting ? "bg-gray-500" : "bg-green-600"
+                  } text-white`}
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Menyimpan..." : "Simpan"}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

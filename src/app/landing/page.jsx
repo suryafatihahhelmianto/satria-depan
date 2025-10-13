@@ -1,174 +1,286 @@
 "use client";
 
-import Link from "next/link";
-import { BarChart2, TrendingUp } from "lucide-react";
-import { useState, useEffect } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
-import { ArrowRight } from "react-icons/fa";
+import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
+import { BarChart2, TrendingUp } from "lucide-react";
+import { FaStar } from "react-icons/fa";
+import { useState, useEffect } from "react";
 
 export default function LandingPage() {
-  // Variants untuk animasi
   const containerVariants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: { opacity: 1, y: 0, transition: { duration: 1, delay: 0.3 } },
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 1 } },
   };
 
   const [flip, setFlip] = useState(false);
 
+  // 🔁 Auto spin tiap 5 detik
   useEffect(() => {
     const interval = setInterval(() => {
-      setFlip((prevFlip) => !prevFlip);
+      setFlip((prev) => !prev);
     }, 5000);
-
-    // Membersihkan interval ketika komponen unmount
     return () => clearInterval(interval);
   }, []);
 
-  const handleClick = () => {
-    setFlip((prevFlip) => !prevFlip);
-  };
+  const handleClick = () => setFlip((prev) => !prev);
 
-  const featureVariants = {
-    hidden: { opacity: 0, scale: 0.9 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: { duration: 0.5, ease: "easeOut" },
-    },
-  };
+  const [shine, setShine] = useState(false);
+  const [showThumb, setShowThumb] = useState(false);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setShine(true);
+      setTimeout(() => setShine(false), 1800); // durasi shine
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (shine) {
+      setTimeout(() => {
+        setShowThumb(true);
+        setTimeout(() => setShowThumb(false), 1200); // jempol muncul bentar
+      }, 1500); // muncul di akhir shine
+    }
+  }, [shine]);
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 text-gray-900">
-      {/* Hero Section */}
-      <motion.section
-        className="relative w-full bg-gradient-to-b from-green-300 to-white"
-        initial="hidden"
-        animate="visible"
-        variants={containerVariants}
-      >
-        <div className="container mx-auto flex flex-col items-center justify-center text-center py-20 px-6 space-y-8">
-          {/* Floating Logo */}
-          <motion.div
-            className="relative w-40 h-40 bg-white rounded-full shadow-lg flex items-center justify-center cursor-pointer"
-            initial={{ scale: 0 }}
-            animate={{
-              scale: 1, // Efek scale
-              rotateY: flip ? 360 : 0, // Efek flip 360 derajat
-              transition: { duration: 2, ease: "easeInOut" }, // Mengatur durasi dan transisi flip
-            }}
-            onClick={handleClick} // Menambahkan event klik
-            style={{
-              transformStyle: "preserve-3d", // Untuk menjaga elemen flip 3D
-            }}
-          >
-            <Image
-              src="/img/logo-satria-keren.png"
-              alt="logo-satria-keren"
-              width={500}
-              height={500}
-              className="rounded-full"
-            />
-          </motion.div>
+    <div className="flex flex-col md:flex-row min-h-screen font-sans bg-gradient-to-b from-green-300 to-white md:gap-0">
+      {/* === LEFT SIDE === */}
+      <div className="relative w-full md:w-1/2 h-[60vh] sm:h-[65vh] md:h-auto overflow-hidden">
+        <Image
+          src="/img/tebumbahikmah.jpeg"
+          alt="Latar tebu"
+          fill
+          className="object-cover opacity-50"
+          priority
+        />
 
-          {/* Main Text */}
-          <motion.h1
-            className="text-green-800 text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl drop-shadow-lg"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0, transition: { duration: 0.8 } }}
+        {/* Overlay + Text */}
+        <div className="absolute inset-0 z-10 flex flex-col justify-start md:justify-center items-center text-center px-4 sm:px-6 pt-10 sm:pt-16 md:pt-0">
+          {/* Logo */}
+          <div
+            className="w-28 h-28 sm:w-36 sm:h-36 md:w-44 md:h-44 relative mb-4 sm:mb-6 mx-auto"
+            style={{ perspective: "1200px" }}
+            onClick={handleClick}
           >
-            SATRIA-KEREN
-          </motion.h1>
-          <motion.div
-            className="space-y-1"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1, transition: { duration: 1, delay: 0.5 } }}
-          >
-            <p className="text-lg sm:text-xl max-w-2xl font-medium drop-shadow-md">
-              Sistem Analitik dan Teknologi Rajawali-IPB untuk Inovasi Agro:
-            </p>
-            <p className="text-md sm:text-lg max-w-2xl font-medium drop-shadow-md">
-              Pengukuran Kinerja Keberlanjutan Rantai Pasok dan Prediksi
-              Rendemen Agro Industri Gula Tebu
-            </p>
-          </motion.div>
-
-          {/* Button */}
-          <motion.div>
-            <Link href="/login">
-              <button className="mt-6 px-10 py-4 bg-white text-green-600 text-lg font-semibold rounded-full shadow-lg hover:bg-green-50 hover:scale-105 transition-transform duration-300">
-                Masuk ke Sistem
-              </button>
-            </Link>
-          </motion.div>
-        </div>
-      </motion.section>
-
-      {/* Features Section */}
-      <section id="features" className="bg-white py-16">
-        <motion.div
-          className="container mx-auto px-6 md:px-12"
-          initial="hidden"
-          animate="visible"
-          variants={containerVariants}
-        >
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-center mb-12 text-green-700">
-            Fitur Utama
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Feature 1 */}
             <motion.div
-              className="group bg-gray-50 border border-gray-200 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-2 transition-all duration-300"
-              variants={featureVariants}
+              className="absolute inset-0 rounded-full bg-white p-2 sm:p-3 border-4 border-green-300 shadow-xl flex items-center justify-center"
+              animate={{
+                rotateY: flip ? 360 : 0,
+                transition: { duration: 2, ease: "easeInOut" },
+              }}
+              style={{
+                transformStyle: "preserve-3d",
+              }}
             >
-              <div className="p-6 flex flex-col items-center text-center group-hover:scale-105">
-                <div className="flex items-center justify-center space-x-2 text-green-600 mb-4 transition-transform duration-300">
-                  <BarChart2 className="h-8 w-8" />
-                  <h3 className="text-xl font-semibold">
-                    Analisis Kinerja Keberlanjutan Rantai Pasok
-                  </h3>
-                </div>
-                <p className="text-gray-600">
-                  Evaluasi komprehensif keberlanjutan rantai pasok agro dengan
-                  metrik terukur. Identifikasi area peningkatan dan optimalkan
-                  efisiensi operasional untuk keberlanjutan jangka panjang.
-                </p>
+              {/* Logo depan */}
+              <div
+                className="absolute inset-0 rounded-full flex items-center justify-center"
+                style={{ backfaceVisibility: "hidden" }}
+              >
+                <Image
+                  src="/img/logo-satria-keren.png"
+                  alt="Logo SATRIA-KEREN depan"
+                  fill
+                  className="object-contain rounded-full"
+                />
               </div>
-            </motion.div>
 
-            {/* Feature 2 */}
-            <motion.div
-              className="group bg-gray-50 border border-gray-200 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-2  transition-all duration-300"
-              variants={featureVariants}
-            >
-              <div className="p-6 flex flex-col items-center text-center group-hover:scale-105">
-                <div className="flex items-center justify-center space-x-2 text-green-600 mb-4 transition-transform duration-300">
-                  <TrendingUp className="h-8 w-8" />
-                  <h3 className="text-xl font-semibold">
-                    Analisis Prediksi Rendemen
-                  </h3>
-                </div>
-                <p className="text-gray-600">
-                  Memanfaatkan analitik prediktif untuk memperkirakan rendemen
-                  gula tebu dengan akurasi tinggi. Mengoptimalkan perencanaan
-                  produksi dan keputusan berbasis data yang andal.
-                </p>
+              {/* Logo belakang */}
+              <div
+                className="absolute inset-0 rounded-full flex items-center justify-center"
+                style={{
+                  transform: "rotateY(180deg)",
+                  backfaceVisibility: "hidden",
+                }}
+              >
+                <Image
+                  src="/img/logo-satria-keren.png"
+                  alt="Logo SATRIA-KEREN belakang"
+                  fill
+                  className="object-contain rounded-full"
+                />
               </div>
             </motion.div>
           </div>
-        </motion.div>
-      </section>
 
-      {/* Footer */}
-      <motion.footer
-        className="bg-white py-8 text-center text-green-800 border"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1, transition: { duration: 0.8, delay: 0.3 } }}
+          <>
+            {/* Title */}
+            <h1
+              className={`relative mt-6 sm:mt-10 text-balance text-5xl sm:text-5xl md:text-7xl lg:text-8xl font-extrabold mb-4 sm:mb-6 inline-block overflow-visible ${
+                shine ? "shine-on" : ""
+              }`}
+              style={{
+                // clamp font-size for better scaling across breakpoints
+                fontSize: "clamp(1.8rem, 5vw + 0.5rem, 5.5rem)",
+                WebkitTextStrokeWidth: "clamp(2px, 0.4vw, 5px)",
+                WebkitTextStrokeColor: "#1e5c2a",
+                WebkitTextFillColor: "white",
+                textShadow: `
+                  0 0 clamp(2px, 0.4vw, 6px) #1e5c2a,
+                  0 0 clamp(4px, 0.8vw, 10px) #1e5c2a,
+                  0 0 clamp(6px, 1.2vw, 14px) #1e5c2a
+                `,
+                color: "white",
+              }}
+            >
+              <span className="relative inline-block">
+                SATRIA–KEREN
+                <span className="lux-shine"></span>
+                <AnimatePresence>
+                  {showThumb && (
+                    <motion.div
+                      initial={{ scale: 0, opacity: 0, y: 10 }}
+                      animate={{ scale: 1.1, opacity: 1, y: -6 }}
+                      exit={{ scale: 0, opacity: 0, y: 10 }}
+                      transition={{ duration: 0.6, ease: "easeOut" }}
+                      className="thumb-star absolute top-3 left-[96%] sm:top-4 sm:left-[98%] transform -translate-x-1/2"
+                    >
+                      <FaStar className="text-yellow-300 drop-shadow-[0_0_8px_rgba(34,197,94,0.7)] text-2xl sm:text-3xl md:text-4xl rotate-[15deg]" />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </span>
+            </h1>
+
+            {/* Subtitle */}
+            <div className="relative mt-4 sm:mt-4 md:mt-4 rounded-2xl shadow-lg px-3 sm:px-6 md:px-6 py-4 sm:py-5 md:py-6 w-full max-w-3xl mx-auto bg-white overflow-hidden">
+              <p className="relative text-gray-700 text-sm sm:text-base md:text-xl lg:text-xl font-normal text-center leading-relaxed sm:leading-relaxed md:leading-relaxed lg:leading-snug">
+                Sistem Analitik dan Teknologi Rajawali-IPB untuk Inovasi Agro:{" "}
+                <br className="hidden sm:block" />
+                <span className="block sm:inline">
+                  Pengukuran Kinerja Keberlanjutan Rantai Pasok dan Prediksi
+                  Rendemen Agro Industri Gula Tebu
+                </span>
+              </p>
+            </div>
+
+            <style jsx>{`
+              .lux-shine {
+                position: absolute;
+                top: 0;
+                left: -75%;
+                width: 50%;
+                height: 100%;
+                background: linear-gradient(
+                  120deg,
+                  rgba(255, 255, 255, 0) 0%,
+                  rgba(255, 255, 255, 0.4) 30%,
+                  rgba(255, 255, 255, 0.8) 50%,
+                  rgba(255, 255, 255, 0.4) 70%,
+                  rgba(255, 255, 255, 0) 100%
+                );
+                transform: skewX(-25deg);
+                filter: blur(2px);
+                opacity: 0;
+                pointer-events: none;
+              }
+
+              .shine-on .lux-shine {
+                animation: luxShineMove 1.8s cubic-bezier(0.45, 0, 0.55, 1)
+                  forwards;
+              }
+
+              @keyframes luxShineMove {
+                0% {
+                  left: -75%;
+                  opacity: 0;
+                }
+                10% {
+                  opacity: 1;
+                }
+                50% {
+                  left: 50%;
+                  opacity: 1;
+                }
+                90% {
+                  opacity: 1;
+                }
+                100% {
+                  left: 130%;
+                  opacity: 0;
+                }
+              }
+
+              /* reduce stroke on smaller screens for readability */
+              @media (max-width: 768px) {
+                h1 {
+                  -webkit-text-stroke: 3px #1e5c2a;
+                }
+              }
+
+              /* nudge thumb star to avoid clipping on very small widths */
+              @media (max-width: 360px) {
+                .thumb-star {
+                  left: 94%;
+                }
+              }
+            `}</style>
+          </>
+          {/*Meng Futer*/}
+          <div className="md:absolute md:bottom-0 md:left-1/2 md:-translate-x-1/2 bg-green-600 text-white text-xs sm:text-sm text-center py-2 px-4 sm:px-6 rounded-t-none md:rounded-t-full shadow-md mt-6 md:mt-0 whitespace-nowrap max-w-full md:w-auto">
+            © 2025 <span className="font-semibold">SATRIA–KEREN v2</span>. Semua
+            Hak Cipta Dilindungi.
+          </div>
+        </div>
+      </div>
+
+      {/* === RIGHT SIDE === */}
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={containerVariants}
+        className="w-full md:w-1/2 flex flex-col justify-start md:justify-center items-center px-4 sm:px-6 py-8 sm:py-12 bg-gradient-to-b from-green-300 to-white"
       >
-        <p className="text-sm">
-          © 2024 SATRIA-KEREN. Semua Hak Cipta Dilindungi.
-        </p>
-      </motion.footer>
+        <h2 className="text-green-800 text-4xl sm:text-5xl md:text-6xl font-bold mb-8 sm:mb-12 text-center text-balance">
+          Fitur Utama
+        </h2>
+
+        <div className="w-full max-w-2xl mx-auto space-y-4 sm:space-y-6 px-0 sm:px-2">
+          {/* Feature 1 */}
+          <div className="bg-white rounded-xl border-2 border-green-400 p-4 sm:p-6 shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-300">
+            <div className="flex items-start gap-2 sm:gap-3 mb-2 sm:mb-3">
+              <BarChart2 className="h-5 w-5 sm:h-6 sm:w-6 text-green-600 mt-1" />
+              <h3 className="text-base sm:text-lg font-semibold text-green-700">
+                Analisis Kinerja Keberlanjutan Rantai Pasok
+              </h3>
+            </div>
+            <p className="text-gray-700 text-sm sm:text-base leading-relaxed text-center">
+              Evaluasi komprehensif keberlanjutan rantai pasok agro dengan
+              metrik terukur. Identifikasi area peningkatan dan optimalkan
+              efisiensi operasional untuk keberlanjutan jangka panjang.
+            </p>
+          </div>
+
+          {/* Feature 2 */}
+          <div className="bg-white rounded-xl border-2 border-green-400 p-4 sm:p-6 shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-300">
+            <div className="flex items-start gap-2 sm:gap-3 mb-2 sm:mb-3">
+              <TrendingUp className="h-5 w-5 sm:h-6 sm:w-6 text-green-600 mt-1" />
+              <h3 className="text-base sm:text-lg font-semibold text-green-700">
+                Analisis Prediksi Rendemen
+              </h3>
+            </div>
+            <p className="text-gray-700 text-sm sm:text-base leading-relaxed text-center">
+              Memanfaatkan analitik prediktif untuk memperkirakan rendemen gula
+              tebu dengan akurasi tinggi. Mengoptimalkan perencanaan produksi
+              dan keputusan berbasis data yang andal.
+            </p>
+          </div>
+        </div>
+
+        <Link href="/login" className="mt-8 sm:mt-10">
+          <button className="relative px-7 sm:px-10 py-3 font-bold text-white rounded-full bg-gradient-to-r from-emerald-500 to-green-700 shadow-lg overflow-hidden group transition-all duration-500 hover:scale-105">
+            <span className="relative z-10 text-sm sm:text-base">
+              MASUK KE SISTEM
+            </span>
+            <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-0 group-hover:opacity-100 translate-x-[-200%] group-hover:translate-x-[200%] transition-all duration-1000 ease-in-out"></span>
+            <div className="absolute inset-0 rounded-full ring-2 ring-white/20 group-hover:ring-4 group-hover:ring-green-200 transition-all duration-500"></div>
+          </button>
+        </Link>
+      </motion.div>
     </div>
   );
 }

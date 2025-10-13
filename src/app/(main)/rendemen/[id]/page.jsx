@@ -17,26 +17,11 @@ export default function DetailPage() {
   const [error, setError] = useState(null);
 
   const jenisOptions = {
-    0: "Mandiri",
-    1: "PC",
-    2: "R1",
-    3: "R2",
-    4: "R3",
-    5: "RC",
-    6: "TRS I KM B",
-    7: "TRS I KM C",
-    8: "TRS I KM E",
-    9: "TRS II KM B",
-    10: "TRS II KM C",
-    11: "TRS II KM D",
-    12: "TRS II KM E",
-    13: "TRS II KM K",
-    14: "TRT I KM B",
-    15: "TRT I KM K",
-    16: "TRT II KM B",
-    17: "TRT II KM C",
-    18: "TRT II KM K",
-    19: "TRT III KM C",
+    0: "PC",
+    1: "R1",
+    2: "R2",
+    3: "R3",
+    4: "RC",
   };
 
   const masaTanamOptions = {

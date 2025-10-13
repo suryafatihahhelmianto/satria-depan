@@ -16,6 +16,7 @@ import {
 import { fetchData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
 import { formatNumberToIndonesian } from "@/tools/formatNumber";
+import { HiOutlineLightBulb } from "react-icons/hi";
 
 export default function KalkulatorPage() {
   const [formData, setFormData] = useState({
@@ -39,17 +40,34 @@ export default function KalkulatorPage() {
 
   const validateInputs = () => {
     const errors = [];
+
+    // Cek kalau ada field yang masih kosong
+    Object.entries(formData).forEach(([key, value]) => {
+      if (value === "" || value === null) {
+        const fieldLabel = {
+          blokKebun: "Blok Kebun",
+          jenis: "Jenis/Kategori",
+          masaTanam: "Masa Tanam",
+          varietas: "Varietas",
+          kemasakan: "Kemasakan",
+          brix: "Brix",
+          curahHujan: "Curah Hujan",
+        }[key];
+        errors.push(`${fieldLabel} belum diisi`);
+      }
+    });
+
+    // Validasi numerik hanya kalau sudah diisi
     const brixValue = Number.parseFloat(formData.brix);
     const curahHujanValue = Number.parseFloat(formData.curahHujan);
 
-    if (isNaN(brixValue) || brixValue < 0 || brixValue > 30) {
+    if (!isNaN(brixValue) && (brixValue < 0 || brixValue > 30)) {
       errors.push("Nilai Brix harus antara 0 dan 30");
     }
 
     if (
-      isNaN(curahHujanValue) ||
-      curahHujanValue < 0 ||
-      curahHujanValue > 5000
+      !isNaN(curahHujanValue) &&
+      (curahHujanValue < 0 || curahHujanValue > 5000)
     ) {
       errors.push("Nilai Curah Hujan harus antara 0 dan 5000 mm");
     }
@@ -106,22 +124,24 @@ export default function KalkulatorPage() {
   };
 
   return (
-    <div className="min-h-screen bg-grey-200 py-6 px-2 sm:py-12 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto bg-ijoDash rounded-lg sm:rounded-2xl shadow-xl overflow-hidden">
+    <div className="min-h-screen bg-grey-200 py-6 px-1 sm:py-12 sm:px-6 lg:px-8 overflow-x-hidden">
+      <div className="max-w-6xl mx-auto bg-ijoDash rounded-lg sm:rounded-2xl shadow-xl overflow-hidden">
         <div className="p-4 sm:p-6 md:p-10">
           <div className="text-center mb-10">
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black mb-2">
-              Kalkulator Rendemen
+              Kalkulator Prediksi Rendemen
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-black">
-              Hitung prediksi rendemen tanpa disimpan ke dalam sistem.
+              Hitung prediksi rendemen tanpa mudah, cepat, kapan saja dan di
+              mana saja.
             </p>
           </div>
           <form onSubmit={(e) => e.preventDefault()} className="space-y-8">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               <InputField
                 icon={<FaSeedling className="text-orange-500 text-2xl" />}
                 label="Blok Kebun"
+                info="Nama blok kebun berdasarkan pembagian wilayah atau area di dalam kebun yang sudah disepakati"
                 name="blokKebun"
                 value={formData.blokKebun}
                 onChange={handleInputChange}
@@ -129,7 +149,8 @@ export default function KalkulatorPage() {
               />
               <SelectField
                 icon={<FaLeaf className="text-orange-500 text-2xl" />}
-                label="Jenis"
+                label="Jenis/Kategori"
+                info="Jenis mengacu pada kategori tebu yang ditanam, misalnya Plain Cane (PC), 1, 2, 3. Jika menanam tingkat yang lebih dari 3, isi saja RC"
                 name="jenis"
                 value={formData.jenis}
                 onChange={handleInputChange}
@@ -168,6 +189,7 @@ export default function KalkulatorPage() {
               <SelectField
                 icon={<FaCalendarAlt className="text-orange-500 text-2xl" />}
                 label="Masa Tanam"
+                info="Periode waktu ketika tebu ditanam.Dituliskan 5A, 6B, dst yang menunjukkan bulan tebu ditanam"
                 name="masaTanam"
                 value={formData.masaTanam}
                 onChange={handleInputChange}
@@ -195,6 +217,7 @@ export default function KalkulatorPage() {
               <SelectField
                 icon={<FaDna className="text-orange-500 text-2xl" />}
                 label="Varietas"
+                info="Jenis dari tanaman tebu yang ditanam"
                 name="varietas"
                 value={formData.varietas}
                 onChange={handleInputChange}
@@ -234,6 +257,7 @@ export default function KalkulatorPage() {
               <SelectField
                 icon={<FaRegCalendarAlt className="text-orange-500 text-2xl" />}
                 label="Kemasakan"
+                info="Tingkat kematangan tanaman tebu yang optimal untuk dipanen"
                 name="kemasakan"
                 value={formData.kemasakan}
                 onChange={handleInputChange}
@@ -251,6 +275,7 @@ export default function KalkulatorPage() {
                 }
                 label="Brix"
                 name="brix"
+                info="Ukuran konsentrasi zat padat berupa gula pada tanaman tebu dalam 100 gram larutan"
                 value={formData.brix}
                 onChange={handleInputChange}
                 placeholder="Masukkan nilai Brix"
@@ -258,6 +283,7 @@ export default function KalkulatorPage() {
                 step="0.1"
               />
               <InputField
+                className="lg:col-start-2"
                 icon={<FaCloudRain className="text-orange-500 text-2xl" />}
                 label="Curah Hujan"
                 info="Total curah hujan dari mulai tanam sampai pengukuran brix."
@@ -307,7 +333,7 @@ export default function KalkulatorPage() {
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center">
-                <FaExclamationTriangle className="text-red-500 text-2xl mr-3" />
+                <FaExclamationTriangle className="text-red-500 text-2xl mr-3 animate-pulse" />
                 <h3 className="text-lg font-semibold text-gray-900">
                   Data Tidak Valid
                 </h3>
@@ -326,7 +352,10 @@ export default function KalkulatorPage() {
               </p>
               <ul className="list-disc list-inside space-y-1">
                 {validationErrors.map((error, index) => (
-                  <li key={index} className="text-red-600 text-sm">
+                  <li
+                    key={index}
+                    className="text-red-600 text-sm font-bold animate-pulse"
+                  >
                     {error}
                   </li>
                 ))}
@@ -348,34 +377,54 @@ export default function KalkulatorPage() {
   );
 }
 
-const InputField = ({ icon, label, info, ...props }) => (
-  <div>
+const InputField = ({ className = "", icon, label, info, ...props }) => (
+  <div className={`flex flex-col ${className}`}>
     <label className="text-lg font-medium text-black flex items-center mb-2">
       {icon}
       <span className="mx-2">{label}</span>
       {info && (
-        <div className="relative">
-          <span className="text- cursor-pointer group">
-            <FaInfoCircle />
-            <div className="absolute bottom-full mb-2 left-0 w-64 bg-white text-black text-sm rounded-lg shadow-lg p-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-300 z-10">
-              {info}
-            </div>
-          </span>
+        <div className="relative flex items-center group ml-1">
+          <FaInfoCircle className="cursor-pointer text-gray-600 hover:text-green-700" />
+          <div
+            className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-64 bg-white text-gray-900 text-sm rounded-lg shadow-lg p-4
+    opacity-0 invisible group-hover:opacity-100 group-hover:visible
+    transition-all duration-300 z-999 flex items-start gap-2"
+          >
+            <span className="text-yellow-500 mt-0.5">
+              <HiOutlineLightBulb size={18} />
+            </span>
+            <span className="leading-snug">{info}</span>
+          </div>
         </div>
       )}
     </label>
     <input
       {...props}
-      className="mt-1 block w-full py-2 sm:py-3 px-3 sm:px-4 border border-green-300 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-base sm:text-lg"
+      className="mt-1 block w-full py-2 px-3 sm:py-2.5 sm:px-4 border border-green-300 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm sm:text-base"
     />
   </div>
 );
 
-const SelectField = ({ icon, label, options, ...props }) => (
+const SelectField = ({ icon, label, info, options, ...props }) => (
   <div>
     <label className="text-lg font-medium text-black flex items-center mb-2">
       {icon}
-      <span className="ml-2">{label}</span>
+      <span className="mx-2">{label}</span>
+      {info && (
+        <div className="relative flex items-center group ml-1">
+          <FaInfoCircle className="cursor-pointer text-gray-600 hover:text-green-700" />
+          <div
+            className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-64 bg-white text-gray-900 text-sm rounded-lg shadow-lg p-4
+    opacity-0 invisible group-hover:opacity-100 group-hover:visible
+    transition-all duration-300 z-999 flex items-start gap-2"
+          >
+            <span className="text-yellow-500 mt-0.5">
+              <HiOutlineLightBulb size={18} />
+            </span>
+            <span className="leading-snug">{info}</span>
+          </div>
+        </div>
+      )}
     </label>
     <select
       {...props}

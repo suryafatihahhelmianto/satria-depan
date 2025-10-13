@@ -19,8 +19,8 @@ import { useUser } from "@/context/UserContext";
 import { FaArrowLeft } from "react-icons/fa";
 
 export default function RendemenPage() {
-  const ITEMS_PER_PAGE = 5;
-  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const ITEMS_PER_PAGE = 10;
+  const [itemsPerPage, setItemsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const { role, isAdmin } = useUser();
   const [loading, setLoading] = useState(true);
@@ -426,7 +426,7 @@ export default function RendemenPage() {
                   }}
                   className="px-3 py-2 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm"
                 >
-                  {[5, 10, 20, 50].map((size) => (
+                  {[10, 20, 50].map((size) => (
                     <option key={size} value={size}>
                       {size}
                     </option>
