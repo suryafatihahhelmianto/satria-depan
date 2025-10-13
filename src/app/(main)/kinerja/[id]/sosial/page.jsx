@@ -8,6 +8,28 @@ import { usePathname } from "next/navigation";
 import { AiFillCheckCircle } from "react-icons/ai";
 import Skeleton from "@/components/common/Skeleton";
 import { useUser } from "@/context/UserContext";
+import { FaUsers } from "react-icons/fa";
+
+function renderKinerjaSection({
+  role,
+  allowedRoles,
+  title,
+  rows,
+  sesiId,
+  isAdmin,
+  type = "sosial",
+}) {
+  if (!allowedRoles.includes(role)) return null;
+  return (
+    <KinerjaTable
+      title={title}
+      rows={rows}
+      type={type}
+      sesiId={sesiId}
+      isAdmin={isAdmin}
+    />
+  );
+}
 
 export default function DataSosial() {
   const { isAdmin, role } = useUser();
@@ -339,75 +361,80 @@ export default function DataSosial() {
     // },
   ];
 
+  const allowedSections = [
+    { roles: ["ADMIN", "KEPALAPABRIK"], rows: rowsS1 },
+    { roles: ["ADMIN", "SDM"], rows: rowsS2 },
+    { roles: ["ADMIN", "SDM"], rows: rowsS3 },
+    { roles: ["ADMIN", "QUALITYCONTROL"], rows: rowsS4 },
+    { roles: ["ADMIN", "SDM"], rows: rowsS5 },
+    { roles: ["ADMIN", "TANAMAN"], rows: rowsS6 },
+  ];
+
+  const userCanFill = allowedSections.some((section) =>
+    section.roles.includes(role)
+  );
+
   return (
     <div className="min-h-screen bg-gray-100 mb-24">
-      {["ADMIN", "KEPALAPABRIK"].includes(role) && (
-        <KinerjaTable
-          title="Dukungan Kelembagaan terhadap Rantai Pasok Agroindustri (S1)"
-          rows={rowsS1}
-          isAdmin={isAdmin}
-          type={"sosial"}
-          sesiId={sesiId}
-        />
+      {!userCanFill ? (
+        <div className="bg-gray-100 border border-dashed border-gray-300 text-gray-600 text-center p-6 rounded-2xl my-8 flex flex-col items-center gap-2">
+          <FaUsers className="text-3xl text-gray-600" />
+          <p>
+            Anda tidak perlu mengisi bagian <b>SOSIAL</b>
+          </p>
+        </div>
+      ) : (
+        <>
+          {renderKinerjaSection({
+            role,
+            allowedRoles: ["ADMIN", "KEPALAPABRIK"],
+            title: "Dukungan Kelembagaan terhadap Rantai Pasok Agroindustri (S1)",
+            rows: rowsS1,
+            sesiId,
+            isAdmin,
+          })}
+          {renderKinerjaSection({
+            role,
+            allowedRoles: ["ADMIN", "SDM"],
+            title: "Ketersediaan Infrastruktur sebagai Penunjang Aktivitas (S2)",
+            rows: rowsS2,
+            sesiId,
+            isAdmin,
+          })}
+          {renderKinerjaSection({
+            role,
+            allowedRoles: ["ADMIN", "SDM"],
+            title: "Manfaat Corporate Social Responsibility bagi Sosial (S3)",
+            rows: rowsS3,
+            sesiId,
+            isAdmin,
+          })}
+          {renderKinerjaSection({
+            role,
+            allowedRoles: ["ADMIN", "QUALITYCONTROL"],
+            title: "Keluhan Limbah Rantai Pasok Industri (S4)",
+            rows: rowsS4,
+            sesiId,
+            isAdmin,
+          })}
+          {renderKinerjaSection({
+            role,
+            allowedRoles: ["ADMIN", "SDM"],
+            title: "Penyerapan Tenaga Kerja Lokal (S5)",
+            rows: rowsS5,
+            sesiId,
+            isAdmin,
+          })}
+          {renderKinerjaSection({
+            role,
+            allowedRoles: ["ADMIN", "TANAMAN"],
+            title: "Peningkatan Keikutsertaan Stakeholder Kemitraan (S6)",
+            rows: rowsS6,
+            sesiId,
+            isAdmin,
+          })}
+        </>
       )}
-
-      {["ADMIN", "SDM"].includes(role) && (
-        <KinerjaTable
-          title="Ketersediaan Infrastruktur sebagai Penunjang Aktivitas (S2)"
-          rows={rowsS2}
-          isAdmin={isAdmin}
-          type={"sosial"}
-          sesiId={sesiId}
-        />
-      )}
-
-      {["ADMIN", "SDM"].includes(role) && (
-        <KinerjaTable
-          title="Manfaat Corporate Social Responsibility bagi Sosial (S3)"
-          rows={rowsS3}
-          isAdmin={isAdmin}
-          type={"sosial"}
-          sesiId={sesiId}
-        />
-      )}
-
-      {["ADMIN", "QUALITYCONTROL"].includes(role) && (
-        <KinerjaTable
-          title="Keluhan Limbah Rantai Pasok Industri (S4)"
-          rows={rowsS4}
-          isAdmin={isAdmin}
-          type={"sosial"}
-          sesiId={sesiId}
-        />
-      )}
-      {["ADMIN", "SDM"].includes(role) && (
-        <KinerjaTable
-          title="Penyerapan Tenaga Kerja Lokal (S5)"
-          rows={rowsS5}
-          isAdmin={isAdmin}
-          type={"sosial"}
-          sesiId={sesiId}
-        />
-      )}
-      {["ADMIN", "TANAMAN"].includes(role) && (
-        <KinerjaTable
-          title="Peningkatan Keikutsertaan Stakeholder Kemitraan (S6)"
-          rows={rowsS6}
-          isAdmin={isAdmin}
-          type={"sosial"}
-          sesiId={sesiId}
-        />
-      )}
-
-      {/* <div className="text-center mt-6">
-        <button
-          type="button"
-          onClick={handleCalculate}
-          className="bg-green-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-800"
-        >
-          Simpan dan Hitung Dimensi Sosial
-        </button>
-      </div> */}
     </div>
   );
 }

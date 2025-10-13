@@ -7,6 +7,28 @@ import KinerjaTable from "@/components/table/KinerjaTable"; // Import the Kinerj
 import { usePathname, useRouter } from "next/navigation";
 import Skeleton from "@/components/common/Skeleton";
 import { useUser } from "@/context/UserContext";
+import { FaChartLine } from "react-icons/fa";
+
+function renderKinerjaSection({
+  role,
+  allowedRoles,
+  title,
+  rows,
+  sesiId,
+  isAdmin,
+  type = "ekonomi",
+}) {
+  if (!allowedRoles.includes(role)) return null;
+  return (
+    <KinerjaTable
+      title={title}
+      rows={rows}
+      type={type}
+      sesiId={sesiId}
+      isAdmin={isAdmin}
+    />
+  );
+}
 
 export default function DataKinerja() {
   const router = useRouter();
@@ -375,78 +397,80 @@ export default function DataKinerja() {
     },
   ];
 
+  const allowedSections = [
+    { roles: ["ADMIN", "KEPALAPABRIK"], rows: rowsE1 },
+    { roles: ["ADMIN", "QUALITYCONTROL"], rows: rowsE2 },
+    { roles: ["ADMIN", "TUK"], rows: rowsE3 },
+    { roles: ["ADMIN", "TUK"], rows: rowsE4 },
+    { roles: ["ADMIN", "TUK"], rows: rowsE5 },
+    { roles: ["ADMIN", "TUK"], rows: rowsE6 },
+  ];
+
+  const userCanFill = allowedSections.some((section) =>
+    section.roles.includes(role)
+  );
+
   return (
     <div className="min-h-screen bg-gray-100 mb-24">
-      {["ADMIN", "KEPALAPABRIK"].includes(role) && (
-        <KinerjaTable
-          title="Tingkat Risiko Rantai Pasok (E1)"
-          rows={rowsE1}
-          type={"ekonomi"}
-          sesiId={sesiId}
-          isAdmin={isAdmin}
-        />
-      )}
-      {["ADMIN", "QUALITYCONTROL"].includes(role) && (
-        <KinerjaTable
-          title="Potensi Kehilangan Produksi (E2)"
-          rows={rowsE2}
-          type={"ekonomi"}
-          sesiId={sesiId}
-          isAdmin={isAdmin}
-        />
-      )}
-
-      {["ADMIN", "TUK"].includes(role) && (
+      {!userCanFill ? (
+        <div className="bg-gray-100 border border-dashed border-gray-300 text-gray-600 text-center p-6 rounded-2xl my-8 flex flex-col items-center gap-2">
+          <FaChartLine className="text-3xl text-gray-600" />
+          <p>
+            Anda tidak perlu mengisi bagian <b>EKONOMI</b>
+          </p>
+        </div>
+      ) : (
         <>
-          <KinerjaTable
-            title="Kesenjangan Keuntungan Pelaku Rantai Pasok per Ton Gula (E3)"
-            rows={rowsE3}
-            type={"ekonomi"}
-            sesiId={sesiId}
-            isAdmin={isAdmin}
-          />
+          {renderKinerjaSection({
+            role,
+            allowedRoles: ["ADMIN", "KEPALAPABRIK"],
+            title: "Tingkat Risiko Rantai Pasok (E1)",
+            rows: rowsE1,
+            sesiId,
+            isAdmin,
+          })}
+          {renderKinerjaSection({
+            role,
+            allowedRoles: ["ADMIN", "QUALITYCONTROL"],
+            title: "Potensi Kehilangan Produksi (E2)",
+            rows: rowsE2,
+            sesiId,
+            isAdmin,
+          })}
+          {renderKinerjaSection({
+            role,
+            allowedRoles: ["ADMIN", "TUK"],
+            title: "Kesenjangan Keuntungan Pelaku Rantai Pasok per Ton Gula (E3)",
+            rows: rowsE3,
+            sesiId,
+            isAdmin,
+          })}
+          {renderKinerjaSection({
+            role,
+            allowedRoles: ["ADMIN", "TUK"],
+            title: "Harga Patokan Petani (E4)",
+            rows: rowsE4,
+            sesiId,
+            isAdmin,
+          })}
+          {renderKinerjaSection({
+            role,
+            allowedRoles: ["ADMIN", "TUK"],
+            title: "Tingkat Ketangkasan (E5)",
+            rows: rowsE5,
+            sesiId,
+            isAdmin,
+          })}
+          {renderKinerjaSection({
+            role,
+            allowedRoles: ["ADMIN", "TUK"],
+            title: "Return on Investment (E6)",
+            rows: rowsE6,
+            sesiId,
+            isAdmin,
+          })}
         </>
       )}
-      {["ADMIN", "TUK"].includes(role) && (
-        <>
-          <KinerjaTable
-            title="Harga Patokan Petani (E4)"
-            rows={rowsE4}
-            type={"ekonomi"}
-            sesiId={sesiId}
-            isAdmin={isAdmin}
-          />
-        </>
-      )}
-
-      {["ADMIN", "TUK"].includes(role) && (
-        <>
-          <KinerjaTable
-            title="Tingkat Ketangkasan (E5)"
-            rows={rowsE5}
-            type={"ekonomi"}
-            sesiId={sesiId}
-            isAdmin={isAdmin}
-          />
-          <KinerjaTable
-            title="Return on Investment (E6)"
-            rows={rowsE6}
-            type={"ekonomi"}
-            sesiId={sesiId}
-            isAdmin={isAdmin}
-          />
-        </>
-      )}
-
-      {/* <div className="text-center mt-6">
-        <button
-          type="button"
-          onClick={handleCalculate}
-          className="bg-green-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-800"
-        >
-          Hitung
-        </button>
-      </div> */}
     </div>
   );
 }

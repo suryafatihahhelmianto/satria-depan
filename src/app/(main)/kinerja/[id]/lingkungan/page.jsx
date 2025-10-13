@@ -9,6 +9,28 @@ import KinerjaTableBulan from "@/components/table/KinerjaTableBulan";
 import Skeleton from "@/components/common/Skeleton";
 import { CheckCircle } from "lucide-react";
 import { useUser } from "@/context/UserContext";
+import { FaLeaf } from "react-icons/fa";
+
+function renderKinerjaSection({
+  role,
+  allowedRoles,
+  title,
+  rows,
+  sesiId,
+  isAdmin,
+  type = "lingkungan",
+}) {
+  if (!allowedRoles.includes(role)) return null;
+  return (
+    <KinerjaTable
+      title={title}
+      rows={rows}
+      type={type}
+      sesiId={sesiId}
+      isAdmin={isAdmin}
+    />
+  );
+}
 
 export default function LingkunganPage() {
   const { isAdmin, role } = useUser();
@@ -1036,97 +1058,105 @@ export default function LingkunganPage() {
     },
   ];
 
+  const allowedSections = [
+    { roles: ["ADMIN", "QUALITYCONTROL"], rows: dataL1 },
+    { roles: ["ADMIN", "QUALITYCONTROL"], rows: dataL2 },
+    { roles: ["ADMIN"], rows: dataL3 },
+    { roles: ["INSTALASI"], rows: dataL3instalasi },
+    { roles: ["FABRIKASI"], rows: dataL3fabrikasi },
+    { roles: ["ADMIN", "QUALITYCONTROL"], rows: dataL4 },
+    { roles: ["ADMIN", "QUALITYCONTROL"], rows: dataL5 },
+    { roles: ["ADMIN", "QUALITYCONTROL"], rows: dataL6 },
+    { roles: ["ADMIN", "QUALITYCONTROL"], rows: dataL7 },
+  ];
+
+  const userCanFill = allowedSections.some((section) =>
+    section.roles.includes(role)
+  );
+
   return (
     <div className="min-h-screen bg-gray-100 mb-24">
-      {loading ? (
-        <div className="py-16">
-          <Skeleton rows={7} />
+      {!userCanFill ? (
+        <div className="bg-gray-100 border border-dashed border-gray-300 text-gray-600 text-center p-6 rounded-2xl my-8 flex flex-col items-center gap-2">
+          <FaLeaf className="text-3xl text-gray-600" />
+          <p>
+            Anda tidak perlu mengisi bagian <b>LINGKUNGAN</b>
+          </p>
         </div>
       ) : (
         <>
-          {["ADMIN", "QUALITYCONTROL"].includes(role) && (
-            <div>
-              <KinerjaTable
-                title="Tingkat Gangguan Bau Agroindustri pada Masyarakat (L1)"
-                rows={dataL1}
-                isAdmin={isAdmin}
-                type={"lingkungan"}
-                sesiId={sesiId}
-              />
-
-              <KinerjaTable
-                title="Tingkat Gangguan Debu Agroindustri pada Masyarakat (L2)"
-                rows={dataL2}
-                isAdmin={isAdmin}
-                type={"lingkungan"}
-                sesiId={sesiId}
-              />
-            </div>
-          )}
-
-          {["ADMIN"].includes(role) && (
-            <KinerjaTable
-              title="Emisi Listrik (L3)"
-              rows={dataL3}
-              isAdmin={isAdmin}
-              type={"lingkungan"}
-              sesiId={sesiId}
-            />
-          )}
-          {["INSTALASI"].includes(role) && (
-            <KinerjaTable
-              title="Emisi Listrik (L3)"
-              rows={dataL3instalasi}
-              isAdmin={isAdmin}
-              type={"lingkungan"}
-              sesiId={sesiId}
-            />
-          )}
-          {["FABRIKASI"].includes(role) && (
-            <KinerjaTable
-              title="Emisi Listrik (L3)"
-              rows={dataL3fabrikasi}
-              isAdmin={isAdmin}
-              type={"lingkungan"}
-              sesiId={sesiId}
-            />
-          )}
-
-          {["ADMIN", "QUALITYCONTROL"].includes(role) && (
-            <div>
-              <KinerjaTable
-                title="Kebisingan (L4)"
-                rows={dataL4}
-                isAdmin={isAdmin}
-                type={"lingkungan"}
-                sesiId={sesiId}
-              />
-
-              {/* <KinerjaTable title="Kualitas Air Permukaan (L5)" rows={dataL5} /> */}
-              <KinerjaTableBulan
-                title="Kualitas Air Permukaan (L5)"
-                data={dataL5}
-                isAdmin={isAdmin}
-                type={"lingkungan"}
-                sesiId={sesiId}
-                // saveOption="individual"
-              />
-              <KinerjaTable
-                title="Kualitas Udara Ambien (L6)"
-                rows={dataL6}
-                isAdmin={isAdmin}
-                type={"lingkungan"}
-                sesiId={sesiId}
-              />
-              <KinerjaTable
-                title="Kualitas Udara Ruang Kerja (L7)"
-                rows={dataL7}
-                isAdmin={isAdmin}
-                type={"lingkungan"}
-                sesiId={sesiId}
-              />
-            </div>
-          )}
+          {renderKinerjaSection({
+            role,
+            allowedRoles: ["ADMIN", "QUALITYCONTROL"],
+            title: "Tingkat Gangguan Bau Agroindustri pada Masyarakat (L1)",
+            rows: dataL1,
+            sesiId,
+            isAdmin,
+          })}
+          {renderKinerjaSection({
+            role,
+            allowedRoles: ["ADMIN", "QUALITYCONTROL"],
+            title: "Tingkat Gangguan Debu Agroindustri pada Masyarakat (L2)",
+            rows: dataL2,
+            sesiId,
+            isAdmin,
+          })}
+          {renderKinerjaSection({
+            role,
+            allowedRoles: ["ADMIN"],
+            title: "Emisi Listrik (L3)",
+            rows: dataL3,
+            sesiId,
+            isAdmin,
+          })}
+          {renderKinerjaSection({
+            role,
+            allowedRoles: ["INSTALASI"],
+            title: "Emisi Listrik (L3)",
+            rows: dataL3instalasi,
+            sesiId,
+            isAdmin,
+          })}
+          {renderKinerjaSection({
+            role,
+            allowedRoles: ["FABRIKASI"],
+            title: "Emisi Listrik (L3)",
+            rows: dataL3fabrikasi,
+            sesiId,
+            isAdmin,
+          })}
+          {renderKinerjaSection({
+            role,
+            allowedRoles: ["ADMIN", "QUALITYCONTROL"],
+            title: "Kebisingan (L4)",
+            rows: dataL4,
+            sesiId,
+            isAdmin,
+          })}
+          {renderKinerjaSection({
+            role,
+            allowedRoles: ["ADMIN", "QUALITYCONTROL"],
+            title: "Kualitas Air Permukaan (L5)",
+            rows: dataL5,
+            sesiId,
+            isAdmin,
+          })}
+          {renderKinerjaSection({
+            role,
+            allowedRoles: ["ADMIN", "QUALITYCONTROL"],
+            title: "Kualitas Udara Ambien (L6)",
+            rows: dataL6,
+            sesiId,
+            isAdmin,
+          })}
+          {renderKinerjaSection({
+            role,
+            allowedRoles: ["ADMIN", "QUALITYCONTROL"],
+            title: "Kualitas Udara Ruang Kerja (L7)",
+            rows: dataL7,
+            sesiId,
+            isAdmin,
+          })}
         </>
       )}
     </div>

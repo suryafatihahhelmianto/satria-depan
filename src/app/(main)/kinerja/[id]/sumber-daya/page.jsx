@@ -10,6 +10,28 @@ import { getCookie } from "@/tools/getCookie";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import { AiFillCheckCircle } from "react-icons/ai";
+import { FaIndustry } from "react-icons/fa";
+
+function renderKinerjaSection({
+  role,
+  allowedRoles,
+  title,
+  rows,
+  sesiId,
+  isAdmin,
+  type = "sdam",
+}) {
+  if (!allowedRoles.includes(role)) return null;
+  return (
+    <KinerjaTable
+      title={title}
+      rows={rows}
+      type={type}
+      sesiId={sesiId}
+      isAdmin={isAdmin}
+    />
+  );
+}
 
 export default function SumberDayaPage() {
   const { isAdmin, role } = useUser();
@@ -571,122 +593,133 @@ export default function SumberDayaPage() {
     );
   }
 
+  const allowedSections = [
+    { roles: ["ADMIN", "SDM"], rows: dataD1 },
+    { roles: ["ADMIN", "TANAMAN"], rows: dataD2 },
+    { roles: ["ADMIN"], rows: dataD3 },
+    { roles: ["QUALITYCONTROL"], rows: dataD3qc },
+    { roles: ["SDM"], rows: dataD3sdm },
+    { roles: ["ADMIN", "QUALITYCONTROL"], rows: dataD4 },
+    { roles: ["ADMIN", "QUALITYCONTROL"], rows: dataD5 },
+    { roles: ["ADMIN", "INSTALASI"], rows: dataD6 },
+    { roles: ["ADMIN", "TANAMAN"], rows: dataD7 },
+    { roles: ["ADMIN", "TANAMAN"], rows: dataD8 },
+    { roles: ["ADMIN", "TANAMAN"], rows: dataD9 },
+    { roles: ["ADMIN", "FABRIKASI"], rows: dataD10 },
+  ];
+
+  const userCanFill = allowedSections.some((section) =>
+    section.roles.includes(role)
+  );
+
   return (
     <div className="min-h-screen bg-gray-100 mb-24">
-      {["ADMIN", "SDM"].includes(role) && (
-        <KinerjaTable
-          title="Kemudahan Akses Sumber Daya Tenaga Kerja (D1)"
-          rows={dataD1}
-          isAdmin={isAdmin}
-          type={"sdam"}
-          sesiId={sesiId}
-        />
-      )}
-
-      {["ADMIN", "TANAMAN"].includes(role) && (
-        <KinerjaTable
-          title="Tingkat Luas Tanam TRI (D2)"
-          rows={dataD2}
-          isAdmin={isAdmin}
-          type={"sdam"}
-          sesiId={sesiId}
-        />
-      )}
-
-      {["ADMIN"].includes(role) && (
-        <KinerjaTable
-          title="Kompetensi Tenaga Kerja (D3)"
-          rows={dataD3}
-          isAdmin={isAdmin}
-          type={"sdam"}
-          sesiId={sesiId}
-        />
-      )}
-      {["QUALITYCONTROL"].includes(role) && (
-        <KinerjaTable
-          title="Kompetensi Tenaga Kerja (D3)"
-          rows={dataD3qc}
-          isAdmin={isAdmin}
-          type={"sdam"}
-          sesiId={sesiId}
-        />
-      )}
-      {["SDM"].includes(role) && (
-        <KinerjaTable
-          title="Kompetensi Tenaga Kerja (D3)"
-          rows={dataD3sdm}
-          isAdmin={isAdmin}
-          type={"sdam"}
-          sesiId={sesiId}
-        />
-      )}
-
-      {["ADMIN", "QUALITYCONTROL"].includes(role) && (
-        <KinerjaTable
-          title="Kualitas Bahan Baku (D4)"
-          rows={dataD4}
-          isAdmin={isAdmin}
-          type={"sdam"}
-          sesiId={sesiId}
-        />
-      )}
-
-      {["ADMIN", "QUALITYCONTROL"].includes(role) && (
-        <KinerjaTable
-          title="Overall Recovery (D5)"
-          rows={dataD5}
-          isAdmin={isAdmin}
-          type={"sdam"}
-          sesiId={sesiId}
-        />
-      )}
-
-      {["ADMIN", "INSTALASI"].includes(role) && (
-        <KinerjaTable
-          title="Kecukupan Bahan Baku (D6)"
-          rows={dataD6}
-          isAdmin={isAdmin}
-          type={"sdam"}
-          sesiId={sesiId}
-        />
-      )}
-
-      {["ADMIN", "TANAMAN"].includes(role) && (
+      {!userCanFill ? (
+        <div className="bg-gray-100 border border-dashed border-gray-300 text-gray-600 text-center p-6 rounded-2xl my-8 flex flex-col items-center gap-2">
+          <FaIndustry className="text-3xl text-gray-600" />
+          <p>
+            Anda tidak perlu mengisi bagian <b>SUMBER DAYA</b>
+          </p>
+        </div>
+      ) : (
         <>
-          <KinerjaTable
-            title="Tingkat Ratoon Tebu (D7)"
-            rows={dataD7}
-            isAdmin={isAdmin}
-            type={"sdam"}
-            sesiId={sesiId}
-          />
-
-          <KinerjaTable
-            title="Varietas Tebu yang Responsif terhadap Kondisi Lahan yang Marginal (D8)"
-            rows={dataD8}
-            isAdmin={isAdmin}
-            type={"sdam"}
-            sesiId={sesiId}
-          />
-
-          <KinerjaTable
-            title="Tingkat Penggunaan Mekanisasi yang Tepat dan Sesuai Kebutuhan (D9)"
-            rows={dataD9}
-            isAdmin={isAdmin}
-            type={"sdam"}
-            sesiId={sesiId}
-          />
+          {renderKinerjaSection({
+            role,
+            allowedRoles: ["ADMIN", "SDM"],
+            title: "Kemudahan Akses Sumber Daya Tenaga Kerja (D1)",
+            rows: dataD1,
+            sesiId,
+            isAdmin,
+          })}
+          {renderKinerjaSection({
+            role,
+            allowedRoles: ["ADMIN", "TANAMAN"],
+            title: "Tingkat Luas Tanam TRI (D2)",
+            rows: dataD2,
+            sesiId,
+            isAdmin,
+          })}
+          {renderKinerjaSection({
+            role,
+            allowedRoles: ["ADMIN"],
+            title: "Kompetensi Tenaga Kerja (D3)",
+            rows: dataD3,
+            sesiId,
+            isAdmin,
+          })}
+          {renderKinerjaSection({
+            role,
+            allowedRoles: ["QUALITYCONTROL"],
+            title: "Kompetensi Tenaga Kerja (D3)",
+            rows: dataD3qc,
+            sesiId,
+            isAdmin,
+          })}
+          {renderKinerjaSection({
+            role,
+            allowedRoles: ["SDM"],
+            title: "Kompetensi Tenaga Kerja (D3)",
+            rows: dataD3sdm,
+            sesiId,
+            isAdmin,
+          })}
+          {renderKinerjaSection({
+            role,
+            allowedRoles: ["ADMIN", "QUALITYCONTROL"],
+            title: "Kualitas Bahan Baku (D4)",
+            rows: dataD4,
+            sesiId,
+            isAdmin,
+          })}
+          {renderKinerjaSection({
+            role,
+            allowedRoles: ["ADMIN", "QUALITYCONTROL"],
+            title: "Overall Recovery (D5)",
+            rows: dataD5,
+            sesiId,
+            isAdmin,
+          })}
+          {renderKinerjaSection({
+            role,
+            allowedRoles: ["ADMIN", "INSTALASI"],
+            title: "Kecukupan Bahan Baku (D6)",
+            rows: dataD6,
+            sesiId,
+            isAdmin,
+          })}
+          {renderKinerjaSection({
+            role,
+            allowedRoles: ["ADMIN", "TANAMAN"],
+            title: "Tingkat Ratoon Tebu (D7)",
+            rows: dataD7,
+            sesiId,
+            isAdmin,
+          })}
+          {renderKinerjaSection({
+            role,
+            allowedRoles: ["ADMIN", "TANAMAN"],
+            title: "Varietas Tebu yang Responsif terhadap Kondisi Lahan yang Marginal (D8)",
+            rows: dataD8,
+            sesiId,
+            isAdmin,
+          })}
+          {renderKinerjaSection({
+            role,
+            allowedRoles: ["ADMIN", "TANAMAN"],
+            title: "Tingkat Penggunaan Mekanisasi yang Tepat dan Sesuai Kebutuhan (D9)",
+            rows: dataD9,
+            sesiId,
+            isAdmin,
+          })}
+          {renderKinerjaSection({
+            role,
+            allowedRoles: ["ADMIN", "FABRIKASI"],
+            title: "Teknologi Pengolahan Raw Sugar (D10)",
+            rows: dataD10,
+            sesiId,
+            isAdmin,
+          })}
         </>
-      )}
-
-      {["ADMIN", "FABRIKASI"].includes(role) && (
-        <KinerjaTable
-          title="Teknologi Pengolahan Raw Sugar (D10)"
-          rows={dataD10}
-          isAdmin={isAdmin}
-          type={"sdam"}
-          sesiId={sesiId}
-        />
       )}
     </div>
   );
