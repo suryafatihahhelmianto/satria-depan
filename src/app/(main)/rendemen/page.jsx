@@ -28,12 +28,24 @@ export default function RendemenPage() {
   const [sessions, setSessions] = useState([]); // State untuk menyimpan data sesi
 
   const [totalPages, setTotalPages] = useState(0);
+  const [filterPabrik, setFilterPabrik] = useState("");
+  const [sortBy, setSortBy] = useState(""); // "tanggal" | "rendemen"
+  const [sortOrder, setSortOrder] = useState("asc"); // asc atau desc
 
-  // const currentData = sessions.slice(
-  //   (currentPage - 1) * ITEMS_PER_PAGE,
-  //   currentPage * ITEMS_PER_PAGE
-  // );
-  // const totalPages = Math.ceil(sessions.length / ITEMS_PER_PAGE);
+  const filteredAndSortedSessions = sessions
+    .filter((s) =>
+      s.pabrikGula.namaPabrik.toLowerCase().includes(filterPabrik.toLowerCase())
+    )
+    .sort((a, b) => {
+      if (!sortBy) return 0;
+
+      let valA = sortBy === "tanggal" ? new Date(a.tanggal) : a.nilaiRendemen;
+      let valB = sortBy === "tanggal" ? new Date(b.tanggal) : b.nilaiRendemen;
+
+      if (sortOrder === "asc") return valA > valB ? 1 : -1;
+      return valA < valB ? 1 : -1;
+    });
+
   const handlePageChange = (page) => {
     setCurrentPage(page);
     fetchSessions(page); // Panggil ulang data dengan halaman baru
@@ -222,22 +234,20 @@ export default function RendemenPage() {
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="flex items-center justify-between mb-8">
-        <div className="flex items-center gap-1 p-4 hover:bg-gray-100 hover:rounded-lg hover:shadow-md transition-all">
-          <Link href={"/rendemen/input"} className="flex items-center gap-2">
-            <AiFillPlusCircle className="text-2xl text-green-800 hover:text-green-900 cursor-pointer" />
-            <h1 className="cursor-pointer hover:text-green-600 rounded-s">
-              Tambah Prediksi Rendemen
-            </h1>
-          </Link>
-        </div>
-        <div className="flex justify-end font-bold gap-2 text-xl">
+        {/* Judul*/}
+        <h1 className="text-3xl font-semibold text-green-900">
+          Rekapitulasi Perhitungan Prediksi Rendemen
+        </h1>
+        {/* Tombol-tombol di kanan */}
+        <div className="flex items-center font-bold gap-2 text-xl">
           <Link
-            href={"/rendemen/statistics"}
+            href="/rendemen/statistics"
             className="gap-2 bg-green-800 hover:bg-green-900 text-white hover:cursor-pointer p-2 rounded-lg flex items-center"
           >
             <p className="text-sm">Lihat Trend</p>
             <AiOutlineLineChart />
           </Link>
+
           <button
             className="flex items-center gap-2 bg-green-800 hover:bg-green-900 text-white hover:cursor-pointer p-2 rounded-lg"
             onClick={fetchCSVData}
@@ -245,6 +255,7 @@ export default function RendemenPage() {
             <p className="text-sm">Unduh CSV</p>
             <AiOutlineDownload />
           </button>
+
           <button
             className="flex items-center gap-2 bg-green-800 hover:bg-green-900 text-white hover:cursor-pointer p-2 rounded-lg"
             onClick={fetchXLSData}
@@ -253,6 +264,18 @@ export default function RendemenPage() {
             <AiOutlineDownload />
           </button>
         </div>
+      </div>
+
+      <div className="flex justify-end mb-3">
+        <Link
+          href="/rendemen/input"
+          className="flex items-center gap-2 border-2 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:rounded-xl border-green-800 rounded-md p-2 hover:border-green-900"
+        >
+          <AiFillPlusCircle className="text-2xl text-green-800 hover:text-green-900 cursor-pointer" />
+          <h1 className="cursor-pointer hover:text-green-600">
+            Tambah Prediksi Rendemen
+          </h1>
+        </Link>
       </div>
 
       {loading ? (

@@ -53,6 +53,14 @@ export default function OpsiDetail() {
 
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 sm:gap-6 md:gap-8 text-center">
         <Link
+          href={`/detail/${id ? id : ""}/hasil`} // Add ID to URL if present
+          className={`${getButtonStyle(
+            `/detail/${id ? id : ""}/hasil`
+          )} p-3 rounded-lg transition-all duration-200`}
+        >
+          Agregat
+        </Link>
+        <Link
           href={`/detail/${id ? id : ""}/sumber-daya`} // Add ID to URL if present
           className={`${getButtonStyle(
             `/detail/${id ? id : ""}/sumber-daya`
@@ -83,14 +91,6 @@ export default function OpsiDetail() {
           )} p-3 rounded-lg transition-all duration-200`}
         >
           Sosial
-        </Link>
-        <Link
-          href={`/detail/${id ? id : ""}/hasil`} // Add ID to URL if present
-          className={`${getButtonStyle(
-            `/detail/${id ? id : ""}/hasil`
-          )} p-3 rounded-lg transition-all duration-200`}
-        >
-          Agregat
         </Link>
       </div>
     </div>

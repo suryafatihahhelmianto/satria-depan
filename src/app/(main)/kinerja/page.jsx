@@ -51,6 +51,9 @@ export default function KinerjaPage() {
   const [sortField, setSortField] = useState("periode");
   const [sortOrder, setSortOrder] = useState("desc");
 
+  const [showDeadlineModal, setShowDeadlineModal] = useState(false);
+  const [selectedSession, setSelectedSession] = useState(null);
+
   // ✅ Ambil data sesi dan nama pabrik
   const fetchSessionAndPabrikNames = async () => {
     const cookie = getCookie("token");
@@ -236,6 +239,19 @@ export default function KinerjaPage() {
     setEditData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleDetailClick = (session) => {
+    const batas = new Date(session.tanggalSelesai);
+    const sekarang = new Date();
+
+    if (sekarang > batas) {
+      setSelectedSession(session);
+      setShowDeadlineModal(true);
+    } else {
+      // Jika belum lewat, langsung buka halaman detail
+      window.location.href = `/kinerja/${session.id}/sumber-daya`;
+    }
+  };
+
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -259,22 +275,46 @@ export default function KinerjaPage() {
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    const token = getCookie("token");
+
     try {
-      await fetchData(`/api/sesi/${editData.id}`, {
+      const response = await fetch(`/api/kinerja/${editData.id}`, {
         method: "PUT",
-        headers: { Authorization: `Bearer ${token}` },
-        data: { batasPengisian: editData.batasPengisian },
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ batasPengisian: editData.batasPengisian }),
       });
-      setEditData({ id: null, batasPengisian: "" });
+
+      if (!response.ok) throw new Error("Gagal memperbarui data");
+
+      // ✅ Setelah sukses, update data list tanpa refresh
+      await fetchKinerjaSessions(); // fungsi untuk refresh data dari backend
+
+      // 🔽 update state lokal langsung tanpa refetch
+      setSessions((prev) =>
+        prev.map((item) =>
+          item.id === editData.id
+            ? { ...item, batasPengisian: editData.batasPengisian }
+            : item
+        )
+      );
+
+      // ✅ Tutup modal & reset
       setIsEditModalOpen(false);
-      fetchSessionAndPabrikNames();
-    } catch (error) {
-      console.error("Error updating session: ", error);
+      setEditData({ id: "", batasPengisian: "" });
+      setSuccess("Batas pengisian berhasil diperbarui!"); // opsional: notifikasi sukses
+    } catch (err) {
+      console.error(err);
+      alert("Terjadi kesalahan saat menyimpan data.");
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => setSuccess(""), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [success]);
 
   const handleDelete = async (id) => {
     const token = getCookie("token");
@@ -326,33 +366,20 @@ export default function KinerjaPage() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* tombol tambah, download, dll */}
-      <div className="flex items-center justify-between gap-2 mb-8">
-        <div className="flex items-center gap-1 p-4 w-full max-w-sm hover:bg-gray-100 hover:rounded-lg hover:shadow-md transition-all">
-          {isAdmin && (
-            <div className="flex w-full gap-2">
-              <AiFillPlusCircle
-                className="text-2xl text-green-800 hover:text-green-900 cursor-pointer"
-                onClick={() => setIsModalOpen(true)}
-              />
-              <h1
-                className="cursor-pointer hover:text-green-900"
-                onClick={() => setIsModalOpen(true)}
-              >
-                Tambah Form Pengukuran Kinerja
-              </h1>
-            </div>
-          )}
-        </div>
-
-        <div className="flex w-full justify-end font-bold gap-2 text-xl">
+      {/* Tombol atas: Lihat Trend, Download, dll */}
+      <div className="flex items-center justify-between gap-2 mb-4">
+        <h1 className="text-3xl font-semibold text-green-700">
+          Rekapitulasi Perhitungan Kinerja
+        </h1>
+        <div className="flex items-center font-bold gap-2 text-xl">
           <Link
-            href={"/kinerja/statistics"}
+            href="/kinerja/statistics"
             className="gap-2 bg-green-800 hover:bg-green-900 hover:cursor-pointer text-white p-2 rounded-lg flex items-center"
           >
             <p className="text-sm">Lihat Trend</p>
             <AiOutlineLineChart />
           </Link>
+
           <button
             className="flex items-center gap-2 bg-green-800 hover:bg-green-900 hover:cursor-pointer text-white p-2 rounded-lg"
             onClick={fetchCSVKinerja}
@@ -360,6 +387,7 @@ export default function KinerjaPage() {
             <p className="text-sm">Unduh CSV</p>
             <AiOutlineDownload />
           </button>
+
           <button
             className="flex items-center gap-2 bg-green-800 hover:bg-green-900 hover:cursor-pointer text-white p-2 rounded-lg"
             onClick={fetchExcelKinerja}
@@ -370,6 +398,45 @@ export default function KinerjaPage() {
         </div>
       </div>
 
+      {/* Bar bawah: Filter + Tambah Form */}
+      <div className="flex items-center justify-between mt-3 mb-3">
+        {/* 🔽 Filter Pabrik */}
+        <div className="flex items-center gap-3 ml-1">
+          <label htmlFor="filterPabrik" className="font-semibold text-gray-700">
+            Filter Pabrik:
+          </label>
+          <select
+            id="filterPabrik"
+            value={selectedPabrik}
+            onChange={(e) => setSelectedPabrik(e.target.value)}
+            className="border border-gray-300 rounded-lg px-3 py-2"
+          >
+            <option value="semua">Semua Pabrik</option>
+            {Object.entries(pabrikNames).map(([id, nama]) => (
+              <option key={id} value={id}>
+                {nama}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* ➕ Tombol Tambah Pengukuran */}
+        {isAdmin && (
+          <div className="flex justify-end mr-1">
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="flex items-center gap-2 border-2 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:rounded-xl border-green-800 rounded-md p-2 hover:border-green-900"
+            >
+              <AiFillPlusCircle className="text-2xl text-green-800 hover:text-green-900 cursor-pointer" />
+              <h1 className="cursor-pointer hover:text-green-600">
+                Tambah Form Pengukuran Kinerja
+              </h1>
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* ✅ Notifikasi Sukses */}
       {success && (
         <div className="mb-4 flex items-center space-x-2">
           <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-md shadow-md">
@@ -377,26 +444,6 @@ export default function KinerjaPage() {
           </div>
         </div>
       )}
-
-      {/* 🔽 Filter Pabrik */}
-      <div className="mb-4 flex items-center gap-3 ml-2">
-        <label htmlFor="filterPabrik" className="font-semibold text-gray-700">
-          Filter Pabrik:
-        </label>
-        <select
-          id="filterPabrik"
-          value={selectedPabrik}
-          onChange={(e) => setSelectedPabrik(e.target.value)}
-          className="border border-gray-300 rounded-lg px-3 py-2"
-        >
-          <option value="semua">Semua Pabrik</option>
-          {Object.entries(pabrikNames).map(([id, nama]) => (
-            <option key={id} value={id}>
-              {nama}
-            </option>
-          ))}
-        </select>
-      </div>
 
       {/* tabel utama */}
       <div className="overflow-x-auto shadow-lg rounded-lg border">
@@ -499,14 +546,12 @@ export default function KinerjaPage() {
                           </div>
 
                           <div className="relative group">
-                            <Link
-                              href={`/kinerja/${session.id}/sumber-daya`}
-                              className="flex gap-2"
+                            <button
+                              className="bg-blue-400 p-2 rounded-lg flex items-center justify-center hover:bg-blue-500"
+                              onClick={() => handleDetailClick(session)}
                             >
-                              <button className="bg-blue-400 p-2 rounded-lg flex items-center justify-center hover:bg-blue-500">
-                                <AiFillRead className="text-white" />
-                              </button>
-                            </Link>
+                              <AiFillRead className="text-white" />
+                            </button>
                             <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 bg-black text-white text-xs px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
                               Detail
                             </span>
@@ -623,6 +668,55 @@ export default function KinerjaPage() {
                 </div>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/*Modal Batas Pengisian Ea*/}
+      {showDeadlineModal && selectedSession && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+          <div className="bg-white p-8 rounded-lg w-full max-w-md mx-4 text-center shadow-lg">
+            <h2 className="text-xl font-bold mb-3 text-red-700">
+              Batas Pengisian Sudah Lewat
+            </h2>
+            <p className="text-gray-700 mb-6">
+              Batas pengisian untuk periode{" "}
+              <span className="font-semibold text-gray-900">
+                {new Date(selectedSession.tanggalMulai).getFullYear()}
+              </span>{" "}
+              telah berakhir pada{" "}
+              <span className="font-semibold text-gray-900">
+                {new Date(selectedSession.tanggalSelesai).toLocaleDateString(
+                  "id-ID"
+                )}
+              </span>
+              .
+            </p>
+
+            <div className="flex justify-center gap-3">
+              <button
+                className="px-4 py-2 bg-gray-400 hover:bg-gray-500 text-white rounded-lg"
+                onClick={() => setShowDeadlineModal(false)}
+              >
+                Tutup
+              </button>
+
+              {isAdmin && (
+                <button
+                  className="px-4 py-2 bg-green-700 hover:bg-green-800 text-white rounded-lg"
+                  onClick={() => {
+                    setEditData({
+                      id: selectedSession.id,
+                      batasPengisian: selectedSession.batasPengisian,
+                    });
+                    setShowDeadlineModal(false);
+                    setIsEditModalOpen(true);
+                  }}
+                >
+                  Ubah Batas Pengisian
+                </button>
+              )}
+            </div>
           </div>
         </div>
       )}
