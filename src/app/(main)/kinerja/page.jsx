@@ -276,46 +276,28 @@ export default function KinerjaPage() {
     e.preventDefault();
     setIsSubmitting(true);
 
+    const token = getCookie("token");
     try {
-      const response = await fetch(`/api/kinerja/${editData.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ batasPengisian: editData.batasPengisian }),
-      });
+      await fetchData(
+        `/api/sesi/${editData.id}`,
 
-      if (!response.ok) throw new Error("Gagal memperbarui data");
-
-      // ✅ Setelah sukses, update data list tanpa refresh
-      await fetchKinerjaSessions(); // fungsi untuk refresh data dari backend
-
-      // 🔽 update state lokal langsung tanpa refetch
-      setSessions((prev) =>
-        prev.map((item) =>
-          item.id === editData.id
-            ? { ...item, batasPengisian: editData.batasPengisian }
-            : item
-        )
+        {
+          method: "PUT",
+          headers: { Authorization: `Bearer ${token}` },
+          data: { batasPengisian: editData.batasPengisian },
+        }
       );
 
-      // ✅ Tutup modal & reset
+      setEditData({ id: null, batasPengisian: "" });
       setIsEditModalOpen(false);
-      setEditData({ id: "", batasPengisian: "" });
-      setSuccess("Batas pengisian berhasil diperbarui!"); // opsional: notifikasi sukses
-    } catch (err) {
-      console.error(err);
-      alert("Terjadi kesalahan saat menyimpan data.");
+      fetchSessionAndPabrikNames();
+    } catch (error) {
+      console.error("Error updating session: ", error);
     } finally {
       setIsSubmitting(false);
     }
   };
-
-  useEffect(() => {
-    if (success) {
-      const timer = setTimeout(() => setSuccess(""), 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [success]);
-
+  
   const handleDelete = async (id) => {
     const token = getCookie("token");
     if (confirm("Apakah Anda yakin ingin menghapus sesi ini?")) {
