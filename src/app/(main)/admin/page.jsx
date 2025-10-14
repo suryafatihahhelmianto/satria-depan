@@ -1,12 +1,21 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { FaEdit, FaTrash } from "react-icons/fa";
-import { fetchData, postData, putData } from "@/tools/api";
-import { getCookie } from "@/tools/getCookie";
+import { useUser } from "@/context/UserContext";
+import { FaEdit, FaTrash, FaSpinner } from "react-icons/fa";
 import { AiFillPlusCircle } from "react-icons/ai";
+import { fetchData, postData } from "@/tools/api";
+import { getCookie } from "@/tools/getCookie";
 import Skeleton from "@/components/common/Skeleton";
-import { FaSpinner } from "react-icons/fa";
+import {
+  AiFillEye,
+  AiFillEyeInvisible,
+  AiOutlineUser,
+  AiOutlineIdcard,
+  AiOutlineLock,
+  AiOutlinePhone,
+  AiOutlineTool,
+} from "react-icons/ai";
 
 export default function PenggunaPage() {
   const [loading, setLoading] = useState(true);
@@ -15,6 +24,10 @@ export default function PenggunaPage() {
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [users, setUsers] = useState([]);
   const [factories, setFactories] = useState([]);
+  const { isAdmin } = useUser();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPhone, setShowPhone] = useState(false);
+
   const [formData, setFormData] = useState({
     nama: "",
     username: "",
@@ -25,7 +38,11 @@ export default function PenggunaPage() {
     pabrikGulaId: 0,
   });
 
-  // State untuk loading, error, dan success
+  // 🔹 Filter state
+  const [selectedFactory, setSelectedFactory] = useState("Semua");
+  const [selectedJabatan, setSelectedJabatan] = useState("Semua Jabatan");
+
+  // Loading, success, error
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -68,7 +85,7 @@ export default function PenggunaPage() {
       setFormData({
         nama: user.nama,
         username: user.username,
-        password: "", // Kosongkan password agar bisa diisi ulang
+        password: "",
         jabatan: user.jabatan,
         level: user.jabatan,
         nomorHp: user.nomorHp,
@@ -92,7 +109,7 @@ export default function PenggunaPage() {
   const closeModal = () => {
     setModalOpen(false);
     setSelectedUserId(null);
-    setErrorMessage(""); // Clear error when closing modal
+    setErrorMessage("");
   };
 
   const handleClickOutside = (e) => {
@@ -101,10 +118,13 @@ export default function PenggunaPage() {
     }
   };
 
+  const displayJabatan = (jabatan) => {
+    if (jabatan === "FABRIKASI") return "PABRIKASI";
+    return jabatan;
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-
-    // Jika jabatan diubah, atur pabrikGulaId menjadi 0 jika "ADMIN" atau "DIREKSI"
     if (name === "jabatan") {
       setFormData((prevData) => ({
         ...prevData,
@@ -123,25 +143,22 @@ export default function PenggunaPage() {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     const token = getCookie("token");
-    setIsLoading(true); // Start loading
+    setIsLoading(true);
 
     const dataToSend = {
       ...formData,
       level: formData.jabatan,
     };
 
-    // Jika jabatan adalah "ADMIN" atau "DIREKSI", hapus atau set pabrikGulaId ke 0
     if (dataToSend.jabatan === "ADMIN" || dataToSend.jabatan === "DIREKSI") {
       dataToSend.pabrikGulaId = 99;
     }
 
-    if (isEditMode && !dataToSend.password) {
-      delete dataToSend.password;
-    }
+    if (isEditMode && !dataToSend.password) delete dataToSend.password;
 
     try {
       if (isEditMode) {
-        const response = await fetchData(`/api/users/edit/${selectedUserId}`, {
+        await fetchData(`/api/users/edit/${selectedUserId}`, {
           method: "PUT",
           data: dataToSend,
           headers: { Authorization: `Bearer ${token}` },
@@ -156,17 +173,12 @@ export default function PenggunaPage() {
           ? "Pengguna berhasil diperbarui"
           : "Pengguna berhasil ditambahkan"
       );
-
       closeModal();
       fetchUsers();
     } catch (error) {
       console.error("Error saving user: ", error);
-      // setErrorMessage(
-      //   // "Terjadi kesalahan saat menyimpan data pengguna.",
-      //   error
-      // );
     } finally {
-      setIsLoading(false); // End loading
+      setIsLoading(false);
     }
   };
 
@@ -188,41 +200,96 @@ export default function PenggunaPage() {
     }
   };
 
-  if (loading) {
-    return (
-      <div>
-        <Skeleton rows={3} />
-      </div>
-    );
-  }
+  // 🔹 Filter logic
+  const filteredUsers = users.filter((user) => {
+    const namaPabrik = user.pabrikGula?.namaPabrik || "";
+
+    const matchFactory =
+      selectedFactory === "Semua" ||
+      namaPabrik === selectedFactory ||
+      (selectedFactory === "PG R2" &&
+        (namaPabrik === "Semua" || namaPabrik === "PG R2" || !user.pabrikGula));
+
+    const matchJabatan =
+      selectedJabatan === "Semua Jabatan" ||
+      displayJabatan(user.jabatan) === selectedJabatan;
+
+    return matchFactory && matchJabatan;
+  });
+
+  if (loading) return <Skeleton rows={3} />;
 
   return (
     <div className="p-6">
-      {/* Success message */}
       {successMessage && (
         <div className="mb-4 text-green-500 font-semibold">
           {successMessage}
         </div>
       )}
-
-      <div className="flex items-center gap-1 p-4 hover:bg-gray-100 hover:rounded-lg hover:shadow-md transition-all max-w-fit">
-        <AiFillPlusCircle
-          className="text-2xl text-green-800 hover:text-green-900 cursor-pointer"
-          onClick={() => openModal()}
-        />
-        <h1
-          className="cursor-pointer hover:text-green-800"
-          onClick={() => openModal()}
-        >
-          Tambah Pengguna
+      {/* Header filter & action */}
+      <div className="flex flex-col mb-6 gap-4">
+        <h1 className="text-3xl font-semibold text-green-700">
+          Daftar Pengguna
         </h1>
-      </div>
 
-      <h1 className="text-2xl font-bold mb-6">Data Pengguna</h1>
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          {/* Left: Filter controls */}
+          <div className="flex items-center gap-3 flex-wrap">
+            <h2 className="font-semibold text-gray-700">Filter by:</h2>
+
+            {/* Filter Pabrik */}
+            <select
+              value={selectedFactory}
+              onChange={(e) => setSelectedFactory(e.target.value)}
+              className="border border-gray-300 rounded-lg px-3 py-2 hover:border-green-600 focus:outline-none focus:ring-1 focus:ring-green-600 transition"
+            >
+              <option value="Semua">Semua</option>
+              <option value="PG R2">PG R2</option>
+              <option value="Jatitujuh">Jatitujuh</option>
+              <option value="Tersana Baru">Tersana Baru</option>
+              <option value="Sindang Laut">Sindang Laut</option>
+            </select>
+
+            {/* Filter Jabatan */}
+            <select
+              value={selectedJabatan}
+              onChange={(e) => setSelectedJabatan(e.target.value)}
+              className="border border-gray-300 rounded-lg px-3 py-2 hover:border-green-600 focus:outline-none focus:ring-1 focus:ring-green-600 transition"
+            >
+              <option>Semua Jabatan</option>
+              <option>DIREKSI</option>
+              <option>KEPALAPABRIK</option>
+              <option>ADMIN</option>
+              <option>QUALITYCONTROL</option>
+              <option>SDM</option>
+              <option>INSTALASI</option>
+              <option>PABRIKASI</option>
+              <option>TANAMAN</option>
+              <option>TUK</option>
+            </select>
+          </div>
+
+          {/* Right: Add button */}
+          {isAdmin && (
+            <div className="flex justify-end mr-1">
+              <button
+                onClick={() => openModal()}
+                className="flex items-center gap-2 border-2 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:rounded-xl border-green-800 rounded-md p-2 hover:border-green-900"
+              >
+                <AiFillPlusCircle className="text-2xl text-green-800 hover:text-green-900 cursor-pointer" />
+                <h1 className="cursor-pointer hover:text-green-600">
+                  Tambah Pengguna
+                </h1>
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+      {/* Table */}
       <div className="overflow-x-auto shadow-lg rounded-lg border">
         <table className="w-full text-left border-collapse border border-gray-300">
-          <thead className="bg-gray-200">
-            <tr className="bg-gradient-to-r from-ijoWasis to-ijoDash text-white">
+          <thead className="bg-gradient-to-r from-ijoWasis to-ijoDash text-white">
+            <tr>
               <th className="py-2 px-4">Pabrik</th>
               <th className="py-2 px-4">Nama</th>
               <th className="py-2 px-4">Jabatan</th>
@@ -230,39 +297,34 @@ export default function PenggunaPage() {
             </tr>
           </thead>
           <tbody>
-            {users.length > 0 ? (
-              users.map((user, index) => (
+            {filteredUsers.length > 0 ? (
+              filteredUsers.map((user, index) => (
                 <tr key={index} className="hover:bg-gray-200">
                   <td className="py-2 px-4 border">
-                    {user.pabrikGula?.namaPabrik || "Semua"}
+                    {user.pabrikGula
+                      ? user.pabrikGula.namaPabrik === "Semua"
+                        ? "PG R2"
+                        : user.pabrikGula.namaPabrik
+                      : "PG R2"}
                   </td>
                   <td className="py-2 px-4 border">{user.nama}</td>
-                  <td className="py-2 px-4 border">{user.jabatan}</td>
+                  <td className="py-2 px-4 border">
+                    {displayJabatan(user.jabatan)}
+                  </td>
                   <td className="py-2 px-4 border">
                     <div className="flex gap-2">
-                      <div className="relative group">
-                        <button
-                          className="p-2 bg-yellow-500 rounded hover:bg-yellow-600"
-                          onClick={() => openModal(user)}
-                        >
-                          <FaEdit className="text-white" />
-                        </button>
-                        <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 bg-black text-white text-xs px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                          Edit
-                        </span>
-                      </div>
-
-                      <div className="relative group">
-                        <button
-                          className="p-2 bg-red-500 rounded hover:bg-red-600"
-                          onClick={() => handleDelete(user.id)}
-                        >
-                          <FaTrash className="text-white" />
-                        </button>
-                        <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 bg-black text-white text-xs px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                          Hapus
-                        </span>
-                      </div>
+                      <button
+                        className="p-2 bg-yellow-500 rounded hover:bg-yellow-600"
+                        onClick={() => openModal(user)}
+                      >
+                        <FaEdit className="text-white" />
+                      </button>
+                      <button
+                        className="p-2 bg-red-500 rounded hover:bg-red-600"
+                        onClick={() => handleDelete(user.id)}
+                      >
+                        <FaTrash className="text-white" />
+                      </button>
                     </div>
                   </td>
                 </tr>
@@ -277,7 +339,7 @@ export default function PenggunaPage() {
           </tbody>
         </table>
       </div>
-
+      ;
       {isModalOpen && (
         <div
           id="modalOverlay"
@@ -294,9 +356,16 @@ export default function PenggunaPage() {
             <h2 className="text-black font-bold text-center mb-4 text-xl">
               {isEditMode ? "Edit Pengguna" : "Tambah Pengguna Baru"}
             </h2>
+
             <form className="space-y-4" onSubmit={handleFormSubmit}>
+              {/* NAMA */}
               <div>
-                <label htmlFor="nama">Nama</label>
+                <label
+                  htmlFor="nama"
+                  className="flex items-center gap-2 font-semibold"
+                >
+                  <AiOutlineUser className="text-green-700" /> Nama
+                </label>
                 <input
                   type="text"
                   name="nama"
@@ -306,8 +375,15 @@ export default function PenggunaPage() {
                   className="w-full px-4 py-2 rounded-lg bg-gray-200 focus:outline-none"
                 />
               </div>
+
+              {/* USERNAME */}
               <div>
-                <label htmlFor="username">Username</label>
+                <label
+                  htmlFor="username"
+                  className="flex items-center gap-2 font-semibold"
+                >
+                  <AiOutlineIdcard className="text-green-700" /> Username
+                </label>
                 <input
                   type="text"
                   name="username"
@@ -317,51 +393,72 @@ export default function PenggunaPage() {
                   className="w-full px-4 py-2 rounded-lg bg-gray-200 focus:outline-none"
                 />
               </div>
-              <div>
-                <label htmlFor="password">Password</label>
-                <input
-                  type="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleInputChange}
-                  placeholder={
-                    isEditMode
-                      ? "Kosongkan jika tidak ingin diubah"
-                      : "Password"
-                  }
-                  className={`w-full px-4 py-2 rounded-lg focus:outline-none ${
-                    formData.password.length > 0 &&
-                    (!/[A-Z]/.test(formData.password) ||
-                      !/[!@#$%^&*(),.?":{}|<>]/.test(formData.password) ||
-                      !/[0-9]/.test(formData.password) ||
-                      formData.password.length < 8)
-                      ? "bg-red-100 border-2 border-red-500"
-                      : "bg-gray-200"
-                  }`}
-                />
 
-                {/* Pesan kesalahan untuk setiap aturan */}
+              {/* PASSWORD */}
+              <div>
+                <label
+                  htmlFor="password"
+                  className="flex items-center gap-2 font-semibold"
+                >
+                  <AiOutlineLock className="text-green-700" /> Password
+                </label>
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    value={formData.password}
+                    onChange={handleInputChange}
+                    placeholder={
+                      isEditMode
+                        ? "Kosongkan jika tidak ingin diubah"
+                        : "Password"
+                    }
+                    className={`w-full px-4 py-2 rounded-lg pr-10 focus:outline-none ${
+                      formData.password.length > 0 &&
+                      (!/[A-Z]/.test(formData.password) ||
+                        !/[!@#$%^&*(),.?":{}|<>]/.test(formData.password) ||
+                        !/[0-9]/.test(formData.password) ||
+                        formData.password.length < 8)
+                        ? "bg-red-100 border-2 border-red-500"
+                        : "bg-gray-200"
+                    }`}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-2.5 text-gray-600 hover:text-black"
+                  >
+                    {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
+                  </button>
+                </div>
+
+                {/* Pesan kesalahan password */}
                 {formData.password.length > 0 && (
                   <div className="text-red-500 text-sm mt-1">
                     {!/[A-Z]/.test(formData.password) && (
-                      <p>
-                        - Password harus mengandung minimal 1 huruf kapital.
-                      </p>
+                      <p>- Harus mengandung minimal 1 huruf kapital.</p>
                     )}
                     {!/[!@#$%^&*(),.?":{}|<>]/.test(formData.password) && (
-                      <p>- Password harus mengandung minimal 1 simbol.</p>
+                      <p>- Harus mengandung minimal 1 simbol.</p>
                     )}
                     {!/[0-9]/.test(formData.password) && (
-                      <p>- Password harus mengandung minimal 1 angka.</p>
+                      <p>- Harus mengandung minimal 1 angka.</p>
                     )}
                     {formData.password.length < 8 && (
-                      <p>- Password harus memiliki minimal 8 karakter.</p>
+                      <p>- Harus minimal 8 karakter.</p>
                     )}
                   </div>
                 )}
               </div>
+
+              {/* JABATAN */}
               <div>
-                <label htmlFor="jabatan">Jabatan</label>
+                <label
+                  htmlFor="jabatan"
+                  className="flex items-center gap-2 font-semibold"
+                >
+                  <AiOutlineTool className="text-green-700" /> Jabatan
+                </label>
                 <select
                   className="w-full px-4 py-2 rounded-lg bg-gray-200 focus:outline-none"
                   value={formData.jabatan}
@@ -384,11 +481,17 @@ export default function PenggunaPage() {
                   <option value="TUK">KEPALA BAGIAN TUK</option>
                 </select>
               </div>
-              {/* Input Pabrik hanya tampil jika jabatan bukan ADMIN atau DIREKSI */}
+
+              {/* PABRIK */}
               {formData.jabatan !== "ADMIN" &&
                 formData.jabatan !== "DIREKSI" && (
                   <div>
-                    <label htmlFor="pabrikGulaId">Pabrik</label>
+                    <label
+                      htmlFor="pabrikGulaId"
+                      className="flex items-center gap-2 font-semibold"
+                    >
+                      <AiOutlineTool className="text-green-700" /> Pabrik
+                    </label>
                     <select
                       name="pabrikGulaId"
                       value={formData.pabrikGulaId}
@@ -405,29 +508,47 @@ export default function PenggunaPage() {
                   </div>
                 )}
 
+              {/* NOMOR HP */}
               <div>
-                <label htmlFor="nomorHp">Nomor HP</label>
-                <input
-                  type="tel"
-                  name="nomorHp"
-                  value={formData.nomorHp}
-                  onChange={handleInputChange}
-                  placeholder="Nomor HP"
-                  className={`w-full px-4 py-2 rounded-lg focus:outline-none ${
-                    !/^0[0-9]*$/.test(formData.nomorHp) ||
-                    formData.nomorHp.length > 13
-                      ? "bg-red-100 border-2 border-red-500"
-                      : "bg-gray-200"
-                  }`}
-                />
+                <label
+                  htmlFor="nomorHp"
+                  className="flex items-center gap-2 font-semibold"
+                >
+                  <AiOutlinePhone className="text-green-700" /> Nomor HP
+                </label>
+                <div className="relative">
+                  <input
+                    type={showPhone ? "text" : "password"}
+                    name="nomorHp"
+                    value={formData.nomorHp}
+                    onChange={handleInputChange}
+                    placeholder="Nomor HP"
+                    className={`w-full px-4 py-2 rounded-lg pr-10 focus:outline-none ${
+                      !/^0[0-9]*$/.test(formData.nomorHp) ||
+                      formData.nomorHp.length > 13 ||
+                      formData.nomorHp.length < 10
+                        ? "bg-red-100 border-2 border-red-500"
+                        : "bg-gray-200"
+                    }`}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPhone(!showPhone)}
+                    className="absolute right-3 top-2.5 text-gray-600 hover:text-black"
+                  >
+                    {showPhone ? <AiFillEyeInvisible /> : <AiFillEye />}
+                  </button>
+                </div>
                 {(!/^0[0-9]*$/.test(formData.nomorHp) ||
-                  formData.nomorHp.length > 13) && (
+                  formData.nomorHp.length > 13 ||
+                  formData.nomorHp.length < 8) && (
                   <p className="text-red-500 text-sm mt-1">
-                    Nomor HP harus dimulai dengan &quot;0&quot; dan maksimal 13
-                    digit angka.
+                    Nomor HP harus dimulai dengan "0", minimal 10 dan maksimal
+                    13 digit angka.
                   </p>
                 )}
               </div>
+
               {errorMessage && (
                 <div className="mb-4 text-red-500 font-semibold">
                   {errorMessage}

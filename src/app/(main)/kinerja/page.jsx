@@ -278,14 +278,11 @@ export default function KinerjaPage() {
 
     const token = getCookie("token");
     try {
-      await fetchData(
-        `/api/sesi/${editData.id}`,
-        {
-          method: "PUT",
-          headers: { Authorization: `Bearer ${token}` },
-          data: { batasPengisian: editData.batasPengisian },
-        }
-      );
+      await fetchData(`/api/sesi/${editData.id}`, {
+        method: "PUT",
+        headers: { Authorization: `Bearer ${token}` },
+        data: { batasPengisian: editData.batasPengisian },
+      });
       setSessions((prev) =>
         prev.map((item) =>
           item.id === editData.id
@@ -311,7 +308,7 @@ export default function KinerjaPage() {
       return () => clearTimeout(timer);
     }
   }, [success]);
-  
+
   const handleDelete = async (id) => {
     const token = getCookie("token");
     if (confirm("Apakah Anda yakin ingin menghapus sesi ini?")) {
@@ -416,7 +413,7 @@ export default function KinerjaPage() {
           </select>
         </div>
 
-        {/* ➕ Tombol Tambah Pengukuran */}
+        {/* Tombol Tambah Pengukuran */}
         {isAdmin && (
           <div className="flex justify-end mr-1">
             <button
