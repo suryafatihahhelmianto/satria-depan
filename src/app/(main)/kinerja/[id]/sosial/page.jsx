@@ -378,7 +378,7 @@ export default function DataSosial() {
     <div className="min-h-screen bg-gray-100 mb-24">
       {!userCanFill ? (
         <div className="bg-gray-100 border border-dashed border-gray-300 text-gray-600 text-center p-6 rounded-2xl my-8 flex flex-col items-center gap-2">
-          <FaUsers className="text-3xl text-gray-600" />
+          <FaUsers className="text-3xl text-green-600" />
           <p>
             Anda tidak perlu mengisi bagian <b>SOSIAL</b>
           </p>
@@ -388,7 +388,8 @@ export default function DataSosial() {
           {renderKinerjaSection({
             role,
             allowedRoles: ["ADMIN", "KEPALAPABRIK"],
-            title: "Dukungan Kelembagaan terhadap Rantai Pasok Agroindustri (S1)",
+            title:
+              "Dukungan Kelembagaan terhadap Rantai Pasok Agroindustri (S1)",
             rows: rowsS1,
             sesiId,
             isAdmin,
@@ -396,7 +397,8 @@ export default function DataSosial() {
           {renderKinerjaSection({
             role,
             allowedRoles: ["ADMIN", "SDM"],
-            title: "Ketersediaan Infrastruktur sebagai Penunjang Aktivitas (S2)",
+            title:
+              "Ketersediaan Infrastruktur sebagai Penunjang Aktivitas (S2)",
             rows: rowsS2,
             sesiId,
             isAdmin,

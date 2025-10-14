@@ -7,6 +7,7 @@ import { formatNumberToIndonesian } from "@/tools/formatNumber";
 import { getCookie } from "@/tools/getCookie";
 import { usePathname } from "next/navigation";
 import React, { useState, useEffect } from "react";
+import { FaSort, FaSortUp, FaSortDown } from "react-icons/fa";
 
 export default function DetailPage() {
   const pathname = usePathname();
@@ -16,6 +17,33 @@ export default function DetailPage() {
   const [dataSosial, setDataSosial] = useState([]);
   const [dataSpiderSosial, setDataSpiderSosial] = useState([]);
   const [nilaiDimensiSosial, setNilaiDimensiSosial] = useState(0);
+  const [sortConfig, setSortConfig] = useState({ key: null, order: null });
+
+  // Fungsi kategori warna
+  const getKategoriColor = (nilai) => {
+    if (nilai >= 0 && nilai <= 25) return "text-red-600";
+    if (nilai > 25 && nilai <= 50) return "text-orange-600";
+    if (nilai > 50 && nilai <= 75) return "text-green-500";
+    if (nilai > 75 && nilai <= 100) return "text-green-600";
+    return "text-gray-500";
+  };
+
+  // Sorting handler
+  const handleSort = (key) => {
+    let newOrder = "asc";
+    if (sortConfig.key === key && sortConfig.order === "asc") {
+      newOrder = "desc";
+    }
+    setSortConfig({ key, order: newOrder });
+
+    setDataSosial((prev) => {
+      const sorted = [...prev].sort((a, b) => {
+        if (newOrder === "asc") return a[key] - b[key];
+        return b[key] - a[key];
+      });
+      return sorted;
+    });
+  };
 
   useEffect(() => {
     const fetchSosialData = async () => {
@@ -100,8 +128,9 @@ export default function DetailPage() {
       <div className="mb-8">
         <SpiderGraph data={dataSpiderSosial} />
       </div>
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white/50 border border-white/30 shadow-xl rounded-2xl backdrop-blur-lg">
+      {/* Tabel responsif */}
+      <div className="overflow-x-auto flex justify-center mt-4">
+        <table className="w-full max-w-6xl bg-white/60 border border-white/40 shadow-xl rounded-2xl backdrop-blur-lg">
           <thead className="bg-gradient-to-r from-green-600 to-green-400 text-white">
             <tr>
               <th className="px-6 py-3 text-left font-semibold text-lg border-b border-green-700">
@@ -110,14 +139,45 @@ export default function DetailPage() {
               <th className="px-6 py-3 text-left font-semibold text-lg border-b border-green-700">
                 Simbol
               </th>
-              <th className="px-6 py-3 text-center font-semibold text-lg border-b border-green-700">
-                Nilai
+              {/* Kolom Nilai (%) */}
+              <th
+                className="px-6 py-3 text-center font-semibold text-lg border-b border-green-700 cursor-pointer select-none hover:bg-green-700 transition"
+                onClick={() => handleSort("nilai")}
+              >
+                <div className="flex items-center justify-center gap-2">
+                  <span>Nilai (%)</span>
+                  {sortConfig.key === "nilai" ? (
+                    sortConfig.order === "asc" ? (
+                      <FaSortUp />
+                    ) : (
+                      <FaSortDown />
+                    )
+                  ) : (
+                    <FaSort />
+                  )}
+                </div>
               </th>
-              <th className="px-6 py-3 text-center font-semibold text-lg border-b border-green-700">
-                Prioritas Indikator*
+              {/* Kolom Prioritas Indikator */}
+              <th
+                className="px-6 py-3 text-center font-semibold text-lg border-b border-green-700 cursor-pointer select-none hover:bg-green-700 transition"
+                onClick={() => handleSort("leverage")}
+              >
+                <div className="flex items-center justify-center gap-2">
+                  <span>Prioritas Indikator*</span>
+                  {sortConfig.key === "leverage" ? (
+                    sortConfig.order === "asc" ? (
+                      <FaSortUp />
+                    ) : (
+                      <FaSortDown />
+                    )
+                  ) : (
+                    <FaSort />
+                  )}
+                </div>
               </th>
             </tr>
           </thead>
+
           <tbody>
             {dataSosial.map((data, index) => (
               <tr
@@ -132,16 +192,19 @@ export default function DetailPage() {
                 <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                   {data.simbol}
                 </td>
-                <td className="px-6 py-4 border-b border-gray-200 text-center text-gray-800 font-semibold">
+                <td
+                  className={`px-6 py-4 border-b border-gray-200 text-center font-semibold ${getKategoriColor(
+                    data.nilai
+                  )}`}
+                >
                   {formatNumberToIndonesian(data.nilai)}
                 </td>
-                <td className="px-6 py-4 border-b border-gray-200 text-center">
-                  {/* Bar horizontal untuk prioritas indikator */}
-                  <div className="flex items-center">
+                <td className="px-6 py-4 border-b border-gray-200 text-left">
+                  <div className="flex items-center justify-left">
                     <div
-                      className="bg-ijoTebu h-2"
+                      className="bg-ijoTebu h-2 rounded-full"
                       style={{
-                        width: `${(data.leverage / 20) * 90}px`, // Panjang bar diatur proporsional, bisa disesuaikan
+                        width: `${Math.min((data.leverage / 20) * 100, 100)}px`,
                       }}
                     ></div>
                     <span className="ml-2 text-gray-700 font-medium">
@@ -153,14 +216,13 @@ export default function DetailPage() {
             ))}
           </tbody>
         </table>
-        <h1 className="mt-6">
-          {" "}
-          *Indikator dengan nilai leverage tinggi memiliki tingkat sensitivitas
-          tinggi, indikator dengan nilai leverage tinggi dapat digunakan sebagai
-          prioritas utama dalam pengembangan strategi peningkatan kinerja
-          keberlanjutan rantai pasok
-        </h1>
       </div>
+      <p className="mt-6 text-sm text-gray-700 max-w-5xl mx-auto">
+        *Indikator dengan nilai leverage tinggi memiliki tingkat sensitivitas
+        tinggi, indikator dengan nilai leverage tinggi dapat digunakan sebagai
+        prioritas utama dalam pengembangan strategi peningkatan kinerja
+        keberlanjutan rantai pasok.
+      </p>
     </div>
   );
 }

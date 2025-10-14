@@ -1078,7 +1078,7 @@ export default function LingkunganPage() {
     <div className="min-h-screen bg-gray-100 mb-24">
       {!userCanFill ? (
         <div className="bg-gray-100 border border-dashed border-gray-300 text-gray-600 text-center p-6 rounded-2xl my-8 flex flex-col items-center gap-2">
-          <FaLeaf className="text-3xl text-gray-600" />
+          <FaLeaf className="text-3xl text-green-600" />
           <p>
             Anda tidak perlu mengisi bagian <b>LINGKUNGAN</b>
           </p>

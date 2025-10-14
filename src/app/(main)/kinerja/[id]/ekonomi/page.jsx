@@ -414,7 +414,7 @@ export default function DataKinerja() {
     <div className="min-h-screen bg-gray-100 mb-24">
       {!userCanFill ? (
         <div className="bg-gray-100 border border-dashed border-gray-300 text-gray-600 text-center p-6 rounded-2xl my-8 flex flex-col items-center gap-2">
-          <FaChartLine className="text-3xl text-gray-600" />
+          <FaChartLine className="text-3xl text-green-600" />
           <p>
             Anda tidak perlu mengisi bagian <b>EKONOMI</b>
           </p>
@@ -440,7 +440,8 @@ export default function DataKinerja() {
           {renderKinerjaSection({
             role,
             allowedRoles: ["ADMIN", "TUK"],
-            title: "Kesenjangan Keuntungan Pelaku Rantai Pasok per Ton Gula (E3)",
+            title:
+              "Kesenjangan Keuntungan Pelaku Rantai Pasok per Ton Gula (E3)",
             rows: rowsE3,
             sesiId,
             isAdmin,
