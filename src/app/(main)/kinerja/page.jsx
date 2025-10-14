@@ -280,23 +280,37 @@ export default function KinerjaPage() {
     try {
       await fetchData(
         `/api/sesi/${editData.id}`,
-
         {
           method: "PUT",
           headers: { Authorization: `Bearer ${token}` },
           data: { batasPengisian: editData.batasPengisian },
         }
       );
+      setSessions((prev) =>
+        prev.map((item) =>
+          item.id === editData.id
+            ? { ...item, batasPengisian: editData.batasPengisian }
+            : item
+        )
+      );
 
       setEditData({ id: null, batasPengisian: "" });
       setIsEditModalOpen(false);
       fetchSessionAndPabrikNames();
+      setSuccess("Batas pengisian berhasil diperbarui!");
     } catch (error) {
       console.error("Error updating session: ", error);
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => setSuccess(""), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [success]);
   
   const handleDelete = async (id) => {
     const token = getCookie("token");
