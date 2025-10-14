@@ -32,6 +32,27 @@ function renderKinerjaSection({
   );
 }
 
+function renderKinerjaBulanSection({
+  role,
+  allowedRoles,
+  title,
+  rows,
+  sesiId,
+  isAdmin,
+  type = "lingkungan",
+}) {
+  if (!allowedRoles.includes(role)) return null;
+  return (
+    <KinerjaTableBulan
+      title={title}
+      data={rows}
+      type={type}
+      sesiId={sesiId}
+      isAdmin={isAdmin}
+    />
+  );
+}
+
 export default function LingkunganPage() {
   const { isAdmin, role } = useUser();
   const pathname = usePathname();
@@ -1133,7 +1154,7 @@ export default function LingkunganPage() {
             sesiId,
             isAdmin,
           })}
-          {renderKinerjaSection({
+          {renderKinerjaBulanSection({
             role,
             allowedRoles: ["ADMIN", "QUALITYCONTROL"],
             title: "Kualitas Air Permukaan (L5)",
