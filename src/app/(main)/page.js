@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
-
 import { useRouter } from "next/navigation";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import DatePicker from "react-datepicker";
@@ -57,6 +56,38 @@ export default function HomePage() {
     setSelectedYear(year);
   };
 
+  const fetchDashboardData = useCallback(
+    async (pabrikId) => {
+      try {
+        setLoading(true);
+        const response = await fetchData(
+          `/api/dashboard/${pabrikId}?tahun=${selectedYear}&startDate=${selectedDate.toISOString()}&endDate=${selectedDate.toISOString()}`,
+          {
+            method: "GET",
+            headers: { Authorization: `Bearer ${getCookie("token")}` },
+          }
+        );
+
+        const updatedInformasi = response.informasi.map((item) => {
+          let updatedRole = item.role;
+          if (updatedRole === "QUALITYCONTROL") updatedRole = "QUALITY CONTROL";
+          if (updatedRole === "KEPALAPABRIK")
+            updatedRole = "GENERAL MANAGER / KEPALA PABRIK";
+          if (updatedRole === "SDM") updatedRole = "SDM dan UMUM";
+          return { ...item, role: updatedRole };
+        });
+
+        response.informasi = updatedInformasi;
+        setDashboardData(response);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+        setLoading(false);
+      }
+    },
+    [selectedYear, selectedDate]
+  );
+
   const fetchFactories = useCallback(async () => {
     try {
       const response = await fetchData("/api/pabrik", {
@@ -96,38 +127,6 @@ export default function HomePage() {
       setSelectedYear(null);
     }
   }, [selectedFactory.id]);
-
-  const fetchDashboardData = useCallback(
-    async (pabrikId) => {
-      try {
-        setLoading(true);
-        const response = await fetchData(
-          `/api/dashboard/${pabrikId}?tahun=${selectedYear}&startDate=${selectedDate.toISOString()}&endDate=${selectedDate.toISOString()}`,
-          {
-            method: "GET",
-            headers: { Authorization: `Bearer ${getCookie("token")}` },
-          }
-        );
-
-        const updatedInformasi = response.informasi.map((item) => {
-          let updatedRole = item.role;
-          if (updatedRole === "QUALITYCONTROL") updatedRole = "QUALITY CONTROL";
-          if (updatedRole === "KEPALAPABRIK")
-            updatedRole = "GENERAL MANAGER / KEPALA PABRIK";
-          if (updatedRole === "SDM") updatedRole = "SDM dan UMUM";
-          return { ...item, role: updatedRole };
-        });
-
-        response.informasi = updatedInformasi;
-        setDashboardData(response);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching dashboard data:", error);
-        setLoading(false);
-      }
-    },
-    [selectedYear, selectedDate]
-  );
 
   const fetchSesiPengisian = async () => {
     try {
