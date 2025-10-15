@@ -213,11 +213,17 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
         {/* Bagian bawah: notice + footer */}
         <div>
           {isMobile && showNotice && (
-            <div className="bg-yellow-50 border border-yellow-300 text-yellow-800 rounded-xl px-4 py-3 shadow-md text-left mb-3 animate-fadeIn">
-              <p className="text-sm font-medium flex items-center gap-1">
-                <AiOutlineMobile size={16} /> <b>Layar kecil terdeteksi</b>
+            <div className="bg-yellow-100 border-2 border-yellow-400 text-yellow-900 rounded-xl px-5 py-4 shadow-lg text-left mb-4 animate-fadeIn animate-pulse-slow">
+              <p className="text-base font-semibold flex items-center gap-2">
+                <AiOutlineMobile
+                  size={20}
+                  className="text-yellow-600 animate-bounce-slow"
+                />
+                <span>
+                  📱 <b>Layar kecil terdeteksi</b>
+                </span>
               </p>
-              <p className="text-xs mt-1">
+              <p className="text-sm mt-2 leading-snug">
                 Beberapa fitur mungkin tidak tersedia. Gunakan perangkat dengan{" "}
                 <b>layar lebih besar</b> untuk pengalaman penuh.
               </p>
