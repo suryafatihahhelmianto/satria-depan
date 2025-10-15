@@ -393,7 +393,7 @@ export default function KinerjaPage() {
 
       {/* Bar bawah: Filter + Tambah Form */}
       <div className="flex items-center justify-between mt-3 mb-3">
-        {/* 🔽 Filter Pabrik */}
+        {/* Filter Pabrik */}
         <div className="flex items-center gap-3 ml-1">
           <label htmlFor="filterPabrik" className="font-semibold text-gray-700">
             Filter Pabrik:
