@@ -4,6 +4,7 @@ import { fetchData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { HiOutlineLightBulb } from "react-icons/hi";
 import {
   AiFillCheckCircle,
   AiOutlineLoading,
@@ -197,9 +198,18 @@ export default function TableInputRow({
               {label}
               <AiOutlineInfoCircle className="ml-2 text-green-500" />
             </div>
-            <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 bg-black text-white text-xs px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-              {capt || label}
-            </span>
+            <div
+              className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 
+             w-max max-w-sm bg-white text-gray-900 text-sm rounded-lg shadow-xl p-4
+             opacity-0 invisible group-hover:opacity-100 group-hover:visible
+             transition-all duration-300 
+             z-[9999] flex items-start gap-2 border border-gray-200"
+            >
+              <span className="text-yellow-500 mt-0.5">
+                <HiOutlineLightBulb size={18} />
+              </span>
+              <span className="leading-snug">{capt || label}</span>
+            </div>
           </div>
         </td>
         <td className="px-4 py-2 border border-gray-200">{renderInput()}</td>

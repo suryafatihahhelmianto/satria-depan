@@ -77,10 +77,10 @@ export default function OpsiDetail() {
           Ekonomi
         </Link>
         <Link
-          href={`/detail/${id ? id : ""}/lingkungan`} // Add ID to URL if present
+          href={`/detail/${id ? id : ""}/lingkungan`}
           className={`${getButtonStyle(
             `/detail/${id ? id : ""}/lingkungan`
-          )} p-3 rounded-lg transition-all duration-200`}
+          )} p-3 rounded-lg transition-all duration-200 text-sm sm:text-xs md:text-sm`}
         >
           Lingkungan
         </Link>

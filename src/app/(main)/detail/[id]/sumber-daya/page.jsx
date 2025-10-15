@@ -157,95 +157,102 @@ export default function DetailPage() {
       </div>
 
       {/* Tabel responsif */}
-      <div className="overflow-x-auto flex justify-center mt-4">
-        <table className="w-full max-w-6xl bg-white/60 border border-white/40 shadow-xl rounded-2xl backdrop-blur-lg">
-          <thead className="bg-gradient-to-r from-green-600 to-green-400 text-white">
-            <tr>
-              <th className="px-6 py-3 text-left font-semibold text-lg border-b border-green-700">
-                Indikator
-              </th>
-              <th className="px-6 py-3 text-left font-semibold text-lg border-b border-green-700">
-                Simbol
-              </th>
+      <div className="mt-4 overflow-x-auto">
+        <div className="min-w-full inline-block align-middle">
+          <div className="overflow-x-auto border border-white/40 shadow-xl rounded-2xl bg-white/60 backdrop-blur-lg">
+            <table className="min-w-[720px] w-full text-sm sm:text-base">
+              <thead className="bg-gradient-to-r from-green-600 to-green-400 text-white">
+                <tr>
+                  <th className="px-6 py-3 text-left font-semibold text-lg border-b border-green-700">
+                    Indikator
+                  </th>
+                  <th className="px-6 py-3 text-left font-semibold text-lg border-b border-green-700">
+                    Simbol
+                  </th>
 
-              {/* Kolom Nilai (%) */}
-              <th
-                className="px-6 py-3 text-center font-semibold text-lg border-b border-green-700 cursor-pointer select-none hover:bg-green-700 transition"
-                onClick={() => handleSort("nilai")}
-              >
-                <div className="flex items-center justify-center gap-2">
-                  <span>Nilai (%)</span>
-                  {sortConfig.key === "nilai" ? (
-                    sortConfig.order === "asc" ? (
-                      <FaSortUp />
-                    ) : (
-                      <FaSortDown />
-                    )
-                  ) : (
-                    <FaSort />
-                  )}
-                </div>
-              </th>
+                  {/* Kolom Nilai (%) */}
+                  <th
+                    className="px-6 py-3 text-center font-semibold text-lg border-b border-green-700 cursor-pointer select-none hover:bg-green-700 transition"
+                    onClick={() => handleSort("nilai")}
+                  >
+                    <div className="flex items-center justify-center gap-2">
+                      <span>Nilai (%)</span>
+                      {sortConfig.key === "nilai" ? (
+                        sortConfig.order === "asc" ? (
+                          <FaSortUp />
+                        ) : (
+                          <FaSortDown />
+                        )
+                      ) : (
+                        <FaSort />
+                      )}
+                    </div>
+                  </th>
 
-              {/* Kolom Prioritas Indikator */}
-              <th
-                className="px-6 py-3 text-center font-semibold text-lg border-b border-green-700 cursor-pointer select-none hover:bg-green-700 transition"
-                onClick={() => handleSort("leverage")}
-              >
-                <div className="flex items-center justify-center gap-2">
-                  <span>Prioritas Indikator*</span>
-                  {sortConfig.key === "leverage" ? (
-                    sortConfig.order === "asc" ? (
-                      <FaSortUp />
-                    ) : (
-                      <FaSortDown />
-                    )
-                  ) : (
-                    <FaSort />
-                  )}
-                </div>
-              </th>
-            </tr>
-          </thead>
+                  {/* Kolom Prioritas Indikator */}
+                  <th
+                    className="px-6 py-3 text-center font-semibold text-lg border-b border-green-700 cursor-pointer select-none hover:bg-green-700 transition"
+                    onClick={() => handleSort("leverage")}
+                  >
+                    <div className="flex items-center justify-center gap-2">
+                      <span>Prioritas Indikator*</span>
+                      {sortConfig.key === "leverage" ? (
+                        sortConfig.order === "asc" ? (
+                          <FaSortUp />
+                        ) : (
+                          <FaSortDown />
+                        )
+                      ) : (
+                        <FaSort />
+                      )}
+                    </div>
+                  </th>
+                </tr>
+              </thead>
 
-          <tbody>
-            {dataSDAM.map((data, index) => (
-              <tr
-                key={data.id}
-                className={`transition-colors duration-200 ${
-                  index % 2 === 0 ? "bg-gray-50" : "bg-white"
-                } hover:bg-green-50`}
-              >
-                <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                  {data.indikator}
-                </td>
-                <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
-                  {data.simbol}
-                </td>
-                <td
-                  className={`px-6 py-4 border-b border-gray-200 text-center font-semibold ${getKategoriColor(
-                    data.nilai
-                  )}`}
-                >
-                  {formatNumberToIndonesian(data.nilai)}
-                </td>
-                <td className="px-6 py-4 border-b border-gray-200 text-left">
-                  <div className="flex items-center justify-left">
-                    <div
-                      className="bg-ijoTebu h-2 rounded-full"
-                      style={{
-                        width: `${Math.min((data.leverage / 20) * 100, 100)}px`,
-                      }}
-                    ></div>
-                    <span className="ml-2 text-gray-700 font-medium">
-                      {formatNumberToIndonesian(data.leverage)}
-                    </span>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+              <tbody>
+                {dataSDAM.map((data, index) => (
+                  <tr
+                    key={data.id}
+                    className={`transition-colors duration-200 ${
+                      index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                    } hover:bg-green-50`}
+                  >
+                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                      {data.indikator}
+                    </td>
+                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                      {data.simbol}
+                    </td>
+                    <td
+                      className={`px-6 py-4 border-b border-gray-200 text-center font-semibold ${getKategoriColor(
+                        data.nilai
+                      )}`}
+                    >
+                      {formatNumberToIndonesian(data.nilai)}
+                    </td>
+                    <td className="px-6 py-4 border-b border-gray-200 text-left">
+                      <div className="flex items-center justify-left">
+                        <div
+                          className="bg-ijoTebu h-2 rounded-full"
+                          style={{
+                            width: `${Math.min(
+                              (data.leverage / 20) * 100,
+                              100
+                            )}px`,
+                          }}
+                        ></div>
+                        <span className="ml-2 text-gray-700 font-medium">
+                          {formatNumberToIndonesian(data.leverage)}
+                        </span>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
 
       <p className="mt-6 text-sm text-gray-700 max-w-5xl mx-auto">

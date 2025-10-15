@@ -132,8 +132,8 @@ export default function KalkulatorPage() {
               Kalkulator Prediksi Rendemen
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-black">
-              Hitung prediksi rendemen tanpa mudah, cepat, kapan saja dan di
-              mana saja.
+              Hitung prediksi rendemen mudah, cepat, kapan saja dan di mana
+              saja.
             </p>
           </div>
           <form onSubmit={(e) => e.preventDefault()} className="space-y-8">

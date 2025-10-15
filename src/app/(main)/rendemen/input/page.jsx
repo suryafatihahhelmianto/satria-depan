@@ -14,6 +14,7 @@ import {
 } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { fetchData } from "@/tools/api";
+import { HiOutlineLightBulb } from "react-icons/hi";
 import { getCookie } from "@/tools/getCookie";
 
 export default function RendemenInputPage() {
@@ -169,6 +170,7 @@ export default function RendemenInputPage() {
               <SelectField
                 icon={<FaLeaf className="text-green-500 text-2xl" />}
                 label="Jenis / Kategori"
+                info="Jenis mengacu pada kategori tebu yang ditanam, misalnya Plain Cane (PC), 1, 2, 3. Jika menanam tingkat yang lebih dari 3, isi saja RC"
                 name="jenis"
                 value={formData.jenis}
                 onChange={handleInputChange}
@@ -185,6 +187,7 @@ export default function RendemenInputPage() {
               <SelectField
                 icon={<FaCalendarAlt className="text-green-500 text-2xl" />}
                 label="Masa Tanam"
+                info="Periode waktu ketika tebu ditanam.Dituliskan 5A, 6B, dst yang menunjukkan bulan tebu ditanam"
                 name="masaTanam"
                 value={formData.masaTanam}
                 onChange={handleInputChange}
@@ -200,6 +203,7 @@ export default function RendemenInputPage() {
               <SelectField
                 icon={<FaDna className="text-green-500 text-2xl" />}
                 label="Varietas"
+                info="Jenis dari tanaman tebu yang ditanam"
                 name="varietas"
                 value={formData.varietas}
                 onChange={handleInputChange}
@@ -219,6 +223,7 @@ export default function RendemenInputPage() {
               <SelectField
                 icon={<FaRegCalendarAlt className="text-green-500 text-2xl" />}
                 label="Kemasakan"
+                info="Tingkat kematangan tanaman tebu yang optimal untuk dipanen"
                 name="kemasakan"
                 value={formData.kemasakan}
                 onChange={handleInputChange}
@@ -234,6 +239,7 @@ export default function RendemenInputPage() {
               <InputField
                 icon={<FaThermometerHalf className="text-green-500 text-2xl" />}
                 label="Brix"
+                info="Ukuran konsentrasi zat padat berupa gula pada tanaman tebu dalam 100 gram larutan"
                 name="brix"
                 value={formData.brix}
                 onChange={handleInputChange}
@@ -244,6 +250,7 @@ export default function RendemenInputPage() {
               <InputField
                 icon={<FaCloudRain className="text-green-500 text-2xl" />}
                 label="Curah Hujan"
+                info="Total curah hujan dari mulai tanam sampai pengukuran brix."
                 name="curahHujan"
                 value={formData.curahHujan}
                 onChange={handleInputChange}
@@ -356,13 +363,18 @@ const InputField = ({ icon, label, info, ...props }) => (
       {icon}
       <span className="mx-2">{label}</span>
       {info && (
-        <div className="relative">
-          <span className="text-green-500 cursor-pointer group">
-            <FaInfoCircle className="text-green-900" />
-            <div className="absolute bottom-full mb-2 left-0 w-64 bg-gray-700 text-white text-sm rounded-lg shadow-lg p-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-10">
-              {info}
-            </div>
-          </span>
+        <div className="relative flex items-center group ml-1">
+          <FaInfoCircle className="cursor-pointer text-gray-600 hover:text-green-700" />
+          <div
+            className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-64 bg-white text-gray-900 text-sm rounded-lg shadow-lg p-4
+         opacity-0 invisible group-hover:opacity-100 group-hover:visible
+         transition-all duration-300 z-999 flex items-start gap-2"
+          >
+            <span className="text-yellow-500 mt-0.5">
+              <HiOutlineLightBulb size={18} />
+            </span>
+            <span className="leading-snug">{info}</span>
+          </div>
         </div>
       )}
     </label>
@@ -379,13 +391,18 @@ const SelectField = ({ icon, label, options, info, ...props }) => (
       {icon}
       <span className="mx-2">{label}</span>
       {info && (
-        <div className="relative">
-          <span className="text-green-500 cursor-pointer group">
-            <FaInfoCircle className="text-green-900" />
-            <div className="absolute bottom-full mb-2 left-0 w-64 bg-gray-700 text-white text-sm rounded-lg shadow-lg p-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-10">
-              {info}
-            </div>
-          </span>
+        <div className="relative flex items-center group ml-1">
+          <FaInfoCircle className="cursor-pointer text-gray-600 hover:text-green-700" />
+          <div
+            className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-64 bg-white text-gray-900 text-sm rounded-lg shadow-lg p-4
+          opacity-0 invisible group-hover:opacity-100 group-hover:visible
+          transition-all duration-300 z-999 flex items-start gap-2"
+          >
+            <span className="text-yellow-500 mt-0.5">
+              <HiOutlineLightBulb size={18} />
+            </span>
+            <span className="leading-snug">{info}</span>
+          </div>
         </div>
       )}
     </label>
