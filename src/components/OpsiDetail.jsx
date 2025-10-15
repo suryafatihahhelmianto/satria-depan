@@ -4,7 +4,7 @@ import { fetchData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 
 export default function OpsiDetail() {
   const [periode, setPeriode] = useState(0);
@@ -21,7 +21,9 @@ export default function OpsiDetail() {
       : "bg-gray-200 text-gray-700 hover:bg-gray-300 hover:text-green-800 font-medium shadow-sm";
   };
 
-  const fetchHeaderData = async () => {
+  const fetchHeaderData = useCallback(async () => {
+    if (!id) return; // ✅ hindari fetch kalau id belum siap
+
     try {
       const response = await fetchData(`/api/sesi/header/${id}`, {
         method: "GET",
@@ -36,11 +38,11 @@ export default function OpsiDetail() {
     } catch (error) {
       console.error("Error fetching header data:", error);
     }
-  };
+  }, [id]); // ✅ tambahkan dependency id
 
   useEffect(() => {
     fetchHeaderData();
-  }, []);
+  }, [fetchHeaderData]);
 
   return (
     <div>

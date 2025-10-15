@@ -8,7 +8,8 @@ import { useUser } from "@/context/UserContext";
 import { fetchData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
 import { usePathname, useRouter } from "next/navigation";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+
 import { AiFillCheckCircle } from "react-icons/ai";
 import { FaIndustry } from "react-icons/fa";
 
@@ -143,7 +144,7 @@ export default function SumberDayaPage() {
     }
   };
 
-  const fetchSDAMData = async () => {
+  const fetchSDAMData = useCallback(async () => {
     try {
       const response = await fetchData(`/api/masukkan/sdam/${sesiId}`, {
         method: "GET",
@@ -170,44 +171,35 @@ export default function SumberDayaPage() {
 
       setFormData({
         kemudahanAksesTenagaKerja: response.kemudahanAksesTenagaKerja || "",
-
         luasTanamTRITahunIni: response.luasTanamTRITahunIni || "",
         luasTotalTahunIni: response.luasTotalTahunIni || "",
-
         jumlahJamKerjaEfektif: response.jumlahJamKerjaEfektif || "",
         totalJamKerja: response.totalJamKerja || "",
         jamTerlaksana: response.jamTerlaksana || "",
         jamTotal: response.jamTotal || "",
-
-        produktivitasTebu: response.produktivitasTebu || "", // dataD4
-        rendemenTebu: response.rendemenTebu || "", // dataD4
-        mbs: response.mbs || "", // dataD4
-
-        overallRecovery: response.overallRecovery || "", // dataD5
-
-        kis: response.kis || "", // dataD6
-        kes: response.kes || "", // dataD6
-
-        ratoonTebu: response.ratoonTebu || "", // dataD7
-
-        luasBL: response.luasBL || "", // dataD8
-        luasPST41: response.luasPST41 || "", // dataD8
-        luasPS864: response.luasPS864 || "", // dataD8
-        luasTotal: response.luasTotal || "", // dataD8
-
-        tingkatMekanisasi: response.tingkatMekanisasi || "", // dataD9
-
-        teknologiPengolahanRawSugar: response.teknologiPengolahanRawSugar || "", // dataD10
+        produktivitasTebu: response.produktivitasTebu || "",
+        rendemenTebu: response.rendemenTebu || "",
+        mbs: response.mbs || "",
+        overallRecovery: response.overallRecovery || "",
+        kis: response.kis || "",
+        kes: response.kes || "",
+        ratoonTebu: response.ratoonTebu || "",
+        luasBL: response.luasBL || "",
+        luasPST41: response.luasPST41 || "",
+        luasPS864: response.luasPS864 || "",
+        luasTotal: response.luasTotal || "",
+        tingkatMekanisasi: response.tingkatMekanisasi || "",
+        teknologiPengolahanRawSugar: response.teknologiPengolahanRawSugar || "",
       });
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-  };
+  }, [sesiId]); // <-- dependency aman
 
   useEffect(() => {
     fetchSDAMData();
-  }, [sesiId]);
+  }, [fetchSDAMData]);
 
   const dataD1 = [
     {

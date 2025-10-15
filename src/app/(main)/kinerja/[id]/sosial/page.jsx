@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+
 import { fetchData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
 import KinerjaTable from "@/components/table/KinerjaTable"; // Import the KinerjaTable component
@@ -113,7 +114,7 @@ export default function DataSosial() {
     }
   };
 
-  const fetchSosialData = async () => {
+  const fetchSosialData = useCallback(async () => {
     try {
       const response = await fetchData(`/api/masukkan/sosial/${sesiId}`, {
         method: "GET",
@@ -157,11 +158,11 @@ export default function DataSosial() {
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-  };
+  }, [sesiId]); // ✅ tambahkan dependency di sini
 
   useEffect(() => {
     fetchSosialData();
-  }, [sesiId]);
+  }, [fetchSosialData]);
 
   if (loading) {
     return (

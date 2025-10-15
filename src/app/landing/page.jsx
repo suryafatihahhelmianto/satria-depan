@@ -42,7 +42,7 @@ export default function LandingPage() {
       setTimeout(() => {
         setShowThumb(true);
         setTimeout(() => setShowThumb(false), 1200); // jempol muncul bentar
-      }, 1500); // muncul di akhir shine
+      }, 1500); // muncul di akhir shinee
     }
   }, [shine]);
 
@@ -157,68 +157,6 @@ export default function LandingPage() {
                 </span>
               </p>
             </div>
-
-            <style jsx>{`
-              .lux-shine {
-                position: absolute;
-                top: 0;
-                left: -75%;
-                width: 50%;
-                height: 100%;
-                background: linear-gradient(
-                  120deg,
-                  rgba(255, 255, 255, 0) 0%,
-                  rgba(255, 255, 255, 0.4) 30%,
-                  rgba(255, 255, 255, 0.8) 50%,
-                  rgba(255, 255, 255, 0.4) 70%,
-                  rgba(255, 255, 255, 0) 100%
-                );
-                transform: skewX(-25deg);
-                filter: blur(2px);
-                opacity: 0;
-                pointer-events: none;
-              }
-
-              .shine-on .lux-shine {
-                animation: luxShineMove 1.8s cubic-bezier(0.45, 0, 0.55, 1)
-                  forwards;
-              }
-
-              @keyframes luxShineMove {
-                0% {
-                  left: -75%;
-                  opacity: 0;
-                }
-                10% {
-                  opacity: 1;
-                }
-                50% {
-                  left: 50%;
-                  opacity: 1;
-                }
-                90% {
-                  opacity: 1;
-                }
-                100% {
-                  left: 130%;
-                  opacity: 0;
-                }
-              }
-
-              /* reduce stroke on smaller screens for readability */
-              @media (max-width: 768px) {
-                h1 {
-                  -webkit-text-stroke: 3px #1e5c2a;
-                }
-              }
-
-              /* nudge thumb star to avoid clipping on very small widths */
-              @media (max-width: 360px) {
-                .thumb-star {
-                  left: 94%;
-                }
-              }
-            `}</style>
           </>
           {/*Meng Futer*/}
           <div className="md:absolute md:bottom-0 md:left-1/2 md:-translate-x-1/2 bg-green-600 text-white text-xs sm:text-sm text-center py-2 px-4 sm:px-6 rounded-t-none md:rounded-t-full shadow-md mt-6 md:mt-0 whitespace-nowrap max-w-full md:w-auto">

@@ -4,7 +4,7 @@ import { fetchData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 
 export default function OpsiDimensi() {
   const [periode, setPeriode] = useState(0);
@@ -21,7 +21,10 @@ export default function OpsiDimensi() {
       : "bg-gray-200 text-gray-700 hover:bg-gray-300 hover:text-green-800 font-medium shadow-sm";
   };
 
-  const fetchHeaderData = async () => {
+  // ✅ Wrap fetchHeaderData with useCallback to stabilize reference
+  const fetchHeaderData = useCallback(async () => {
+    if (!id) return; // avoid fetching when id is not ready
+
     try {
       const response = await fetchData(`/api/sesi/header/${id}`, {
         method: "GET",
@@ -36,11 +39,11 @@ export default function OpsiDimensi() {
     } catch (error) {
       console.error("Error fetching header data:", error);
     }
-  };
+  }, [id]); // ✅ depend on id only
 
   useEffect(() => {
     fetchHeaderData();
-  }, []);
+  }, [fetchHeaderData]); // ✅ clean dependency
 
   return (
     <div>
@@ -52,33 +55,33 @@ export default function OpsiDimensi() {
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 md:gap-8 text-center">
         <Link
-          href={`/kinerja/${id ? id : ""}/sumber-daya`} // Add ID to URL if present
+          href={`/kinerja/${id || ""}/sumber-daya`}
           className={`${getButtonStyle(
-            `/kinerja/${id ? id : ""}/sumber-daya`
+            `/kinerja/${id || ""}/sumber-daya`
           )} p-3 rounded-lg transition-all duration-200`}
         >
           Sumber Daya
         </Link>
         <Link
-          href={`/kinerja/${id ? id : ""}/ekonomi`} // Add ID to URL if present
+          href={`/kinerja/${id || ""}/ekonomi`}
           className={`${getButtonStyle(
-            `/kinerja/${id ? id : ""}/ekonomi`
+            `/kinerja/${id || ""}/ekonomi`
           )} p-3 rounded-lg transition-all duration-200`}
         >
           Ekonomi
         </Link>
         <Link
-          href={`/kinerja/${id ? id : ""}/lingkungan`} // Add ID to URL if present
+          href={`/kinerja/${id || ""}/lingkungan`}
           className={`${getButtonStyle(
-            `/kinerja/${id ? id : ""}/lingkungan`
+            `/kinerja/${id || ""}/lingkungan`
           )} p-3 rounded-lg transition-all duration-200`}
         >
           Lingkungan
         </Link>
         <Link
-          href={`/kinerja/${id ? id : ""}/sosial`} // Add ID to URL if present
+          href={`/kinerja/${id || ""}/sosial`}
           className={`${getButtonStyle(
-            `/kinerja/${id ? id : ""}/sosial`
+            `/kinerja/${id || ""}/sosial`
           )} p-3 rounded-lg transition-all duration-200`}
         >
           Sosial

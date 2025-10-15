@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
+
 import { fetchData } from "../../../tools/api";
 import {
   AiFillDelete,
@@ -48,35 +49,37 @@ export default function RendemenPage() {
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
-    fetchSessions(page); // Panggil ulang data dengan halaman baru
+    fetchSessions(page, itemsPerPage);
   };
 
   // Fungsi untuk mem-fetch data dari API
-  const fetchSessions = async (page = currentPage, pageSize = itemsPerPage) => {
-    try {
-      setLoading(true);
-      const token = getCookie("token");
+  const fetchSessions = useCallback(
+    async (page = currentPage, pageSize = itemsPerPage) => {
+      try {
+        setLoading(true);
+        const token = getCookie("token");
 
-      // Tambahkan parameter page dan pageSize
-      const response = await fetchData(
-        `/api/rendemen/list?page=${page}&pageSize=${pageSize}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+        const response = await fetchData(
+          `/api/rendemen/list?page=${page}&pageSize=${pageSize}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-      const { data, pagination } = await response; // Sesuaikan dengan respons API
+        const { data, pagination } = await response;
 
-      setSessions(data); // Simpan data dari API ke state sessions
-      setTotalPages(pagination.totalPages); // Simpan total halaman dari API
-      setLoading(false);
-    } catch (err) {
-      setError(err.message);
-      setLoading(false);
-    }
-  };
+        setSessions(data);
+        setTotalPages(pagination.totalPages);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    },
+    [currentPage, itemsPerPage] // ✅ tambahkan dependensi agar stabil
+  );
 
   const fetchCSVData = async () => {
     try {
@@ -227,8 +230,8 @@ export default function RendemenPage() {
   };
 
   useEffect(() => {
-    fetchSessions(1, itemsPerPage); // Panggil fungsi fetchSessions saat komponen di-mount
-  }, []);
+    fetchSessions(1, itemsPerPage);
+  }, [fetchSessions, itemsPerPage]);
 
   // Render tampilan
   return (

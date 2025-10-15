@@ -543,8 +543,8 @@ export default function PenggunaPage() {
                   formData.nomorHp.length > 13 ||
                   formData.nomorHp.length < 8) && (
                   <p className="text-red-500 text-sm mt-1">
-                    Nomor HP harus dimulai dengan "0", minimal 10 dan maksimal
-                    13 digit angka.
+                    Nomor HP harus dimulai dengan &quot;0&quot;, minimal 10 dan
+                    maksimal 13 digit angka.
                   </p>
                 )}
               </div>

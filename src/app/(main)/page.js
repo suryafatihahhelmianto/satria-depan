@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+
 import { useRouter } from "next/navigation";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import DatePicker from "react-datepicker";
@@ -56,36 +57,7 @@ export default function HomePage() {
     setSelectedYear(year);
   };
 
-  const fetchYears = async () => {
-    if (!selectedFactory.id) return;
-
-    try {
-      const response = await fetchData(
-        `/api/sesi/tahun?pabrikId=${selectedFactory.id}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${getCookie("token")}`,
-          },
-        }
-      );
-
-      const years = response.data;
-      setAvailableYears(years);
-
-      if (years.length > 0) {
-        setSelectedYear(years[0]);
-      } else {
-        setSelectedYear(null);
-      }
-    } catch (error) {
-      console.error("Error fetching years:", error);
-      setAvailableYears([]);
-      setSelectedYear(null);
-    }
-  };
-
-  const fetchFactories = async () => {
+  const fetchFactories = useCallback(async () => {
     try {
       const response = await fetchData("/api/pabrik", {
         method: "GET",
@@ -93,60 +65,69 @@ export default function HomePage() {
       });
 
       if (response.length > 0) {
-        setSelectedFactory(response[0]); // Set the first factory as default
-        fetchDashboardData(response[0].id); // Fetch dashboard data for the first factory
+        setSelectedFactory(response[0]);
+        fetchDashboardData(response[0].id);
       }
 
       setFactories(response);
     } catch (error) {
       console.error("Error fetching factories:", error);
     }
-  };
+  }, [fetchDashboardData]); // ✅ tambahin dependency
 
-  const fetchDashboardData = async (pabrikId) => {
+  const fetchYears = useCallback(async () => {
+    if (!selectedFactory.id) return;
+
     try {
-      setLoading(true);
       const response = await fetchData(
-        `/api/dashboard/${pabrikId}?tahun=${selectedYear}&startDate=${selectedDate.toISOString()}&endDate=${selectedDate.toISOString()}`,
+        `/api/sesi/tahun?pabrikId=${selectedFactory.id}`,
         {
           method: "GET",
           headers: { Authorization: `Bearer ${getCookie("token")}` },
         }
       );
 
-      const updatedInformasi = response.informasi.map((item) => {
-        let updatedRole = item.role;
-
-        // Ganti 'QUALITYCONTROL' dengan 'QUALITY CONTROL'
-        if (updatedRole === "QUALITYCONTROL") {
-          updatedRole = "QUALITY CONTROL";
-        }
-
-        // Ganti 'KEPALAPABRIK' dengan 'GENERAL MANAGER / KEPALA PABRIK'
-        if (updatedRole === "KEPALAPABRIK") {
-          updatedRole = "GENERAL MANAGER / KEPALA PABRIK";
-        }
-
-        if (updatedRole === "SDM") {
-          updatedRole = "SDM dan UMUM";
-        }
-
-        // Kembalikan objek dengan role yang sudah dimodifikasi
-        return { ...item, role: updatedRole };
-      });
-
-      response.informasi = updatedInformasi;
-
-      setDashboardData(response);
-      // setNilaiKinerjaKeberlanjutan(response.nilaiKinerjaKeberlanjutan[0]);
-      // setRataRataRendemen(response.rataRataRendemen || 0);
-      // setInformasi(response.informasi || []);
-      setLoading(false);
+      const years = response.data;
+      setAvailableYears(years);
+      setSelectedYear(years.length > 0 ? years[0] : null);
     } catch (error) {
-      console.error("Error fetching dashboard data:", error);
-      setLoading(false);
+      console.error("Error fetching years:", error);
+      setAvailableYears([]);
+      setSelectedYear(null);
     }
-  };
+  }, [selectedFactory.id]);
+
+  const fetchDashboardData = useCallback(
+    async (pabrikId) => {
+      try {
+        setLoading(true);
+        const response = await fetchData(
+          `/api/dashboard/${pabrikId}?tahun=${selectedYear}&startDate=${selectedDate.toISOString()}&endDate=${selectedDate.toISOString()}`,
+          {
+            method: "GET",
+            headers: { Authorization: `Bearer ${getCookie("token")}` },
+          }
+        );
+
+        const updatedInformasi = response.informasi.map((item) => {
+          let updatedRole = item.role;
+          if (updatedRole === "QUALITYCONTROL") updatedRole = "QUALITY CONTROL";
+          if (updatedRole === "KEPALAPABRIK")
+            updatedRole = "GENERAL MANAGER / KEPALA PABRIK";
+          if (updatedRole === "SDM") updatedRole = "SDM dan UMUM";
+          return { ...item, role: updatedRole };
+        });
+
+        response.informasi = updatedInformasi;
+        setDashboardData(response);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+        setLoading(false);
+      }
+    },
+    [selectedYear, selectedDate]
+  );
 
   const fetchSesiPengisian = async () => {
     try {
@@ -177,17 +158,17 @@ export default function HomePage() {
 
   useEffect(() => {
     fetchFactories();
-  }, []);
+  }, [fetchFactories]);
 
   useEffect(() => {
     fetchYears();
-  }, [selectedFactory]);
+  }, [fetchYears]);
 
   useEffect(() => {
     if (selectedFactory.id && selectedYear !== null) {
       fetchDashboardData(selectedFactory.id);
     }
-  }, [selectedFactory.id, selectedYear, selectedDate]);
+  }, [selectedFactory.id, selectedYear, selectedDate, fetchDashboardData]);
 
   if (loading) {
     return (
