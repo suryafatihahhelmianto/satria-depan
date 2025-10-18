@@ -16,6 +16,7 @@ import {
   AiOutlinePhone,
   AiOutlineTool,
 } from "react-icons/ai";
+import { FaUserTie, FaIndustry } from "react-icons/fa";
 
 export default function PenggunaPage() {
   const [loading, setLoading] = useState(true);
@@ -387,6 +388,7 @@ export default function PenggunaPage() {
                 <input
                   type="text"
                   name="username"
+                  autoComplete="new-username"
                   value={formData.username}
                   onChange={handleInputChange}
                   placeholder="Username"
@@ -406,6 +408,7 @@ export default function PenggunaPage() {
                   <input
                     type={showPassword ? "text" : "password"}
                     name="password"
+                    autoComplete="new-password"
                     value={formData.password}
                     onChange={handleInputChange}
                     placeholder={
@@ -457,7 +460,7 @@ export default function PenggunaPage() {
                   htmlFor="jabatan"
                   className="flex items-center gap-2 font-semibold"
                 >
-                  <AiOutlineTool className="text-green-700" /> Jabatan
+                  <FaUserTie className="text-green-700" /> Jabatan
                 </label>
                 <select
                   className="w-full px-4 py-2 rounded-lg bg-gray-200 focus:outline-none"
@@ -490,7 +493,7 @@ export default function PenggunaPage() {
                       htmlFor="pabrikGulaId"
                       className="flex items-center gap-2 font-semibold"
                     >
-                      <AiOutlineTool className="text-green-700" /> Pabrik
+                      <FaIndustry className="text-green-700" /> Pabrik
                     </label>
                     <select
                       name="pabrikGulaId"
@@ -541,7 +544,7 @@ export default function PenggunaPage() {
                 </div>
                 {(!/^0[0-9]*$/.test(formData.nomorHp) ||
                   formData.nomorHp.length > 13 ||
-                  formData.nomorHp.length < 8) && (
+                  formData.nomorHp.length < 10) && (
                   <p className="text-red-500 text-sm mt-1">
                     Nomor HP harus dimulai dengan &quot;0&quot;, minimal 10 dan
                     maksimal 13 digit angka.

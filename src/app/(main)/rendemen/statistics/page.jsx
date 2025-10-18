@@ -40,6 +40,7 @@ export default function RendemenStatisticsPage() {
   const COLORS = {
     "Tersana Baru": "#FF5733",
     Jatitujuh: "#33A1FF",
+    "Sindang Laut": "#28A745",
   };
 
   const handleMonthChange = (event) => {
