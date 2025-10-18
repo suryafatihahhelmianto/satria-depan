@@ -351,7 +351,10 @@ export default function HomePage() {
 
           <div className="flex flex-col sm:flex-row justify-around gap-5 w-full h-full">
             <div className="flex flex-col items-center justify-center mb-6 h-full">
-              <div className="flex flex-col items-center justify-center mb-6 h-full">
+              <div
+                className="relative group flex flex-col items-center cursor-pointer"
+                onClick={handleDetailRendemenClick}
+              >
                 {/* Tampilkan nilai rata-rata rendemen */}
                 <div className="text-3xl xl:text-5xl font-bold mb-4">
                   {formatNumberToIndonesian(rataRataRendemen) || 0}%
@@ -384,6 +387,9 @@ export default function HomePage() {
                     ? "Sedang"
                     : "Tinggi"}
                 </div>
+                <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 text-sm bg-black text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                  Lihat Detail
+                </span>
               </div>
             </div>
 
