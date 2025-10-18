@@ -9,7 +9,7 @@ export default function KinerjaTable({ title, rows, isAdmin, type, sesiId }) {
       {/* Table Title */}
       <h2 className="text-2xl font-bold text-gray-800 mb-4">{title}</h2>
 
-      <div className="overflow-x-auto mt-4">
+      <div className="overflow-visible mt-4">
         <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
           <thead className="bg-gradient-to-r from-green-500 to-green-600 text-white">
             <tr>
