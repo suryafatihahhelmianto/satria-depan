@@ -1,13 +1,33 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "../Navbar";
 import Sidebar from "../Sidebar";
+
+// 🔹 Helper function — bisa kamu taruh di file terpisah nanti
+function isMobile() {
+  if (typeof window === "undefined") return false; // aman buat Next.js SSR
+  return window.innerWidth < 768;
+}
 
 export default function AppLayout({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (isMobile()) {
+        setIsSidebarOpen(false); // auto close di mobile
+      } else {
+        setIsSidebarOpen(true); // auto open di desktop
+      }
+    };
+
+    handleResize(); // cek awal saat mount
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <div className="flex">

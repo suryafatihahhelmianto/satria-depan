@@ -442,7 +442,7 @@ export default function SumberDayaPage() {
     {
       label: "Tingkat Ratoon Tebu",
       inputType: "dropdown",
-      value: formData.tingkatMekanisasi,
+      value: formData.ratoonTebu,
       options: [
         { label: "PC", value: 0 },
         { label: "1", value: 1 },
@@ -454,7 +454,7 @@ export default function SumberDayaPage() {
       onSubmit: () => handleUpdate("ratoonTebu", formData.ratoonTebu),
       locked: lockedStatus["ratoonTebu"],
       fieldName: "ratoonTebu",
-      capt: "Jumlah keprasan tanaman tebu pada tahun diukur, ditulis sebagai angka keprasan ke- (1, 2, 3 dst), Angka yang diisikan adalah keprasan ke-berapa yang menghasilkan tanaman tebu terbanyak.",
+      capt: "Jumlah keprasan tanaman tebu pada tahun diukur. Angka yang diisikan adalah keprasan ke-berapa yang menghasilkan tanaman tebu terbanyak.",
     },
   ];
 
