@@ -3,7 +3,7 @@
 import { fetchData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { HiOutlineLightBulb } from "react-icons/hi";
 import {
   AiFillCheckCircle,
@@ -82,8 +82,17 @@ export default function TableInputRow({
   const [buttonLoading, setButtonLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [localLocked, setLocalLocked] = useState(locked);
-
   const router = useRouter();
+
+  useEffect(() => {
+    if (locked) {
+      setIsSubmitted(true);
+      setLocalLocked(true);
+    } else {
+      setIsSubmitted(false);
+      setLocalLocked(false);
+    }
+  }, [locked]);
 
   const resetState = async () => {
     try {
