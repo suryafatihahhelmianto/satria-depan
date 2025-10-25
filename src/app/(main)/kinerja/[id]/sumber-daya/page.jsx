@@ -524,7 +524,7 @@ export default function SumberDayaPage() {
 
   const dataD10 = [
     {
-      label: "Teknologi Pengolahan Raw Sugar",
+      label: "Ketersediaan Teknologi Pengolahan Raw Sugar",
       inputType: "dropdown",
       value: formData.teknologiPengolahanRawSugar,
       options: [
