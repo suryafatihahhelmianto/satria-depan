@@ -1,8 +1,7 @@
 # satria-depan
 
-Frontend aplikasi Satria — antarmuka modern, performa tinggi, dengan sentuhan estetik mewah dan gaya yang santai tapi profesional.
-
-Deskripsi singkat: proyek ini adalah frontend berbasis Next.js yang disusun modular untuk skalabilitas, pengembangan cepat, dan pengalaman pengguna premium.
+Frontend aplikasi Satria — antarmuka modern, performa tinggi, estetika mewah, dan gaya santai
+Proyek ini dibangun dengan Next.js dan Tailwind, disusun modular untuk skalabilitas dan pengembangan cepat.
 
 ## Teknologi inti
 
@@ -11,23 +10,27 @@ Deskripsi singkat: proyek ini adalah frontend berbasis Next.js yang disusun modu
 - PostCSS
 - Struktur kode modular di `src/`
 
+## Versi utama (sesuai package.json)
+
+- Node.js: rekomendasi LTS (18 atau 20)
+- Next.js: 14.2.13
+- React / React DOM: ^18.3.1
+- Tailwind CSS: ^3.4.1
+- postcss: ^8
+- sharp: ^0.33.5
+- framer-motion, axios, lucide-react, react-icons, recharts, dll (lihat package.json untuk lengkapnya)
+
 ## Prasyarat
 
-- Node.js (LTS) dan npm atau yarn
-- Variabel environment di `.env.local` [Private]
+- Node.js (LTS) dan npm / yarn
+- Git
+- File environment lokal: `.env.local` (jangan commit)
 
-## Instalasi
+## Instalasi singkat
 
-1. Clone repo:
-
-```sh
+```ps1
 git clone <repo-url>
 cd satria
-```
-
-2. Pasang dependensi:
-
-```sh
 npm install
 # atau
 yarn
@@ -35,21 +38,17 @@ yarn
 
 ## Mode Pengembangan
 
-Jalankan server development dengan hot-reload:
-
-```sh
+```ps1
 npm run dev
 # atau
 yarn dev
 ```
 
-Buka http://localhost:3000
+Akses: http://localhost:3000
 
-## Build & Production
+## Build & Production (lokal)
 
-Bangun dan jalankan aplikasi untuk production:
-
-```sh
+```ps1
 npm run build
 npm start
 # atau
@@ -57,46 +56,115 @@ yarn build
 yarn start
 ```
 
-## Skrip Penting
+Jika build OOM di server rendah memori:
 
-- dev: development server
-- build: compile ke production
-- start: jalankan build di Node
-- lint / format: cek style (jika tersedia)
-- test: jalankan test suite (jika tersedia)
+```ps1
+$env:NODE_OPTIONS="--max_old_space_size=4096"; npm run build
+```
 
-Periksa `package.json` untuk nama skrip yang akurat.
+## Deploy — VPS Ubuntu dengan PM2 (ringkas)
 
-## Workflow & Kontribusi
+Langkah singkat untuk production di VPS Ubuntu menggunakan PM2:
 
-1. Buat branch fitur: `git checkout -b feat/<nama-fitur>`
-2. Kembangkan fitur di `src/`
-3. Jalankan `npm run dev` dan pastikan lint & test lulus
-4. Commit yang jelas & buat PR ke `main`/`master`
-5. Code review → rebase bila perlu → merge
+1. Siapkan server (Ubuntu), pasang Node via nvm:
 
-Praktik terbaik: commit kecil & atomic, gunakan konvensi branch (feat/, fix/, chore/), dokumentasikan perubahan publik di README.
+```bash
+# contoh di server
+curl -fsSL https://fnm.vercel.app/install | bash   # atau gunakan nvm
+source ~/.bashrc
+fnm install 20
+fnm use 20
+```
 
-## Struktur Proyek
+2. Clone repo dan install:
 
-- `src/` – sumber kode utama
-- `public/` – aset statis
-- `next.config.mjs` – konfigurasi Next
-- `tailwind.config.js`, `postcss.config.mjs` – styling
-- `.env.local` – secrets lokal (tidak di-commit)
+```bash
+git clone <repo-url>
+cd satria
+npm install
+```
 
-## Debug & Maintenance
+3. Set environment variables (contoh):
 
-- Hapus cache Next bila perlu: hapus folder `.next/`
-- Periksa log build & runtime di terminal
-- Untuk masalah aset: cek `public/` dan konfigurasi basePath di `next.config.mjs`
+```bash
+cat > .env.production <<EOF
+NEXT_PUBLIC_API_URL=https://api.example.com
+# tambah variabel lain
+EOF
+```
 
-## Deploy
+4. Build:
 
-Direkomendasikan: Vercel (native Next.js) atau container Docker + process manager (PM2). Pastikan environment variables diatur pada platform deploy.
+```bash
+npm run build
+```
 
-## Kontak & Support
+5. Jalankan dengan PM2:
 
-Butuh perubahan gaya dokumentasi, penambahan CI/CD, atau pengaturan deploy? Buka issue atau PR — kita rapikan bareng.
+- Opsi singkat:
 
-<!-- end -->
+```bash
+pm2 start npm --name "satria" -- start
+```
+
+- Rekomendasi: gunakan ecosystem file (untuk env & reload zero-downtime)
+
+Contoh ecosystem.config.js:
+
+```js
+module.exports = {
+  apps: [
+    {
+      name: "satria",
+      script: "npm",
+      args: "start",
+      env_production: {
+        NODE_ENV: "production",
+        NEXT_PUBLIC_API_URL: "https://api.example.com",
+      },
+      instances: "max",
+      exec_mode: "cluster",
+    },
+  ],
+};
+```
+
+Lalu:
+
+```bash
+pm2 start ecosystem.config.js --env production
+pm2 save
+pm2 startup
+```
+
+6. Reverse proxy (opsional, disarankan): pasang Nginx untuk melayani TLS & proxy ke port PM2 (default 3000). Contoh server block ringkas di /etc/nginx/sites-available/satria.
+
+7. Monitoring & deploy ulang:
+
+```bash
+# lihat logs
+pm2 logs satria
+
+# deploy ulang setelah update
+git pull
+npm install
+npm run build
+pm2 restart satria
+```
+
+## Troubleshooting singkat (kasus umum)
+
+- Build gagal: cek versi Node, jalankan dengan NODE_OPTIONS lebih besar.
+- sharp gagal build: pasang build-essential / libvips atau gunakan binary prebuilt.
+- Port 3000 terpakai: set PORT env sebelum start (`PORT=4000 pm2 start npm --name "satria" -- start`).
+- Permision errors di Ubuntu: pastikan user punya akses ke direktori project dan jalankan dengan user non-root; gunakan sudo hanya saat perlu instal paket sistem.
+
+## Struktur penting
+
+- src/ — kode sumber
+- public/ — aset statis
+- next.config.mjs — konfigurasi Next
+- tailwind.config.js, postcss.config.mjs — styling
+- .env.local / .env.production — environment variables
+
+<!-- EOF -->
