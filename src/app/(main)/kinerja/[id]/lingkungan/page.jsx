@@ -10,6 +10,7 @@ import Skeleton from "@/components/common/Skeleton";
 import { CheckCircle } from "lucide-react";
 import { useUser } from "@/context/UserContext";
 import { FaLeaf } from "react-icons/fa";
+import { FaExclamationTriangle } from "react-icons/fa";
 
 function renderKinerjaSection({
   role,
@@ -133,19 +134,18 @@ export default function LingkunganPage() {
   };
 
   const handleUpdate = async (field, value) => {
-    if (lockedStatus[field]) {
-      console.log(`Kolom ${field} sudah terkunci, tidak bisa diupdate.`);
-      return;
-    }
-
     try {
+      if (lockedStatus[field]) {
+        console.log(`Kolom ${field} sudah terkunci, tidak bisa diupdate.`);
+        return;
+      }
+
       const data = { sesiId };
 
       // Periksa apakah value adalah string kosong atau tidak valid
       if (value === "" || value === null || value === undefined) {
         data[field] = 0; // Set default value 0 untuk field kosong
       } else {
-        // Pastikan 'value' adalah string sebelum menggunakan .replace()
         let numericValue = value;
         if (typeof value === "string") {
           numericValue = parseFloat(value.replace(",", ".")); // Ganti koma menjadi titik jika pengguna memasukkan koma
@@ -301,7 +301,7 @@ export default function LingkunganPage() {
         onChange={(e) => handleInputChange(field, e.target.value)}
         onBlur={() => handleUpdate(field, formData[field])}
         disabled={lockedStatus[field]} // Disable input jika statusnya locked
-        className="border rounded-md p-2 mr-2 w-full"
+        className="w-full p-2 mr-2 border rounded-md"
       />
       {lockedStatus[field] && (
         <CheckCircle className="text-green-500" title="Kolom terkunci" />
@@ -1096,9 +1096,9 @@ export default function LingkunganPage() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-100 mb-24">
+    <div className="min-h-screen mb-24 bg-gray-100">
       {!userCanFill ? (
-        <div className="bg-gray-100 border border-dashed border-gray-300 text-gray-600 text-center p-6 rounded-2xl my-8 flex flex-col items-center gap-2">
+        <div className="flex flex-col items-center gap-2 p-6 my-8 text-center text-gray-600 bg-gray-100 border border-gray-300 border-dashed rounded-2xl">
           <FaLeaf className="text-3xl text-green-600" />
           <p>
             Anda tidak perlu mengisi bagian <b>LINGKUNGAN</b>
@@ -1106,6 +1106,14 @@ export default function LingkunganPage() {
         </div>
       ) : (
         <>
+          <div className="flex flex-col items-center gap-2 p-6 my-8 text-center bg-gray-300 rounded-2xl">
+            <FaExclamationTriangle className="text-3xl text-yellow-400" />
+            <p>
+              Tanda <b>titik (.)</b> atau <b>koma (,)</b> dapat digunakan
+              sebagai pemisah angka desimal, sedangkan untuk angka ribuan
+              <b> tidak ada</b> tanda pemisah apapun.
+            </p>
+          </div>
           {renderKinerjaSection({
             role,
             allowedRoles: ["ADMIN", "QUALITYCONTROL"],
