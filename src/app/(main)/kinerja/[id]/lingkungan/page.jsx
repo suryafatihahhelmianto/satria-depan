@@ -315,7 +315,7 @@ export default function LingkunganPage() {
 
     {
       label: "Pengukuran 1",
-      inputType: "number",
+      inputType: "text",
       value: formData.amoniaDesaA1,
       onChange: (e) => handleInputChange("amoniaDesaA1", e.target.value),
       onSubmit: () => handleUpdate("amoniaDesaA1", formData.amoniaDesaA1),
@@ -325,7 +325,7 @@ export default function LingkunganPage() {
     },
     {
       label: "Pengukuran 2",
-      inputType: "number",
+      inputType: "text",
       value: formData.amoniaDesaA2,
       onChange: (e) => handleInputChange("amoniaDesaA2", e.target.value),
       onSubmit: () => handleUpdate("amoniaDesaA2", formData.amoniaDesaA2),
@@ -336,7 +336,7 @@ export default function LingkunganPage() {
     { isSubtitle: true, label: "Desa 2" },
     {
       label: "Pengukuran 1",
-      inputType: "number",
+      inputType: "text",
       value: formData.amoniaDesaB1,
       onChange: (e) => handleInputChange("amoniaDesaB1", e.target.value),
       onSubmit: () => handleUpdate("amoniaDesaB1", formData.amoniaDesaB1),
@@ -346,7 +346,7 @@ export default function LingkunganPage() {
     },
     {
       label: "Pengukuran 2",
-      inputType: "number",
+      inputType: "text",
       value: formData.amoniaDesaB2,
       onChange: (e) => handleInputChange("amoniaDesaB2", e.target.value),
       onSubmit: () => handleUpdate("amoniaDesaB2", formData.amoniaDesaB2),
@@ -358,7 +358,7 @@ export default function LingkunganPage() {
     { isSubtitle: true, label: "Desa 1" },
     {
       label: "Pengukuran 1",
-      inputType: "number",
+      inputType: "text",
       value: formData.sulfidaDesaA1,
       onChange: (e) => handleInputChange("sulfidaDesaA1", e.target.value),
       onSubmit: () => handleUpdate("sulfidaDesaA1", formData.sulfidaDesaA1),
@@ -368,7 +368,7 @@ export default function LingkunganPage() {
     },
     {
       label: "Pengukuran 2",
-      inputType: "number",
+      inputType: "text",
       value: formData.sulfidaDesaA2,
       onChange: (e) => handleInputChange("sulfidaDesaA2", e.target.value),
       onSubmit: () => handleUpdate("sulfidaDesaA2", formData.sulfidaDesaA2),
@@ -379,7 +379,7 @@ export default function LingkunganPage() {
     { isSubtitle: true, label: "Desa 2" },
     {
       label: "Pengukuran 1",
-      inputType: "number",
+      inputType: "text",
       value: formData.sulfidaDesaB1,
       onChange: (e) => handleInputChange("sulfidaDesaB1", e.target.value),
       onSubmit: () => handleUpdate("sulfidaDesaB1", formData.sulfidaDesaB1),
@@ -389,7 +389,7 @@ export default function LingkunganPage() {
     },
     {
       label: "Pengukuran 2",
-      inputType: "number",
+      inputType: "text",
       value: formData.sulfidaDesaB2,
       onChange: (e) => handleInputChange("sulfidaDesaB2", e.target.value),
       onSubmit: () => handleUpdate("sulfidaDesaB2", formData.sulfidaDesaB2),
@@ -408,7 +408,7 @@ export default function LingkunganPage() {
 
     {
       label: "Pengukuran 1",
-      inputType: "number",
+      inputType: "text",
       value: formData.debuDesaA1,
       onChange: (e) => handleInputChange("debuDesaA1", e.target.value),
       onSubmit: () => handleUpdate("debuDesaA1", formData.debuDesaA1),
@@ -418,7 +418,7 @@ export default function LingkunganPage() {
     },
     {
       label: "Pengukuran 2",
-      inputType: "number",
+      inputType: "text",
       value: formData.debuDesaA2,
       onChange: (e) => handleInputChange("debuDesaA2", e.target.value),
       onSubmit: () => handleUpdate("debuDesaA2", formData.debuDesaA2),
@@ -429,7 +429,7 @@ export default function LingkunganPage() {
     { isSubtitle: true, label: "Desa 2" },
     {
       label: "Pengukuran 1",
-      inputType: "number",
+      inputType: "text",
       value: formData.debuDesaB1,
       onChange: (e) => handleInputChange("debuDesaB1", e.target.value),
       onSubmit: () => handleUpdate("debuDesaB1", formData.debuDesaB1),
@@ -439,7 +439,7 @@ export default function LingkunganPage() {
     },
     {
       label: "Pengukuran 2",
-      inputType: "number",
+      inputType: "text",
       value: formData.debuDesaB2,
       onChange: (e) => handleInputChange("debuDesaB2", e.target.value),
       onSubmit: () => handleUpdate("debuDesaB2", formData.debuDesaB2),
@@ -452,7 +452,7 @@ export default function LingkunganPage() {
   const dataL3 = [
     {
       label: "Konsumsi Listrik (Kwh/Ton Tebu)",
-      inputType: "number",
+      inputType: "text",
       value: formData.konsumsiListrik,
       onChange: (e) => handleInputChange("konsumsiListrik", e.target.value),
       onSubmit: () => handleUpdate("konsumsiListrik", formData.konsumsiListrik),
@@ -462,7 +462,7 @@ export default function LingkunganPage() {
     },
     {
       label: "Jumlah Tebu (Ton)",
-      inputType: "number",
+      inputType: "text",
       value: formData.jumlahTonTebu,
       onChange: (e) => handleInputChange("jumlahTonTebu", e.target.value),
       onSubmit: () => handleUpdate("jumlahTonTebu", formData.jumlahTonTebu),
@@ -472,7 +472,7 @@ export default function LingkunganPage() {
     },
     {
       label: "SHS (%Tebu)",
-      inputType: "number",
+      inputType: "text",
       value: formData.shs,
       onChange: (e) => handleInputChange("shs", e.target.value),
       onSubmit: () => handleUpdate("shs", formData.shs),
@@ -484,7 +484,7 @@ export default function LingkunganPage() {
   const dataL3instalasi = [
     {
       label: "Konsumsi Listrik (Kwh/Ton Tebu)",
-      inputType: "number",
+      inputType: "text",
       value: formData.konsumsiListrik,
       onChange: (e) => handleInputChange("konsumsiListrik", e.target.value),
       onSubmit: () => handleUpdate("konsumsiListrik", formData.konsumsiListrik),
@@ -494,7 +494,7 @@ export default function LingkunganPage() {
     },
     {
       label: "Jumlah Tebu (Ton)",
-      inputType: "number",
+      inputType: "text",
       value: formData.jumlahTonTebu,
       onChange: (e) => handleInputChange("jumlahTonTebu", e.target.value),
       onSubmit: () => handleUpdate("jumlahTonTebu", formData.jumlahTonTebu),
@@ -507,7 +507,7 @@ export default function LingkunganPage() {
   const dataL3fabrikasi = [
     {
       label: "SHS (%Tebu)",
-      inputType: "number",
+      inputType: "text",
       value: formData.shs,
       onChange: (e) => handleInputChange("shs", e.target.value),
       onSubmit: () => handleUpdate("shs", formData.shs),
@@ -521,7 +521,7 @@ export default function LingkunganPage() {
     { isSubtitle: true, label: "Kebisingan Ruang Produksi (dB)" },
     {
       label: "Pengukuran 1",
-      inputType: "number",
+      inputType: "text",
       value: formData.bisingProduksi1,
       onChange: (e) => handleInputChange("bisingProduksi1", e.target.value),
       onSubmit: () => handleUpdate("bisingProduksi1", formData.bisingProduksi1),
@@ -531,7 +531,7 @@ export default function LingkunganPage() {
     },
     {
       label: "Pengukuran 2",
-      inputType: "number",
+      inputType: "text",
       value: formData.bisingProduksi2,
       onChange: (e) => handleInputChange("bisingProduksi2", e.target.value),
       onSubmit: () => handleUpdate("bisingProduksi2", formData.bisingProduksi2),
@@ -543,7 +543,7 @@ export default function LingkunganPage() {
     { isSubtitle: true, label: "Desa 1" },
     {
       label: "Pengukuran 1",
-      inputType: "number",
+      inputType: "text",
       value: formData.bisingDesaA1,
       onChange: (e) => handleInputChange("bisingDesaA1", e.target.value),
       onSubmit: () => handleUpdate("bisingDesaA1", formData.bisingDesaA1),
@@ -553,7 +553,7 @@ export default function LingkunganPage() {
     },
     {
       label: "Pengukuran 2",
-      inputType: "number",
+      inputType: "text",
       value: formData.bisingDesaA2,
       onChange: (e) => handleInputChange("bisingDesaA2", e.target.value),
       onSubmit: () => handleUpdate("bisingDesaA2", formData.bisingDesaA2),
@@ -564,7 +564,7 @@ export default function LingkunganPage() {
     { isSubtitle: true, label: "Desa 2" },
     {
       label: "Pengukuran 1",
-      inputType: "number",
+      inputType: "text",
       value: formData.bisingDesaB1,
       onChange: (e) => handleInputChange("bisingDesaB1", e.target.value),
       onSubmit: () => handleUpdate("bisingDesaB1", formData.bisingDesaB1),
@@ -574,7 +574,7 @@ export default function LingkunganPage() {
     },
     {
       label: "Pengukuran 2",
-      inputType: "number",
+      inputType: "text",
       value: formData.bisingDesaB2,
       onChange: (e) => handleInputChange("bisingDesaB2", e.target.value),
       onSubmit: () => handleUpdate("bisingDesaB2", formData.bisingDesaB2),
@@ -591,7 +591,7 @@ export default function LingkunganPage() {
     },
     {
       label: "Total Residu Terlarut (mg/L)",
-      inputType: "number",
+      inputType: "text",
       value: formData.totalResiduJuni,
       onChange: (e) => handleInputChange("totalResiduJuni", e.target.value),
       onSubmit: () => handleUpdate("totalResiduJuni", formData.totalResiduJuni),
@@ -601,7 +601,7 @@ export default function LingkunganPage() {
     },
     {
       label: "BOD5 (mg/L)",
-      inputType: "number",
+      inputType: "text",
       value: formData.bodJuni,
       onChange: (e) => handleInputChange("bodJuni", e.target.value),
       onSubmit: () => handleUpdate("bodJuni", formData.bodJuni),
@@ -611,7 +611,7 @@ export default function LingkunganPage() {
     },
     {
       label: "COD (mg/L)",
-      inputType: "number",
+      inputType: "text",
       value: formData.codJuni,
       onChange: (e) => handleInputChange("codJuni", e.target.value),
       onSubmit: () => handleUpdate("codJuni", formData.codJuni),
@@ -621,7 +621,7 @@ export default function LingkunganPage() {
     },
     {
       label: "Sulfida (mg/L)",
-      inputType: "number",
+      inputType: "text",
       value: formData.sulfidaJuni,
       onChange: (e) => handleInputChange("sulfidaJuni", e.target.value),
       onSubmit: () => handleUpdate("sulfidaJuni", formData.sulfidaJuni),
@@ -635,7 +635,7 @@ export default function LingkunganPage() {
     },
     {
       label: "Total Residu Terlarut (mg/L)",
-      inputType: "number",
+      inputType: "text",
       value: formData.totalResiduJuli,
       onChange: (e) => handleInputChange("totalResiduJuli", e.target.value),
       onSubmit: () => handleUpdate("totalResiduJuli", formData.totalResiduJuli),
@@ -645,7 +645,7 @@ export default function LingkunganPage() {
     },
     {
       label: "BOD5 (mg/L)",
-      inputType: "number",
+      inputType: "text",
       value: formData.bodJuli,
       onChange: (e) => handleInputChange("bodJuli", e.target.value),
       onSubmit: () => handleUpdate("bodJuli", formData.bodJuli),
@@ -655,7 +655,7 @@ export default function LingkunganPage() {
     },
     {
       label: "COD (mg/L)",
-      inputType: "number",
+      inputType: "text",
       value: formData.codJuli,
       onChange: (e) => handleInputChange("codJuli", e.target.value),
       onSubmit: () => handleUpdate("codJuli", formData.codJuli),
@@ -665,7 +665,7 @@ export default function LingkunganPage() {
     },
     {
       label: "Sulfida (mg/L)",
-      inputType: "number",
+      inputType: "text",
       value: formData.sulfidaJuli,
       onChange: (e) => handleInputChange("sulfidaJuli", e.target.value),
       onSubmit: () => handleUpdate("sulfidaJuli", formData.sulfidaJuli),
@@ -679,7 +679,7 @@ export default function LingkunganPage() {
     },
     {
       label: "Total Residu Terlarut (mg/L)",
-      inputType: "number",
+      inputType: "text",
       value: formData.totalResiduAgustus,
       onChange: (e) => handleInputChange("totalResiduAgustus", e.target.value),
       onSubmit: () =>
@@ -690,7 +690,7 @@ export default function LingkunganPage() {
     },
     {
       label: "BOD5 (mg/L)",
-      inputType: "number",
+      inputType: "text",
       value: formData.bodAgustus,
       onChange: (e) => handleInputChange("bodAgustus", e.target.value),
       onSubmit: () => handleUpdate("bodAgustus", formData.bodAgustus),
@@ -700,7 +700,7 @@ export default function LingkunganPage() {
     },
     {
       label: "COD (mg/L)",
-      inputType: "number",
+      inputType: "text",
       value: formData.codAgustus,
       onChange: (e) => handleInputChange("codAgustus", e.target.value),
       onSubmit: () => handleUpdate("codAgustus", formData.codAgustus),
@@ -710,7 +710,7 @@ export default function LingkunganPage() {
     },
     {
       label: "Sulfida (mg/L)",
-      inputType: "number",
+      inputType: "text",
       value: formData.sulfidaAgustus,
       onChange: (e) => handleInputChange("sulfidaAgustus", e.target.value),
       onSubmit: () => handleUpdate("sulfidaAgustus", formData.sulfidaAgustus),
@@ -724,7 +724,7 @@ export default function LingkunganPage() {
     },
     {
       label: "Total Residu Terlarut (mg/L)",
-      inputType: "number",
+      inputType: "text",
       value: formData.totalResiduSeptember,
       onChange: (e) =>
         handleInputChange("totalResiduSeptember", e.target.value),
@@ -736,7 +736,7 @@ export default function LingkunganPage() {
     },
     {
       label: "BOD5 (mg/L)",
-      inputType: "number",
+      inputType: "text",
       value: formData.bodSeptember,
       onChange: (e) => handleInputChange("bodSeptember", e.target.value),
       onSubmit: () => handleUpdate("bodSeptember", formData.bodSeptember),
@@ -746,7 +746,7 @@ export default function LingkunganPage() {
     },
     {
       label: "COD (mg/L)",
-      inputType: "number",
+      inputType: "text",
       value: formData.codSeptember,
       onChange: (e) => handleInputChange("codSeptember", e.target.value),
       onSubmit: () => handleUpdate("codSeptember", formData.codSeptember),
@@ -755,7 +755,7 @@ export default function LingkunganPage() {
     },
     {
       label: "Sulfida (mg/L)",
-      inputType: "number",
+      inputType: "text",
       value: formData.sulfidaSeptember,
       onChange: (e) => handleInputChange("sulfidaSeptember", e.target.value),
       onSubmit: () =>
@@ -776,7 +776,7 @@ export default function LingkunganPage() {
     },
     {
       label: "Pengukuran 1",
-      inputType: "number",
+      inputType: "text",
       value: formData.sulfurDesaA1,
       onChange: (e) => handleInputChange("sulfurDesaA1", e.target.value),
       onSubmit: () => handleUpdate("sulfurDesaA1", formData.sulfurDesaA1),
@@ -786,7 +786,7 @@ export default function LingkunganPage() {
     },
     {
       label: "Pengukuran 2",
-      inputType: "number",
+      inputType: "text",
       value: formData.sulfurDesaA2,
       onChange: (e) => handleInputChange("sulfurDesaA2", e.target.value),
       onSubmit: () => handleUpdate("sulfurDesaA2", formData.sulfurDesaA2),
@@ -801,7 +801,7 @@ export default function LingkunganPage() {
     },
     {
       label: "Pengukuran 1",
-      inputType: "number",
+      inputType: "text",
       value: formData.sulfurDesaB1,
       onChange: (e) => handleInputChange("sulfurDesaB1", e.target.value),
       onSubmit: () => handleUpdate("sulfurDesaB1", formData.sulfurDesaB1),
@@ -811,7 +811,7 @@ export default function LingkunganPage() {
     },
     {
       label: "Pengukuran 2",
-      inputType: "number",
+      inputType: "text",
       value: formData.sulfurDesaB2,
       onChange: (e) => handleInputChange("sulfurDesaB2", e.target.value),
       onSubmit: () => handleUpdate("sulfurDesaB2", formData.sulfurDesaB2),
@@ -829,7 +829,7 @@ export default function LingkunganPage() {
     },
     {
       label: "Pengukuran 1",
-      inputType: "number",
+      inputType: "text",
       value: formData.karbonDesaA1,
       onChange: (e) => handleInputChange("karbonDesaA1", e.target.value),
       onSubmit: () => handleUpdate("karbonDesaA1", formData.karbonDesaA1),
@@ -839,7 +839,7 @@ export default function LingkunganPage() {
     },
     {
       label: "Pengukuran 2",
-      inputType: "number",
+      inputType: "text",
       value: formData.karbonDesaA2,
       onChange: (e) => handleInputChange("karbonDesaA2", e.target.value),
       onSubmit: () => handleUpdate("karbonDesaA2", formData.karbonDesaA2),
@@ -853,7 +853,7 @@ export default function LingkunganPage() {
     },
     {
       label: "Pengukuran 1",
-      inputType: "number",
+      inputType: "text",
       value: formData.karbonDesaB1,
       onChange: (e) => handleInputChange("karbonDesaB1", e.target.value),
       onSubmit: () => handleUpdate("karbonDesaB1", formData.karbonDesaB1),
@@ -863,7 +863,7 @@ export default function LingkunganPage() {
     },
     {
       label: "Pengukuran 2",
-      inputType: "number",
+      inputType: "text",
       value: formData.karbonDesaB2,
       onChange: (e) => handleInputChange("karbonDesaB2", e.target.value),
       onSubmit: () => handleUpdate("karbonDesaB2", formData.karbonDesaB2),
@@ -882,7 +882,7 @@ export default function LingkunganPage() {
     },
     {
       label: "Pengukuran 1",
-      inputType: "number",
+      inputType: "text",
       value: formData.nitrogenDesaA1,
       onChange: (e) => handleInputChange("nitrogenDesaA1", e.target.value),
       onSubmit: () => handleUpdate("nitrogenDesaA1", formData.nitrogenDesaA1),
@@ -892,7 +892,7 @@ export default function LingkunganPage() {
     },
     {
       label: "Pengukuran 2",
-      inputType: "number",
+      inputType: "text",
       value: formData.nitrogenDesaA2,
       onChange: (e) => handleInputChange("nitrogenDesaA2", e.target.value),
       onSubmit: () => handleUpdate("nitrogenDesaA2", formData.nitrogenDesaA2),
@@ -906,7 +906,7 @@ export default function LingkunganPage() {
     },
     {
       label: "Pengukuran 1",
-      inputType: "number",
+      inputType: "text",
       value: formData.nitrogenDesaB1,
       onChange: (e) => handleInputChange("nitrogenDesaB1", e.target.value),
       onSubmit: () => handleUpdate("nitrogenDesaB1", formData.nitrogenDesaB1),
@@ -916,7 +916,7 @@ export default function LingkunganPage() {
     },
     {
       label: "Pengukuran 2",
-      inputType: "number",
+      inputType: "text",
       value: formData.nitrogenDesaB2,
       onChange: (e) => handleInputChange("nitrogenDesaB2", e.target.value),
       onSubmit: () => handleUpdate("nitrogenDesaB2", formData.nitrogenDesaB2),
@@ -935,7 +935,7 @@ export default function LingkunganPage() {
 
     {
       label: "Pengukuran 1",
-      inputType: "number",
+      inputType: "text",
       value: formData.oksidaDesaA1,
       onChange: (e) => handleInputChange("oksidaDesaA1", e.target.value),
       onSubmit: () => handleUpdate("oksidaDesaA1", formData.oksidaDesaA1),
@@ -945,7 +945,7 @@ export default function LingkunganPage() {
     },
     {
       label: "Pengukuran 2",
-      inputType: "number",
+      inputType: "text",
       value: formData.oksidaDesaA2,
       onChange: (e) => handleInputChange("oksidaDesaA2", e.target.value),
       onSubmit: () => handleUpdate("oksidaDesaA2", formData.oksidaDesaA2),
@@ -960,7 +960,7 @@ export default function LingkunganPage() {
 
     {
       label: "Pengukuran 1",
-      inputType: "number",
+      inputType: "text",
       value: formData.oksidaDesaB1,
       onChange: (e) => handleInputChange("oksidaDesaB1", e.target.value),
       onSubmit: () => handleUpdate("oksidaDesaB1", formData.oksidaDesaB1),
@@ -970,7 +970,7 @@ export default function LingkunganPage() {
     },
     {
       label: "Pengukuran 2",
-      inputType: "number",
+      inputType: "text",
       value: formData.oksidaDesaB2,
       onChange: (e) => handleInputChange("oksidaDesaB2", e.target.value),
       onSubmit: () => handleUpdate("oksidaDesaB2", formData.oksidaDesaB2),
@@ -987,7 +987,7 @@ export default function LingkunganPage() {
     },
     {
       label: "Pengukuran 1",
-      inputType: "number",
+      inputType: "text",
       value: formData.amoniaKerja1,
       onChange: (e) => handleInputChange("amoniaKerja1", e.target.value),
       onSubmit: () => handleUpdate("amoniaKerja1", formData.amoniaKerja1),
@@ -997,7 +997,7 @@ export default function LingkunganPage() {
     },
     {
       label: "Pengukuran 2",
-      inputType: "number",
+      inputType: "text",
       value: formData.amoniaKerja2,
       onChange: (e) => handleInputChange("amoniaKerja2", e.target.value),
       onSubmit: () => handleUpdate("amoniaKerja2", formData.amoniaKerja2),
@@ -1011,7 +1011,7 @@ export default function LingkunganPage() {
     },
     {
       label: "Pengukuran 1",
-      inputType: "number",
+      inputType: "text",
       value: formData.debuKerja1,
       onChange: (e) => handleInputChange("debuKerja1", e.target.value),
       onSubmit: () => handleUpdate("debuKerja1", formData.debuKerja1),
@@ -1021,7 +1021,7 @@ export default function LingkunganPage() {
     },
     {
       label: "Pengukuran 2",
-      inputType: "number",
+      inputType: "text",
       value: formData.debuKerja2,
       onChange: (e) => handleInputChange("debuKerja2", e.target.value),
       onSubmit: () => handleUpdate("debuKerja2", formData.debuKerja2),
@@ -1035,7 +1035,7 @@ export default function LingkunganPage() {
     },
     {
       label: "Pengukuran 1",
-      inputType: "number",
+      inputType: "text",
       value: formData.nitrogenKerja1,
       onChange: (e) => handleInputChange("nitrogenKerja1", e.target.value),
       onSubmit: () => handleUpdate("nitrogenKerja1", formData.nitrogenKerja1),
@@ -1045,7 +1045,7 @@ export default function LingkunganPage() {
     },
     {
       label: "Pengukuran 2",
-      inputType: "number",
+      inputType: "text",
       value: formData.nitrogenKerja2,
       onChange: (e) => handleInputChange("nitrogenKerja2", e.target.value),
       onSubmit: () => handleUpdate("nitrogenKerja2", formData.nitrogenKerja2),
@@ -1059,7 +1059,7 @@ export default function LingkunganPage() {
     },
     {
       label: "Pengukuran 1",
-      inputType: "number",
+      inputType: "text",
       value: formData.sulfurKerja1,
       onChange: (e) => handleInputChange("sulfurKerja1", e.target.value),
       onSubmit: () => handleUpdate("sulfurKerja1", formData.sulfurKerja1),
@@ -1069,7 +1069,7 @@ export default function LingkunganPage() {
     },
     {
       label: "Pengukuran 2",
-      inputType: "number",
+      inputType: "text",
       value: formData.sulfurKerja2,
       onChange: (e) => handleInputChange("sulfurKerja2", e.target.value),
       onSubmit: () => handleUpdate("sulfurKerja2", formData.sulfurKerja2),
@@ -1109,9 +1109,8 @@ export default function LingkunganPage() {
           <div className="flex flex-col items-center gap-2 p-6 my-8 text-center bg-gray-300 rounded-2xl">
             <FaExclamationTriangle className="text-3xl text-yellow-400" />
             <p>
-              Tanda <b>titik (.)</b> atau <b>koma (,)</b> dapat digunakan
-              sebagai pemisah angka desimal, sedangkan untuk angka ribuan
-              <b> tidak ada</b> tanda pemisah apapun.
+              Tanda <b>titik (.)</b> atau <b>koma (,)</b> digunakan sebagai pemisah angka desimal, sedangkan untuk angka ribuan
+              <b> tidak </b> menggunakan tanda pemisah apapun.
             </p>
           </div>
           {renderKinerjaSection({

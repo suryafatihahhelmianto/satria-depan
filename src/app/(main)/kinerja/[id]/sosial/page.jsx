@@ -270,7 +270,7 @@ export default function DataSosial() {
   const rowsS5 = [
     {
       label: "PKWT Tenaga Kerja Lokal (orang)",
-      inputType: "number",
+      inputType: "text",
       value: formData.tetapMajaIndra,
       onChange: (e) =>
         setFormData({ ...formData, tetapMajaIndra: e.target.value }),
@@ -281,7 +281,7 @@ export default function DataSosial() {
     },
     {
       label: "PKWT Total (orang)",
-      inputType: "number",
+      inputType: "text",
       value: formData.tetapTotal,
       onChange: (e) => setFormData({ ...formData, tetapTotal: e.target.value }),
       onSubmit: () => handleUpdate("tetapTotal", formData.tetapTotal),
@@ -291,7 +291,7 @@ export default function DataSosial() {
     },
     {
       label: "PKWTT Tenaga Kerja Lokal (orang)",
-      inputType: "number",
+      inputType: "text",
       value: formData.tidakMajaIndra,
       onChange: (e) =>
         setFormData({ ...formData, tidakMajaIndra: e.target.value }),
@@ -302,7 +302,7 @@ export default function DataSosial() {
     },
     {
       label: "PKWTT Total (orang)",
-      inputType: "number",
+      inputType: "text",
       value: formData.tidakTetapTotal,
       onChange: (e) =>
         setFormData({ ...formData, tidakTetapTotal: e.target.value }),
@@ -316,7 +316,7 @@ export default function DataSosial() {
   const rowsS6 = [
     {
       label: "Luas Lahan Kemitraan Tahun Ini (ha)",
-      inputType: "number",
+      inputType: "text",
       value: formData.luasLahan,
       onChange: (e) => setFormData({ ...formData, luasLahan: e.target.value }),
       onSubmit: () => handleUpdate("luasLahan", formData.luasLahan),
@@ -326,7 +326,7 @@ export default function DataSosial() {
     },
     // {
     //   label: "Total Luas Lahan yang Ditanami Tahun Ini (ha)",
-    //   inputType: "number",
+    //   inputType: "text",
     //   value: formData.luasLahanYangDitanami,
     //   onChange: (e) =>
     //     setFormData({
@@ -340,7 +340,7 @@ export default function DataSosial() {
     // },
     {
       label: "Luas Lahan Kemitraan Tahun Lalu (ha)",
-      inputType: "number",
+      inputType: "text",
       value: formData.luasLahanTahunLalu,
       onChange: (e) =>
         setFormData({ ...formData, luasLahanTahunLalu: e.target.value }),
@@ -352,7 +352,7 @@ export default function DataSosial() {
     },
     // {
     //   label: "Total Luas Lahan yang Ditanami Tahun Lalu (ha)",
-    //   inputType: "number",
+    //   inputType: "text",
     //   value: formData.luasLahanYangDitanamiTahunLalu,
     //   onChange: (e) =>
     //     setFormData({
@@ -396,9 +396,8 @@ export default function DataSosial() {
           <div className="flex flex-col items-center gap-2 p-6 my-8 text-center bg-gray-300 rounded-2xl">
             <FaExclamationTriangle className="text-3xl text-yellow-400" />
             <p>
-              Tanda <b>titik (.)</b> atau <b>koma (,)</b> dapat digunakan
-              sebagai pemisah angka desimal, sedangkan untuk angka ribuan
-              <b> tidak ada</b> tanda pemisah apapun.
+              Tanda <b>titik (.)</b> atau <b>koma (,)</b> digunakan sebagai pemisah angka desimal, sedangkan untuk angka ribuan
+              <b> tidak </b> menggunakan tanda pemisah apapun.
             </p>
           </div>
           {renderKinerjaSection({

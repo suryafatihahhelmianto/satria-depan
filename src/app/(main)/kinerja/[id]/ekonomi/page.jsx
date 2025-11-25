@@ -241,7 +241,7 @@ export default function DataKinerja() {
   const rowsE2 = [
     {
       label: "Pol Ampas (%)",
-      inputType: "number",
+      inputType: "text",
       value: formData.polAmpas,
       onChange: (e) => setFormData({ ...formData, polAmpas: e.target.value }),
       onSubmit: () => handleUpdate("polAmpas", formData.polAmpas),
@@ -251,7 +251,7 @@ export default function DataKinerja() {
     },
     {
       label: "Pol Blotong (%)",
-      inputType: "number",
+      inputType: "text",
       value: formData.polBlotong,
       onChange: (e) => setFormData({ ...formData, polBlotong: e.target.value }),
       onSubmit: () => handleUpdate("polBlotong", formData.polBlotong),
@@ -261,7 +261,7 @@ export default function DataKinerja() {
     },
     {
       label: "Pol Tetes (%)",
-      inputType: "number",
+      inputType: "text",
       value: formData.polTetes,
       onChange: (e) => setFormData({ ...formData, polTetes: e.target.value }),
       onSubmit: () => handleUpdate("polTetes", formData.polTetes),
@@ -271,7 +271,7 @@ export default function DataKinerja() {
     },
     {
       label: "Rendemen Kebun (%)",
-      inputType: "number",
+      inputType: "text",
       value: formData.rendemenKebun,
       onChange: (e) =>
         setFormData({ ...formData, rendemenKebun: e.target.value }),
@@ -282,7 +282,7 @@ export default function DataKinerja() {
     },
     {
       label: "Rendemen Gerbang (%)",
-      inputType: "number",
+      inputType: "text",
       value: formData.rendemenGerbang,
       onChange: (e) =>
         setFormData({ ...formData, rendemenGerbang: e.target.value }),
@@ -293,7 +293,7 @@ export default function DataKinerja() {
     },
     {
       label: "Rendemen NPP (%)",
-      inputType: "number",
+      inputType: "text",
       value: formData.rendemenNPP,
       onChange: (e) =>
         setFormData({ ...formData, rendemenNPP: e.target.value }),
@@ -304,7 +304,7 @@ export default function DataKinerja() {
     },
     {
       label: "Rendemen Gula (%)",
-      inputType: "number",
+      inputType: "text",
       value: formData.rendemenGula,
       onChange: (e) =>
         setFormData({ ...formData, rendemenGula: e.target.value }),
@@ -318,7 +318,7 @@ export default function DataKinerja() {
   const rowsE3 = [
     {
       label: "Keuntungan Petani per Ton Tebu (Rp)",
-      inputType: "number",
+      inputType: "text",
       value: formData.kesenjanganRantai,
       onChange: (e) =>
         setFormData({ ...formData, kesenjanganRantai: e.target.value }),
@@ -330,7 +330,7 @@ export default function DataKinerja() {
     },
     {
       label: "Keuntungan Pabrik per Ton Tebu (Rp)",
-      inputType: "number",
+      inputType: "text",
       value: formData.kesenjanganPabrik,
       onChange: (e) =>
         setFormData({ ...formData, kesenjanganPabrik: e.target.value }),
@@ -345,7 +345,7 @@ export default function DataKinerja() {
   const rowsE4 = [
     {
       label: "Harga Acuan/Referensi (Rp)",
-      inputType: "number",
+      inputType: "text",
       value: formData.hargaAcuan,
       onChange: (e) => setFormData({ ...formData, hargaAcuan: e.target.value }),
       onSubmit: () => handleUpdate("hargaAcuan", formData.hargaAcuan),
@@ -355,7 +355,7 @@ export default function DataKinerja() {
     },
     {
       label: "Harga Lelang (rata-rata) (Rp)",
-      inputType: "number",
+      inputType: "text",
       value: formData.hargaLelang,
       onChange: (e) =>
         setFormData({ ...formData, hargaLelang: e.target.value }),
@@ -369,7 +369,7 @@ export default function DataKinerja() {
   const rowsE5 = [
     {
       label: "Produksi Tahun Ini (Ton)",
-      inputType: "number",
+      inputType: "text",
       value: formData.shsTahunIni,
       onChange: (e) =>
         setFormData({ ...formData, shsTahunIni: e.target.value }),
@@ -380,7 +380,7 @@ export default function DataKinerja() {
     },
     {
       label: "Produksi tahun lalu (Ton)",
-      inputType: "number",
+      inputType: "text",
       value: formData.shsTahunSebel,
       onChange: (e) =>
         setFormData({ ...formData, shsTahunSebel: e.target.value }),
@@ -394,7 +394,7 @@ export default function DataKinerja() {
   const rowsE6 = [
     {
       label: "Return on Invesment (ROI) (%)",
-      inputType: "number",
+      inputType: "text",
       value: formData.returnOE,
       onChange: (e) => setFormData({ ...formData, returnOE: e.target.value }),
       onSubmit: () => handleUpdate("returnOE", formData.returnOE),
@@ -431,9 +431,8 @@ export default function DataKinerja() {
           <div className="flex flex-col items-center gap-2 p-6 my-8 text-center bg-gray-300 rounded-2xl">
             <FaExclamationTriangle className="text-3xl text-yellow-400" />
             <p>
-              Tanda <b>titik (.)</b> atau <b>koma (,)</b> dapat digunakan
-              sebagai pemisah angka desimal, sedangkan untuk angka ribuan
-              <b> tidak ada</b> tanda pemisah apapun.
+              Tanda <b>titik (.)</b> atau <b>koma (,)</b> digunakan sebagai pemisah angka desimal, sedangkan untuk angka ribuan
+              <b> tidak </b> menggunakan tanda pemisah apapun.
             </p>
           </div>
           {renderKinerjaSection({

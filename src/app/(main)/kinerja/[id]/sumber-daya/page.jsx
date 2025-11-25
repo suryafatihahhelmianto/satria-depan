@@ -226,7 +226,7 @@ export default function SumberDayaPage() {
   const dataD2 = [
     {
       label: "Luas Tanam TRI (ha)",
-      inputType: "number",
+      inputType: "text",
       value: formData.luasTanamTRITahunIni,
       onChange: (e) =>
         handleInputChange("luasTanamTRITahunIni", e.target.value),
@@ -238,7 +238,7 @@ export default function SumberDayaPage() {
     },
     {
       label: "Total Luas Lahan yang Ditanami Tahun Ini (ha)",
-      inputType: "number",
+      inputType: "text",
       value: formData.luasTotalTahunIni,
       onChange: (e) => handleInputChange("luasTotalTahunIni", e.target.value),
       onSubmit: () =>
@@ -256,7 +256,7 @@ export default function SumberDayaPage() {
     },
     {
       label: "Jam Henti A (%)",
-      inputType: "number",
+      inputType: "text",
       value: formData.jumlahJamKerjaEfektif,
       onChange: (e) =>
         handleInputChange("jumlahJamKerjaEfektif", e.target.value),
@@ -268,7 +268,7 @@ export default function SumberDayaPage() {
     },
     {
       label: "Jam Henti B (%)",
-      inputType: "number",
+      inputType: "text",
       value: formData.totalJamKerja,
       onChange: (e) => handleInputChange("totalJamKerja", e.target.value),
       onSubmit: () => handleUpdate("totalJamKerja", formData.totalJamKerja),
@@ -282,7 +282,7 @@ export default function SumberDayaPage() {
     },
     {
       label: "Jam Terlaksana (Jam/Tahun)",
-      inputType: "number",
+      inputType: "text",
       value: formData.jamTerlaksana,
       onChange: (e) => handleInputChange("jamTerlaksana", e.target.value),
       onSubmit: () => handleUpdate("jamTerlaksana", formData.jamTerlaksana),
@@ -292,7 +292,7 @@ export default function SumberDayaPage() {
     },
     {
       label: "Jam Total (Jam/Tahun)",
-      inputType: "number",
+      inputType: "text",
       value: formData.jamTotal,
       onChange: (e) => handleInputChange("jamTotal", e.target.value),
       onSubmit: () => handleUpdate("jamTotal", formData.jamTotal),
@@ -309,7 +309,7 @@ export default function SumberDayaPage() {
     },
     {
       label: "Jam Henti A (%)",
-      inputType: "number",
+      inputType: "text",
       value: formData.jumlahJamKerjaEfektif,
       onChange: (e) =>
         handleInputChange("jumlahJamKerjaEfektif", e.target.value),
@@ -321,7 +321,7 @@ export default function SumberDayaPage() {
     },
     {
       label: "Jam Henti B (%)",
-      inputType: "number",
+      inputType: "text",
       value: formData.totalJamKerja,
       onChange: (e) => handleInputChange("totalJamKerja", e.target.value),
       onSubmit: () => handleUpdate("totalJamKerja", formData.totalJamKerja),
@@ -338,7 +338,7 @@ export default function SumberDayaPage() {
     },
     {
       label: "Jam Terlaksana (Jam/Tahun)",
-      inputType: "number",
+      inputType: "text",
       value: formData.jamTerlaksana,
       onChange: (e) => handleInputChange("jamTerlaksana", e.target.value),
       onSubmit: () => handleUpdate("jamTerlaksana", formData.jamTerlaksana),
@@ -348,7 +348,7 @@ export default function SumberDayaPage() {
     },
     {
       label: "Jam Total (Jam/Tahun)",
-      inputType: "number",
+      inputType: "text",
       value: formData.jamTotal,
       onChange: (e) => handleInputChange("jamTotal", e.target.value),
       onSubmit: () => handleUpdate("jamTotal", formData.jamTotal),
@@ -361,7 +361,7 @@ export default function SumberDayaPage() {
   const dataD4 = [
     {
       label: "Produktivitas Tebu (Ton/Ha)",
-      inputType: "number",
+      inputType: "text",
       value: formData.produktivitasTebu,
       onChange: (e) => handleInputChange("produktivitasTebu", e.target.value),
       onSubmit: () =>
@@ -372,7 +372,7 @@ export default function SumberDayaPage() {
     },
     {
       label: "Rendemen Tebu (%)",
-      inputType: "number",
+      inputType: "text",
       value: formData.rendemenTebu,
       onChange: (e) => handleInputChange("rendemenTebu", e.target.value),
       onSubmit: () => handleUpdate("rendemenTebu", formData.rendemenTebu),
@@ -402,7 +402,7 @@ export default function SumberDayaPage() {
   const dataD5 = [
     {
       label: "Overall Recovery (%)",
-      inputType: "number",
+      inputType: "text",
       value: formData.overallRecovery,
       onChange: (e) => handleInputChange("overallRecovery", e.target.value),
       onSubmit: () => handleUpdate("overallRecovery", formData.overallRecovery),
@@ -415,7 +415,7 @@ export default function SumberDayaPage() {
   const dataD6 = [
     {
       label: "KIS (TCD)",
-      inputType: "number",
+      inputType: "text",
       value: formData.kis,
       onChange: (e) => handleInputChange("kis", e.target.value),
       onSubmit: () => handleUpdate("kis", formData.kis),
@@ -425,7 +425,7 @@ export default function SumberDayaPage() {
     },
     {
       label: "KES (TCD)",
-      inputType: "number",
+      inputType: "text",
       value: formData.kes,
       onChange: (e) => handleInputChange("kes", e.target.value),
       onSubmit: () => handleUpdate("kes", formData.kes),
@@ -458,7 +458,7 @@ export default function SumberDayaPage() {
   const dataD8 = [
     {
       label: "Luas BL (ha)",
-      inputType: "number",
+      inputType: "text",
       value: formData.luasBL,
       onChange: (e) => handleInputChange("luasBL", e.target.value),
       onSubmit: () => handleUpdate("luasBL", formData.luasBL),
@@ -468,7 +468,7 @@ export default function SumberDayaPage() {
     },
     {
       label: "Luas PSJT941 (ha)",
-      inputType: "number",
+      inputType: "text",
       value: formData.luasPST41,
       onChange: (e) => handleInputChange("luasPST41", e.target.value),
       onSubmit: () => handleUpdate("luasPST41", formData.luasPST41),
@@ -478,7 +478,7 @@ export default function SumberDayaPage() {
     },
     {
       label: "Luas PS864/PS862 (ha)",
-      inputType: "number",
+      inputType: "text",
       value: formData.luasPS864,
       onChange: (e) => handleInputChange("luasPS864", e.target.value),
       onSubmit: () => handleUpdate("luasPS864", formData.luasPS864),
@@ -488,7 +488,7 @@ export default function SumberDayaPage() {
     },
     {
       label: "Total Luas Lahan yang ditanam Tahun Ini (ha)",
-      inputType: "number",
+      inputType: "text",
       value: formData.luasTotal,
       onChange: (e) => handleInputChange("luasTotal", e.target.value),
       onSubmit: () => handleUpdate("luasTotal", formData.luasTotal),
@@ -583,9 +583,8 @@ export default function SumberDayaPage() {
           <div className="flex flex-col items-center gap-2 p-6 my-8 text-center bg-gray-300 rounded-2xl">
             <FaExclamationTriangle className="text-3xl text-yellow-400" />
             <p>
-              Tanda <b>titik (.)</b> atau <b>koma (,)</b> dapat digunakan
-              sebagai pemisah angka desimal, sedangkan untuk angka ribuan
-              <b> tidak ada</b> tanda pemisah apapun.
+              Tanda <b>titik (.)</b> atau <b>koma (,)</b> digunakan sebagai pemisah angka desimal, sedangkan untuk angka ribuan
+              <b> tidak </b> menggunakan tanda pemisah apapun.
             </p>
           </div>
           {renderKinerjaSection({
