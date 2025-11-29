@@ -442,16 +442,16 @@ export default function SumberDayaPage() {
       value: formData.ratoonTebu,
       options: [
         { label: "PC", value: 0 },
-        { label: "1", value: 1 },
-        { label: "2", value: 2 },
-        { label: "3", value: 3 },
-        { label: "Lebih dari 3", value: 10 },
+        { label: "RC1", value: 1 },
+        { label: "RC2", value: 2 },
+        { label: "RC3", value: 3 },
+        { label: "Lebih dari RC3", value: 10 },
       ],
       onChange: (e) => handleInputChange("ratoonTebu", e.target.value),
       onSubmit: () => handleUpdate("ratoonTebu", formData.ratoonTebu),
       locked: lockedStatus["ratoonTebu"],
       fieldName: "ratoonTebu",
-      capt: "Jumlah keprasan tanaman tebu pada tahun diukur. Angka yang diisikan adalah keprasan ke-berapa yang menghasilkan tanaman tebu terbanyak.",
+      capt: "Tingkat Kuantum PC/Ratoon tebu yang digiling terbanyak dalam setahun.",
     },
   ];
 
@@ -583,7 +583,8 @@ export default function SumberDayaPage() {
           <div className="flex flex-col items-center gap-2 p-6 my-8 text-center bg-gray-300 rounded-2xl">
             <FaExclamationTriangle className="text-3xl text-yellow-400" />
             <p>
-              Tanda <b>titik (.)</b> atau <b>koma (,)</b> digunakan sebagai pemisah angka desimal, sedangkan untuk angka ribuan
+              Tanda <b>titik (.)</b> atau <b>koma (,)</b> digunakan sebagai
+              pemisah angka desimal, sedangkan untuk angka ribuan
               <b> tidak </b> menggunakan tanda pemisah apapun.
             </p>
           </div>
@@ -680,7 +681,7 @@ export default function SumberDayaPage() {
           {renderKinerjaSection({
             role,
             allowedRoles: ["ADMIN", "FABRIKASI"],
-            title: "Teknologi Pengolahan Raw Sugar (D10)",
+            title: "Ketersediaan Teknologi Pengolahan Raw Sugar (D10)",
             rows: dataD10,
             sesiId,
             isAdmin,

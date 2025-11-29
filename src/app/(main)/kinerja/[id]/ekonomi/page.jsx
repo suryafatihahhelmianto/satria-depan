@@ -281,7 +281,7 @@ export default function DataKinerja() {
       capt: "Rata-rata rendemen kebun hingga hari terakhir giling.",
     },
     {
-      label: "Rendemen Gerbang (%)",
+      label: "Brix Gawang (%)",
       inputType: "text",
       value: formData.rendemenGerbang,
       onChange: (e) =>
@@ -289,7 +289,7 @@ export default function DataKinerja() {
       onSubmit: () => handleUpdate("rendemenGerbang", formData.rendemenGerbang),
       locked: lockedStatus["rendemenGerbang"],
       fieldName: "rendemenGerbang",
-      capt: "Rata-rata rendemen gerbang hingga hari terakhir giling.",
+      capt: "Rata-rata perhitungan Brix Gawang hingga hari terakhir giling.",
     },
     {
       label: "Rendemen NPP (%)",
@@ -344,17 +344,17 @@ export default function DataKinerja() {
 
   const rowsE4 = [
     {
-      label: "Harga Acuan/Referensi (Rp)",
+      label: "Harga Acuan/Referensi (Rp/Kg)",
       inputType: "text",
       value: formData.hargaAcuan,
       onChange: (e) => setFormData({ ...formData, hargaAcuan: e.target.value }),
       onSubmit: () => handleUpdate("hargaAcuan", formData.hargaAcuan),
       locked: lockedStatus["hargaAcuan"],
       fieldName: "hargaAcuan",
-      capt: "Rata-rata harga acuan yang ditetapkan  dalam satu tahun produksi",
+      capt: "Rata-rata harga acuan yang ditetapkan  dalam satu tahun produksi perkilo",
     },
     {
-      label: "Harga Lelang (rata-rata) (Rp)",
+      label: "Harga Lelang (rata-rata) (Rp/Kg)",
       inputType: "text",
       value: formData.hargaLelang,
       onChange: (e) =>
@@ -362,7 +362,7 @@ export default function DataKinerja() {
       onSubmit: () => handleUpdate("hargaLelang", formData.hargaLelang),
       locked: lockedStatus["hargaLelang"],
       fieldName: "hargaLelang",
-      capt: "Rata-rata harga lelang gula yang ditetapkan dalam satu tahun produksi",
+      capt: "Rata-rata harga lelang gula yang ditetapkan dalam satu tahun produksi perkilo",
     },
   ];
 
@@ -431,7 +431,8 @@ export default function DataKinerja() {
           <div className="flex flex-col items-center gap-2 p-6 my-8 text-center bg-gray-300 rounded-2xl">
             <FaExclamationTriangle className="text-3xl text-yellow-400" />
             <p>
-              Tanda <b>titik (.)</b> atau <b>koma (,)</b> digunakan sebagai pemisah angka desimal, sedangkan untuk angka ribuan
+              Tanda <b>titik (.)</b> atau <b>koma (,)</b> digunakan sebagai
+              pemisah angka desimal, sedangkan untuk angka ribuan
               <b> tidak </b> menggunakan tanda pemisah apapun.
             </p>
           </div>
