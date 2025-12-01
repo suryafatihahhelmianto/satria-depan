@@ -126,7 +126,7 @@ export default function DetailPage() {
           },
           {
             id: 10,
-            indikator: "Teknologi Pengolahan Raw Sugar",
+            indikator: "Ketersediaan Teknologi Pengolahan Raw Sugar",
             simbol: "D10",
             nilai: (response.teknoOlahGula * 100).toFixed(1),
             leverage: response.leverageTeknoOlahGula,
