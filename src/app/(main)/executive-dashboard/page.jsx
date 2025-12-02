@@ -12,6 +12,18 @@ import FactoryPerformanceCards from "@/components/ExecutiveCard";
 import "react-circular-progressbar/dist/styles.css";
 import GridCardSkeleton from "@/components/common/GridCardSkeleton";
 
+const getAvailableYears = () => {
+  const currentYear = new Date().getFullYear();
+  const startYear = 2021;
+  const years = [];
+
+  for (let y = startYear; y <= currentYear; y++) {
+    years.push(y);
+  }
+
+  return years;
+};
+
 const getKategori = (nilaiKinerja) => {
   if (nilaiKinerja >= 0 && nilaiKinerja <= 25) {
     return "TIDAK BERKELANJUTAN";
@@ -28,40 +40,13 @@ const getKategori = (nilaiKinerja) => {
 
 export default function HomePage() {
   const [loading, setLoading] = useState(true);
-  const [selectedYear, setSelectedYear] = useState(null);
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [availableYears] = useState(getAvailableYears());
   const [factories, setFactories] = useState([]);
   const [allFactoriesData, setAllFactoriesData] = useState({});
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [availableYears, setAvailableYears] = useState([]);
 
   const router = useRouter();
-
-  const handleYearChange = (event) => {
-    const year = Number.parseInt(event.target.value);
-    setSelectedYear(year);
-  };
-
-  const fetchYears = useCallback(async () => {
-    if (factories.length === 0) return;
-
-    try {
-      const response = await fetchData(
-        `/api/sesi/tahun?pabrikId=${factories[0].id}`,
-        {
-          method: "GET",
-          headers: { Authorization: `Bearer ${getCookie("token")}` },
-        }
-      );
-
-      const years = response.data;
-      setAvailableYears(years);
-      setSelectedYear(years.length > 0 ? years[0] : null);
-    } catch (error) {
-      console.error("Error fetching years:", error);
-      setAvailableYears([]);
-      setSelectedYear(null);
-    }
-  }, [factories]);
 
   const fetchFactories = async () => {
     try {
@@ -149,10 +134,6 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-    fetchYears();
-  }, [factories, fetchYears]);
-
-  useEffect(() => {
     if (factories.length > 0 && selectedYear) {
       fetchAllFactoriesDashboardData();
     }
@@ -183,16 +164,15 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* BODY */}
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-6">
-        {/* KARTU PABRIK */}
         <FactoryPerformanceCards
           factories={factories}
           allFactoriesData={allFactoriesData}
           selectedYear={selectedYear}
-          setSelectedYear={setSelectedYear} // ← WAJIB ADA
+          setSelectedYear={setSelectedYear}
           selectedDate={selectedDate}
           setSelectedDate={setSelectedDate}
+          availableYears={availableYears}
         />
 
         {/* HISTOGRAM
