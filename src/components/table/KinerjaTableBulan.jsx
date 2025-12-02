@@ -180,13 +180,13 @@ export default function KinerjaTableBulan({ data, isAdmin, type, sesiId }) {
         <table className="min-w-full bg-white">
           <thead className="bg-gradient-to-r from-green-500 to-green-600 text-white">
             <tr>
-              <th className="px-4 py-3 text-left border-b border-gray-200">
+              <th className="text-xl px-4 py-3 text-left border-b border-gray-200">
                 Parameter
               </th>
               {Object.keys(parametersByMonth).map((month, index) => (
                 <th
                   key={index}
-                  className="px-4 py-3 text-center border-b border-gray-200"
+                  className="text-lg px-4 py-3 text-center border-b border-gray-200"
                 >
                   {month}
                 </th>
@@ -199,7 +199,7 @@ export default function KinerjaTableBulan({ data, isAdmin, type, sesiId }) {
                 key={rowIndex}
                 className={rowIndex % 2 === 0 ? "bg-gray-50" : "bg-white"}
               >
-                <td className="px-4 py-3 border-b border-gray-300 font-medium text-gray-700">
+                <td className="text-lg px-4 py-3 border-b border-gray-300 font-medium text-gray-700">
                   {label}
                 </td>
                 {Object.keys(parametersByMonth).map((month, colIndex) => {

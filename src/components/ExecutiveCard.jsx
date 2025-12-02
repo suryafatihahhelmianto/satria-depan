@@ -1,13 +1,14 @@
 "use client";
 
 import { CheckCircle, AlertCircle, Calendar } from "lucide-react";
+import { AlertTriangle } from "lucide-react";
+
 import HistogramChart from "@/components/ExecutiveSpider";
 import { RendemenGaugeCard } from "./ExecutiveRendemen";
 import { useRouter } from "next/navigation";
 import { fetchData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
 
-/* ------------------ KATEGORI NILAI ------------------ */
 const getKategori = (nilaiKinerja) => {
   if (nilaiKinerja >= 0 && nilaiKinerja <= 25) return "TIDAK BERKELANJUTAN";
   if (nilaiKinerja > 25 && nilaiKinerja <= 50) return "KURANG BERKELANJUTAN";
@@ -81,14 +82,11 @@ export default function FactoryPerformanceCards({
         nilaiKinerja,
         rataRataRendemen,
         kategori: getKategori(nilaiKinerja),
-
-        /* ------------------ (C) STATUS PENGISIAN ------------------ */
         indikatorWajib: selectedYearData?.indikatorWajib ?? 0,
         indikatorTerisi: selectedYearData?.indikatorTerisi ?? 0,
-
-        /* ------------------ (D) ORANG YG SUDAH / BELUM MENGISI ------------------ */
         requiredUsers: selectedYearData?.requiredUsers ?? [],
         filledUsers: selectedYearData?.filledUsers ?? [],
+        sessionStatus: selectedYearData?.status ?? null,
       };
     })
     .filter(Boolean);
@@ -110,7 +108,7 @@ export default function FactoryPerformanceCards({
       );
 
       if (response?.id) {
-        router.push(`/detail/${response.id}/hasil`);
+        router.push(`/detail-eksekutif/${response.id}/hasil`);
       } else {
         alert("Sesi pengisian tidak ditemukan.");
       }
@@ -193,24 +191,59 @@ export default function FactoryPerformanceCards({
                     indikatorWajib,
                     indikatorTerisi,
                     requiredUsers,
-                    filledUsers,
                   }) => {
                     const nilai = Number(selectedYearData?.nilaiKinerja ?? 0);
 
-                    /* ------------------ (C) STATUS PENGISIAN ------------------ */
-                    const isComplete = indikatorTerisi >= indikatorWajib;
-                    const status = isComplete ? "Selesai" : "Belum Selesai";
+                    /* STATUS PENGISIAN */
 
-                    /* ------------------ (D) LIST ORANG BELUM MENGISI ------------------ */
-                    const belumMengisi = requiredUsers.filter(
-                      (u) => !filledUsers.includes(u)
+                    /* LIST ORANG BELUM MENGISI  */
+
+                    const informasi = selectedYearData?.informasi ?? [];
+
+                    /* 1️⃣ AMBIL SEMUA ROLE YANG ADA DI INFORMASI */
+                    const allRoles = informasi.map((i) => i.role);
+
+                    /* 2️⃣ ROLE YANG BELUM MENGISI (langsung dari backend) */
+                    const rolesBelumMengisi = informasi
+                      .filter((item) => item.unfilledColumns?.length > 0)
+                      .map((item) => item.role);
+
+                    /* 3️⃣ HITUNG ROLE YANG SUDAH MENGISI */
+                    const filledUsers = allRoles.filter(
+                      (role) => !rolesBelumMengisi.includes(role)
                     );
+
+                    /* 4️⃣ HITUNG PROGRESSNYA */
+                    const totalRequiredUsers = allRoles.length;
+                    const totalFilledUsers = filledUsers.length;
+
+                    /* 5️⃣ STATUS BACKEND */
+                    const isFinal = selectedYearData?.status === "FINAL";
+
+                    /* 6️⃣ STATUS FRONTEND KITA */
+                    const isComplete = totalFilledUsers >= totalRequiredUsers;
+
+                    let statusDisplay = "";
+
+                    if (isFinal) {
+                      statusDisplay = "Selesai";
+                    } else {
+                      statusDisplay = isComplete
+                        ? "Dalam Proses Perhitungan"
+                        : "Belum Selesai";
+                    }
+
+                    const progressUsersText = `(${totalFilledUsers}/${totalRequiredUsers})`;
+
+                    // siapa yang belum isi
+                    const belumMengisi = rolesBelumMengisi;
 
                     return (
                       <div
                         key={factory.id}
                         onClick={() => handleDetailClick(factory.id)}
                         className={`
+                        relative
                         rounded-xl p-4 text-center shadow-sm border
                         hover:shadow-lg cursor-pointer transition-all duration-300 
                         active:scale-[0.98]
@@ -240,20 +273,31 @@ export default function FactoryPerformanceCards({
                         {/* STATUS */}
                         <p
                           className={`text-sm mt-2 font-medium ${
-                            isComplete ? "text-blue-600" : "text-red-600"
+                            isFinal
+                              ? "text-green-600"
+                              : isComplete
+                              ? "text-blue-600"
+                              : "text-red-600"
                           }`}
                         >
-                          {status} ({indikatorTerisi}/{indikatorWajib})
+                          {statusDisplay}
                         </p>
 
-                        {/* ORANG BELUM MENGISI */}
-                        {!isComplete && (
+                        {!isFinal && belumMengisi.length > 0 && (
                           <p className="text-xs text-red-500 mt-1">
-                            Belum mengisi:{" "}
-                            {belumMengisi.length > 0
-                              ? belumMengisi.join(", ")
-                              : "-"}
+                            Belum mengisi: {belumMengisi.join(", ")}
                           </p>
+                        )}
+
+                        {!isFinal > 0 && (
+                          <div
+                            onClick={(e) => e.stopPropagation()}
+                            className="absolute top-2 right-2 bg-amber-700 hover:bg-amber-900 text-white 
+               p-2 rounded-full shadow animate-pulse"
+                            title="Ada indikator belum diisi"
+                          >
+                            <AlertTriangle className="w-4 h-4" />
+                          </div>
                         )}
                       </div>
                     );
@@ -286,7 +330,7 @@ export default function FactoryPerformanceCards({
             <input
               type="date"
               id="rendemen-date-picker"
-              className="hidden"
+              className="sr-only"
               value={
                 selectedDate ? selectedDate.toISOString().split("T")[0] : ""
               }

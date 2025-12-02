@@ -251,6 +251,7 @@ export default function KalkulatorPage() {
                   { value: "25", label: "PS882" },
                   { value: "26", label: "PSJK922" },
                   { value: "27", label: "PSJT941" },
+                  { value: "28", label: "Mojo" },
                 ]}
               />
 

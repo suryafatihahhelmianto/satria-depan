@@ -203,7 +203,7 @@ export default function TableInputRow({
       <tr className={`border-b hover:bg-gray-50 transition`}>
         <td className="px-4 py-2 border border-gray-200 rounded-l-md">
           <div className="relative group">
-            <div className="flex items-center">
+            <div className="text-lg flex items-center">
               {label}
               <AiOutlineInfoCircle className="ml-2 text-green-500" />
             </div>

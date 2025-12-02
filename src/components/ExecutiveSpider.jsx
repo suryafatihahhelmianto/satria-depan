@@ -10,6 +10,9 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
+import { Calendar } from "lucide-react";
+import InfoButton from "./InfoButton";
+
 const FACTORY_COLORS = {
   "PG Jatitujuh": "#a855f7",
   "PG Tersana Baru": "#3b82f6",
@@ -80,7 +83,14 @@ export default function SpiderChart({ data }) {
   });
 
   return (
-    <div className="w-full p-3 rounded-2xl">
+    <div className="relative w-full p-3 rounded-2xl">
+      {/* Icon kalender di kanan atas */}
+      <div className="absolute top-3 right-3 cursor-pointer">
+        <InfoButton>
+          <Calendar className="text-gray-600 hover:text-gray-800" />
+        </InfoButton>
+      </div>
+
       <ResponsiveContainer width="100%" height={400}>
         <RadarChart data={formattedData} cx="50%" cy="50%" outerRadius="80%">
           <PolarGrid stroke="#cbd5e1" />
@@ -88,7 +98,6 @@ export default function SpiderChart({ data }) {
           <PolarRadiusAxis angle={30} domain={[0, 100]} />
 
           <Tooltip content={<CustomTooltip />} />
-
           <Legend
             layout="vertical"
             verticalAlign="top"

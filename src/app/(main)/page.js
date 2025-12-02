@@ -10,6 +10,7 @@ import HistogramChart from "@/components/HistogramChart";
 import InfoButton from "@/components/InfoButton";
 import { fetchData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
+import { FaExclamationTriangle } from "react-icons/fa";
 
 import "react-circular-progressbar/dist/styles.css";
 import "react-datepicker/dist/react-datepicker.css";
@@ -58,7 +59,7 @@ export default function HomePage() {
 
   const fetchYears = useCallback(async () => {
     if (!selectedFactory.id) return;
-  
+
     try {
       const response = await fetchData(
         `/api/sesi/tahun?pabrikId=${selectedFactory.id}`,
@@ -67,7 +68,7 @@ export default function HomePage() {
           headers: { Authorization: `Bearer ${getCookie("token")}` },
         }
       );
-  
+
       const years = response.data;
       setAvailableYears(years);
       setSelectedYear(years.length > 0 ? years[0] : null);
@@ -77,7 +78,6 @@ export default function HomePage() {
       setSelectedYear(null);
     }
   }, [selectedFactory.id]);
-  
 
   const fetchFactories = async () => {
     try {
@@ -97,34 +97,37 @@ export default function HomePage() {
     }
   };
 
-  const fetchDashboardData = useCallback(async (pabrikId) => {
-    try {
-      setLoading(true);
-      const response = await fetchData(
-        `/api/dashboard/${pabrikId}?tahun=${selectedYear}&startDate=${selectedDate.toISOString()}&endDate=${selectedDate.toISOString()}`,
-        {
-          method: "GET",
-          headers: { Authorization: `Bearer ${getCookie("token")}` },
-        }
-      );
-  
-      const updatedInformasi = response.informasi.map((item) => {
-        let updatedRole = item.role;
-        if (updatedRole === "QUALITYCONTROL") updatedRole = "QUALITY CONTROL";
-        if (updatedRole === "KEPALAPABRIK") updatedRole = "GENERAL MANAGER / KEPALA PABRIK";
-        if (updatedRole === "SDM") updatedRole = "SDM dan UMUM";
-        return { ...item, role: updatedRole };
-      });
-  
-      response.informasi = updatedInformasi;
-      setDashboardData(response);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching dashboard data:", error);
-      setLoading(false);
-    }
-  }, [selectedYear, selectedDate]);
-  
+  const fetchDashboardData = useCallback(
+    async (pabrikId) => {
+      try {
+        setLoading(true);
+        const response = await fetchData(
+          `/api/dashboard/${pabrikId}?tahun=${selectedYear}&startDate=${selectedDate.toISOString()}&endDate=${selectedDate.toISOString()}`,
+          {
+            method: "GET",
+            headers: { Authorization: `Bearer ${getCookie("token")}` },
+          }
+        );
+
+        const updatedInformasi = response.informasi.map((item) => {
+          let updatedRole = item.role;
+          if (updatedRole === "QUALITYCONTROL") updatedRole = "QUALITY CONTROL";
+          if (updatedRole === "KEPALAPABRIK")
+            updatedRole = "GENERAL MANAGER / KEPALA PABRIK";
+          if (updatedRole === "SDM") updatedRole = "SDM dan UMUM";
+          return { ...item, role: updatedRole };
+        });
+
+        response.informasi = updatedInformasi;
+        setDashboardData(response);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+        setLoading(false);
+      }
+    },
+    [selectedYear, selectedDate]
+  );
 
   const fetchSesiPengisian = async () => {
     try {
@@ -154,7 +157,7 @@ export default function HomePage() {
   };
 
   const handleDetailRendemenClick = async () => {
-    router.push(`/kinerja/statistics`);
+    router.push(`/rendemen/statistics`);
   };
 
   useEffect(() => {
@@ -170,7 +173,6 @@ export default function HomePage() {
       fetchDashboardData(selectedFactory.id);
     }
   }, [selectedFactory.id, selectedYear, selectedDate]);
-  
 
   if (loading) {
     return (
@@ -351,6 +353,13 @@ export default function HomePage() {
 
           <div className="flex flex-col sm:flex-row justify-around gap-5 w-full h-full">
             <div className="flex flex-col items-center justify-center mb-6 h-full">
+              {/* Warning jika QC belum menghitung */}
+              {(rataRataRendemen === 0 || rataRataRendemen === null) && (
+                <div className="animate-pulse flex text-center items-center gap-2 bg-yellow-100 border border-yellow-400 text-yellow-800 px-3 py-2 rounded-xl mb-4 w-full max-w-sm">
+                  <FaExclamationTriangle className="text-4xl animate-pulse" />
+                  <span>Hari ini QC belum melakukan perhitungan</span>
+                </div>
+              )}
               <div
                 className="relative group flex flex-col items-center cursor-pointer"
                 onClick={handleDetailRendemenClick}
@@ -361,7 +370,10 @@ export default function HomePage() {
                 </div>
 
                 {/* Bar indikator */}
-                <div onClick={handleDetailRendemenClick} className="relative w-32 2xl:w-52 h-6 rounded-full bg-gradient-to-r from-red-500 via-yellow-500 to-green-500">
+                <div
+                  onClick={handleDetailRendemenClick}
+                  className="relative w-32 2xl:w-52 h-6 rounded-full bg-gradient-to-r from-red-500 via-yellow-500 to-green-500"
+                >
                   <div
                     className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 border-2 border-gray-700 bg-transparent 
                     w-3/4 sm:w-1/2 md:w-1/3 lg:w-1/4 h-auto"
@@ -435,24 +447,6 @@ export default function HomePage() {
               <AiOutlineExclamationCircle className="mr-3 text-gray-500" />
               Informasi!
             </h2>
-            {/* <ul className="text-gray-700 space-y-3">
-              <li className="flex items-center">
-                <BsFillCircleFill className="text-red-500 mr-3 animate-pulse" />
-                Bagian SDM belum mengisi data
-              </li>
-              <li className="flex items-center">
-                <BsFillCircleFill className="text-red-500 mr-3 animate-pulse" />
-                Bagian TUK belum mengisi data
-              </li>
-            </ul> */}
-            {/* <ul className="text-gray-700 space-y-3">
-              {informasi.map((info, index) => (
-                <li key={index} className="flex items-center">
-                  <BsFillCircleFill className="text-red-500 mr-3 animate-pulse" />
-                  {info}
-                </li>
-              ))}
-            </ul> */}
             <ul className="text-gray-700 space-y-3">
               {informasi.map((info, index) => (
                 <li key={index} className="flex items-center">
@@ -464,12 +458,6 @@ export default function HomePage() {
                         ? `${info.role} Belum Mengisi Data!`
                         : `Kepala Bagian ${info.role} Belum Mengisi Data!`}
                     </p>
-                    {/* Render role */}
-                    {/* <ul className="ml-4">
-                      {info.unfilledColumns.map((column, colIndex) => (
-                        <li key={colIndex}>{column}</li>
-                      ))}
-                    </ul> */}
                   </div>
                 </li>
               ))}

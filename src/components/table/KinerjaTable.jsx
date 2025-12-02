@@ -10,20 +10,20 @@ export default function KinerjaTable({ title, rows, isAdmin, type, sesiId }) {
       <h2 className="text-2xl font-bold text-gray-800 mb-4">{title}</h2>
 
       <div className="overflow-visible mt-4">
-        <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
-          <thead className="bg-gradient-to-r from-green-500 to-green-600 text-white">
+        <table className="min-w-full bg-white border border-gray-300 rounded-xl shadow-md">
+          <thead className="bg-gradient-to-r from-green-400 to-emerald-600 text-white rounded-xl">
             <tr>
-              <th className="px-4 py-3 text-left border-b border-gray-200">
+              <th className="text-xl px-4 py-3 text-center border-b border-gray-200">
                 Sub Indikator
               </th>
-              <th className="px-4 py-3 text-left border-b border-gray-200">
+              <th className="text-xl px-4 py-3 text-center border-b border-gray-200">
                 Data
               </th>
-              <th className="px-4 py-3 text-center border-b border-gray-200">
+              <th className="text-xl px-4 py-3 text-center border-b border-gray-200">
                 Status
               </th>
               {isAdmin && (
-                <th className="px-4 py-3 text-center border-b border-gray-200">
+                <th className="text-xl px-4 py-3 text-center border-b border-gray-200">
                   Aksi
                 </th>
               )}
@@ -34,10 +34,13 @@ export default function KinerjaTable({ title, rows, isAdmin, type, sesiId }) {
             {rows.map((row, index) =>
               row.isSubtitle ? (
                 // If row is a subtitle
-                <tr key={index} className="bg-gray-200">
+                <tr
+                  key={index}
+                  className="bg-gradient-to-r from-white via-white to-emerald-100"
+                >
                   <td
                     colSpan="3"
-                    className="px-4 py-3 font-semibold text-gray-700 border-b border-gray-300"
+                    className="text-xl px-4 py-3 font-semibold text-gray-700 border-b bg-gradient-to-r from-white via-white to-emerald-100"
                   >
                     {row.label}
                   </td>
