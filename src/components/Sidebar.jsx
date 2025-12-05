@@ -13,6 +13,9 @@ import {
   AiFillCalculator,
   AiOutlineMobile,
 } from "react-icons/ai";
+import { AiOutlineBook } from "react-icons/ai";
+import { ArrowLeft } from "lucide-react";
+
 import { GoGoal } from "react-icons/go";
 import { BsBoxArrowRight, BsGearFill, BsPersonFill } from "react-icons/bs";
 import Image from "next/image";
@@ -77,6 +80,11 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
         path: "/admin",
         icon: <AiOutlineUser size={20} />,
       },
+    {
+      name: "Quick Manual",
+      path: "/manual",
+      icon: <AiOutlineBook size={20} />,
+    },
   ].filter(Boolean);
 
   const getLinkStyle = (path) =>
@@ -115,6 +123,35 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
             : "w-[100px]"
         }`}
       >
+        {!["/", "/executive-dashboard"].includes(pathname) && (
+          <button
+            onClick={() => history.back()}
+            className={`
+              group absolute top-24 z-[9999] p-2 rounded-full bg-white border 
+              border-green-300 shadow-lg
+              transition duration-300 ease-in-out
+              opacity-20 scale-90 
+              hover:opacity-100 hover:scale-100 
+              active:scale-95
+              ${isOpen ? "left-[320px]" : "left-[120px]"}
+            `}
+          >
+            <ArrowLeft className="w-5 h-5 text-green-600" />
+
+            {/* Tooltip */}
+            <span
+              className="
+                absolute left-1/2 top-full mt-2 -translate-x-1/2
+                bg-black text-white text-xs px-2 py-1 rounded 
+                opacity-0 group-hover:opacity-100 transition
+                whitespace-nowrap pointer-events-none
+              "
+            >
+              Back
+            </span>
+          </button>
+        )}
+
         {/* Bagian atas: logo + menu */}
         <div>
           {/* Logo */}

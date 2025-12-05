@@ -116,19 +116,6 @@ export default function HomePage() {
     }
   };
 
-  const handleDetailClick = async (pabrikId) => {
-    const sesiPengisianId = await fetchSesiPengisian(pabrikId);
-    if (sesiPengisianId) {
-      router.push(`/detail/${sesiPengisianId}/hasil`);
-    } else {
-      alert("Sesi pengisian tidak ditemukan");
-    }
-  };
-
-  const handleDetailRendemenClick = async () => {
-    router.push(`/kinerja/statistics`);
-  };
-
   useEffect(() => {
     fetchFactories();
   }, []);
@@ -151,12 +138,12 @@ export default function HomePage() {
     <div className="min-h-screen bg-gradient-to-br from-white via-white to-slate-100">
       {/* HEADER */}
       <div className="border-b border-gray-300/50 backdrop-blur-sm bg-white/80 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 md:px-6 py-6 flex flex-col md:flex-row md:justify-between md:items-center gap-6">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 py-2 flex flex-col md:flex-row md:justify-between md:items-center gap-4">
           <div>
-            <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-green-500 via-emerald-400 to-cyan-600 bg-clip-text text-transparent mb-2 drop-shadow-sm">
+            <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-green-500 via-emerald-400 to-teal-500 bg-clip-text text-transparent mb-1 drop-shadow-sm">
               Selamat Datang Kembali
             </h1>
-            <p className="text-gray-600 text-sm">
+            <p className="text-gray-600 text-xs">
               Monitoring Performa Keberlanjutan dari Pabrik Anda
             </p>
           </div>

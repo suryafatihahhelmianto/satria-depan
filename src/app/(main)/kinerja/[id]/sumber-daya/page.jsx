@@ -580,13 +580,69 @@ export default function SumberDayaPage() {
         </div>
       ) : (
         <>
-          <div className="flex flex-col items-center gap-2 p-6 my-8 text-center bg-gray-300 rounded-2xl">
-            <FaExclamationTriangle className="text-3xl text-yellow-400" />
-            <p>
-              Tanda <b>titik (.)</b> atau <b>koma (,)</b> digunakan sebagai
-              pemisah angka desimal, sedangkan untuk angka ribuan
-              <b> tidak </b> menggunakan tanda pemisah apapun.
-            </p>
+          <div className="relative my-8">
+            <div
+              className="absolute inset-0 rounded-2xl bg-gradient-to-r from-green-100 via-white to-teal-100
+                         blur-lg opacity-70 animate-[pulse_4s_ease-in-out_infinite]"
+            ></div>
+
+            <div
+              className="flex flex-col gap-4 p-6
+                     rounded-2xl bg-white/30 backdrop-blur-lg border border-white/50
+                     shadow-xl hover:shadow-2xl transition-all duration-300
+                   "
+            >
+              {/* Instruction wrapper */}
+              <div className="flex items-start gap-4">
+                {/* Exclamation Icon */}
+                <FaExclamationTriangle className="text-8xl text-amber-400 drop-shadow-sm animate-pulse mt-1" />
+
+                {/* Konten instruksi */}
+                <div className="flex-1 flex flex-col gap-4">
+                  {/* Decimal instruction */}
+                  <div className="mt-2 flex justify-between items-center w-full">
+                    <p className="text-gray-800 text-xl flex-1">
+                      Gunakan{" "}
+                      <span className="font-semibold text-gray-900">
+                        titik (.)
+                      </span>{" "}
+                      atau{" "}
+                      <span className="font-semibold text-gray-900">
+                        koma (,)
+                      </span>{" "}
+                      sebagai pemisah angka desimal.
+                    </p>
+
+                    <div className="flex gap-2 mr-12 text-xl">
+                      contoh:{" "}
+                      <span className="inline-block px-2 py-1 border rounded-full font-bold text-gray-900 bg-gray-100">
+                        9.14
+                      </span>
+                      <span className="inline-block px-2 py-1 border rounded-full font-bold text-gray-900 bg-gray-100">
+                        9,14
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Thousands instruction */}
+                  <div className="flex justify-between items-center w-full">
+                    <p className="text-gray-800 text-xl flex-1">
+                      Jangan gunakan tanda pemisah apapun untuk angka ribuan.
+                    </p>
+
+                    <div className="flex gap-2 mr-8 text-xl">
+                      contoh:{" "}
+                      <span className="inline-block px-2 py-1 border rounded-full font-bold text-gray-900 bg-gray-100">
+                        14000
+                      </span>
+                      <span className="inline-block px-2 py-1 border rounded-full font-bold text-gray-900 bg-gray-100">
+                        9500
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
           {renderKinerjaSection({
             role,

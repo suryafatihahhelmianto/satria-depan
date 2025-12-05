@@ -47,6 +47,27 @@ export default function HomePage() {
 
   const router = useRouter();
 
+  useEffect(() => {
+    async function checkRole() {
+      try {
+        const response = await fetchData("/api/auth/me", {
+          method: "GET",
+          headers: { Authorization: `Bearer ${getCookie("token")}` },
+        });
+
+        const userRole = response.role?.toUpperCase();
+
+        if (userRole === "DIREKSI") {
+          router.replace("/executive-dashboard");
+        }
+      } catch (error) {
+        console.error("Error checking user role:", error);
+      }
+    }
+
+    checkRole();
+  }, []);
+
   const handleFactoryChange = (factory) => {
     setSelectedFactory(factory);
     fetchDashboardData(factory.id);
@@ -157,7 +178,7 @@ export default function HomePage() {
   };
 
   const handleDetailRendemenClick = async () => {
-    router.push(`/rendemen/statistics`);
+    router.push(`/rendemen`);
   };
 
   useEffect(() => {

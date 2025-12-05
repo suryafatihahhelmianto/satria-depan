@@ -10,20 +10,20 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-import { Calendar } from "lucide-react";
 import InfoButton from "./InfoButton";
+import { formatNumberToIndonesian } from "@/tools/formatNumber";
 
 const FACTORY_COLORS = {
-  "PG Jatitujuh": "#a855f7",
-  "PG Tersana Baru": "#3b82f6",
-  "PG Sindang Laut": "#f97316",
+  "PG Jatitujuh": "#b8860b",
+  "PG Tersana Baru": "#c4b7a6",
+  "PG Sindang Laut": "#6b8e23",
 };
 
 const CustomTooltip = ({ active, payload }) => {
   if (active && payload && payload.length) {
     return (
       <div className="bg-white border border-blue-200 rounded-lg p-4 shadow-xl">
-        <div className="font-mono text-xs text-blue-400 mb-2 opacity-70">
+        <div className="font-mono text-xs text-emerald-600 mb-2 opacity-70">
           Detail Nilai
         </div>
         {payload.map((entry, index) => (
@@ -33,7 +33,9 @@ const CustomTooltip = ({ active, payload }) => {
             style={{ color: entry.color }}
           >
             {entry.name}:{" "}
-            <span className="font-bold">{entry.value?.toFixed(1) || 0}%</span>
+            <span className="font-bold">
+              {formatNumberToIndonesian(entry.value) || 0}%
+            </span>
           </div>
         ))}
       </div>
@@ -83,19 +85,27 @@ export default function SpiderChart({ data }) {
   });
 
   return (
-    <div className="relative w-full p-3 rounded-2xl">
-      {/* Icon kalender di kanan atas */}
-      <div className="absolute top-3 right-3 cursor-pointer">
-        <InfoButton>
-          <Calendar className="text-gray-600 hover:text-gray-800" />
-        </InfoButton>
+    <div className="relative w-full p-1 rounded-2xl">
+      <div className="z-10 absolute top-3 right-3 cursor-pointer">
+        <div className="relative group">
+          <InfoButton />
+          <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 bg-black text-white text-xs px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+            Click Me!
+          </span>
+        </div>
       </div>
 
       <ResponsiveContainer width="100%" height={400}>
         <RadarChart data={formattedData} cx="50%" cy="50%" outerRadius="80%">
           <PolarGrid stroke="#cbd5e1" />
           <PolarAngleAxis dataKey="Dimensi" stroke="#475569" />
-          <PolarRadiusAxis angle={30} domain={[0, 100]} />
+          <PolarRadiusAxis
+            angle={45}
+            domain={[0, 100]}
+            tickCount={5}
+            ticks={[0, 25, 50, 75, 100]}
+            tick={{ fontSize: 14 }}
+          />
 
           <Tooltip content={<CustomTooltip />} />
           <Legend

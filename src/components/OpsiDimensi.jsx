@@ -21,9 +21,8 @@ export default function OpsiDimensi() {
       : "bg-gray-200 text-gray-700 hover:bg-gray-300 hover:text-green-800 font-medium shadow-sm";
   };
 
-  // ✅ Wrap fetchHeaderData with useCallback to stabilize reference
   const fetchHeaderData = useCallback(async () => {
-    if (!id) return; // avoid fetching when id is not ready
+    if (!id) return;
 
     try {
       const response = await fetchData(`/api/sesi/header/${id}`, {
@@ -39,11 +38,11 @@ export default function OpsiDimensi() {
     } catch (error) {
       console.error("Error fetching header data:", error);
     }
-  }, [id]); // ✅ depend on id only
+  }, [id]);
 
   useEffect(() => {
     fetchHeaderData();
-  }, [fetchHeaderData]); // ✅ clean dependency
+  }, [fetchHeaderData]);
 
   return (
     <div>

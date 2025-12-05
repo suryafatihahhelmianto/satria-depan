@@ -3,10 +3,12 @@
 import { TrendingUp, TrendingDown, AlertCircle } from "lucide-react";
 import { formatNumberToIndonesian } from "@/tools/formatNumber";
 import Battery from "./ExecutiveBattery";
+import { useRouter } from "next/navigation";
 
 export function RendemenGaugeCard({ rataRataRendemen, rendemenKemarin }) {
   const selisih = rataRataRendemen - rendemenKemarin;
   const isNaik = selisih >= 0;
+  const router = useRouter();
 
   const isBelumIsi = rataRataRendemen === 0;
 
@@ -15,6 +17,10 @@ export function RendemenGaugeCard({ rataRataRendemen, rendemenKemarin }) {
     if (val < 5) return "text-red-600";
     if (val < 8) return "text-amber-600";
     return "text-emerald-600";
+  };
+
+  const handleDetailRendemenClick = async () => {
+    router.push(`/rendemen`);
   };
 
   return (
@@ -61,8 +67,23 @@ export function RendemenGaugeCard({ rataRataRendemen, rendemenKemarin }) {
         </div>
 
         {/* Right section */}
-        <div className="scale-[0.95] origin-right opacity-100 mt-6">
+        <div
+          className="group relative scale-[0.95] origin-right opacity-100 mt-6 cursor-pointer"
+          onClick={handleDetailRendemenClick}
+        >
           <Battery value={rataRataRendemen} maxValue={12} />
+
+          {/* Tooltip */}
+          <span
+            className="
+      absolute left-1/2 -top-3 -translate-x-1/2 -translate-y-full
+      bg-black text-white text-xs px-2 py-1 rounded 
+      opacity-0 group-hover:opacity-100 transition
+      whitespace-nowrap pointer-events-none
+    "
+          >
+            Lihat detail
+          </span>
         </div>
       </div>
     </div>

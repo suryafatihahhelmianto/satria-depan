@@ -35,9 +35,9 @@ export default function AppLayout({ children }) {
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
       <div
-        className={`transition-all duration-300 w-full p-8 ${
+        className={`transition-all duration-300 w-full p-7 ${
           isSidebarOpen ? "md:ml-[300px]" : "md:ml-[100px]"
-        } md:mt-24`}
+        } md:mt-16`}
       >
         {children}
       </div>

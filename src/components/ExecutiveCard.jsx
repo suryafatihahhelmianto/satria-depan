@@ -2,12 +2,14 @@
 
 import { CheckCircle, AlertCircle, Calendar } from "lucide-react";
 import { AlertTriangle } from "lucide-react";
+import React, { useState } from "react";
 
 import HistogramChart from "@/components/ExecutiveSpider";
 import { RendemenGaugeCard } from "./ExecutiveRendemen";
 import { useRouter } from "next/navigation";
 import { fetchData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
+import { formatNumberToIndonesian } from "@/tools/formatNumber";
 
 const getKategori = (nilaiKinerja) => {
   if (nilaiKinerja >= 0 && nilaiKinerja <= 25) return "TIDAK BERKELANJUTAN";
@@ -81,6 +83,7 @@ export default function FactoryPerformanceCards({
         selectedYearData,
         nilaiKinerja,
         rataRataRendemen,
+        rataRataRendemenKemarin: dashboardData?.rataRataRendemenKemarin ?? 0,
         kategori: getKategori(nilaiKinerja),
         indikatorWajib: selectedYearData?.indikatorWajib ?? 0,
         indikatorTerisi: selectedYearData?.indikatorTerisi ?? 0,
@@ -179,7 +182,7 @@ export default function FactoryPerformanceCards({
             </div>
 
             {/* CARD NILAI PER PABRIK */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-2">
               {factoriesWithData
                 .slice(0, 3)
                 .map(
@@ -226,10 +229,10 @@ export default function FactoryPerformanceCards({
                     let statusDisplay = "";
 
                     if (isFinal) {
-                      statusDisplay = "Selesai";
+                      statusDisplay = "Perhitungan Selesai";
                     } else {
                       statusDisplay = isComplete
-                        ? "Dalam Proses Perhitungan"
+                        ? "Data Belum Lengkap"
                         : "Belum Selesai";
                     }
 
@@ -242,15 +245,21 @@ export default function FactoryPerformanceCards({
                       <div
                         key={factory.id}
                         onClick={() => handleDetailClick(factory.id)}
-                        className={`
-                        relative
-                        rounded-xl p-4 text-center shadow-sm border
-                        hover:shadow-lg cursor-pointer transition-all duration-300 
-                        active:scale-[0.98]
-                        ${kategoriStyles[kategori]?.card ?? ""}
-                      `}
+                        className="
+                            relative
+                            rounded-xl p-4 text-center shadow-sm border
+                            hover:shadow-lg cursor-pointer transition-all duration-300 
+                            active:scale-[0.98]
+                            group/card
+                            overflow-visible
+                          "
                       >
-                        <p className="font-semibold text-slate-800">
+                        {/* TOOLTIP */}
+                        <span className="absolute bottom-full left-[40%] -translate-x-1/2 mb-3 px-2 py-1 rounded-md bg-black text-white text-xs whitespace-nowrap opacity-0 group-hover/card:opacity-100 transition-all duration-200 pointer-events-none z-20">
+                          Lihat Detail
+                        </span>
+
+                        <p className="text-xl font-semibold text-slate-800">
                           {factory.namaPabrik}
                         </p>
 
@@ -259,7 +268,7 @@ export default function FactoryPerformanceCards({
                             kategoriStyles[kategori]?.text ?? ""
                           }`}
                         >
-                          {nilai.toFixed(2)}%
+                          {formatNumberToIndonesian(nilai)}%
                         </p>
 
                         <p
@@ -270,13 +279,12 @@ export default function FactoryPerformanceCards({
                           {kategori}
                         </p>
 
-                        {/* STATUS */}
                         <p
-                          className={`text-sm mt-2 font-medium ${
+                          className={`text-sm mt-2 font-medium animate-pulse ${
                             isFinal
                               ? "text-green-600"
                               : isComplete
-                              ? "text-blue-600"
+                              ? "text-teal-600"
                               : "text-red-600"
                           }`}
                         >
@@ -289,14 +297,31 @@ export default function FactoryPerformanceCards({
                           </p>
                         )}
 
-                        {!isFinal > 0 && (
+                        {!isFinal && (
                           <div
+                            className="absolute top-[-14px] right-[-10px] z-30 group"
                             onClick={(e) => e.stopPropagation()}
-                            className="absolute top-2 right-2 bg-amber-700 hover:bg-amber-900 text-white 
-               p-2 rounded-full shadow animate-pulse"
-                            title="Ada indikator belum diisi"
                           >
-                            <AlertTriangle className="w-4 h-4" />
+                            {/* ICON WARNING */}
+                            <div className="bg-amber-700 hover:bg-red-700 text-white p-2 rounded-full shadow animate-pulse relative">
+                              <AlertTriangle className="w-4 h-4" />
+                            </div>
+
+                            {/* TOOLTIP BESAR */}
+                            <div
+                              className="
+        absolute right-0 mt-2 w-56
+        bg-white text-black text-sm font-medium
+        p-3 rounded-lg shadow-xl border border-amber-300
+        opacity-0 group-hover:opacity-100
+        pointer-events-none transition-all duration-200
+        z-50
+      "
+                            >
+                              ⚠️ <b>Peringatan</b>
+                              <br />
+                              Ada indikator yang belum diisi.
+                            </div>
                           </div>
                         )}
                       </div>
@@ -310,7 +335,7 @@ export default function FactoryPerformanceCards({
         {/* RIGHT — 1/3 WIDTH */}
         <div className="w-full mb-4 lg:col-span-1">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xl font-semibold">
+            <h3 className="text-xl md:xs font-semibold">
               Prediksi Rendemen Hari Ini
             </h3>
 
@@ -345,20 +370,24 @@ export default function FactoryPerformanceCards({
 
           {/* RENDERMEN CARDS */}
           <div className="space-y-4">
-            {factoriesWithData.map(({ factory, rataRataRendemen }) => {
-              const rr = Number(rataRataRendemen ?? 0);
-              return (
-                <div
-                  key={`rendemen-${factory.id}`}
-                  className="bg-white rounded-xl border border-blue-200/70 overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 p-4"
-                >
-                  <h2 className="text-base font-bold text-slate-800 mb-4">
-                    PG {factory.namaPabrik}
-                  </h2>
-                  <RendemenGaugeCard rataRataRendemen={rr} />
-                </div>
-              );
-            })}
+            {factoriesWithData.map(
+              ({ factory, rataRataRendemen, rendemenKemarin }) => {
+                const rr = Number(rataRataRendemen ?? 0);
+                const rk = Number(rendemenKemarin ?? 0);
+
+                return (
+                  <div
+                    key={`rendemen-${factory.id}`}
+                    className="bg-white rounded-xl border border-blue-200/70 overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 p-4"
+                  >
+                    <h2 className="text-base font-bold text-slate-800 mb-4">
+                      PG {factory.namaPabrik}
+                    </h2>
+                    <RendemenGaugeCard rataRataRendemen={rr} />
+                  </div>
+                );
+              }
+            )}
           </div>
         </div>
       </div>

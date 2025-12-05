@@ -461,7 +461,7 @@ export default function DataKinerja() {
                       sebagai pemisah angka desimal.
                     </p>
 
-                    <div className="flex gap-2 mr-8 text-xl">
+                    <div className="flex gap-2 mr-12 text-xl">
                       contoh:{" "}
                       <span className="inline-block px-2 py-1 border rounded-full font-bold text-gray-900 bg-gray-100">
                         9.14
@@ -475,7 +475,11 @@ export default function DataKinerja() {
                   {/* Thousands instruction */}
                   <div className="flex justify-between items-center w-full">
                     <p className="text-gray-800 text-xl flex-1">
-                      Jangan gunakan tanda pemisah apapun untuk angka ribuan.
+                      Jangan gunakan{" "}
+                      <span className="font-semibold text-gray-900">
+                        tanda pemisah
+                      </span>{" "}
+                      apapun untuk angka ribuan.
                     </p>
 
                     <div className="flex gap-2 mr-8 text-xl">
