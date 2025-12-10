@@ -440,13 +440,22 @@ export default function OpsiDetailEksekutif() {
   }, [id]); // ✅ tambahkan dependency id
 
   useEffect(() => {
+    if (!id) return;
     fetchHasilKinerja();
     fetchSDAMData();
     fetchEkonomiData();
     fetchLingkunganData();
     fetchSosialData();
     fetchHeaderData();
-  }, [fetchHeaderData]);
+  }, [
+    id,
+    fetchHasilKinerja,
+    fetchSDAMData,
+    fetchEkonomiData,
+    fetchLingkunganData,
+    fetchSosialData,
+    fetchHeaderData,
+  ]);
 
   return (
     <div>
