@@ -1,4 +1,4 @@
-// // middleware.js
+// middleware.js
 import { NextResponse } from "next/server";
 
 export function middleware(req) {
@@ -7,24 +7,23 @@ export function middleware(req) {
 
   const currentPath = req.nextUrl.pathname;
 
-  // Tentukan apakah pengguna sedang berada di halaman login atau landing
+  // Tentukan apakah pengguna sedang berada di halaman login, landing, atau sertifikat
   const isLoginPage = currentPath === "/login";
   const isLandingPage = currentPath === "/landing";
+  const isSertifikatPage = currentPath === "/sertifikat";
 
   console.log("currentPath: ", currentPath);
   console.log("isLoginPage: ", isLoginPage);
   console.log("isLandingPage: ", isLandingPage);
+  console.log("isSertifikatPage: ", isSertifikatPage);
 
+  // Jika sudah login dan mencoba akses login/landing, redirect ke home
   if (token && (isLoginPage || isLandingPage)) {
     return NextResponse.redirect(new URL("/", req.url));
   }
 
-  // Jika tidak ada token dan pengguna mencoba mengakses rute selain login, arahkan ke halaman login
-  if (
-    !token &&
-    req.nextUrl.pathname !== "/login" &&
-    currentPath !== "/landing"
-  ) {
+  // Jika tidak ada token dan mencoba akses rute yang dilindungi
+  if (!token && !isLoginPage && !isLandingPage && !isSertifikatPage) {
     return NextResponse.redirect(new URL("/landing", req.url));
   }
 
@@ -35,6 +34,6 @@ export function middleware(req) {
 // Konfigurasi rute mana saja yang akan dilindungi middleware
 export const config = {
   matcher: [
-    "/((?!api|login|img|_next/static|_next/image).*)", // Melindungi semua rute kecuali API, halaman login, dan aset statis
+    "/((?!api|login|iso|img|_next/static|_next/image).*)", // Melindungi semua rute kecuali API, halaman login, dan aset statis
   ],
 };

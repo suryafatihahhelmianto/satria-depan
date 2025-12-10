@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { BarChart2, TrendingUp } from "lucide-react";
 import { FaStar } from "react-icons/fa";
 import { useState, useEffect } from "react";
+import ISO from "@/components/Iso";
 
 export default function LandingPage() {
   const containerVariants = {
@@ -218,6 +219,7 @@ export default function LandingPage() {
             <div className="absolute inset-0 rounded-full ring-2 ring-white/20 group-hover:ring-4 group-hover:ring-green-200 transition-all duration-500"></div>
           </button>
         </Link>
+        <ISO />
       </motion.div>
     </div>
   );
