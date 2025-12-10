@@ -18,6 +18,7 @@ import { TbCertificate } from "react-icons/tb";
 import { GiSugarCane } from "react-icons/gi";
 import { MdEco } from "react-icons/md";
 import SkeletonCardBig from "@/components/common/SkeletonCardBig";
+import Bek from "@/components/ButtonBack";
 
 export default function SertifikatPage() {
   const [loading, setLoading] = useState(true);
@@ -114,6 +115,7 @@ export default function SertifikatPage() {
           />
         ))}
       </div>
+      <Bek className="left-[100px] opacity-45 hover:opacity-100" />
 
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">

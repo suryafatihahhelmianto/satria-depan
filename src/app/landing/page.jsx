@@ -172,7 +172,14 @@ export default function LandingPage() {
         initial="hidden"
         animate="visible"
         variants={containerVariants}
-        className="w-full md:w-1/2 flex flex-col justify-start md:justify-center items-center px-4 sm:px-6 py-8 sm:py-12 bg-gradient-to-b from-green-300 to-white"
+        className="w-full md:w-1/2 
+        flex flex-col 
+        justify-start md:justify-center 
+        items-center 
+        px-4 sm:px-6 
+        py-8 sm:py-12 
+        bg-gradient-to-b from-green-300 to-white 
+        mb-16 md:mb-0"
       >
         <h2 className="text-green-800 text-4xl sm:text-5xl md:text-6xl font-bold mb-8 sm:mb-12 text-center text-balance">
           Fitur Utama

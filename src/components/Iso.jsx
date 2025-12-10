@@ -198,11 +198,6 @@ export default function ISOBadgeMini() {
                 Certified by USAC & AQSR for Software Engineering (ISO 29110)
                 and Quality Requirements (ISO 25002) standards.
               </p>
-              <div className="mt-1 pt-1 border-t border-gray-100">
-                <p className="text-[9px] text-blue-600 font-medium">
-                  Just click to view full certificates
-                </p>
-              </div>
             </div>
           </div>
         </div>

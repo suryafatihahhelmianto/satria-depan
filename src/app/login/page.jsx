@@ -9,6 +9,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { fetchData } from "@/tools/api";
 import Router from "next/router";
+import ISO from "@/components/Iso";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
@@ -246,7 +247,7 @@ export default function LoginPage() {
       </div>
 
       {/* === RIGHT SIDE === */}
-      <div className="flex justify-center items-center w-full md:w-1/2 p-6 bg-gradient-to-b from-green-300 to-white">
+      <div className="flex justify-center items-center w-full md:w-1/2 p-6 bg-gradient-to-b from-green-300 to-white mb-8 md:mb-0">
         {/* Card Wrapper */}
         <div className="bg-white rounded-2xl shadow-2xl p-6 sm:p-10 w-full max-w-md text-center">
           {/* Header Section */}
@@ -357,6 +358,7 @@ export default function LoginPage() {
                 {loading ? "Logging in..." : "Login"}
               </button>
             </form>
+            <ISO className="mt-9" />
           </div>
         </div>
       </div>
