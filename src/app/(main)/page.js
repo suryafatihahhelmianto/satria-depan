@@ -11,6 +11,7 @@ import InfoButton from "@/components/InfoButton";
 import { fetchData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
 import { FaExclamationTriangle } from "react-icons/fa";
+import { useUser } from "@/context/UserContext";
 
 import "react-circular-progressbar/dist/styles.css";
 import "react-datepicker/dist/react-datepicker.css";
@@ -32,6 +33,13 @@ const getKategori = (nilaiKinerja) => {
 };
 
 export default function HomePage() {
+  const router = useRouter();
+  const { role, isLoading: userLoading } = useUser();
+
+  // State untuk autentikasi dan redirect
+  const [authChecked, setAuthChecked] = useState(false);
+
+  // State untuk data dashboard
   const [loading, setLoading] = useState(true);
   const [selectedYear, setSelectedYear] = useState(null);
   const [factories, setFactories] = useState([]);
@@ -41,32 +49,40 @@ export default function HomePage() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [availableYears, setAvailableYears] = useState([]);
 
-  // const [nilaiKinerjaKeberlanjutan, setNilaiKinerjaKeberlanjutan] = useState(0);
-  // const [rataRataRendemen, setRataRataRendemen] = useState(0);
-  // const [informasi, setInformasi] = useState([]);
-
-  const router = useRouter();
-
+  // Effect untuk handle redirect berdasarkan role
   useEffect(() => {
-    async function checkRole() {
-      try {
-        const response = await fetchData("/api/auth/me", {
-          method: "GET",
-          headers: { Authorization: `Bearer ${getCookie("token")}` },
-        });
+    // Jika masih loading user context, tunggu
+    if (userLoading) return;
 
-        const userRole = response.role?.toUpperCase();
+    console.log("User role in HomePage:", role);
 
-        if (userRole === "DIREKSI") {
-          router.replace("/executive-dashboard");
-        }
-      } catch (error) {
-        console.error("Error checking user role:", error);
-      }
+    // Jika role adalah DIREKSI, langsung redirect
+    if (role === "DIREKSI") {
+      console.log("User is DIREKSI, redirecting to executive dashboard");
+      router.replace("/executive-dashboard");
+      return;
     }
 
-    checkRole();
-  }, []);
+    // Jika role sudah diperiksa dan bukan DIREKSI, lanjutkan
+    setAuthChecked(true);
+  }, [role, userLoading, router]);
+
+  // Jika masih loading user atau role adalah DIREKSI (sedang redirect), tampilkan loading
+  if (userLoading || role === "DIREKSI") {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-700 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Memeriksa akses pengguna...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Jika auth belum dicek, tunggu
+  if (!authChecked) {
+    return null;
+  }
 
   const handleFactoryChange = (factory) => {
     setSelectedFactory(factory);
@@ -210,28 +226,6 @@ export default function HomePage() {
   const { nilaiKinerjaKeberlanjutan, rataRataRendemen, informasi } =
     dashboardData;
 
-  // const histogramData = nilaiKinerjaKeberlanjutan.map((data) => ({
-  //   year: data.tahun,
-  //   "Index Total": data.nilaiKinerja,
-  //   "Dimensi Ekonomi": data.dimensiEkonomi,
-  //   "Dimensi Sosial": data.dimensiSosial,
-  //   "Dimensi Lingkungan": data.dimensiLingkungan,
-  //   "Dimensi Sumber Daya": data.dimensiSDAM,
-  // }));
-  // const histogramData = nilaiKinerjaKeberlanjutan
-  //   ? {
-  //       year: nilaiKinerjaKeberlanjutan.tahun,
-  //       "Index Total": nilaiKinerjaKeberlanjutan.nilaiKinerja,
-  //       "Dimensi Ekonomi": nilaiKinerjaKeberlanjutan.dimensiEkonomi,
-  //       "Dimensi Sosial": nilaiKinerjaKeberlanjutan.dimensiSosial,
-  //       "Dimensi Lingkungan": nilaiKinerjaKeberlanjutan.dimensiLingkungan,
-  //       "Dimensi Sumber Daya": nilaiKinerjaKeberlanjutan.dimensiSDAM,
-  //     }
-  //   : []; // Atau bisa null, tergantung bagaimana Anda ingin menangani ketidakadaan data
-
-  // const selectedYearData = nilaiKinerjaKeberlanjutan.find(
-  //   (data) => data.tahun === parseInt(selectedYear)
-  // );
   const selectedYearData = nilaiKinerjaKeberlanjutan.find(
     (data) => data.tahun === parseInt(selectedYear)
   );
@@ -279,15 +273,10 @@ export default function HomePage() {
                     className="w-40 h-40 md:w-52 md:h-52 mb-2 hover:cursor-pointer"
                   >
                     <CircularProgressbar
-                      // value={selectedYearData?.nilaiKinerja.toFixed(2) || 0}
                       value={
                         nilaiKinerjaKeberlanjutan[0].nilaiKinerja.toFixed(2) ||
                         0
                       }
-                      // text={`${
-                      //   formatNumberToIndonesian(selectedYearData?.nilaiKinerja) ||
-                      //   0
-                      // }%`}
                       text={`${
                         formatNumberToIndonesian(
                           nilaiKinerjaKeberlanjutan[0].nilaiKinerja
@@ -374,7 +363,6 @@ export default function HomePage() {
 
           <div className="flex flex-col sm:flex-row justify-around gap-5 w-full h-full">
             <div className="flex flex-col items-center justify-center mb-6 h-full">
-              {/* Warning jika QC belum menghitung */}
               {(rataRataRendemen === 0 || rataRataRendemen === null) && (
                 <div className="animate-pulse flex text-center items-center gap-2 bg-yellow-100 border border-yellow-400 text-yellow-800 px-3 py-2 rounded-xl mb-4 w-full max-w-sm">
                   <FaExclamationTriangle className="text-4xl animate-pulse" />
@@ -385,12 +373,10 @@ export default function HomePage() {
                 className="relative group flex flex-col items-center cursor-pointer"
                 onClick={handleDetailRendemenClick}
               >
-                {/* Tampilkan nilai rata-rata rendemen */}
                 <div className="text-3xl xl:text-5xl font-bold mb-4">
                   {formatNumberToIndonesian(rataRataRendemen) || 0}%
                 </div>
 
-                {/* Bar indikator */}
                 <div
                   onClick={handleDetailRendemenClick}
                   className="relative w-32 2xl:w-52 h-6 rounded-full bg-gradient-to-r from-red-500 via-yellow-500 to-green-500"
@@ -401,10 +387,10 @@ export default function HomePage() {
                     style={{
                       left: `${
                         rataRataRendemen <= 4
-                          ? (rataRataRendemen / 12) * 100 // Posisi untuk kategori rendah
+                          ? (rataRataRendemen / 12) * 100
                           : rataRataRendemen <= 8
-                          ? (rataRataRendemen / 12) * 100 // Posisi untuk kategori sedang
-                          : (rataRataRendemen / 12) * 100 // Posisi untuk kategori tinggi
+                          ? (rataRataRendemen / 12) * 100
+                          : (rataRataRendemen / 12) * 100
                       }%`,
                       width: "30px",
                       height: "50px",
@@ -412,7 +398,6 @@ export default function HomePage() {
                   ></div>
                 </div>
 
-                {/* Tampilkan label kategori */}
                 <div className="mt-4 text-xl font-semibold text-gray-700">
                   {rataRataRendemen <= 4
                     ? "Rendah"
@@ -437,7 +422,6 @@ export default function HomePage() {
                   selected={selectedDate}
                   onChange={(date) => {
                     setSelectedDate(date);
-                    // fetchDashboardData(selectedFactory.id);
                   }}
                   inline
                   dateFormat="dd/MM/yyyy"
@@ -454,9 +438,7 @@ export default function HomePage() {
           <h2 className="text-xl font-semibold mb-2 text-center">
             Kinerja Keberlanjutan Rantai Pasok PG{" "}
             {selectedFactory ? selectedFactory.namaPabrik : "Pabrik"}{" "}
-            {/* {selectedYear} */}
           </h2>
-          {/* <HistogramChart data={histogramData} /> */}
           <HistogramChart data={dashboardData.dataHistogram} />
         </div>
 
@@ -472,7 +454,6 @@ export default function HomePage() {
               {informasi.map((info, index) => (
                 <li key={index} className="flex items-center">
                   <BsFillCircleFill className="text-red-500 mr-3 animate-pulse" />
-                  {/* Access and display specific properties of the object */}
                   <div>
                     <p className="font-bold text-l animate-pulse">
                       {info.role === "GENERAL MANAGER / KEPALA PABRIK"
