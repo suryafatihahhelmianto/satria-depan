@@ -19,80 +19,62 @@ import GridCardSkeleton from "@/components/common/GridCardSkeleton";
 import { formatNumberToIndonesian } from "@/tools/formatNumber";
 
 const getKategori = (nilaiKinerja) => {
-  if (nilaiKinerja >= 0 && nilaiKinerja <= 25) {
-    return "TIDAK BERKELANJUTAN";
-  } else if (nilaiKinerja > 25 && nilaiKinerja <= 50) {
-    return "KURANG BERKELANJUTAN";
-  } else if (nilaiKinerja > 50 && nilaiKinerja <= 75) {
-    return "CUKUP BERKELANJUTAN";
-  } else if (nilaiKinerja > 75 && nilaiKinerja <= 100) {
-    return "BERKELANJUTAN";
-  } else {
-    return "NILAI TIDAK VALID";
-  }
+  if (nilaiKinerja >= 0 && nilaiKinerja <= 25) return "TIDAK BERKELANJUTAN";
+  if (nilaiKinerja > 25 && nilaiKinerja <= 50) return "KURANG BERKELANJUTAN";
+  if (nilaiKinerja > 50 && nilaiKinerja <= 75) return "CUKUP BERKELANJUTAN";
+  if (nilaiKinerja > 75 && nilaiKinerja <= 100) return "BERKELANJUTAN";
+  return "NILAI TIDAK VALID";
 };
 
 export default function HomePage() {
   const router = useRouter();
   const { role, isLoading: userLoading } = useUser();
 
-  // State untuk autentikasi dan redirect
   const [authChecked, setAuthChecked] = useState(false);
-
-  // State untuk data dashboard
   const [loading, setLoading] = useState(true);
+
   const [selectedYear, setSelectedYear] = useState(null);
   const [factories, setFactories] = useState([]);
   const [selectedFactory, setSelectedFactory] = useState({});
   const [dashboardData, setDashboardData] = useState(null);
-  const [sustainabilityData, setSustainabilityData] = useState([]);
+
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [availableYears, setAvailableYears] = useState([]);
 
-  // Effect untuk handle redirect berdasarkan role
+  // ---------------------------------------------------------------------------------------
+  // 1. Redirect Role (must be placed BEFORE any conditional return)
+  // ---------------------------------------------------------------------------------------
   useEffect(() => {
-    // Jika masih loading user context, tunggu
     if (userLoading) return;
 
-    console.log("User role in HomePage:", role);
-
-    // Jika role adalah DIREKSI, langsung redirect
     if (role === "DIREKSI") {
-      console.log("User is DIREKSI, redirecting to executive dashboard");
       router.replace("/executive-dashboard");
       return;
     }
 
-    // Jika role sudah diperiksa dan bukan DIREKSI, lanjutkan
     setAuthChecked(true);
-  }, [role, userLoading, router]);
+  }, [userLoading, role, router]);
 
-  // Jika masih loading user atau role adalah DIREKSI (sedang redirect), tampilkan loading
-  if (userLoading || role === "DIREKSI") {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-700 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Memeriksa akses pengguna...</p>
-        </div>
-      </div>
-    );
-  }
+  // ---------------------------------------------------------------------------------------
+  // 2. FETCH FUNCTIONS (all wrapped in useCallback)
+  // ---------------------------------------------------------------------------------------
 
-  // Jika auth belum dicek, tunggu
-  if (!authChecked) {
-    return null;
-  }
+  const fetchFactories = useCallback(async () => {
+    try {
+      const response = await fetchData("/api/pabrik", {
+        method: "GET",
+        headers: { Authorization: `Bearer ${getCookie("token")}` },
+      });
 
-  const handleFactoryChange = (factory) => {
-    setSelectedFactory(factory);
-    fetchDashboardData(factory.id);
-  };
+      setFactories(response);
 
-  const handleYearChange = (event) => {
-    const year = parseInt(event.target.value);
-    setSelectedYear(year);
-  };
+      if (response.length > 0) {
+        setSelectedFactory(response[0]); // default
+      }
+    } catch (error) {
+      console.error("Error fetching factories:", error);
+    }
+  }, []);
 
   const fetchYears = useCallback(async () => {
     if (!selectedFactory.id) return;
@@ -106,9 +88,8 @@ export default function HomePage() {
         }
       );
 
-      const years = response.data;
-      setAvailableYears(years);
-      setSelectedYear(years.length > 0 ? years[0] : null);
+      setAvailableYears(response.data || []);
+      setSelectedYear(response.data?.[0] || null);
     } catch (error) {
       console.error("Error fetching years:", error);
       setAvailableYears([]);
@@ -116,28 +97,11 @@ export default function HomePage() {
     }
   }, [selectedFactory.id]);
 
-  const fetchFactories = async () => {
-    try {
-      const response = await fetchData("/api/pabrik", {
-        method: "GET",
-        headers: { Authorization: `Bearer ${getCookie("token")}` },
-      });
-
-      if (response.length > 0) {
-        setSelectedFactory(response[0]); // Set the first factory as default
-        fetchDashboardData(response[0].id); // Fetch dashboard data for the first factory
-      }
-
-      setFactories(response);
-    } catch (error) {
-      console.error("Error fetching factories:", error);
-    }
-  };
-
   const fetchDashboardData = useCallback(
     async (pabrikId) => {
       try {
         setLoading(true);
+
         const response = await fetchData(
           `/api/dashboard/${pabrikId}?tahun=${selectedYear}&startDate=${selectedDate.toISOString()}&endDate=${selectedDate.toISOString()}`,
           {
@@ -146,70 +110,80 @@ export default function HomePage() {
           }
         );
 
-        const updatedInformasi = response.informasi.map((item) => {
-          let updatedRole = item.role;
-          if (updatedRole === "QUALITYCONTROL") updatedRole = "QUALITY CONTROL";
-          if (updatedRole === "KEPALAPABRIK")
-            updatedRole = "GENERAL MANAGER / KEPALA PABRIK";
-          if (updatedRole === "SDM") updatedRole = "SDM dan UMUM";
-          return { ...item, role: updatedRole };
+        // Normalize roles
+        response.informasi = response.informasi.map((item) => {
+          let updated = item.role;
+          if (updated === "QUALITYCONTROL") updated = "QUALITY CONTROL";
+          if (updated === "KEPALAPABRIK")
+            updated = "GENERAL MANAGER / KEPALA PABRIK";
+          if (updated === "SDM") updated = "SDM dan UMUM";
+          return { ...item, role: updated };
         });
 
-        response.informasi = updatedInformasi;
         setDashboardData(response);
-        setLoading(false);
       } catch (error) {
-        console.error("Error fetching dashboard data:", error);
+        console.error("Error fetching dashboard:", error);
+      } finally {
         setLoading(false);
       }
     },
     [selectedYear, selectedDate]
   );
 
-  const fetchSesiPengisian = async () => {
+  const fetchSesiPengisian = useCallback(async () => {
     try {
       const response = await fetchData(
         `/api/sesi/sesiByPabrikId?tahun=${selectedYear}&pabrikId=${selectedFactory.id}`,
         {
           method: "GET",
-          headers: {
-            Authorization: `Bearer ${getCookie("token")}`,
-          },
+          headers: { Authorization: `Bearer ${getCookie("token")}` },
         }
       );
-
       return response.id;
     } catch (error) {
       console.error("Error fetching sesi pengisian:", error);
     }
-  };
+  }, [selectedYear, selectedFactory.id]);
 
-  const handleDetailClick = async () => {
-    const sesiPengisianId = await fetchSesiPengisian();
-    if (sesiPengisianId) {
-      router.push(`/detail/${sesiPengisianId}/hasil`);
-    } else {
-      alert("Sesi pengisian tidak ditemukan");
-    }
-  };
-
-  const handleDetailRendemenClick = async () => {
-    router.push(`/rendemen`);
-  };
+  // ---------------------------------------------------------------------------------------
+  // 3. EFFECTS — all effects MUST be above any return statements
+  // ---------------------------------------------------------------------------------------
 
   useEffect(() => {
     fetchFactories();
-  }, []);
+  }, [fetchFactories]);
 
   useEffect(() => {
+    if (!selectedFactory.id) return;
     fetchYears();
-  }, [selectedFactory]);
+  }, [selectedFactory.id, fetchYears]);
 
   useEffect(() => {
-    if (selectedFactory.id && selectedYear) {
-      fetchDashboardData(selectedFactory.id);
-    }
-  }, [selectedFactory.id, selectedYear, selectedDate]);
+    if (!selectedFactory.id || !selectedYear) return;
+    fetchDashboardData(selectedFactory.id);
+  }, [
+    selectedFactory.id,
+    selectedYear,
+    selectedDate,
+    fetchDashboardData,
+  ]);
+
+  // ---------------------------------------------------------------------------------------
+  // 4. CONDITIONAL RETURNS — AFTER ALL HOOKS
+  // ---------------------------------------------------------------------------------------
+
+  if (userLoading || role === "DIREKSI") {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-700 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Memeriksa akses pengguna...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!authChecked) return null;
 
   if (loading) {
     return (
@@ -223,11 +197,33 @@ export default function HomePage() {
     return <p>No data available for the selected factory.</p>;
   }
 
+  // ---------------------------------------------------------------------------------------
+  // 5. PAGE RENDER BELOW
+  // ---------------------------------------------------------------------------------------
+
+  const handleFactoryChange = (factory) => {
+    setSelectedFactory(factory);
+  };
+
+  const handleYearChange = (event) => {
+    setSelectedYear(parseInt(event.target.value));
+  };
+
+  const handleDetailClick = async () => {
+    const sesiPengisianId = await fetchSesiPengisian();
+    if (sesiPengisianId) router.push(`/detail/${sesiPengisianId}/hasil`);
+    else alert("Sesi pengisian tidak ditemukan");
+  };
+
+  const handleDetailRendemenClick = () => {
+    router.push(`/rendemen`);
+  };
+
   const { nilaiKinerjaKeberlanjutan, rataRataRendemen, informasi } =
     dashboardData;
 
   const selectedYearData = nilaiKinerjaKeberlanjutan.find(
-    (data) => data.tahun === parseInt(selectedYear)
+    (d) => d.tahun === Number(selectedYear)
   );
 
   return (
