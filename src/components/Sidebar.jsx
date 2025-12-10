@@ -81,7 +81,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
         icon: <AiOutlineUser size={20} />,
       },
     {
-      name: "Quick Manual",
+      name: "Manual Singkat",
       path: "/manual",
       icon: <AiOutlineBook size={20} />,
     },
