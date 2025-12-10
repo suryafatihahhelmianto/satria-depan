@@ -80,7 +80,11 @@ export default function LandingPage() {
               {/* Logo depan */}
               <div
                 className="absolute inset-0 rounded-full flex items-center justify-center"
-                style={{ backfaceVisibility: "hidden" }}
+                style={{
+                  backfaceVisibility: "hidden",
+                  WebkitBackfaceVisibility: "hidden",
+                  transform: "rotateY(0deg)",
+                }}
               >
                 <Image
                   src="/img/logo-satria-keren.png"
@@ -94,8 +98,9 @@ export default function LandingPage() {
               <div
                 className="absolute inset-0 rounded-full flex items-center justify-center"
                 style={{
-                  transform: "rotateY(180deg)",
                   backfaceVisibility: "hidden",
+                  WebkitBackfaceVisibility: "hidden",
+                  transform: "rotateY(180deg) scaleX(-1)",
                 }}
               >
                 <Image
