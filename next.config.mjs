@@ -3,12 +3,7 @@
 
 // export default nextConfig;
 
-import dotenv from "dotenv";
 import withPWA from "next-pwa";
-
-dotenv.config({
-  path: process.env.APP_ENV === "demo" ? ".env.demo" : ".env.production",
-});
 
 const nextConfig = withPWA({
   // PWA Config
