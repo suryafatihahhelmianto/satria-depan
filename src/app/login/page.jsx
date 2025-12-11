@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FaStar } from "react-icons/fa";
 import { AiOutlineUser, AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { RiLockPasswordLine } from "react-icons/ri";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { fetchData } from "@/tools/api";
 import Router from "next/router";
@@ -40,27 +40,64 @@ export default function LoginPage() {
   const [shine, setShine] = useState(false);
   const [showThumb, setShowThumb] = useState(false);
 
+  // State untuk loading dengan progress bar - DISEDERHANAKAN
   const [loadingText, setLoadingText] = useState("Menyiapkan sistem...");
+  const [loadingProgress, setLoadingProgress] = useState(0);
+  const loadingIntervalRef = useRef(null);
+
+  // Hanya 3-4 pesan loading yang bergantian secara acak
+  const loadingMessages = [
+    "🔍 Memverifikasi kredensial...",
+    "🧠 Mengakses sistem analitik...",
+    "🌾 Menghubungkan ke database tebu...",
+    "⚡ Memuat dashboard utama...",
+    "🔐 Membuat sesi pengguna...",
+    "📊 Menyiapkan data kinerja...",
+  ];
 
   useEffect(() => {
     if (loading) {
-      const messages = [
-        "🔍 Mencocokkan data pengguna...",
-        "🧠 Memanggil AI kebun cerdas...",
-        "🌾 Merapihkan tebu di lahan...",
-        "📊 Menghitung rendemen terbaik...",
-        "🚀 Menyiapkan dashboard untuk Anda...",
-        "🧩 Menghubungkan modul analitik...",
-        "🍃 Mengukur tingkat keberlanjutan rantai pasok...",
-        "⚙️ Menyiapkan engine perhitungan keberlanjutan...",
-        "📈 Menyusun visualisasi performa pabrik...",
-      ];
-      let i = 0;
-      const interval = setInterval(() => {
-        setLoadingText(messages[i]);
-        i = (i + 1) % messages.length;
-      }, 1200);
-      return () => clearInterval(interval);
+      // Mulai dari 10%
+      setLoadingProgress(10);
+
+      // Simulasi progress yang lebih realistis (lambat di awal, cepat di akhir)
+      loadingIntervalRef.current = setInterval(() => {
+        setLoadingProgress((prev) => {
+          // Algorithm: semakin tinggi progress, semakin lambat naiknya
+          let increment;
+          if (prev < 30) increment = 1; // Lambat di awal
+          else if (prev < 60) increment = 2; // Sedang
+          else if (prev < 85) increment = 3; // Cepat
+          else increment = 0.5; // Sangat lambat di akhir (mendekati 100%)
+
+          const newProgress = Math.min(prev + increment, 95); // Hingga 95%
+
+          // Jika sudah 95%, berhenti (nanti akan langsung ke 100% saat API sukses)
+          if (newProgress >= 95) {
+            clearInterval(loadingIntervalRef.current);
+            return 95;
+          }
+
+          return newProgress;
+        });
+      }, 300);
+
+      // Ganti pesan loading secara periodik
+      const messageInterval = setInterval(() => {
+        const randomIndex = Math.floor(Math.random() * loadingMessages.length);
+        setLoadingText(loadingMessages[randomIndex]);
+      }, 1500);
+
+      return () => {
+        clearInterval(loadingIntervalRef.current);
+        clearInterval(messageInterval);
+      };
+    } else {
+      // Reset progress ketika loading selesai
+      setLoadingProgress(0);
+      if (loadingIntervalRef.current) {
+        clearInterval(loadingIntervalRef.current);
+      }
     }
   }, [loading]);
 
@@ -98,25 +135,55 @@ export default function LoginPage() {
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError("");
+    setSuccessMessage("");
 
     try {
+      // Mulai progress dari 10%
+      setLoadingProgress(10);
+      setLoadingText("🔍 Memverifikasi kredensial...");
+
+      // API call dengan timeout yang realistis
       const response = await fetchData("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         data: { username, password },
+        timeout: 10000, // 10 detik timeout
       });
+
+      // Update progress ke 70% setelah API response
+      setLoadingProgress(70);
+      setLoadingText("Kredensial valid! Membuat sesi...");
 
       document.cookie = `token=${response.token}; path=/; max-age=86400;`;
 
-      setSuccessMessage("Login Berhasil, Tunggu Sebentar Yaa...");
-      router.push("/");
+      // Update progress ke 90%
+      setLoadingProgress(90);
+      setLoadingText("Login berhasil! Mengarahkan ke dashboard...");
+
+      // Tunggu sebentar untuk menunjukkan progress 100%
+      setTimeout(() => {
+        setLoadingProgress(100);
+        setSuccessMessage("Login Berhasil, Tunggu Sebentar Yaa...");
+
+        // Redirect setelah progress complete
+        setTimeout(() => {
+          router.push("/");
+        }, 800);
+      }, 500);
 
       setUsername("");
       setPassword("");
-      setError("");
     } catch (error) {
-      setError("Login failed. Please check your credentials.");
+      setError("Login gagal. Silakan periksa username dan password Anda.");
       setLoading(false);
+      setLoadingProgress(0);
+
+      // Hapus interval jika ada
+      if (loadingIntervalRef.current) {
+        clearInterval(loadingIntervalRef.current);
+      }
+
       console.error("Login error:", error);
     }
   };
@@ -363,65 +430,137 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* === LOADING MODAL UX === */}
+      {/* === LOADING MODAL UX DENGAN PROGRESS BAR YANG LEBIH REALISTIS === */}
       <AnimatePresence>
         {loading && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/70 backdrop-blur-sm flex flex-col justify-center items-center z-50"
+            className="fixed inset-0 bg-black/80 backdrop-blur-lg flex flex-col justify-center items-center z-50"
           >
-            {/* Spinner dengan animasi cahaya */}
+            {/* Main Loading Container */}
             <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1, rotate: 360 }}
-              transition={{
-                duration: 1,
-                repeat: Infinity,
-                ease: "easeInOut",
-                repeatDelay: 0.2,
-              }}
-              className="relative w-16 h-16 mb-8"
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.3 }}
+              className="bg-gradient-to-br from-green-900/90 to-green-800/90 p-8 rounded-3xl shadow-2xl max-w-md w-full mx-4 border border-green-400/30"
             >
-              <div className="absolute inset-0 rounded-full border-4 border-green-400 border-t-transparent animate-spin"></div>
-              <div className="absolute inset-2 rounded-full bg-gradient-to-r from-green-300 to-green-500 blur-md opacity-70 animate-pulse"></div>
+              {/* Header */}
+              <div className="text-center mb-6">
+                <motion.div
+                  initial={{ rotate: 0 }}
+                  animate={{ rotate: 360 }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "linear",
+                  }}
+                  className="inline-block mb-4"
+                >
+                  <div className="w-16 h-16 rounded-full border-4 border-green-300 border-t-transparent relative">
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-r from-green-400/30 to-green-600/30 blur-sm"></div>
+                  </div>
+                </motion.div>
+
+                <h3 className="text-xl font-bold text-white mb-2">
+                  Sedang masuk ke SATRIA-KEREN
+                </h3>
+              </div>
+
+              {/* Dynamic Progress Bar - SIMPLE */}
+              <div className="mb-6">
+                {/* Progress Bar Container */}
+                <div className="relative h-3 bg-green-900/50 rounded-full overflow-hidden mb-3">
+                  {/* Progress Fill */}
+                  <motion.div
+                    className="h-full bg-gradient-to-r from-green-400 to-green-500 rounded-full relative"
+                    initial={{ width: "0%" }}
+                    animate={{ width: `${loadingProgress}%` }}
+                    transition={{ type: "spring", stiffness: 100 }}
+                  >
+                    {/* Glow effect */}
+                    <div className="absolute top-0 left-0 h-full w-full bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse"></div>
+                  </motion.div>
+                </div>
+
+                {/* Progress Info */}
+                <div className="flex justify-between items-center text-xs text-green-200 mb-4">
+                  <span>Loading...</span>
+                  <span className="font-bold">{loadingProgress}%</span>
+                </div>
+              </div>
+
+              {/* Dynamic Loading Text */}
+              <motion.div
+                key={loadingText}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="text-center mb-6"
+              >
+                <div className="inline-flex items-center justify-center gap-2 bg-green-800/30 px-4 py-2 rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <motion.span
+                      animate={{ opacity: [1, 0.5, 1] }}
+                      transition={{ duration: 1.5, repeat: Infinity }}
+                      className="text-green-300"
+                    >
+                      ●
+                    </motion.span>
+                    <span className="text-green-100 text-sm">
+                      {loadingText}
+                    </span>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Simple Status */}
+              <div className="text-center">
+                <div className="inline-flex items-center gap-2 text-green-300 text-xs bg-green-900/30 px-3 py-1 rounded">
+                  <motion.div
+                    animate={{ scale: [1, 1.2, 1] }}
+                    transition={{ duration: 1, repeat: Infinity }}
+                    className="w-1.5 h-1.5 bg-green-400 rounded-full"
+                  />
+                  <span>Harap tunggu sebentar...</span>
+                </div>
+              </div>
             </motion.div>
 
-            {/* Dynamic Loading Text */}
-            <motion.p
-              key={loadingText}
+            {/* Cancel Button (optional) */}
+            <motion.button
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.5 }}
-              className="text-white text-lg font-medium text-center px-8"
+              transition={{ delay: 0.5 }}
+              onClick={() => {
+                setLoading(false);
+                setLoadingProgress(0);
+                if (loadingIntervalRef.current) {
+                  clearInterval(loadingIntervalRef.current);
+                }
+              }}
+              className="mt-6 px-4 py-2 text-sm text-green-300 hover:text-white hover:bg-green-800/30 rounded-lg transition-colors"
             >
-              {loadingText}
-            </motion.p>
-
-            {/* Pesan Tetap */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5, duration: 0.8 }}
-              className="mt-6 bg-green-500/20 border border-green-400 text-green-200 font-medium py-2 px-6 rounded-xl shadow-inner flex items-center gap-2"
-            >
-              Sedang Memproses, tunggu sebentar ya...
-            </motion.div>
-
-            {/* Tombol Loading Info */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8 }}
-              className="mt-6 bg-green-500 text-white font-semibold py-2 px-6 rounded-xl shadow-lg cursor-wait"
-            >
-              Logging in...
-            </motion.div>
+              Batalkan
+            </motion.button>
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Tambahkan style untuk animasi */}
+      <style jsx global>{`
+        @keyframes shimmer {
+          0% {
+            transform: translateX(-100%);
+          }
+          100% {
+            transform: translateX(100%);
+          }
+        }
+        .animate-shimmer {
+          animation: shimmer 2s infinite;
+        }
+      `}</style>
     </div>
   );
 }

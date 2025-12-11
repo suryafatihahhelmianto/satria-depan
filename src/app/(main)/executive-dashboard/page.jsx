@@ -2,8 +2,6 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { TrendingUp } from "lucide-react";
-import HistogramChart from "@/components/ExecutiveSpider";
 import DigitalClock from "@/components/ExecutiveClock";
 import { fetchData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
@@ -22,20 +20,6 @@ const getAvailableYears = () => {
   }
 
   return years;
-};
-
-const getKategori = (nilaiKinerja) => {
-  if (nilaiKinerja >= 0 && nilaiKinerja <= 25) {
-    return "TIDAK BERKELANJUTAN";
-  } else if (nilaiKinerja > 25 && nilaiKinerja <= 50) {
-    return "KURANG BERKELANJUTAN";
-  } else if (nilaiKinerja > 50 && nilaiKinerja <= 75) {
-    return "CUKUP BERKELANJUTAN";
-  } else if (nilaiKinerja > 75 && nilaiKinerja <= 100) {
-    return "BERKELANJUTAN";
-  } else {
-    return "NILAI TIDAK VALID";
-  }
 };
 
 export default function HomePage() {
@@ -98,24 +82,6 @@ export default function HomePage() {
     }
   }, [factories, selectedYear, selectedDate]);
 
-  const fetchSesiPengisian = async (pabrikId) => {
-    try {
-      const response = await fetchData(
-        `/api/sesi/sesiByPabrikId?tahun=${selectedYear}&pabrikId=${pabrikId}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${getCookie("token")}`,
-          },
-        }
-      );
-
-      return response.id;
-    } catch (error) {
-      console.error("Error fetching sesi pengisian:", error);
-    }
-  };
-
   useEffect(() => {
     fetchFactories();
   }, []);
@@ -161,40 +127,6 @@ export default function HomePage() {
           setSelectedDate={setSelectedDate}
           availableYears={availableYears}
         />
-
-        {/* HISTOGRAM
-        <div className="mt-14">
-          <h3
-            className="text-3xl font-extrabold mb-6 flex items-center gap-3
-      bg-gradient-to-r from-green-700 to-green-500 bg-clip-text text-transparent drop-shadow-sm"
-          >
-            <TrendingUp className="w-7 h-7 text-emerald-600" />
-            Perbandingan Keberlanjutan 3 Pabrik
-          </h3>
-
-          <HistogramChart
-            data={factories.map((factory) => {
-              const dashboardData = allFactoriesData[factory.id];
-
-              if (
-                !dashboardData ||
-                !dashboardData.nilaiKinerjaKeberlanjutan[0]
-              ) {
-                return { namaPabrik: factory.namaPabrik };
-              }
-
-              const kinerja = dashboardData.nilaiKinerjaKeberlanjutan[0];
-
-              return {
-                namaPabrik: factory.namaPabrik,
-                dimensiEkonomi: kinerja.dimensiEkonomi || 0,
-                dimensiSosial: kinerja.dimensiSosial || 0,
-                dimensiLingkungan: kinerja.dimensiLingkungan || 0,
-                dimensiSDAM: kinerja.dimensiSDAM || 0,
-              };
-            })}
-          />
-        </div> */}
       </div>
     </div>
   );

@@ -303,7 +303,7 @@ export default function RendemenPage() {
             <tbody>
               {sessions.length === 0 ? (
                 <tr>
-                  <td colSpan="4" className="py-2 px-4 border-b text-center">
+                  <td colSpan="6" className="py-2 px-4 border-b text-center">
                     Tidak ada data rendemen yang tersedia
                   </td>
                 </tr>

@@ -18,6 +18,15 @@ const BackButton = ({ className = "" }) => {
       `}
     >
       <ArrowLeft className="w-5 h-5 text-green-600" />
+      <span
+        className="absolute inset-0 
+                            bg-gradient-to-r from-transparent via-green-500 to-transparent 
+                            opacity-0 
+                            group-hover:opacity-100 
+                            translate-x-[-200%] 
+                            group-hover:translate-x-[200%] 
+                            transition-all duration-1000 ease-in-out"
+      ></span>
 
       {/* Tooltip */}
       <span

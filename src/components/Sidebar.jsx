@@ -204,6 +204,15 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                   >
                     {link.icon}
                     {isOpen && <span>{link.name}</span>}
+                    <span
+                      className="absolute inset-0 
+                            bg-gradient-to-r from-transparent via-green-500 to-transparent 
+                            opacity-0 
+                            group-hover:opacity-100 
+                            translate-x-[-200%] 
+                            group-hover:translate-x-[200%] 
+                            transition-all duration-1000 ease-in-out"
+                    ></span>
                   </Link>
                 </li>
               ))}
@@ -219,6 +228,15 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                     onClick={handleLinkClick}
                   >
                     <BsPersonFill className="mr-2" /> Biodata
+                    <span
+                      className="absolute inset-0 
+                            bg-gradient-to-r from-transparent via-green-500 to-transparent 
+                            opacity-0 
+                            group-hover:opacity-100 
+                            translate-x-[-200%] 
+                            group-hover:translate-x-[200%] 
+                            transition-all duration-1000 ease-in-out"
+                    ></span>
                   </Link>
                 </li>
                 <li>
@@ -228,6 +246,15 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                     onClick={handleLinkClick}
                   >
                     <BsGearFill className="mr-2" /> Pengaturan
+                    <span
+                      className="absolute inset-0 
+                            bg-gradient-to-r from-transparent via-green-500 to-transparent 
+                            opacity-0 
+                            group-hover:opacity-100 
+                            translate-x-[-200%] 
+                            group-hover:translate-x-[200%] 
+                            transition-all duration-1000 ease-in-out"
+                    ></span>
                   </Link>
                 </li>
                 <li>
@@ -240,6 +267,15 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                     className="flex gap-2 w-full text-left px-4 py-2 text-red-600 hover:bg-red-100 items-center"
                   >
                     <BsBoxArrowRight className="mr-2" /> Logout
+                    <span
+                      className="absolute inset-0 
+                            bg-gradient-to-r from-transparent via-green-500 to-transparent 
+                            opacity-0 
+                            group-hover:opacity-100 
+                            translate-x-[-200%] 
+                            group-hover:translate-x-[200%] 
+                            transition-all duration-1000 ease-in-out"
+                    ></span>
                   </button>
                 </li>
               </ul>

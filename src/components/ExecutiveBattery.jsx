@@ -1,15 +1,21 @@
 "use client";
 
 export default function BatteryHorizontal({ value, maxValue = 12 }) {
-  const percentage = (value / maxValue) * 100;
+  // Cek jika value undefined, null, atau 0
+  const isEmpty = !value || value === 0;
+
+  // Jika kosong, set percentage menjadi 0
+  const percentage = isEmpty ? 0 : (value / maxValue) * 100;
 
   const getColor = (val) => {
+    if (isEmpty) return "#9ca3af"; // abu-abu untuk kosong
     if (val <= maxValue * 0.33) return "#ef4444"; // merah
     if (val <= maxValue * 0.66) return "#eab308"; // kuning
     return "#22c55e"; // hijau
   };
 
   const getKategori = (val) => {
+    if (isEmpty) return "BELUM DIISI";
     if (val <= maxValue * 0.33) return "RENDAH";
     if (val <= maxValue * 0.66) return "SEDANG";
     return "TINGGI";

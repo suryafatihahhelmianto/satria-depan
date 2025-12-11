@@ -22,11 +22,22 @@ const InfoButton = () => {
   };
 
   return (
-    <div className="relative inline-block">
+    <div className="relative inline-block group">
+      {/* Tooltip "Click Me!" */}
+      <div
+        className="absolute -top-8 left-1/2 transform -translate-x-1/2 
+                      bg-black text-white text-xs px-2 py-1 rounded 
+                      opacity-0 group-hover:opacity-100 transition-opacity 
+                      pointer-events-none whitespace-nowrap z-30"
+      >
+        Click Me!
+      </div>
+
       <AiOutlineInfoCircle
         size={20}
         onClick={toggleTable}
-        className="ml-2 text-gray-500 hover:text-gray-700 cursor-pointer"
+        className="ml-2 text-gray-500 hover:text-gray-700 cursor-pointer 
+                   transition-colors duration-200"
       />
 
       {isOpen && (

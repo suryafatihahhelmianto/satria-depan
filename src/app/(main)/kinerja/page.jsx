@@ -30,6 +30,20 @@ export default function KinerjaPage() {
   // 🔽 State untuk filter pabrik
   const [selectedPabrik, setSelectedPabrik] = useState("semua");
 
+  // 🔽 State untuk loading modal dengan animasi
+  const [isLoadingModalOpen, setIsLoadingModalOpen] = useState(false);
+  const [loadingProgress, setLoadingProgress] = useState(0);
+  const [loadingStep, setLoadingStep] = useState("");
+  const [loadingMessages] = useState([
+    "Menyiapkan data...",
+    "Membangun template formulir...",
+    "Menyusun komponen...",
+    "Menginisialisasi validasi...",
+    "Menyalakan mesin learning...",
+    "Mempersiapkan antarmuka...",
+    "Hampir selesai...",
+  ]);
+
   const currentYear = new Date().getFullYear();
   const years = [];
   for (let i = currentYear - 3; i <= currentYear + 1; i++) {
@@ -53,6 +67,40 @@ export default function KinerjaPage() {
 
   const [showDeadlineModal, setShowDeadlineModal] = useState(false);
   const [selectedSession, setSelectedSession] = useState(null);
+
+  // ✅ Fungsi untuk menampilkan loading dengan animasi
+  const startLoadingAnimation = () => {
+    setIsLoadingModalOpen(true);
+    setLoadingProgress(0);
+
+    // Simulasi progress dengan interval
+    const interval = setInterval(() => {
+      setLoadingProgress((prev) => {
+        if (prev >= 100) {
+          clearInterval(interval);
+          return 100;
+        }
+        return prev + 5;
+      });
+    }, 100);
+
+    // Update loading step secara acak (simulasi)
+    const stepInterval = setInterval(() => {
+      const randomIndex = Math.floor(Math.random() * loadingMessages.length);
+      setLoadingStep(loadingMessages[randomIndex]);
+    }, 800);
+
+    // Simpan interval untuk cleanup
+    return { progressInterval: interval, stepInterval };
+  };
+
+  const stopLoadingAnimation = () => {
+    setIsLoadingModalOpen(false);
+    setLoadingProgress(100);
+    setTimeout(() => {
+      setLoadingProgress(0);
+    }, 300);
+  };
 
   // ✅ Ambil data sesi dan nama pabrik
   const fetchSessionAndPabrikNames = async () => {
@@ -119,11 +167,16 @@ export default function KinerjaPage() {
 
   const fetchCSVKinerja = async () => {
     try {
+      // Start loading animation
+      const intervals = startLoadingAnimation();
+      setLoadingStep("Menyiapkan data CSV...");
+
       const csvResponse = await fetchData("/api/sesi/csv", {
         headers: { Authorization: `Bearer ${getCookie("token")}` },
       });
       const kinerjaData = await csvResponse.data;
 
+      setLoadingStep("Membangun struktur CSV...");
       const headers = [
         "Nama Pabrik",
         "Periode",
@@ -145,6 +198,7 @@ export default function KinerjaPage() {
         item.status,
       ]);
 
+      setLoadingStep("Membuat file CSV...");
       const csvContent = [headers.join(",")]
         .concat(rows.map((row) => row.join(",")))
         .join("\n");
@@ -155,19 +209,27 @@ export default function KinerjaPage() {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+
+      stopLoadingAnimation();
     } catch (error) {
       console.error("Error saat mengunduh data CSV:", error);
+      stopLoadingAnimation();
       alert("Gagal mengunduh data CSV.");
     }
   };
 
   const fetchExcelKinerja = async () => {
     try {
+      // Start loading animation
+      const intervals = startLoadingAnimation();
+      setLoadingStep("Menyiapkan data Excel...");
+
       const excelResponse = await fetchData("/api/sesi/csv", {
         headers: { Authorization: `Bearer ${getCookie("token")}` },
       });
       const kinerjaData = excelResponse.data;
 
+      setLoadingStep("Membangun struktur XML Excel...");
       const xmlHeader = `<?xml version="1.0"?>
       <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
                 xmlns:o="urn:schemas-microsoft-com:office:office"
@@ -192,6 +254,7 @@ export default function KinerjaPage() {
           .join("") +
         `</Row>`;
 
+      setLoadingStep("Memproses data baris...");
       const dataRows = kinerjaData
         .map((item) => {
           const cells = [
@@ -213,6 +276,7 @@ export default function KinerjaPage() {
         })
         .join("");
 
+      setLoadingStep("Membuat file Excel...");
       const xmlFooter = `</Table></Worksheet></Workbook>`;
       const xmlContent = xmlHeader + headerRow + dataRows + xmlFooter;
 
@@ -223,8 +287,11 @@ export default function KinerjaPage() {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+
+      stopLoadingAnimation();
     } catch (error) {
       console.error("Error saat mengunduh data Excel XML:", error);
+      stopLoadingAnimation();
       alert("Gagal mengunduh data Excel XML.");
     }
   };
@@ -254,19 +321,30 @@ export default function KinerjaPage() {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+
+    // Start loading animation
+    const intervals = startLoadingAnimation();
+    setLoadingStep("Menyimpan formulir pengukuran kinerja...");
+
     setIsSubmitting(true);
     const token = getCookie("token");
     try {
+      setLoadingStep("Mengirim data ke server...");
       await postData("/api/sesi", formData, {
         headers: { Authorization: `Bearer ${token}` },
       });
+
+      setLoadingStep("Memperbarui data tampilan...");
       setFormData({ pabrikId: 0, periode: "", batasPengisian: "" });
       setIsModalOpen(false);
-      fetchSessionAndPabrikNames();
+      await fetchSessionAndPabrikNames();
+
       setSuccess("Sesi Pengisian berhasil dibuat");
+      stopLoadingAnimation();
     } catch (error) {
       console.error("Error creating session: ", error);
       setError(error.response?.data?.message);
+      stopLoadingAnimation();
     } finally {
       setIsSubmitting(false);
     }
@@ -274,15 +352,23 @@ export default function KinerjaPage() {
 
   const handleEditSubmit = async (e) => {
     e.preventDefault();
+
+    // Start loading animation
+    const intervals = startLoadingAnimation();
+    setLoadingStep("Memperbarui batas pengisian...");
+
     setIsSubmitting(true);
 
     const token = getCookie("token");
     try {
+      setLoadingStep("Mengirim permintaan update...");
       await fetchData(`/api/sesi/${editData.id}`, {
         method: "PUT",
         headers: { Authorization: `Bearer ${token}` },
         data: { batasPengisian: editData.batasPengisian },
       });
+
+      setLoadingStep("Memperbarui data lokal...");
       setSessions((prev) =>
         prev.map((item) =>
           item.id === editData.id
@@ -293,10 +379,14 @@ export default function KinerjaPage() {
 
       setEditData({ id: null, batasPengisian: "" });
       setIsEditModalOpen(false);
-      fetchSessionAndPabrikNames();
+      await fetchSessionAndPabrikNames();
+
+      setLoadingStep("Selesai!");
       setSuccess("Batas pengisian berhasil diperbarui!");
+      stopLoadingAnimation();
     } catch (error) {
       console.error("Error updating session: ", error);
+      stopLoadingAnimation();
     } finally {
       setIsSubmitting(false);
     }
@@ -312,15 +402,25 @@ export default function KinerjaPage() {
   const handleDelete = async (id) => {
     const token = getCookie("token");
     if (confirm("Apakah Anda yakin ingin menghapus sesi ini?")) {
+      // Start loading animation
+      const intervals = startLoadingAnimation();
+      setLoadingStep("Menghapus sesi pengisian...");
+
       try {
         await fetchData(`/api/sesi/${id}`, {
           method: "DELETE",
           headers: { Authorization: `Bearer ${token}` },
         });
-        fetchSessionAndPabrikNames();
+
+        setLoadingStep("Memperbarui tampilan...");
+        await fetchSessionAndPabrikNames();
+
+        setLoadingStep("Selesai!");
         alert("Sesi berhasil dihapus");
+        stopLoadingAnimation();
       } catch (error) {
         console.error("Error deleting session: ", error);
+        stopLoadingAnimation();
         alert("Gagal menghapus sesi");
       }
     }
@@ -348,6 +448,19 @@ export default function KinerjaPage() {
     });
 
     setSessions(sorted);
+  };
+
+  // Fungsi untuk membuka modal dengan loading
+  const openCreateModalWithLoading = () => {
+    // Start loading animation
+    const intervals = startLoadingAnimation();
+    setLoadingStep("Menyiapkan formulir pengukuran kinerja...");
+
+    // Simulasi loading selama 1.5 detik sebelum membuka modal
+    setTimeout(() => {
+      stopLoadingAnimation();
+      setIsModalOpen(true);
+    }, 1500);
   };
 
   useEffect(() => {
@@ -417,7 +530,7 @@ export default function KinerjaPage() {
         {isAdmin && (
           <div className="flex justify-end mr-1">
             <button
-              onClick={() => setIsModalOpen(true)}
+              onClick={openCreateModalWithLoading}
               className="flex items-center gap-2 border-2 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:rounded-xl border-green-800 rounded-md p-2 hover:border-green-900"
             >
               <AiFillPlusCircle className="text-2xl text-green-800 hover:text-green-900 cursor-pointer" />
@@ -434,6 +547,47 @@ export default function KinerjaPage() {
         <div className="mb-4 flex items-center space-x-2">
           <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-md shadow-md">
             <p className="font-bold">{success}</p>
+          </div>
+        </div>
+      )}
+
+      {/* Loading Modal */}
+      {isLoadingModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-70 z-[60] flex items-center justify-center">
+          <div className="bg-white p-8 rounded-2xl w-full max-w-md mx-4 shadow-2xl">
+            <div className="text-center mb-6">
+              <div className="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-green-600 mb-4"></div>
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">
+                Sedang Memproses...
+              </h2>
+              <p className="text-gray-600 mb-6">{loadingStep}</p>
+            </div>
+
+            {/* Progress Bar */}
+            <div className="mb-6">
+              <div className="flex justify-between text-sm text-gray-600 mb-2">
+                <span>Progress</span>
+                <span>{loadingProgress}%</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-4">
+                <div
+                  className="bg-gradient-to-r from-green-500 to-green-700 h-4 rounded-full transition-all duration-300"
+                  style={{ width: `${loadingProgress}%` }}
+                ></div>
+              </div>
+            </div>
+
+            {/* Loading Messages Animation */}
+            <div className="text-center">
+              <div className="inline-flex items-center justify-center space-x-2 animate-pulse">
+                <div className="h-2 w-2 bg-green-500 rounded-full"></div>
+                <div className="h-2 w-2 bg-green-500 rounded-full"></div>
+                <div className="h-2 w-2 bg-green-500 rounded-full"></div>
+              </div>
+              <p className="text-sm text-gray-500 mt-4">
+                Harap tunggu sebentar, proses sedang berjalan...
+              </p>
+            </div>
           </div>
         </div>
       )}
@@ -523,11 +677,18 @@ export default function KinerjaPage() {
                               <button
                                 className="bg-yellow-400 p-2 rounded-lg flex items-center justify-center hover:bg-yellow-500"
                                 onClick={() => {
-                                  setEditData({
-                                    id: session.id,
-                                    batasPengisian: session.batasPengisian,
-                                  });
-                                  setIsEditModalOpen(true);
+                                  // Start loading animation for edit
+                                  const intervals = startLoadingAnimation();
+                                  setLoadingStep("Menyiapkan form edit...");
+
+                                  setTimeout(() => {
+                                    stopLoadingAnimation();
+                                    setEditData({
+                                      id: session.id,
+                                      batasPengisian: session.batasPengisian,
+                                    });
+                                    setIsEditModalOpen(true);
+                                  }, 1000);
                                 }}
                               >
                                 <AiFillEdit className="text-white" />
@@ -698,12 +859,19 @@ export default function KinerjaPage() {
                 <button
                   className="px-4 py-2 bg-green-700 hover:bg-green-800 text-white rounded-lg"
                   onClick={() => {
-                    setEditData({
-                      id: selectedSession.id,
-                      batasPengisian: selectedSession.batasPengisian,
-                    });
-                    setShowDeadlineModal(false);
-                    setIsEditModalOpen(true);
+                    // Start loading animation
+                    const intervals = startLoadingAnimation();
+                    setLoadingStep("Menyiapkan form edit batas pengisian...");
+
+                    setTimeout(() => {
+                      stopLoadingAnimation();
+                      setEditData({
+                        id: selectedSession.id,
+                        batasPengisian: selectedSession.batasPengisian,
+                      });
+                      setShowDeadlineModal(false);
+                      setIsEditModalOpen(true);
+                    }, 1000);
                   }}
                 >
                   Ubah Batas Pengisian

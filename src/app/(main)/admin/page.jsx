@@ -51,6 +51,7 @@ export default function PenggunaPage() {
   useEffect(() => {
     fetchUsers();
     fetchFactories();
+    console.log(process.env.NEXT_PUBLIC_HOLDING);
   }, []);
 
   const fetchUsers = async () => {
@@ -208,8 +209,10 @@ export default function PenggunaPage() {
     const matchFactory =
       selectedFactory === "Semua" ||
       namaPabrik === selectedFactory ||
-      (selectedFactory === "PG R2" &&
-        (namaPabrik === "Semua" || namaPabrik === "PG R2" || !user.pabrikGula));
+      (selectedFactory === process.env.NEXT_PUBLIC_HOLDING &&
+        (namaPabrik === "Semua" ||
+          namaPabrik === process.env.NEXT_PUBLIC_HOLDING ||
+          !user.pabrikGula));
 
     const matchJabatan =
       selectedJabatan === "Semua Jabatan" ||
@@ -245,7 +248,9 @@ export default function PenggunaPage() {
               className="border border-gray-300 rounded-lg px-3 py-2 hover:border-green-600 focus:outline-none focus:ring-1 focus:ring-green-600 transition"
             >
               <option value="Semua">Semua</option>
-              <option value="PG R2">PG R2</option>
+              <option value={process.env.NEXT_PUBLIC_HOLDING}>
+                {process.env.NEXT_PUBLIC_HOLDING}
+              </option>
               <option value="Jatitujuh">Jatitujuh</option>
               <option value="Tersana Baru">Tersana Baru</option>
               <option value="Sindang Laut">Sindang Laut</option>
@@ -304,9 +309,9 @@ export default function PenggunaPage() {
                   <td className="py-2 px-4 border">
                     {user.pabrikGula
                       ? user.pabrikGula.namaPabrik === "Semua"
-                        ? "PG R2"
+                        ? process.env.NEXT_PUBLIC_HOLDING
                         : user.pabrikGula.namaPabrik
-                      : "PG R2"}
+                      : process.env.NEXT_PUBLIC_HOLDING}
                   </td>
                   <td className="py-2 px-4 border">{user.nama}</td>
                   <td className="py-2 px-4 border">
@@ -340,7 +345,7 @@ export default function PenggunaPage() {
           </tbody>
         </table>
       </div>
-      ;
+
       {isModalOpen && (
         <div
           id="modalOverlay"

@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 
 export function RendemenGaugeCard({ rataRataRendemen, rendemenKemarin }) {
   const selisih = rataRataRendemen - rendemenKemarin;
-  const isNaik = selisih >= 0;
+  // const isNaik = selisih >= 0;
   const router = useRouter();
 
   const isBelumIsi = rataRataRendemen === 0;
@@ -27,7 +27,7 @@ export function RendemenGaugeCard({ rataRataRendemen, rendemenKemarin }) {
     <div className="border-t border-blue-200/70 pt-3 relative">
       {/* Badge jika belum mengisi */}
       {isBelumIsi && (
-        <div className="mb-1 absolute right-0 top-0 -translate-y-2 bg-orange-100 text-orange-700 border border-orange-300 text-sm px-3 py-1 rounded-full flex items-center gap-2 shadow-lg">
+        <div className="animate-pulse mb-1 absolute right-0 top-0 -translate-y-2 bg-orange-100 text-orange-700 border border-orange-300 text-sm px-3 py-1 rounded-full flex items-center gap-2 shadow-lg">
           <AlertCircle className="w-4 h-4" />
           Belum Diisi Oleh QC
         </div>
@@ -42,11 +42,13 @@ export function RendemenGaugeCard({ rataRataRendemen, rendemenKemarin }) {
               isBelumIsi ? "text-slate-400" : getRendemenColor(rataRataRendemen)
             }`}
           >
-            {formatNumberToIndonesian(rataRataRendemen)}%
+            {isBelumIsi
+              ? "-"
+              : formatNumberToIndonesian(rataRataRendemen) + "%"}
           </div>
 
           {/* Insight naik/turun – hide if belum isi */}
-          {!isBelumIsi && (
+          {/* {!isBelumIsi && (
             <div
               className={`flex items-center gap-1 text-[11px] font-semibold mt-2 px-2 py-[2px] rounded-full w-fit
               ${
@@ -63,7 +65,7 @@ export function RendemenGaugeCard({ rataRataRendemen, rendemenKemarin }) {
               {isNaik ? "Naik" : "Turun"}{" "}
               {formatNumberToIndonesian(Math.abs(selisih))}%
             </div>
-          )}
+          )} */}
         </div>
 
         {/* Right section */}
@@ -76,11 +78,11 @@ export function RendemenGaugeCard({ rataRataRendemen, rendemenKemarin }) {
           {/* Tooltip */}
           <span
             className="
-      absolute left-1/2 -top-3 -translate-x-1/2 -translate-y-full
-      bg-black text-white text-xs px-2 py-1 rounded 
-      opacity-0 group-hover:opacity-100 transition
-      whitespace-nowrap pointer-events-none
-    "
+              absolute left-1/2 -top-3 -translate-x-1/2 -translate-y-full
+              bg-black text-white text-xs px-2 py-1 rounded 
+              opacity-0 group-hover:opacity-100 transition
+              whitespace-nowrap pointer-events-none
+            "
           >
             Lihat detail
           </span>
