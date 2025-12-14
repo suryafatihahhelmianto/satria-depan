@@ -3,18 +3,24 @@
 import SpiderGraphEksekutif from "@/components/SpiderGraphEksekutif";
 import { fetchData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState, useCallback } from "react";
 import {
   FaChartLine,
   FaIndustry,
   FaLeaf,
   FaUsers,
-  FaSort,
-  FaSortUp,
-  FaSortDown,
+  FaChevronRight,
+  FaChevronLeft,
 } from "react-icons/fa";
+
+const OPTIONS = [
+  { id: "hasil", label: "Agregat", icon: null },
+  { id: "sumber-daya", label: "Sumber Daya", icon: <FaIndustry /> },
+  { id: "ekonomi", label: "Ekonomi", icon: <FaChartLine /> },
+  { id: "lingkungan", label: "Lingkungan", icon: <FaLeaf /> },
+  { id: "sosial", label: "Sosial", icon: <FaUsers /> },
+];
 
 export default function OpsiDetailEksekutif() {
   const [periode, setPeriode] = useState(0);
@@ -24,10 +30,28 @@ export default function OpsiDetailEksekutif() {
   const [dataSpiderEkonomi, setDataSpiderEkonomi] = useState([]);
   const [dataSpiderLingkungan, setDataSpiderLingkungan] = useState([]);
   const [dataSpiderSosial, setDataSpiderSosial] = useState([]);
+  const [activeOption, setActiveOption] = useState("hasil");
+  const [showMobileOptions, setShowMobileOptions] = useState(false);
 
   const pathname = usePathname();
-  const idMatch = pathname.match(/\/detail-eksekutif\/([a-zA-Z0-9]+)/); // Capture ID after /detail-eksekutif/
-  const id = idMatch ? idMatch[1] : null; // Extract ID if present
+  const router = useRouter();
+  const idMatch = pathname.match(/\/detail-eksekutif\/([a-zA-Z0-9]+)/);
+  const id = idMatch ? idMatch[1] : null;
+
+  // Determine active option from pathname
+  useEffect(() => {
+    if (pathname.includes("sumber-daya")) {
+      setActiveOption("sumber-daya");
+    } else if (pathname.includes("ekonomi")) {
+      setActiveOption("ekonomi");
+    } else if (pathname.includes("lingkungan")) {
+      setActiveOption("lingkungan");
+    } else if (pathname.includes("sosial")) {
+      setActiveOption("sosial");
+    } else {
+      setActiveOption("hasil");
+    }
+  }, [pathname]);
 
   const getKategori = (nilai) => {
     if (nilai >= 0 && nilai <= 25) return "Tidak Berkelanjutan";
@@ -37,11 +61,30 @@ export default function OpsiDetailEksekutif() {
     return "Tidak Diketahui";
   };
 
-  // Function to determine the active button style
-  const getButtonStyle = (path) => {
-    return pathname.startsWith(path)
-      ? "bg-green-800 text-white font-semibold shadow-md transform transition-transform scale-105"
-      : "bg-gray-200 text-gray-700 hover:bg-gray-300 hover:text-green-800 font-medium shadow-sm";
+  const handleOptionSelect = (optionId) => {
+    setActiveOption(optionId);
+    setShowMobileOptions(false);
+    router.push(`/detail-eksekutif/${id ? id : ""}/${optionId}`);
+  };
+
+  const getCurrentSpiderData = () => {
+    switch (activeOption) {
+      case "sumber-daya":
+        return dataSpiderSDAM;
+      case "ekonomi":
+        return dataSpiderEkonomi;
+      case "lingkungan":
+        return dataSpiderLingkungan;
+      case "sosial":
+        return dataSpiderSosial;
+      default:
+        return dataSpiderHasil;
+    }
+  };
+
+  const getCurrentOptionLabel = () => {
+    const option = OPTIONS.find((opt) => opt.id === activeOption);
+    return option ? option.label : "Agregat";
   };
 
   const fetchHasilKinerja = useCallback(async () => {
@@ -214,7 +257,6 @@ export default function OpsiDetailEksekutif() {
         }
       );
 
-      // Prepare data for the table
       const dataTable = [
         {
           id: 1,
@@ -284,7 +326,6 @@ export default function OpsiDetailEksekutif() {
         }
       );
 
-      // Prepare data for the table
       const dataTable = [
         {
           id: 1,
@@ -337,7 +378,6 @@ export default function OpsiDetailEksekutif() {
         },
       ];
 
-      // Prepare data for SpiderGraph
       const spiderData = dataTable.map((item) => ({
         subject: item.simbol,
         A: item.nilai,
@@ -362,7 +402,6 @@ export default function OpsiDetailEksekutif() {
         }
       );
 
-      // Prepare data for the table
       const dataTable = [
         {
           id: 1,
@@ -408,7 +447,6 @@ export default function OpsiDetailEksekutif() {
         },
       ];
 
-      // Prepare data for SpiderGraph
       const spiderData = dataTable.map((item) => ({
         subject: item.simbol,
         A: item.nilai,
@@ -421,7 +459,7 @@ export default function OpsiDetailEksekutif() {
   }, [id]);
 
   const fetchHeaderData = useCallback(async () => {
-    if (!id) return; // ✅ hindari fetch kalau id belum siap
+    if (!id) return;
 
     try {
       const response = await fetchData(`/api/sesi/header/${id}`, {
@@ -437,7 +475,7 @@ export default function OpsiDetailEksekutif() {
     } catch (error) {
       console.error("Error fetching header data:", error);
     }
-  }, [id]); // ✅ tambahkan dependency id
+  }, [id]);
 
   useEffect(() => {
     if (!id) return;
@@ -458,55 +496,87 @@ export default function OpsiDetailEksekutif() {
   ]);
 
   return (
-    <div>
-      <div className="flex justify-center mb-8">
-        <h1 className="font-bold text-5xl">
-          Detail Kinerja PG <span className="text-green-800">{namaPabrik}</span>{" "}
-          - Periode <span className="text-green-800">{periode}</span>
+    <div className="px-2 sm:px-4 md:px-6">
+      {/* Judul Responsif */}
+      <div className="flex justify-center mb-6 sm:mb-8">
+        <h1 className="font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl">
+          Detail Kinerja PG{" "}
+          <span className="text-green-800 block sm:inline">{namaPabrik}</span> -{" "}
+          Periode{" "}
+          <span className="text-green-800 block sm:inline">{periode}</span>
         </h1>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 sm:gap-6 md:gap-8 text-center">
-        <Link
-          href={`/detail-eksekutif/${id ? id : ""}/hasil`} // Add ID to URL if present
-          className="border-4 rounded-lg"
+      {/* Mobile Toggle Button (Only shown on mobile) */}
+      <div className="sm:hidden mb-4">
+        <button
+          onClick={() => setShowMobileOptions(!showMobileOptions)}
+          className="w-full bg-green-800 text-white p-3 rounded-lg flex items-center justify-between font-medium"
         >
-          <SpiderGraphEksekutif data={dataSpiderHasil} />
-          <button className={`${getButtonStyle(
-            `/detail-eksekutif/${id ? id : ""}/hasil`)} p-3 rounded-lg transition-all duration-200 w-full`}>Agregat</button>
-        </Link>
-        <Link
-          href={`/detail-eksekutif/${id ? id : ""}/sumber-daya`} // Add ID to URL if present
-          className="border-4 rounded-lg"
-        >
-          <SpiderGraphEksekutif data={dataSpiderSDAM} />
-          <button className={`${getButtonStyle(
-            `/detail-eksekutif/${id ? id : ""}/sumber-daya`)} p-3 rounded-lg transition-all duration-200 w-full`}>Sumber Daya</button>
-        </Link>
-        <Link
-          href={`/detail-eksekutif/${id ? id : ""}/ekonomi`} // Add ID to URL if present
-          className="border-4 rounded-lg"
-        >
-          <SpiderGraphEksekutif data={dataSpiderEkonomi} />
-          <button className={`${getButtonStyle(
-            `/detail-eksekutif/${id ? id : ""}/ekonomi`)} p-3 rounded-lg transition-all duration-200 w-full`}>Ekonomi</button>
-        </Link>
-        <Link
-          href={`/detail-eksekutif/${id ? id : ""}/lingkungan`} // Add ID to URL if present
-          className="border-4 rounded-lg"
-        >
-          <SpiderGraphEksekutif data={dataSpiderLingkungan} />
-          <button className={`${getButtonStyle(
-            `/detail-eksekutif/${id ? id : ""}/lingkungan`)} p-3 rounded-lg transition-all duration-200 w-full`}>Lingkungan</button>
-        </Link>
-        <Link
-          href={`/detail-eksekutif/${id ? id : ""}/sosial`} // Add ID to URL if present
-          className="border-4 rounded-lg"
-        >
-          <SpiderGraphEksekutif data={dataSpiderSosial} />
-          <button className={`${getButtonStyle(
-            `/detail-eksekutif/${id ? id : ""}/sosial`)} p-3 rounded-lg transition-all duration-200 w-full`}>Sosial</button>
-        </Link>
+          <span className="flex items-center gap-2">
+            {OPTIONS.find((opt) => opt.id === activeOption)?.icon}
+            {getCurrentOptionLabel()}
+          </span>
+          {showMobileOptions ? <FaChevronLeft /> : <FaChevronRight />}
+        </button>
+      </div>
+
+      {/* Options Panel for Mobile */}
+      {showMobileOptions && (
+        <div className="sm:hidden mb-6 bg-white border rounded-lg shadow-lg">
+          {OPTIONS.map((option) => (
+            <button
+              key={option.id}
+              onClick={() => handleOptionSelect(option.id)}
+              className={`w-full p-4 flex items-center gap-3 border-b last:border-b-0 transition-colors ${
+                activeOption === option.id
+                  ? "bg-green-50 text-green-800 font-semibold"
+                  : "text-gray-700 hover:bg-gray-50"
+              }`}
+            >
+              {option.icon && <span className="text-lg">{option.icon}</span>}
+              <span className="text-left">{option.label}</span>
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Desktop Options Tabs (Hidden on mobile) */}
+      <div className="hidden sm:flex justify-center mb-8">
+        <div className="flex flex-wrap gap-2 bg-gray-100 p-2 rounded-xl">
+          {OPTIONS.map((option) => (
+            <button
+              key={option.id}
+              onClick={() => handleOptionSelect(option.id)}
+              className={`flex items-center gap-2 px-5 py-3 rounded-lg transition-all duration-200 font-medium ${
+                activeOption === option.id
+                  ? "bg-green-800 text-white shadow-md"
+                  : "text-gray-700 hover:bg-gray-200 hover:text-green-800"
+              }`}
+            >
+              {option.icon && <span>{option.icon}</span>}
+              {option.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Chart Display Area */}
+      <div className="border-2 sm:border-4 rounded-xl p-4 sm:p-6 bg-white shadow-sm">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-800">
+            Spider Chart - {getCurrentOptionLabel()}
+          </h2>
+        </div>
+
+        <div className="h-[300px] sm:h-[400px] md:h-[500px]">
+          <SpiderGraphEksekutif data={getCurrentSpiderData()} />
+          <div className="sm:hidden mt-1 text-center">
+            <p className="text-sm text-gray-500">
+              Tap tombol di atas untuk mengganti dimensi
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

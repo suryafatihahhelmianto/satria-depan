@@ -202,17 +202,24 @@ export default function PenggunaPage() {
     }
   };
 
-  // 🔹 Filter logic
+  // Filter logic yang sesuai
   const filteredUsers = users.filter((user) => {
     const namaPabrik = user.pabrikGula?.namaPabrik || "";
 
+    // User dianggap "holding" jika:
+    // 1. Tidak punya pabrikGula data
+    // 2. namaPabrik === "Semua"
+    // 3. jabatan adalah ADMIN atau DIREKSI
+    const isHoldingUser =
+      !user.pabrikGula ||
+      namaPabrik === "Semua" ||
+      user.jabatan === "ADMIN" ||
+      user.jabatan === "DIREKSI";
+
     const matchFactory =
       selectedFactory === "Semua" ||
-      namaPabrik === selectedFactory ||
-      (selectedFactory === process.env.NEXT_PUBLIC_HOLDING &&
-        (namaPabrik === "Semua" ||
-          namaPabrik === process.env.NEXT_PUBLIC_HOLDING ||
-          !user.pabrikGula));
+      (selectedFactory === process.env.NEXT_PUBLIC_HOLDING && isHoldingUser) ||
+      namaPabrik === selectedFactory;
 
     const matchJabatan =
       selectedJabatan === "Semua Jabatan" ||
@@ -251,9 +258,13 @@ export default function PenggunaPage() {
               <option value={process.env.NEXT_PUBLIC_HOLDING}>
                 {process.env.NEXT_PUBLIC_HOLDING}
               </option>
-              <option value="Jatitujuh">Jatitujuh</option>
-              <option value="Tersana Baru">Tersana Baru</option>
-              <option value="Sindang Laut">Sindang Laut</option>
+              {factories
+                .filter((factory) => factory.namaPabrik !== "Semua") // Exclude pabrik "Semua"
+                .map((factory) => (
+                  <option key={factory.id} value={factory.namaPabrik}>
+                    {factory.namaPabrik}
+                  </option>
+                ))}
             </select>
 
             {/* Filter Jabatan */}

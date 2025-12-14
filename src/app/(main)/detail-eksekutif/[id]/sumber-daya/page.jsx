@@ -210,7 +210,7 @@ export default function DetailPage() {
                     <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
                       {data.indikator}
                     </td>
-                    <td className="px-6 py-4 border-b border-gray-200 text-gray-800">
+                    <td className="px-6 py-4 text-center border-b border-gray-200 text-gray-800">
                       {data.simbol}
                     </td>
                     <td
