@@ -65,9 +65,12 @@ export default function LoginPage() {
         setLoadingProgress((prev) => {
           // Algorithm: semakin tinggi progress, semakin lambat naiknya
           let increment;
-          if (prev < 30) increment = 1; // Lambat di awal
-          else if (prev < 60) increment = 2; // Sedang
-          else if (prev < 85) increment = 3; // Cepat
+          if (prev < 30)
+            increment = 1; // Lambat di awal
+          else if (prev < 60)
+            increment = 2; // Sedang
+          else if (prev < 85)
+            increment = 3; // Cepat
           else increment = 0.5; // Sangat lambat di akhir (mendekati 100%)
 
           const newProgress = Math.min(prev + increment, 95); // Hingga 95%
@@ -196,7 +199,7 @@ export default function LoginPage() {
   }, [router]);
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-gradient-to-b from-green-300 to-white">
+    <div className="flex flex-col min-h-screen md:flex-row bg-gradient-to-b from-green-300 to-white">
       {/* === LEFT SIDE === */}
       <div className="relative w-full md:w-1/2 h-[60vh] sm:h-[65vh] md:h-auto overflow-hidden">
         <Image
@@ -208,15 +211,15 @@ export default function LoginPage() {
         />
 
         {/* Overlay + Text */}
-        <div className="absolute inset-0 z-10 flex flex-col justify-start md:justify-center items-center text-center px-4 sm:px-6 pt-10 sm:pt-16 md:pt-0">
+        <div className="absolute inset-0 z-10 flex flex-col items-center justify-start px-4 pt-10 text-center md:justify-center sm:px-6 sm:pt-16 md:pt-0">
           {/* Logo animasi */}
           <div
-            className="w-28 h-28 sm:w-36 sm:h-36 md:w-44 md:h-44 relative mb-4 sm:mb-6 mx-auto"
+            className="relative mx-auto mb-4 w-28 h-28 sm:w-36 sm:h-36 md:w-44 md:h-44 sm:mb-6"
             style={{ perspective: "1200px" }}
             onClick={handleClick}
           >
             <motion.div
-              className="absolute inset-0 rounded-full bg-white p-2 sm:p-3 border-4 border-green-300 shadow-xl flex items-center justify-center"
+              className="absolute inset-0 flex items-center justify-center p-2 bg-white border-4 border-green-300 rounded-full shadow-xl sm:p-3"
               animate={{
                 rotateY: flip ? 360 : 0,
                 transition: { duration: 2, ease: "easeInOut" },
@@ -227,7 +230,7 @@ export default function LoginPage() {
             >
               {/* Logo depan */}
               <div
-                className="absolute inset-0 rounded-full flex items-center justify-center"
+                className="absolute inset-0 flex items-center justify-center rounded-full"
                 style={{ backfaceVisibility: "hidden" }}
               >
                 <Image
@@ -240,7 +243,7 @@ export default function LoginPage() {
 
               {/* Logo belakang */}
               <div
-                className="absolute inset-0 rounded-full flex items-center justify-center"
+                className="absolute inset-0 flex items-center justify-center rounded-full"
                 style={{
                   transform: "rotateY(180deg)",
                   backfaceVisibility: "hidden",
@@ -294,8 +297,8 @@ export default function LoginPage() {
           </h1>
 
           {/* Subtitle */}
-          <div className="relative mt-4 sm:mt-4 md:mt-4 rounded-2xl shadow-lg px-3 sm:px-6 md:px-6 py-4 sm:py-5 md:py-6 w-full max-w-3xl mx-auto bg-white overflow-hidden">
-            <p className="relative text-gray-700 text-sm sm:text-base md:text-xl lg:text-xl font-normal text-center leading-relaxed">
+          <div className="relative w-full max-w-3xl px-3 py-4 mx-auto mt-4 overflow-hidden bg-white shadow-lg sm:mt-4 md:mt-4 rounded-2xl sm:px-6 md:px-6 sm:py-5 md:py-6">
+            <p className="relative text-sm font-normal leading-relaxed text-center text-gray-700 sm:text-base md:text-xl lg:text-xl">
               Sistem Analitik dan Teknologi Rajawali-IPB untuk Inovasi Agro:{" "}
               <br className="hidden sm:block" />
               <span className="block sm:inline">
@@ -306,7 +309,7 @@ export default function LoginPage() {
           </div>
 
           {/* Footer */}
-          <div className="md:absolute md:bottom-0 md:left-1/2 md:-translate-x-1/2 bg-green-600 text-white text-xs sm:text-sm text-center py-2 px-4 sm:px-6 rounded-t-none md:rounded-t-full shadow-md mt-6 md:mt-0 whitespace-nowrap max-w-full md:w-auto">
+          <div className="max-w-full px-4 py-2 mt-6 text-xs text-center text-white bg-green-600 rounded-t-none shadow-md md:absolute md:bottom-0 md:left-1/2 md:-translate-x-1/2 sm:text-sm sm:px-6 md:rounded-t-full md:mt-0 whitespace-nowrap md:w-auto">
             © 2025 <span className="font-semibold">SATRIA–KEREN v2</span>. Semua
             Hak Cipta Dilindungi.
           </div>
@@ -314,12 +317,12 @@ export default function LoginPage() {
       </div>
 
       {/* === RIGHT SIDE === */}
-      <div className="flex justify-center items-center w-full md:w-1/2 p-6 bg-gradient-to-b from-green-300 to-white mb-8 md:mb-0">
+      <div className="flex items-center justify-center w-full p-6 mb-8 md:w-1/2 bg-gradient-to-b from-green-300 to-white md:mb-0">
         {/* Card Wrapper */}
-        <div className="bg-white rounded-2xl shadow-2xl p-6 sm:p-10 w-full max-w-md text-center">
+        <div className="w-full max-w-md p-6 text-center bg-white shadow-2xl rounded-2xl sm:p-10">
           {/* Header Section */}
           <div className="mb-5">
-            <div className="flex flex-wrap justify-center items-center gap-4 mb-3">
+            <div className="flex flex-wrap items-center justify-center gap-4 mb-3">
               <Image
                 src="/img/logoipb.png"
                 alt="Logo IPB"
@@ -328,11 +331,12 @@ export default function LoginPage() {
                 className="object-contain"
               />
               <Image
-                src="/img/logoidfood.png"
-                alt="Logo ID Food"
+                src="/img/logosgn.png"
+                alt="Logo SGN"
                 width={100}
                 height={100}
                 className="object-contain"
+                style={{ marginTop: "-20px" }}
               />
               <Image
                 src="/img/logorajawali.png"
@@ -342,21 +346,21 @@ export default function LoginPage() {
                 className="object-contain"
               />
             </div>
-            <h2 className="text-green-700 text-base sm:text-lg font-medium">
+            <h2 className="text-base font-medium text-green-700 sm:text-lg">
               Selamat datang di{" "}
               <strong className="text-green-800">SATRIA–KEREN</strong>
             </h2>
           </div>
 
           {/* Form Login Section */}
-          <div className="bg-green-700 p-6 rounded-xl shadow-lg">
+          <div className="p-6 bg-green-700 shadow-lg rounded-xl">
             <form className="flex flex-col" onSubmit={handleLogin}>
               {/* Username */}
               <label
                 htmlFor="username"
-                className="text-left text-white mb-2 flex items-center gap-1"
+                className="flex items-center gap-1 mb-2 text-left text-white"
               >
-                <AiOutlineUser className="text-white text-lg" />
+                <AiOutlineUser className="text-lg text-white" />
                 Username
               </label>
               <input
@@ -366,15 +370,15 @@ export default function LoginPage() {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required
-                className="p-2 mb-4 border rounded-lg focus:outline-none focus:ring focus:border-green-400 w-full"
+                className="w-full p-2 mb-4 border rounded-lg focus:outline-none focus:ring focus:border-green-400"
               />
 
               {/* Password */}
               <label
                 htmlFor="password"
-                className="text-left text-white mb-2 flex items-center gap-1"
+                className="flex items-center gap-1 mb-2 text-left text-white"
               >
-                <RiLockPasswordLine className="text-white text-lg" />
+                <RiLockPasswordLine className="text-lg text-white" />
                 Password
               </label>
 
@@ -386,22 +390,22 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="p-2 w-full border rounded-lg focus:outline-none focus:ring focus:border-green-400 pr-12"
+                  className="w-full p-2 pr-12 border rounded-lg focus:outline-none focus:ring focus:border-green-400"
                 />
 
                 {/* Buka Tutup Passwrod */}
-                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                <div className="absolute transform -translate-y-1/2 right-3 top-1/2">
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="relative group p-2 text-black hover:text-green-800 transition-colors duration-200 focus:outline-none"
+                    className="relative p-2 text-black transition-colors duration-200 group hover:text-green-800 focus:outline-none"
                   >
                     {showPassword ? (
                       <AiFillEye size={20} />
                     ) : (
                       <AiFillEyeInvisible size={20} />
                     )}
-                    <span className="absolute right-0 -top-9 bg-gray-900 text-white text-xs rounded-md py-1 px-2 opacity-0 group-hover:opacity-100 transition-all duration-200 transform scale-90 group-hover:scale-100 whitespace-nowrap">
+                    <span className="absolute right-0 px-2 py-1 text-xs text-white transition-all duration-200 transform scale-90 bg-gray-900 rounded-md opacity-0 -top-9 group-hover:opacity-100 group-hover:scale-100 whitespace-nowrap">
                       {showPassword ? "Hide password" : "Show password"}
                     </span>
                   </button>
@@ -409,9 +413,9 @@ export default function LoginPage() {
               </div>
 
               {/* Error / Success */}
-              {error && <p className="text-red-400 text-sm mb-2">{error}</p>}
+              {error && <p className="mb-2 text-sm text-red-400">{error}</p>}
               {successMessage && (
-                <p className="text-green-300 text-sm mb-2">{successMessage}</p>
+                <p className="mb-2 text-sm text-green-300">{successMessage}</p>
               )}
 
               {/* Button */}
@@ -437,17 +441,17 @@ export default function LoginPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/80 backdrop-blur-lg flex flex-col justify-center items-center z-50"
+            className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/80 backdrop-blur-lg"
           >
             {/* Main Loading Container */}
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.3 }}
-              className="bg-gradient-to-br from-green-900/90 to-green-800/90 p-8 rounded-3xl shadow-2xl max-w-md w-full mx-4 border border-green-400/30"
+              className="w-full max-w-md p-8 mx-4 border shadow-2xl bg-gradient-to-br from-green-900/90 to-green-800/90 rounded-3xl border-green-400/30"
             >
               {/* Header */}
-              <div className="text-center mb-6">
+              <div className="mb-6 text-center">
                 <motion.div
                   initial={{ rotate: 0 }}
                   animate={{ rotate: 360 }}
@@ -458,12 +462,12 @@ export default function LoginPage() {
                   }}
                   className="inline-block mb-4"
                 >
-                  <div className="w-16 h-16 rounded-full border-4 border-green-300 border-t-transparent relative">
+                  <div className="relative w-16 h-16 border-4 border-green-300 rounded-full border-t-transparent">
                     <div className="absolute inset-0 rounded-full bg-gradient-to-r from-green-400/30 to-green-600/30 blur-sm"></div>
                   </div>
                 </motion.div>
 
-                <h3 className="text-xl font-bold text-white mb-2">
+                <h3 className="mb-2 text-xl font-bold text-white">
                   Sedang masuk ke SATRIA-KEREN
                 </h3>
               </div>
@@ -471,21 +475,21 @@ export default function LoginPage() {
               {/* Dynamic Progress Bar - SIMPLE */}
               <div className="mb-6">
                 {/* Progress Bar Container */}
-                <div className="relative h-3 bg-green-900/50 rounded-full overflow-hidden mb-3">
+                <div className="relative h-3 mb-3 overflow-hidden rounded-full bg-green-900/50">
                   {/* Progress Fill */}
                   <motion.div
-                    className="h-full bg-gradient-to-r from-green-400 to-green-500 rounded-full relative"
+                    className="relative h-full rounded-full bg-gradient-to-r from-green-400 to-green-500"
                     initial={{ width: "0%" }}
                     animate={{ width: `${loadingProgress}%` }}
                     transition={{ type: "spring", stiffness: 100 }}
                   >
                     {/* Glow effect */}
-                    <div className="absolute top-0 left-0 h-full w-full bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse"></div>
+                    <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse"></div>
                   </motion.div>
                 </div>
 
                 {/* Progress Info */}
-                <div className="flex justify-between items-center text-xs text-green-200 mb-4">
+                <div className="flex items-center justify-between mb-4 text-xs text-green-200">
                   <span>Loading...</span>
                   <span className="font-bold">{loadingProgress}%</span>
                 </div>
@@ -496,9 +500,9 @@ export default function LoginPage() {
                 key={loadingText}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="text-center mb-6"
+                className="mb-6 text-center"
               >
-                <div className="inline-flex items-center justify-center gap-2 bg-green-800/30 px-4 py-2 rounded-lg">
+                <div className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-green-800/30">
                   <div className="flex items-center gap-2">
                     <motion.span
                       animate={{ opacity: [1, 0.5, 1] }}
@@ -507,7 +511,7 @@ export default function LoginPage() {
                     >
                       ●
                     </motion.span>
-                    <span className="text-green-100 text-sm">
+                    <span className="text-sm text-green-100">
                       {loadingText}
                     </span>
                   </div>
@@ -516,7 +520,7 @@ export default function LoginPage() {
 
               {/* Simple Status */}
               <div className="text-center">
-                <div className="inline-flex items-center gap-2 text-green-300 text-xs bg-green-900/30 px-3 py-1 rounded">
+                <div className="inline-flex items-center gap-2 px-3 py-1 text-xs text-green-300 rounded bg-green-900/30">
                   <motion.div
                     animate={{ scale: [1, 1.2, 1] }}
                     transition={{ duration: 1, repeat: Infinity }}
@@ -539,7 +543,7 @@ export default function LoginPage() {
                   clearInterval(loadingIntervalRef.current);
                 }
               }}
-              className="mt-6 px-4 py-2 text-sm text-green-300 hover:text-white hover:bg-green-800/30 rounded-lg transition-colors"
+              className="px-4 py-2 mt-6 text-sm text-green-300 transition-colors rounded-lg hover:text-white hover:bg-green-800/30"
             >
               Batalkan
             </motion.button>

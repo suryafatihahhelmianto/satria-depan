@@ -67,10 +67,10 @@ export default function HomePage() {
   }
 
   return (
-    <div className="p-4 md:p-6 bg-gray-100 min-h-screen">
+    <div className="min-h-screen p-4 bg-gray-100 md:p-6">
       {/* HEADER */}
-      <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-6">
-        <h1 className="text-2xl md:text-3xl font-semibold mb-4 md:mb-0 text-green-700">
+      <div className="flex flex-col mb-6 md:flex-row md:justify-between md:items-center">
+        <h1 className="mb-4 text-2xl font-semibold text-green-700 md:text-3xl md:mb-0">
           Kondisi PG {selectedFactory.namaPabrik} saat ini
         </h1>
         <div className="flex items-center gap-4">
@@ -92,25 +92,25 @@ export default function HomePage() {
 
       {/* GRID 3 COLUMN */}
       <div className="grid grid-cols-6 gap-4 mb-6">
-        <div className="col-span-5 bg-white p-4 md:p-6 rounded-lg shadow-md">
+        <div className="col-span-5 p-4 bg-white rounded-lg shadow-md md:p-6">
           {/* Outer card: header + content */}
 
           {/* Judul (kiri) */}
-          <div className="flex justify-between items-center mb-4">
+          <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold">
               Nilai Kinerja Keberlanjutan Rantai Pasok
             </h2>
 
             <div className="relative">
               <BsBell className="text-2xl text-gray-700 cursor-pointer" />
-              <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+              <span className="absolute flex items-center justify-center w-5 h-5 text-xs text-white bg-red-500 rounded-full -top-2 -right-2">
                 10
               </span>
             </div>
           </div>
 
           {/* Periode */}
-          <div className="mb-4 flex items-center gap-3">
+          <div className="flex items-center gap-3 mb-4">
             <label className="text-sm font-semibold whitespace-nowrap">
               Periode Perhitungan:
             </label>
@@ -128,11 +128,11 @@ export default function HomePage() {
           </div>
 
           {/* GRID utama */}
-          <div className="grid grid-cols-5 gap-4 mt-6 items-stretch">
+          <div className="grid items-stretch grid-cols-5 gap-4 mt-6">
             {/* LEFT: histogram (col-span-2) */}
-            <div className="col-span-2 bg-white border border-gray-100 rounded-lg p-4 flex flex-col">
+            <div className="flex flex-col col-span-2 p-4 bg-white border border-gray-100 rounded-lg">
               {/* Card kecil di dalam kolom kiri (hilangkan max-w-md mx-auto) */}
-              <h3 className="text-center font-semibold text-gray-800 mb-2 text-sm">
+              <h3 className="mb-2 text-sm font-semibold text-center text-gray-800">
                 Kinerja Keberlanjutan Rantai Pasok PG Jatitujuh
               </h3>
 
@@ -140,13 +140,13 @@ export default function HomePage() {
                 <HistogramChart data={dashboardData.dataHistogram} />
               </div>
 
-              <div className="mt-3 flex items-center gap-3">
+              <div className="flex items-center gap-3 mt-3">
                 <label className="text-sm font-semibold whitespace-nowrap">
                   Pilih Dimensi Perhitungan:
                 </label>
                 <select
                   defaultValue="Index Total"
-                  className="rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-green-500 focus:ring-green-500"
+                  className="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:border-green-500 focus:ring-green-500"
                 >
                   <option value="Index Total">Index Total</option>
                   <option value="Dimensi Ekonomi">Dimensi Ekonomi</option>
@@ -157,14 +157,14 @@ export default function HomePage() {
             </div>
 
             {/* CENTER + RIGHT: col-span-3 */}
-            <div className="col-span-3 bg-white rounded-lg p-4 flex items-center gap-6">
+            <div className="flex items-center col-span-3 gap-6 p-4 bg-white rounded-lg">
               {/* Circular progress (kiri) */}
-              <div className="flex-1 flex items-center justify-center">
+              <div className="flex items-center justify-center flex-1">
                 <div className="w-48 h-48">
                   <CircularProgressbar
                     value={nilaiKinerjaKeberlanjutan[0].nilaiKinerja}
                     text={`${formatNumberToIndonesian(
-                      nilaiKinerjaKeberlanjutan[0].nilaiKinerja
+                      nilaiKinerjaKeberlanjutan[0].nilaiKinerja,
                     )}%`}
                     styles={buildStyles({
                       pathColor: "#4CAF50",
@@ -173,17 +173,17 @@ export default function HomePage() {
                       textSize: "16px",
                     })}
                   />
-                  <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 bg-black text-white text-xl px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                  <span className="absolute px-2 py-1 mb-1 text-xl text-white transition-opacity transform -translate-x-1/2 bg-black rounded-lg opacity-0 pointer-events-none bottom-full left-1/2 group-hover:opacity-100">
                     Lihat Detail
                   </span>
                 </div>
                 <div className="flex items-center justify-center">
-                  <p className="mt-2 text-gray-700 text-center font-semibold">
+                  <p className="mt-2 font-semibold text-center text-gray-700">
                     Sangat Mantap
                   </p>
                   <div className="relative group">
                     <InfoButton />
-                    <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 bg-black text-white text-xs px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                    <span className="absolute px-2 py-1 text-xs text-white transition-opacity transform -translate-x-1/2 bg-black rounded-lg opacity-0 pointer-events-none -top-3 left-1/2 group-hover:opacity-100 whitespace-nowrap">
                       Click Me!
                     </span>
                   </div>
@@ -191,15 +191,15 @@ export default function HomePage() {
               </div>
 
               {/* Divider vertikal */}
-              <div className="w-px bg-gray-200 h-48"></div>
+              <div className="w-px h-48 bg-gray-200"></div>
 
               {/* Status Perhitungan (kanan) */}
-              <div className="w-72 flex flex-col">
-                <div className="bg-teal-500 text-white shadow-lg text-sm font-semibold text-center py-2 rounded-t-md w-full">
+              <div className="flex flex-col w-72">
+                <div className="w-full py-2 text-sm font-semibold text-center text-white bg-teal-500 shadow-lg rounded-t-md">
                   Status Perhitungan:
                 </div>
-                <div className="flex-1 flex items-center justify-center bg-gray-100 rounded-b-md w-full p-4">
-                  <div className="w-48 h-48 rounded-full bg-green-500 flex items-center justify-center text-white font-bold text-xl">
+                <div className="flex items-center justify-center flex-1 w-full p-4 bg-gray-100 rounded-b-md">
+                  <div className="flex items-center justify-center w-48 h-48 text-xl font-bold text-white bg-green-500 rounded-full">
                     SELESAI
                   </div>
                 </div>
@@ -209,14 +209,14 @@ export default function HomePage() {
         </div>
 
         {/* Right Column - Yield Prediction */}
-        <div className="col-span-1 bg-white p-3 md:p-4 rounded-lg shadow-md w-fit max-w-xs ml-auto">
-          <h2 className="text-lg font-semibold mb-4">
+        <div className="max-w-xs col-span-1 p-3 ml-auto bg-white rounded-lg shadow-md md:p-4 w-fit">
+          <h2 className="mb-4 text-lg font-semibold">
             Nilai Prediksi Rendemen
           </h2>
 
           {/* Nilai + Gauge */}
-          <div className="flex flex-col items-center justify-center mb-3 mt-10">
-            <div className="text-5xl font-bold mb-2 text-gray-800 mt-6">
+          <div className="flex flex-col items-center justify-center mt-10 mb-3">
+            <div className="mt-6 mb-2 text-5xl font-bold text-gray-800">
               {formatNumberToIndonesian(rataRataRendemen)}%
             </div>
             <SemiCircularGauge
@@ -228,7 +228,7 @@ export default function HomePage() {
 
           {/* Periode Perhitungan */}
           <div className="mt-12">
-            <p className="text-sm font-semibold text-gray-700 mb-2 text-center">
+            <p className="mb-2 text-sm font-semibold text-center text-gray-700">
               Periode Perhitungan:
             </p>
             <div className="flex justify-center mt-2">
@@ -236,7 +236,7 @@ export default function HomePage() {
                 selected={selectedDate}
                 onChange={(date) => date && setSelectedDate(date)}
                 dateFormat="dd/MM/yyyy"
-                className="border border-gray-300 rounded-md px-3 py-2 w-40 text-center cursor-pointer"
+                className="w-40 px-3 py-2 text-center border border-gray-300 rounded-md cursor-pointer"
                 placeholderText="Pilih Tanggal"
               />
             </div>
@@ -246,18 +246,18 @@ export default function HomePage() {
 
       {/* Informasi Section */}
       <div className="grid grid-cols-1 gap-2">
-        <div className="relative bg-white border-l-8 border-gray-300 p-6 rounded-xl shadow-lg">
+        <div className="relative p-6 bg-white border-l-8 border-gray-300 shadow-lg rounded-xl">
           <div className="absolute inset-0 bg-[repeating-linear-gradient(black,black_34px,#e0e0e0_36px)] rounded-xl pointer-events-none"></div>
           <div className="relative">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+            <h2 className="flex items-center mb-4 text-2xl font-bold text-gray-800">
               <AiOutlineExclamationCircle className="mr-3 text-gray-500" />
               Informasi!
             </h2>
-            <ul className="text-gray-700 space-y-3">
+            <ul className="space-y-3 text-gray-700">
               {informasi.map((info, index) => (
                 <li key={index} className="flex items-center">
-                  <BsFillCircleFill className="text-red-500 mr-3 animate-pulse" />
-                  <p className="font-bold text-lg animate-pulse">
+                  <BsFillCircleFill className="mr-3 text-red-500 animate-pulse" />
+                  <p className="text-lg font-bold animate-pulse">
                     {info.role === "GENERAL MANAGER / KEPALA PABRIK"
                       ? `${info.role} Belum Mengisi Data!`
                       : `Kepala Bagian ${info.role} Belum Mengisi Data!`}

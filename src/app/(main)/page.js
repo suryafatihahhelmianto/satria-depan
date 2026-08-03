@@ -85,7 +85,7 @@ export default function HomePage() {
         {
           method: "GET",
           headers: { Authorization: `Bearer ${getCookie("token")}` },
-        }
+        },
       );
 
       setAvailableYears(response.data || []);
@@ -107,7 +107,7 @@ export default function HomePage() {
           {
             method: "GET",
             headers: { Authorization: `Bearer ${getCookie("token")}` },
-          }
+          },
         );
 
         // Normalize roles
@@ -127,7 +127,7 @@ export default function HomePage() {
         setLoading(false);
       }
     },
-    [selectedYear, selectedDate]
+    [selectedYear, selectedDate],
   );
 
   const fetchSesiPengisian = useCallback(async () => {
@@ -137,7 +137,7 @@ export default function HomePage() {
         {
           method: "GET",
           headers: { Authorization: `Bearer ${getCookie("token")}` },
-        }
+        },
       );
       return response.id;
     } catch (error) {
@@ -161,12 +161,7 @@ export default function HomePage() {
   useEffect(() => {
     if (!selectedFactory.id || !selectedYear) return;
     fetchDashboardData(selectedFactory.id);
-  }, [
-    selectedFactory.id,
-    selectedYear,
-    selectedDate,
-    fetchDashboardData,
-  ]);
+  }, [selectedFactory.id, selectedYear, selectedDate, fetchDashboardData]);
 
   // ---------------------------------------------------------------------------------------
   // 4. CONDITIONAL RETURNS — AFTER ALL HOOKS
@@ -174,9 +169,9 @@ export default function HomePage() {
 
   if (userLoading || role === "DIREKSI") {
     return (
-      <div className="flex justify-center items-center h-screen">
+      <div className="flex items-center justify-center h-screen">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-700 mx-auto"></div>
+          <div className="w-12 h-12 mx-auto border-b-2 border-green-700 rounded-full animate-spin"></div>
           <p className="mt-4 text-gray-600">Memeriksa akses pengguna...</p>
         </div>
       </div>
@@ -223,16 +218,16 @@ export default function HomePage() {
     dashboardData;
 
   const selectedYearData = nilaiKinerjaKeberlanjutan.find(
-    (d) => d.tahun === Number(selectedYear)
+    (d) => d.tahun === Number(selectedYear),
   );
 
   return (
-    <div className="p-4 md:p-6 bg-gray-100 min-h-screen">
-      <div className="flex flex-col md:flex-row md:justify-between mb-6">
-        <h1 className="text-2xl md:text-3xl font-semibold mb-4 md:mb-0 text-green-700">
+    <div className="min-h-screen p-4 bg-gray-100 md:p-6">
+      <div className="flex flex-col mb-6 md:flex-row md:justify-between">
+        <h1 className="mb-4 text-2xl font-semibold text-green-700 md:text-3xl md:mb-0">
           Kondisi PG {selectedFactory.namaPabrik || "Pabrik"} saat ini
         </h1>
-        <div className="mb-4 flex flex-col md:flex-row md:items-center gap-2">
+        <div className="flex flex-col gap-2 mb-4 md:flex-row md:items-center">
           <label className="block text-lg font-semibold">Pilih Pabrik:</label>
           <div className="flex flex-wrap gap-2">
             {factories.map((factory) => (
@@ -252,8 +247,8 @@ export default function HomePage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-2 gap-4">
-        <div className="bg-white p-4 md:p-6 rounded-lg shadow-md flex flex-col items-center">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-2">
+        <div className="flex flex-col items-center p-4 bg-white rounded-lg shadow-md md:p-6">
           <div className="w-full mb-4">
             <h1 className="text-xl font-semibold">
               Nilai Kinerja Keberlanjutan Rantai Pasok
@@ -261,12 +256,12 @@ export default function HomePage() {
           </div>
 
           {availableYears.length > 0 ? (
-            <div className="flex flex-col md:flex-row justify-around gap-5 w-full h-full">
-              <div className="flex flex-col items-center justify-end mb-6 h-full">
+            <div className="flex flex-col justify-around w-full h-full gap-5 md:flex-row">
+              <div className="flex flex-col items-center justify-end h-full mb-6">
                 <div className="relative group">
                   <div
                     onClick={handleDetailClick}
-                    className="w-40 h-40 md:w-52 md:h-52 mb-2 hover:cursor-pointer"
+                    className="w-40 h-40 mb-2 md:w-52 md:h-52 hover:cursor-pointer"
                   >
                     <CircularProgressbar
                       value={
@@ -275,7 +270,7 @@ export default function HomePage() {
                       }
                       text={`${
                         formatNumberToIndonesian(
-                          nilaiKinerjaKeberlanjutan[0].nilaiKinerja
+                          nilaiKinerjaKeberlanjutan[0].nilaiKinerja,
                         ) || 0
                       }%`}
                       styles={buildStyles({
@@ -285,32 +280,32 @@ export default function HomePage() {
                       })}
                     />
                   </div>
-                  <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 bg-black text-white text-xl px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                  <span className="absolute px-2 py-1 mb-1 text-xl text-white transition-opacity transform -translate-x-1/2 bg-black rounded-lg opacity-0 pointer-events-none bottom-full left-1/2 group-hover:opacity-100">
                     Lihat Detail
                   </span>
                 </div>
                 <div className="flex items-center justify-center">
-                  <p className="mt-2 text-gray-700 text-center font-semibold">
+                  <p className="mt-2 font-semibold text-center text-gray-700">
                     {getKategori(selectedYearData?.nilaiKinerja)}
                   </p>
                   <div className="relative group">
                     <InfoButton />
-                    <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 bg-black text-white text-xs px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                    <span className="absolute px-2 py-1 text-xs text-white transition-opacity transform -translate-x-1/2 bg-black rounded-lg opacity-0 pointer-events-none -top-3 left-1/2 group-hover:opacity-100 whitespace-nowrap">
                       Click Me!
                     </span>
                   </div>
                 </div>
               </div>
 
-              <div className="border-t-2 md:border-l-2 md:border-t-0 border-gray-300 w-full md:w-0 h-0 md:h-full my-4 md:my-0"></div>
+              <div className="w-full h-0 my-4 border-t-2 border-gray-300 md:border-l-2 md:border-t-0 md:w-0 md:h-full md:my-0"></div>
 
               <div>
-                <div className="font-semibold mb-4">
+                <div className="mb-4 font-semibold">
                   <h1>Periode Perhitungan:</h1>
                   <select
                     value={selectedYear}
                     onChange={handleYearChange}
-                    className="bg-white border border-gray-300 rounded-md p-2 text-lg"
+                    className="p-2 text-lg bg-white border border-gray-300 rounded-md"
                   >
                     {availableYears.map((year) => (
                       <option key={year} value={year}>
@@ -319,7 +314,7 @@ export default function HomePage() {
                     ))}
                   </select>
                 </div>
-                <p className="font-bold text-gray-700 mb-4">
+                <p className="mb-4 font-bold text-gray-700">
                   Status Perhitungan:
                 </p>
                 <div className="flex justify-center space-x-4">
@@ -345,48 +340,47 @@ export default function HomePage() {
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center h-64">
-              <p className="text-xl text-gray-600 text-center">
+              <p className="text-xl text-center text-gray-600">
                 Belum ada sesi pengisian untuk pabrik ini.
               </p>
             </div>
           )}
         </div>
 
-        <div className="bg-white p-4 md:p-6 rounded-lg shadow-md flex flex-col items-center">
+        <div className="flex flex-col items-center p-4 bg-white rounded-lg shadow-md md:p-6">
           <div className="w-full mb-4">
             <h1 className="text-xl font-semibold">Nilai Prediksi Rendemen</h1>
           </div>
 
-          <div className="flex flex-col sm:flex-row justify-around gap-5 w-full h-full">
-            <div className="flex flex-col items-center justify-center mb-6 h-full">
+          <div className="flex flex-col justify-around w-full h-full gap-5 sm:flex-row">
+            <div className="flex flex-col items-center justify-center h-full mb-6">
               {(rataRataRendemen === 0 || rataRataRendemen === null) && (
-                <div className="animate-pulse flex text-center items-center gap-2 bg-yellow-100 border border-yellow-400 text-yellow-800 px-3 py-2 rounded-xl mb-4 w-full max-w-sm">
+                <div className="flex items-center w-full max-w-sm gap-2 px-3 py-2 mb-4 text-center text-yellow-800 bg-yellow-100 border border-yellow-400 animate-pulse rounded-xl">
                   <FaExclamationTriangle className="text-4xl animate-pulse" />
                   <span>Hari ini QC belum melakukan perhitungan</span>
                 </div>
               )}
               <div
-                className="relative group flex flex-col items-center cursor-pointer"
+                className="relative flex flex-col items-center cursor-pointer group"
                 onClick={handleDetailRendemenClick}
               >
-                <div className="text-3xl xl:text-5xl font-bold mb-4">
+                <div className="mb-4 text-3xl font-bold xl:text-5xl">
                   {formatNumberToIndonesian(rataRataRendemen) || 0}%
                 </div>
 
                 <div
                   onClick={handleDetailRendemenClick}
-                  className="relative w-32 2xl:w-52 h-6 rounded-full bg-gradient-to-r from-red-500 via-yellow-500 to-green-500"
+                  className="relative w-32 h-6 rounded-full 2xl:w-52 bg-gradient-to-r from-red-500 via-yellow-500 to-green-500"
                 >
                   <div
-                    className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 border-2 border-gray-700 bg-transparent 
-                    w-3/4 sm:w-1/2 md:w-1/3 lg:w-1/4 h-auto"
+                    className="absolute w-3/4 h-auto transform -translate-x-1/2 -translate-y-1/2 bg-transparent border-2 border-gray-700 top-1/2 left-1/2 sm:w-1/2 md:w-1/3 lg:w-1/4"
                     style={{
                       left: `${
                         rataRataRendemen <= 4
                           ? (rataRataRendemen / 12) * 100
                           : rataRataRendemen <= 8
-                          ? (rataRataRendemen / 12) * 100
-                          : (rataRataRendemen / 12) * 100
+                            ? (rataRataRendemen / 12) * 100
+                            : (rataRataRendemen / 12) * 100
                       }%`,
                       width: "30px",
                       height: "50px",
@@ -398,19 +392,19 @@ export default function HomePage() {
                   {rataRataRendemen <= 4
                     ? "Rendah"
                     : rataRataRendemen <= 8
-                    ? "Sedang"
-                    : "Tinggi"}
+                      ? "Sedang"
+                      : "Tinggi"}
                 </div>
-                <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 text-sm bg-black text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                <span className="absolute px-3 py-1 mb-2 text-sm text-white transition-opacity transform -translate-x-1/2 bg-black rounded-lg opacity-0 pointer-events-none bottom-full left-1/2 group-hover:opacity-100">
                   Lihat Detail
                 </span>
               </div>
             </div>
 
-            <div className="border-t-2 md:border-l-2 md:border-t-0 border-gray-300 w-full md:w-0 h-0 md:h-full my-4 md:my-0"></div>
+            <div className="w-full h-0 my-4 border-t-2 border-gray-300 md:border-l-2 md:border-t-0 md:w-0 md:h-full md:my-0"></div>
 
-            <div className="flex flex-col items-center mb-6 h-full">
-              <div className="font-semibold mb-4 text-black">
+            <div className="flex flex-col items-center h-full mb-6">
+              <div className="mb-4 font-semibold text-black">
                 <h1>Periode Perhitungan:</h1>
               </div>
               <div className="w-full">
@@ -421,7 +415,7 @@ export default function HomePage() {
                   }}
                   inline
                   dateFormat="dd/MM/yyyy"
-                  className="border border-white/20 rounded-md p-2 bg-white/40 text-green-700 text-lg"
+                  className="p-2 text-lg text-green-700 border rounded-md border-white/20 bg-white/40"
                 />
               </div>
             </div>
@@ -429,27 +423,27 @@ export default function HomePage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 mt-6">
-        <div className="bg-white p-4 rounded-lg shadow-md">
-          <h2 className="text-xl font-semibold mb-2 text-center">
+      <div className="grid grid-cols-1 gap-4 mt-6 lg:grid-cols-2">
+        <div className="p-4 bg-white rounded-lg shadow-md">
+          <h2 className="mb-2 text-xl font-semibold text-center">
             Kinerja Keberlanjutan Rantai Pasok PG{" "}
             {selectedFactory ? selectedFactory.namaPabrik : "Pabrik"}{" "}
           </h2>
           <HistogramChart data={dashboardData.dataHistogram} />
         </div>
 
-        <div className="relative bg-white border-l-8 border-gray-300 p-6 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300">
+        <div className="relative p-6 transition-shadow duration-300 bg-white border-l-8 border-gray-300 shadow-lg rounded-xl hover:shadow-2xl">
           <div className="absolute inset-0 bg-[repeating-linear-gradient(black, black 34px, #e0e0e0 36px)] rounded-xl pointer-events-none"></div>
 
           <div className="relative">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+            <h2 className="flex items-center mb-4 text-2xl font-bold text-gray-800">
               <AiOutlineExclamationCircle className="mr-3 text-gray-500" />
               Informasi!
             </h2>
-            <ul className="text-gray-700 space-y-3">
+            <ul className="space-y-3 text-gray-700">
               {informasi.map((info, index) => (
                 <li key={index} className="flex items-center">
-                  <BsFillCircleFill className="text-red-500 mr-3 animate-pulse" />
+                  <BsFillCircleFill className="mr-3 text-red-500 animate-pulse" />
                   <div>
                     <p className="font-bold text-l animate-pulse">
                       {info.role === "GENERAL MANAGER / KEPALA PABRIK"
