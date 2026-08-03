@@ -339,7 +339,7 @@ export default function LoginPage() {
                 style={{ marginTop: "-20px" }}
               />
               <Image
-                src="/img/logorajawali.png"
+                src="/img/logorajawali2.png"
                 alt="Logo Rajawali"
                 width={100}
                 height={100}
