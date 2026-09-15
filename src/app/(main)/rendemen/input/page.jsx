@@ -78,7 +78,7 @@ export default function RendemenInputPage() {
   const validateInputs = () => {
     const errors = [];
     if (!formData.blokKebun.trim()) errors.push("Blok Kebun harus diisi");
-    if (formData.jenis === "") errors.push("Jenis harus dipilih");
+    if (formData.jenis === "") errors.push("Kategori harus dipilih");
     if (formData.masaTanam === "") errors.push("Masa Tanam harus dipilih");
     if (formData.varietas === "") errors.push("Varietas harus dipilih");
 
@@ -234,7 +234,7 @@ export default function RendemenInputPage() {
                 value={formData.jenis}
                 onChange={handleInputChange}
                 options={[
-                  { value: "", label: "Pilih Jenis" },
+                  { value: "", label: "Pilih Kategori" },
                   { value: "0", label: "PC" },
                   { value: "1", label: "R1" },
                   { value: "2", label: "R2" },

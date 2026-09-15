@@ -77,7 +77,7 @@ export default function KalkulatorPage() {
       if (value === "" || value === null) {
         const fieldLabel = {
           blokKebun: "Blok Kebun",
-          jenis: "Jenis/Kategori",
+          jenis: "Kategori",
           masaTanam: "Masa Tanam",
           varietas: "Varietas",
           brix: "Brix",
@@ -190,14 +190,14 @@ export default function KalkulatorPage() {
                 value={formData.jenis}
                 onChange={handleInputChange}
                 options={[
-                  { value: "", label: "Pilih Jenis" },
+                  { value: "", label: "Pilih Kategori" },
                   { value: "0", label: "PC" },
                   { value: "1", label: "R1" },
                   { value: "2", label: "R2" },
                   { value: "3", label: "R3" },
                   { value: "4", label: "RC" },
                 ]}
-                placeholder="Pilih Jenis"
+                placeholder="Pilih Kategori"
                 styles={{
                   control: (base) => ({
                     ...base,
