@@ -17,13 +17,44 @@ import { fetchData } from "@/tools/api";
 import { HiOutlineLightBulb } from "react-icons/hi";
 import { getCookie } from "@/tools/getCookie";
 
+const kemasakanByVarietas = {
+  "0": "3", // BL -> Tengah Lambat
+  "1": "1", // Cening -> Awal Tengah
+  "2": "2", // GMP1 -> Tengah
+  "3": "3", // GMP2 -> Tengah Lambat
+  "4": "1", // GMP3 -> Awal Tengah
+  "5": "2", // KDS3 -> Tengah
+  "6": "1", // KENTUNG -> Awal Tengah
+  "7": "2", // KK -> Tengah
+  "8": "1", // LAMPUNG3 -> Awal Tengah
+  "9": "1", // PA0213 -> Awal Tengah
+  "10": "1", // PA0214 -> Awal Tengah
+  "11": "0", // PA022 -> Awal
+  "12": "0", // PA028 -> Awal
+  "13": "1", // PA1101 -> Awal Tengah
+  "14": "2", // PA1204 -> Tengah
+  "15": "2", // PA1301 -> Tengah
+  "16": "2", // PA1303 -> Tengah
+  "17": "2", // PA1401 -> Tengah
+  "18": "2", // PA1601 -> Tengah
+  "19": "2", // PA197 -> Tengah
+  "20": "1", // PS851 -> Awal Tengah
+  "21": "1", // PS862 -> Awal Tengah
+  "22": "3", // PS864 -> Tengah Lambat
+  "23": "1", // PS865 -> Awal Tengah
+  "24": "0", // PS881 -> Awal
+  "25": "1", // PS882 -> Awal Tengah
+  "26": "1", // PSJK922 -> Awal Tengah
+  "27": "2", // PSJT941 -> Tengah
+  "28": "0", // Mojo -> Awal??
+};
+
 export default function RendemenInputPage() {
   const [formData, setFormData] = useState({
     blokKebun: "",
     jenis: "",
     masaTanam: "",
     varietas: "",
-    kemasakan: "",
     brix: "",
     curahHujan: "",
   });
@@ -50,7 +81,10 @@ export default function RendemenInputPage() {
     if (formData.jenis === "") errors.push("Jenis harus dipilih");
     if (formData.masaTanam === "") errors.push("Masa Tanam harus dipilih");
     if (formData.varietas === "") errors.push("Varietas harus dipilih");
-    if (formData.kemasakan === "") errors.push("Kemasakan harus dipilih");
+
+    const kemasakan = kemasakanByVarietas[formData.varietas];
+    if (formData.varietas !== "" && kemasakan === undefined)
+      errors.push("Kemasakan untuk varietas tersebut belum dikonfigurasi");
 
     const brixValue = parseFloat(formData.brix);
     const curahValue = parseFloat(formData.curahHujan);
@@ -84,58 +118,83 @@ export default function RendemenInputPage() {
   const handleCancelCalculate = () => setIsConfirmModalOpen(false);
 
   const handleConfirmCalculate = async (allowDuplicate = false) => {
-    setIsConfirmModalOpen(false);
-    setIsLoading(true);
+  setIsConfirmModalOpen(false);
+  setIsLoading(true);
 
-    try {
-      const response = await fetchData(`/api/rendemen/input`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${getCookie("token")}`,
-          "Content-Type": "application/json",
-        },
-        data: {
-          ...formData,
-          jenis: parseFloat(formData.jenis),
-          masaTanam: parseFloat(formData.masaTanam),
-          varietas: parseFloat(formData.varietas),
-          kemasakan: parseFloat(formData.kemasakan),
-          brix: parseFloat(formData.brix),
-          curahHujan: parseFloat(formData.curahHujan),
-          allowDuplicate,
-        },
-      });
+  // Ambil kemasakan berdasarkan varietas
+  const kemasakan = kemasakanByVarietas[formData.varietas];
 
-      // === kalau backend mendeteksi duplikat ===
-      if (
-        response?.error === "DUPLICATE_BLOK" ||
-        response?.message?.includes("hari ini sudah ada")
-      ) {
-        setIsDuplicateModalOpen(true);
-        return;
-      }
+  // Pastikan mapping kemasakan tersedia
+  if (kemasakan === undefined) {
+    setValidationErrors([
+      "Kemasakan untuk varietas yang dipilih belum dikonfigurasi.",
+    ]);
+    setIsValidationModalOpen(true);
+    setIsLoading(false);
+    return;
+  }
 
-      // === sukses ===
-      setUsedBlocks((prev) => [
-        ...prev,
-        formData.blokKebun.trim().toLowerCase(),
-      ]);
-      setPredictionValue(response.newRendemen?.nilaiRendemen);
-      router.push("/rendemen");
-    } catch (err) {
-      console.error("Error submitting data:", err);
-
-      const errorMsg = err?.response?.data?.message || err?.message || "";
-
-      if (errorMsg.toLowerCase().includes("hari ini sudah ada")) {
-        setIsDuplicateModalOpen(true);
-      } else {
-        setIsDuplicateModalOpen(true);
-      }
-    } finally {
-      setIsLoading(false);
-    }
+  const payload = {
+    ...formData,
+    jenis: parseFloat(formData.jenis),
+    masaTanam: parseFloat(formData.masaTanam),
+    varietas: parseFloat(formData.varietas),
+    kemasakan: parseFloat(kemasakan),
+    brix: parseFloat(formData.brix),
+    curahHujan: parseFloat(formData.curahHujan),
+    allowDuplicate,
   };
+
+  console.log("PAYLOAD:", payload);
+
+  try {
+    const response = await fetchData(`/api/rendemen/input`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${getCookie("token")}`,
+        "Content-Type": "application/json",
+      },
+      data: payload,
+    });
+
+    // === kalau backend mendeteksi duplikat ===
+    if (
+      response?.error === "DUPLICATE_BLOK" ||
+      response?.message?.includes("hari ini sudah ada")
+    ) {
+      setIsDuplicateModalOpen(true);
+      return;
+    }
+
+    // === sukses ===
+    setUsedBlocks((prev) => [
+      ...prev,
+      formData.blokKebun.trim().toLowerCase(),
+    ]);
+
+    setPredictionValue(response.newRendemen?.nilaiRendemen);
+    router.push("/rendemen");
+  } catch (err) {
+    console.error("Error submitting data:", err);
+
+    const errorMsg =
+      err?.response?.data?.message ||
+      err?.message ||
+      "";
+
+    // Jangan anggap semua error sebagai duplicate
+    if (errorMsg.toLowerCase().includes("hari ini sudah ada")) {
+      setIsDuplicateModalOpen(true);
+    } else {
+      setValidationErrors([
+        errorMsg || "Terjadi kesalahan saat mengirim data.",
+      ]);
+      setIsValidationModalOpen(true);
+    }
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   const handleDuplicateProceed = () => {
     setIsDuplicateModalOpen(false);
@@ -143,11 +202,11 @@ export default function RendemenInputPage() {
 
   // ==================== RENDER ====================
   return (
-    <div className="min-h-screen bg-gray-200 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
+    <div className="min-h-screen px-4 py-12 bg-gray-200 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto overflow-hidden bg-white shadow-xl rounded-2xl">
         <div className="p-10">
-          <div className="text-center mb-10">
-            <h1 className="text-4xl font-bold text-green-800 mb-2">
+          <div className="mb-10 text-center">
+            <h1 className="mb-2 text-4xl font-bold text-green-800">
               Input Data Prediksi Rendemen Gula Tebu
             </h1>
             <p className="text-xl text-green-600">
@@ -156,9 +215,9 @@ export default function RendemenInputPage() {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
               <InputField
-                icon={<FaSeedling className="text-green-500 text-2xl" />}
+                icon={<FaSeedling className="text-2xl text-green-500" />}
                 label="Blok Kebun"
                 info="Nama blok kebun berdasarkan pembagian wilayah atau area di dalam kebun."
                 name="blokKebun"
@@ -168,7 +227,7 @@ export default function RendemenInputPage() {
               />
 
               <SelectField
-                icon={<FaLeaf className="text-green-500 text-2xl" />}
+                icon={<FaLeaf className="text-2xl text-green-500" />}
                 label="Jenis / Kategori"
                 info="Jenis mengacu pada kategori tebu yang ditanam, misalnya Plain Cane (PC), 1, 2, 3. Jika menanam tingkat yang lebih dari 3, isi saja RC"
                 name="jenis"
@@ -185,7 +244,7 @@ export default function RendemenInputPage() {
               />
 
               <SelectField
-                icon={<FaCalendarAlt className="text-green-500 text-2xl" />}
+                icon={<FaCalendarAlt className="text-2xl text-green-500" />}
                 label="Masa Tanam"
                 info="Periode waktu ketika tebu ditanam.Dituliskan 5A, 6B, dst yang menunjukkan bulan tebu ditanam"
                 name="masaTanam"
@@ -201,7 +260,7 @@ export default function RendemenInputPage() {
               />
 
               <SelectField
-                icon={<FaDna className="text-green-500 text-2xl" />}
+                icon={<FaDna className="text-2xl text-green-500" />}
                 label="Varietas"
                 info="Jenis dari tanaman tebu yang ditanam"
                 name="varietas"
@@ -241,8 +300,8 @@ export default function RendemenInputPage() {
                 ]}
               />
 
-              <SelectField
-                icon={<FaRegCalendarAlt className="text-green-500 text-2xl" />}
+              {/* <SelectField
+                icon={<FaRegCalendarAlt className="text-2xl text-green-500" />}
                 label="Kemasakan"
                 info="Tingkat kematangan tanaman tebu yang optimal untuk dipanen"
                 name="kemasakan"
@@ -255,10 +314,10 @@ export default function RendemenInputPage() {
                   { value: "2", label: "Tengah" },
                   { value: "3", label: "Tengah Lambat" },
                 ]}
-              />
+              /> */}
 
               <InputField
-                icon={<FaThermometerHalf className="text-green-500 text-2xl" />}
+                icon={<FaThermometerHalf className="text-2xl text-green-500" />}
                 label="Brix"
                 info="Ukuran konsentrasi zat padat berupa gula pada tanaman tebu dalam 100 gram larutan"
                 name="brix"
@@ -266,10 +325,12 @@ export default function RendemenInputPage() {
                 onChange={handleInputChange}
                 placeholder="Masukkan nilai Brix"
                 type="number"
+                step="0.1"
+                note="Minimum: 13 — Maksimum: 24"
               />
 
               <InputField
-                icon={<FaCloudRain className="text-green-500 text-2xl" />}
+                icon={<FaCloudRain className="text-2xl text-green-500" />}
                 label="Curah Hujan"
                 info="Total curah hujan dari mulai tanam sampai pengukuran brix."
                 name="curahHujan"
@@ -277,13 +338,14 @@ export default function RendemenInputPage() {
                 onChange={handleInputChange}
                 placeholder="Masukkan nilai Curah Hujan"
                 type="number"
+                note="Minimum: 0 — Maksimum: 5000 mm"
               />
             </div>
 
             <div className="mt-10">
               <button
                 type="submit"
-                className="w-full flex justify-center items-center py-4 px-6 border border-transparent rounded-full shadow-sm text-xl font-medium text-white bg-green-600 hover:bg-green-700 transition"
+                className="flex items-center justify-center w-full px-6 py-4 text-xl font-medium text-white transition bg-green-600 border border-transparent rounded-full shadow-sm hover:bg-green-700"
                 disabled={isLoading}
               >
                 {isLoading ? "Menghitung..." : "Hitung Prediksi"}
@@ -308,13 +370,13 @@ export default function RendemenInputPage() {
       {isValidationModalOpen && (
         <Modal
           title="Data Tidak Valid"
-          icon={<FaExclamationTriangle className="text-red-500 text-3xl" />}
+          icon={<FaExclamationTriangle className="text-3xl text-red-500" />}
           message={
             <>
-              <p className="text-gray-700 mb-3">
+              <p className="mb-3 text-gray-700">
                 Terdapat nilai yang tidak valid pada input berikut:
               </p>
-              <ul className="list-disc list-inside text-red-600 space-y-1">
+              <ul className="space-y-1 text-red-600 list-disc list-inside">
                 {validationErrors.map((e, i) => (
                   <li key={i}>{e}</li>
                 ))}
@@ -329,7 +391,7 @@ export default function RendemenInputPage() {
       {/* === Modal Duplikat === */}
       {isDuplicateModalOpen && (
         <Modal
-          icon={<FaExclamationTriangle className="text-red-500 text-3xl" />}
+          icon={<FaExclamationTriangle className="text-3xl text-red-500" />}
           title="Blok Kebun Sudah Pernah Dihitung"
           message="Anda sudah melakukan perhitungan rendemen pada blok kebun ini. ubah nama blok kebun dengan memberi keterangan angka / nama petani, contoh: Cukang Galeuh 1, Cukang Galeuh Budi."
           confirmLabel="Ubah Nama Blok Kebun"
@@ -351,25 +413,25 @@ const Modal = ({
   cancelLabel,
   icon,
 }) => (
-  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-    <div className="bg-white rounded-xl shadow-lg w-full max-w-md p-6">
+  <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
+    <div className="w-full max-w-md p-6 bg-white shadow-lg rounded-xl">
       <div className="flex items-center mb-4">
         {icon && <div className="mr-3">{icon}</div>}
         <h2 className="text-2xl font-bold text-green-800">{title}</h2>
       </div>
-      <div className="mb-6 text-gray-700 text-lg">{message}</div>
+      <div className="mb-6 text-lg text-gray-700">{message}</div>
       <div className="flex justify-end gap-3">
         {cancelLabel && (
           <button
             onClick={onCancel}
-            className="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition"
+            className="px-4 py-2 text-gray-800 transition bg-gray-300 rounded-lg hover:bg-gray-400"
           >
             {cancelLabel}
           </button>
         )}
         <button
           onClick={onConfirm}
-          className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+          className="px-4 py-2 text-white transition bg-green-600 rounded-lg hover:bg-green-700"
         >
           {confirmLabel}
         </button>
@@ -378,18 +440,16 @@ const Modal = ({
   </div>
 );
 
-const InputField = ({ icon, label, info, ...props }) => (
+const InputField = ({ icon, label, info, note, ...props }) => (
   <div>
-    <label className="text-lg font-medium text-green-700 flex items-center mb-2">
+    <label className="flex items-center mb-2 text-lg font-medium text-green-700">
       {icon}
       <span className="mx-2">{label}</span>
       {info && (
-        <div className="relative flex items-center group ml-1">
-          <FaInfoCircle className="cursor-pointer text-gray-600 hover:text-green-700" />
+        <div className="relative flex items-center ml-1 group">
+          <FaInfoCircle className="text-gray-600 cursor-pointer hover:text-green-700" />
           <div
-            className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-64 bg-white text-gray-900 text-sm rounded-lg shadow-lg p-4
-         opacity-0 invisible group-hover:opacity-100 group-hover:visible
-         transition-all duration-300 z-999 flex items-start gap-2"
+            className="absolute flex items-start invisible w-64 gap-2 p-4 mb-2 text-sm text-gray-900 transition-all duration-300 -translate-x-1/2 bg-white rounded-lg shadow-lg opacity-0 bottom-full left-1/2 group-hover:opacity-100 group-hover:visible z-999"
           >
             <span className="text-yellow-500 mt-0.5">
               <HiOutlineLightBulb size={18} />
@@ -401,23 +461,26 @@ const InputField = ({ icon, label, info, ...props }) => (
     </label>
     <input
       {...props}
-      className="mt-1 block w-full py-3 px-4 border border-green-300 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 text-lg"
+      className="block w-full px-4 py-3 mt-1 text-lg bg-white border border-green-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
     />
+    {note && (
+      <span className="mt-1 ml-1 text-xs italic text-gray-600">
+        {note}
+      </span>
+    )}
   </div>
 );
 
 const SelectField = ({ icon, label, options, info, ...props }) => (
   <div>
-    <label className="text-lg font-medium text-green-700 flex items-center mb-2">
+    <label className="flex items-center mb-2 text-lg font-medium text-green-700">
       {icon}
       <span className="mx-2">{label}</span>
       {info && (
-        <div className="relative flex items-center group ml-1">
-          <FaInfoCircle className="cursor-pointer text-gray-600 hover:text-green-700" />
+        <div className="relative flex items-center ml-1 group">
+          <FaInfoCircle className="text-gray-600 cursor-pointer hover:text-green-700" />
           <div
-            className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-64 bg-white text-gray-900 text-sm rounded-lg shadow-lg p-4
-          opacity-0 invisible group-hover:opacity-100 group-hover:visible
-          transition-all duration-300 z-999 flex items-start gap-2"
+            className="absolute flex items-start invisible w-64 gap-2 p-4 mb-2 text-sm text-gray-900 transition-all duration-300 -translate-x-1/2 bg-white rounded-lg shadow-lg opacity-0 bottom-full left-1/2 group-hover:opacity-100 group-hover:visible z-999"
           >
             <span className="text-yellow-500 mt-0.5">
               <HiOutlineLightBulb size={18} />
@@ -429,7 +492,7 @@ const SelectField = ({ icon, label, options, info, ...props }) => (
     </label>
     <select
       {...props}
-      className="mt-1 block w-full py-3 px-4 border border-green-300 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 text-lg"
+      className="block w-full px-4 py-3 mt-1 text-lg bg-white border border-green-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
     >
       {options.map((option) => (
         <option key={option.value} value={option.value}>
