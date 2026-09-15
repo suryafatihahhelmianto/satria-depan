@@ -228,8 +228,8 @@ export default function RendemenInputPage() {
 
               <SelectField
                 icon={<FaLeaf className="text-2xl text-green-500" />}
-                label="Jenis / Kategori"
-                info="Jenis mengacu pada kategori tebu yang ditanam, misalnya Plain Cane (PC), 1, 2, 3. Jika menanam tingkat yang lebih dari 3, isi saja RC"
+                label="Kategori"
+                info="kategori mengacu pada tebu yang ditanam, misalnya Plain Cane (PC), 1, 2, 3. Jika menanam tingkat yang lebih dari 3, isi saja RC"
                 name="jenis"
                 value={formData.jenis}
                 onChange={handleInputChange}
