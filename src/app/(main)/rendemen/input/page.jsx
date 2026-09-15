@@ -18,35 +18,35 @@ import { HiOutlineLightBulb } from "react-icons/hi";
 import { getCookie } from "@/tools/getCookie";
 
 const kemasakanByVarietas = {
-  "0": "3", // BL -> Tengah Lambat
-  "1": "1", // Cening -> Awal Tengah
-  "2": "2", // GMP1 -> Tengah
-  "3": "3", // GMP2 -> Tengah Lambat
-  "4": "1", // GMP3 -> Awal Tengah
-  "5": "2", // KDS3 -> Tengah
-  "6": "1", // KENTUNG -> Awal Tengah
-  "7": "2", // KK -> Tengah
-  "8": "1", // LAMPUNG3 -> Awal Tengah
-  "9": "1", // PA0213 -> Awal Tengah
-  "10": "1", // PA0214 -> Awal Tengah
-  "11": "0", // PA022 -> Awal
-  "12": "0", // PA028 -> Awal
-  "13": "1", // PA1101 -> Awal Tengah
-  "14": "2", // PA1204 -> Tengah
-  "15": "2", // PA1301 -> Tengah
-  "16": "2", // PA1303 -> Tengah
-  "17": "2", // PA1401 -> Tengah
-  "18": "2", // PA1601 -> Tengah
-  "19": "2", // PA197 -> Tengah
-  "20": "1", // PS851 -> Awal Tengah
-  "21": "1", // PS862 -> Awal Tengah
-  "22": "3", // PS864 -> Tengah Lambat
-  "23": "1", // PS865 -> Awal Tengah
-  "24": "0", // PS881 -> Awal
-  "25": "1", // PS882 -> Awal Tengah
-  "26": "1", // PSJK922 -> Awal Tengah
-  "27": "2", // PSJT941 -> Tengah
-  "28": "0", // Mojo -> Awal??
+  0: "3", // BL -> Tengah Lambat
+  1: "1", // Cening -> Awal Tengah
+  2: "2", // GMP1 -> Tengah
+  3: "3", // GMP2 -> Tengah Lambat
+  4: "1", // GMP3 -> Awal Tengah
+  5: "2", // KDS3 -> Tengah
+  6: "1", // KENTUNG -> Awal Tengah
+  7: "2", // KK -> Tengah
+  8: "1", // LAMPUNG3 -> Awal Tengah
+  9: "1", // PA0213 -> Awal Tengah
+  10: "1", // PA0214 -> Awal Tengah
+  11: "0", // PA022 -> Awal
+  12: "0", // PA028 -> Awal
+  13: "1", // PA1101 -> Awal Tengah
+  14: "2", // PA1204 -> Tengah
+  15: "2", // PA1301 -> Tengah
+  16: "2", // PA1303 -> Tengah
+  17: "2", // PA1401 -> Tengah
+  18: "2", // PA1601 -> Tengah
+  19: "2", // PA197 -> Tengah
+  20: "1", // PS851 -> Awal Tengah
+  21: "1", // PS862 -> Awal Tengah
+  22: "3", // PS864 -> Tengah Lambat
+  23: "1", // PS865 -> Awal Tengah
+  24: "0", // PS881 -> Awal
+  25: "1", // PS882 -> Awal Tengah
+  26: "1", // PSJK922 -> Awal Tengah
+  27: "2", // PSJT941 -> Tengah
+  28: "1", // Mojo -> Awal Tengah
 };
 
 export default function RendemenInputPage() {
@@ -89,8 +89,8 @@ export default function RendemenInputPage() {
     const brixValue = parseFloat(formData.brix);
     const curahValue = parseFloat(formData.curahHujan);
 
-    if (isNaN(brixValue) || brixValue < 0 || brixValue > 30)
-      errors.push("Nilai Brix harus antara 0 dan 30");
+    if (isNaN(brixValue) || brixValue < 13 || brixValue > 25)
+      errors.push("Nilai Brix harus antara 13 dan 25");
     if (isNaN(curahValue) || curahValue < 0 || curahValue > 5000)
       errors.push("Curah Hujan harus antara 0 dan 5000 mm");
 
@@ -118,83 +118,80 @@ export default function RendemenInputPage() {
   const handleCancelCalculate = () => setIsConfirmModalOpen(false);
 
   const handleConfirmCalculate = async (allowDuplicate = false) => {
-  setIsConfirmModalOpen(false);
-  setIsLoading(true);
+    setIsConfirmModalOpen(false);
+    setIsLoading(true);
 
-  // Ambil kemasakan berdasarkan varietas
-  const kemasakan = kemasakanByVarietas[formData.varietas];
+    // Ambil kemasakan berdasarkan varietas
+    const kemasakan = kemasakanByVarietas[formData.varietas];
 
-  // Pastikan mapping kemasakan tersedia
-  if (kemasakan === undefined) {
-    setValidationErrors([
-      "Kemasakan untuk varietas yang dipilih belum dikonfigurasi.",
-    ]);
-    setIsValidationModalOpen(true);
-    setIsLoading(false);
-    return;
-  }
-
-  const payload = {
-    ...formData,
-    jenis: parseFloat(formData.jenis),
-    masaTanam: parseFloat(formData.masaTanam),
-    varietas: parseFloat(formData.varietas),
-    kemasakan: parseFloat(kemasakan),
-    brix: parseFloat(formData.brix),
-    curahHujan: parseFloat(formData.curahHujan),
-    allowDuplicate,
-  };
-
-  console.log("PAYLOAD:", payload);
-
-  try {
-    const response = await fetchData(`/api/rendemen/input`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${getCookie("token")}`,
-        "Content-Type": "application/json",
-      },
-      data: payload,
-    });
-
-    // === kalau backend mendeteksi duplikat ===
-    if (
-      response?.error === "DUPLICATE_BLOK" ||
-      response?.message?.includes("hari ini sudah ada")
-    ) {
-      setIsDuplicateModalOpen(true);
+    // Pastikan mapping kemasakan tersedia
+    if (kemasakan === undefined) {
+      setValidationErrors([
+        "Kemasakan untuk varietas yang dipilih belum dikonfigurasi.",
+      ]);
+      setIsValidationModalOpen(true);
+      setIsLoading(false);
       return;
     }
 
-    // === sukses ===
-    setUsedBlocks((prev) => [
-      ...prev,
-      formData.blokKebun.trim().toLowerCase(),
-    ]);
+    const payload = {
+      ...formData,
+      jenis: parseFloat(formData.jenis),
+      masaTanam: parseFloat(formData.masaTanam),
+      varietas: parseFloat(formData.varietas),
+      kemasakan: parseFloat(kemasakan),
+      brix: parseFloat(formData.brix),
+      curahHujan: parseFloat(formData.curahHujan),
+      allowDuplicate,
+    };
 
-    setPredictionValue(response.newRendemen?.nilaiRendemen);
-    router.push("/rendemen");
-  } catch (err) {
-    console.error("Error submitting data:", err);
+    console.log("PAYLOAD:", payload);
 
-    const errorMsg =
-      err?.response?.data?.message ||
-      err?.message ||
-      "";
+    try {
+      const response = await fetchData(`/api/rendemen/input`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${getCookie("token")}`,
+          "Content-Type": "application/json",
+        },
+        data: payload,
+      });
 
-    // Jangan anggap semua error sebagai duplicate
-    if (errorMsg.toLowerCase().includes("hari ini sudah ada")) {
-      setIsDuplicateModalOpen(true);
-    } else {
-      setValidationErrors([
-        errorMsg || "Terjadi kesalahan saat mengirim data.",
+      // === kalau backend mendeteksi duplikat ===
+      if (
+        response?.error === "DUPLICATE_BLOK" ||
+        response?.message?.includes("hari ini sudah ada")
+      ) {
+        setIsDuplicateModalOpen(true);
+        return;
+      }
+
+      // === sukses ===
+      setUsedBlocks((prev) => [
+        ...prev,
+        formData.blokKebun.trim().toLowerCase(),
       ]);
-      setIsValidationModalOpen(true);
+
+      setPredictionValue(response.newRendemen?.nilaiRendemen);
+      router.push("/rendemen");
+    } catch (err) {
+      console.error("Error submitting data:", err);
+
+      const errorMsg = err?.response?.data?.message || err?.message || "";
+
+      // Jangan anggap semua error sebagai duplicate
+      if (errorMsg.toLowerCase().includes("hari ini sudah ada")) {
+        setIsDuplicateModalOpen(true);
+      } else {
+        setValidationErrors([
+          errorMsg || "Terjadi kesalahan saat mengirim data.",
+        ]);
+        setIsValidationModalOpen(true);
+      }
+    } finally {
+      setIsLoading(false);
     }
-  } finally {
-    setIsLoading(false);
-  }
-};
+  };
 
   const handleDuplicateProceed = () => {
     setIsDuplicateModalOpen(false);
@@ -326,7 +323,7 @@ export default function RendemenInputPage() {
                 placeholder="Masukkan nilai Brix"
                 type="number"
                 step="0.1"
-                note="Minimum: 13 — Maksimum: 24"
+                note="Minimum: 13 — Maksimum: 25"
               />
 
               <InputField
@@ -448,9 +445,7 @@ const InputField = ({ icon, label, info, note, ...props }) => (
       {info && (
         <div className="relative flex items-center ml-1 group">
           <FaInfoCircle className="text-gray-600 cursor-pointer hover:text-green-700" />
-          <div
-            className="absolute flex items-start invisible w-64 gap-2 p-4 mb-2 text-sm text-gray-900 transition-all duration-300 -translate-x-1/2 bg-white rounded-lg shadow-lg opacity-0 bottom-full left-1/2 group-hover:opacity-100 group-hover:visible z-999"
-          >
+          <div className="absolute flex items-start invisible w-64 gap-2 p-4 mb-2 text-sm text-gray-900 transition-all duration-300 -translate-x-1/2 bg-white rounded-lg shadow-lg opacity-0 bottom-full left-1/2 group-hover:opacity-100 group-hover:visible z-999">
             <span className="text-yellow-500 mt-0.5">
               <HiOutlineLightBulb size={18} />
             </span>
@@ -464,9 +459,7 @@ const InputField = ({ icon, label, info, note, ...props }) => (
       className="block w-full px-4 py-3 mt-1 text-lg bg-white border border-green-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
     />
     {note && (
-      <span className="mt-1 ml-1 text-xs italic text-gray-600">
-        {note}
-      </span>
+      <span className="mt-1 ml-1 text-xs italic text-gray-600">{note}</span>
     )}
   </div>
 );
@@ -479,9 +472,7 @@ const SelectField = ({ icon, label, options, info, ...props }) => (
       {info && (
         <div className="relative flex items-center ml-1 group">
           <FaInfoCircle className="text-gray-600 cursor-pointer hover:text-green-700" />
-          <div
-            className="absolute flex items-start invisible w-64 gap-2 p-4 mb-2 text-sm text-gray-900 transition-all duration-300 -translate-x-1/2 bg-white rounded-lg shadow-lg opacity-0 bottom-full left-1/2 group-hover:opacity-100 group-hover:visible z-999"
-          >
+          <div className="absolute flex items-start invisible w-64 gap-2 p-4 mb-2 text-sm text-gray-900 transition-all duration-300 -translate-x-1/2 bg-white rounded-lg shadow-lg opacity-0 bottom-full left-1/2 group-hover:opacity-100 group-hover:visible z-999">
             <span className="text-yellow-500 mt-0.5">
               <HiOutlineLightBulb size={18} />
             </span>

@@ -19,35 +19,35 @@ import { formatNumberToIndonesian } from "@/tools/formatNumber";
 import { HiOutlineLightBulb } from "react-icons/hi";
 
 const kemasakanByVarietas = {
-  "0": "3", // BL -> Tengah Lambat
-  "1": "1", // Cening -> Awal Tengah
-  "2": "2", // GMP1 -> Tengah
-  "3": "3", // GMP2 -> Tengah Lambat
-  "4": "1", // GMP3 -> Awal Tengah
-  "5": "2", // KDS3 -> Tengah
-  "6": "1", // KENTUNG -> Awal Tengah
-  "7": "2", // KK -> Tengah
-  "8": "1", // LAMPUNG3 -> Awal Tengah
-  "9": "1", // PA0213 -> Awal Tengah
-  "10": "1", // PA0214 -> Awal Tengah
-  "11": "0", // PA022 -> Awal
-  "12": "0", // PA028 -> Awal
-  "13": "1", // PA1101 -> Awal Tengah
-  "14": "2", // PA1204 -> Tengah
-  "15": "2", // PA1301 -> Tengah
-  "16": "2", // PA1303 -> Tengah
-  "17": "2", // PA1401 -> Tengah
-  "18": "2", // PA1601 -> Tengah
-  "19": "2", // PA197 -> Tengah
-  "20": "1", // PS851 -> Awal Tengah
-  "21": "1", // PS862 -> Awal Tengah
-  "22": "3", // PS864 -> Tengah Lambat
-  "23": "1", // PS865 -> Awal Tengah
-  "24": "0", // PS881 -> Awal
-  "25": "1", // PS882 -> Awal Tengah
-  "26": "1", // PSJK922 -> Awal Tengah
-  "27": "2", // PSJT941 -> Tengah
-  "28": "0", // Mojo -> Awal??
+  0: "3", // BL -> Tengah Lambat
+  1: "1", // Cening -> Awal Tengah
+  2: "2", // GMP1 -> Tengah
+  3: "3", // GMP2 -> Tengah Lambat
+  4: "1", // GMP3 -> Awal Tengah
+  5: "2", // KDS3 -> Tengah
+  6: "1", // KENTUNG -> Awal Tengah
+  7: "2", // KK -> Tengah
+  8: "1", // LAMPUNG3 -> Awal Tengah
+  9: "1", // PA0213 -> Awal Tengah
+  10: "1", // PA0214 -> Awal Tengah
+  11: "0", // PA022 -> Awal
+  12: "0", // PA028 -> Awal
+  13: "1", // PA1101 -> Awal Tengah
+  14: "2", // PA1204 -> Tengah
+  15: "2", // PA1301 -> Tengah
+  16: "2", // PA1303 -> Tengah
+  17: "2", // PA1401 -> Tengah
+  18: "2", // PA1601 -> Tengah
+  19: "2", // PA197 -> Tengah
+  20: "1", // PS851 -> Awal Tengah
+  21: "1", // PS862 -> Awal Tengah
+  22: "3", // PS864 -> Tengah Lambat
+  23: "1", // PS865 -> Awal Tengah
+  24: "0", // PS881 -> Awal
+  25: "1", // PS882 -> Awal Tengah
+  26: "1", // PSJK922 -> Awal Tengah
+  27: "2", // PSJT941 -> Tengah
+  28: "1", // Mojo -> Awal Tengah
 };
 
 export default function KalkulatorPage() {
@@ -96,8 +96,8 @@ export default function KalkulatorPage() {
     const brixValue = Number.parseFloat(formData.brix);
     const curahHujanValue = Number.parseFloat(formData.curahHujan);
 
-    if (!isNaN(brixValue) && (brixValue < 0 || brixValue > 30)) {
-      errors.push("Nilai Brix harus antara 0 dan 30");
+    if (!isNaN(brixValue) && (brixValue < 13 || brixValue > 25)) {
+      errors.push("Nilai Brix harus antara 13 dan 25");
     }
 
     if (
@@ -120,14 +120,8 @@ export default function KalkulatorPage() {
 
     setIsLoading(true);
 
-    const {
-      blokKebun,
-      jenis,
-      masaTanam,
-      varietas,
-      brix,
-      curahHujan,
-    } = formData;
+    const { blokKebun, jenis, masaTanam, varietas, brix, curahHujan } =
+      formData;
     const kemasakan = kemasakanByVarietas[varietas];
 
     const data = {
@@ -313,7 +307,7 @@ export default function KalkulatorPage() {
                 label="Brix"
                 name="brix"
                 info="Ukuran konsentrasi zat padat berupa gula pada tanaman tebu dalam 100 gram larutan"
-                note="Minimum: 13 — Maksimum: 24"
+                note="Minimum: 13 — Maksimum: 25"
                 value={formData.brix}
                 onChange={handleInputChange}
                 placeholder="Masukkan nilai Brix"
@@ -423,9 +417,7 @@ const InputField = ({ className = "", icon, label, info, note, ...props }) => (
       {info && (
         <div className="relative flex items-center ml-1 group">
           <FaInfoCircle className="text-gray-600 cursor-pointer hover:text-green-700" />
-          <div
-            className="absolute flex items-start invisible w-64 gap-2 p-4 mb-2 text-sm text-gray-900 transition-all duration-300 -translate-x-1/2 bg-white rounded-lg shadow-lg opacity-0 bottom-full left-1/2 group-hover:opacity-100 group-hover:visible z-999"
-          >
+          <div className="absolute flex items-start invisible w-64 gap-2 p-4 mb-2 text-sm text-gray-900 transition-all duration-300 -translate-x-1/2 bg-white rounded-lg shadow-lg opacity-0 bottom-full left-1/2 group-hover:opacity-100 group-hover:visible z-999">
             <span className="text-yellow-500 mt-0.5">
               <HiOutlineLightBulb size={18} />
             </span>
@@ -439,9 +431,7 @@ const InputField = ({ className = "", icon, label, info, note, ...props }) => (
       className="mt-1 block w-full py-2 px-3 sm:py-2.5 sm:px-4 border border-green-300 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm sm:text-base"
     />
     {note && (
-      <span className="mt-1 ml-1 text-xs italic text-gray-600">
-        {note}
-      </span>
+      <span className="mt-1 ml-1 text-xs italic text-gray-600">{note}</span>
     )}
   </div>
 );
@@ -454,9 +444,7 @@ const SelectField = ({ icon, label, info, options, ...props }) => (
       {info && (
         <div className="relative flex items-center ml-1 group">
           <FaInfoCircle className="text-gray-600 cursor-pointer hover:text-green-700" />
-          <div
-            className="absolute flex items-start invisible w-64 gap-2 p-4 mb-2 text-sm text-gray-900 transition-all duration-300 -translate-x-1/2 bg-white rounded-lg shadow-lg opacity-0 bottom-full left-1/2 group-hover:opacity-100 group-hover:visible z-999"
-          >
+          <div className="absolute flex items-start invisible w-64 gap-2 p-4 mb-2 text-sm text-gray-900 transition-all duration-300 -translate-x-1/2 bg-white rounded-lg shadow-lg opacity-0 bottom-full left-1/2 group-hover:opacity-100 group-hover:visible z-999">
             <span className="text-yellow-500 mt-0.5">
               <HiOutlineLightBulb size={18} />
             </span>

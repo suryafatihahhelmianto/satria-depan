@@ -91,8 +91,8 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
     pathname === path
       ? "bg-green-600 text-white font-semibold"
       : pathname.startsWith(path) && path !== "/"
-      ? "bg-green-600 text-white font-semibold"
-      : "text-gray-700 hover:bg-green-200 hover:text-gray-900";
+        ? "bg-green-600 text-white font-semibold"
+        : "text-gray-700 hover:bg-green-200 hover:text-gray-900";
 
   const handleLinkClick = () => {
     if (isMobile) toggleSidebar();
@@ -119,8 +119,8 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
               ? "translate-x-0 w-full"
               : "-translate-x-full w-full"
             : isOpen
-            ? "w-[300px]"
-            : "w-[100px]"
+              ? "w-[300px]"
+              : "w-[100px]"
         }`}
       >
         {!["/", "/executive-dashboard"].includes(pathname) && (
@@ -198,7 +198,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                     className={`flex items-center ${
                       isOpen ? "gap-4 py-3 px-4" : "justify-center py-3 px-2"
                     } rounded-lg text-lg transition-colors duration-300 ${getLinkStyle(
-                      link.path
+                      link.path,
                     )}`}
                     onClick={handleLinkClick}
                   >
@@ -304,7 +304,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
           )}
 
           <footer className="text-center text-sm text-green-800 mt-2">
-            © Satria-Keren v2 2025
+            © Satria-Keren v2.1 2026
           </footer>
         </div>
       </div>

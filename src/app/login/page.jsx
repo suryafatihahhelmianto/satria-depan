@@ -303,15 +303,15 @@ export default function LoginPage() {
               <br className="hidden sm:block" />
               <span className="block sm:inline">
                 Pengukuran Kinerja Keberlanjutan Rantai Pasok dan Prediksi
-                Rendemen Agro Industri Gula Tebu
+                Rendemen Agro Industri Gula Tebu berbasis Machine Learning
               </span>
             </p>
           </div>
 
           {/* Footer */}
           <div className="max-w-full px-4 py-2 mt-6 text-xs text-center text-white bg-green-600 rounded-t-none shadow-md md:absolute md:bottom-0 md:left-1/2 md:-translate-x-1/2 sm:text-sm sm:px-6 md:rounded-t-full md:mt-0 whitespace-nowrap md:w-auto">
-            © 2025 <span className="font-semibold">SATRIA–KEREN v2</span>. Semua
-            Hak Cipta Dilindungi.
+            © 2026 <span className="font-semibold">SATRIA–KEREN v2.1</span>.
+            Semua Hak Cipta Dilindungi.
           </div>
         </div>
       </div>
