@@ -233,26 +233,26 @@ export default function PenggunaPage() {
   return (
     <div className="p-6">
       {successMessage && (
-        <div className="mb-4 text-green-500 font-semibold">
+        <div className="mb-4 font-semibold text-green-500">
           {successMessage}
         </div>
       )}
       {/* Header filter & action */}
-      <div className="flex flex-col mb-6 gap-4">
+      <div className="flex flex-col gap-4 mb-6">
         <h1 className="text-3xl font-semibold text-green-700">
           Daftar Pengguna
         </h1>
 
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           {/* Left: Filter controls */}
-          <div className="flex items-center gap-3 flex-wrap">
+          <div className="flex flex-wrap items-center gap-3">
             <h2 className="font-semibold text-gray-700">Filter by:</h2>
 
             {/* Filter Pabrik */}
             <select
               value={selectedFactory}
               onChange={(e) => setSelectedFactory(e.target.value)}
-              className="border border-gray-300 rounded-lg px-3 py-2 hover:border-green-600 focus:outline-none focus:ring-1 focus:ring-green-600 transition"
+              className="px-3 py-2 transition border border-gray-300 rounded-lg hover:border-green-600 focus:outline-none focus:ring-1 focus:ring-green-600"
             >
               <option value="Semua">Semua</option>
               <option value={process.env.NEXT_PUBLIC_HOLDING}>
@@ -271,7 +271,7 @@ export default function PenggunaPage() {
             <select
               value={selectedJabatan}
               onChange={(e) => setSelectedJabatan(e.target.value)}
-              className="border border-gray-300 rounded-lg px-3 py-2 hover:border-green-600 focus:outline-none focus:ring-1 focus:ring-green-600 transition"
+              className="px-3 py-2 transition border border-gray-300 rounded-lg hover:border-green-600 focus:outline-none focus:ring-1 focus:ring-green-600"
             >
               <option>Semua Jabatan</option>
               <option>DIREKSI</option>
@@ -291,9 +291,9 @@ export default function PenggunaPage() {
             <div className="flex justify-end mr-1">
               <button
                 onClick={() => openModal()}
-                className="flex items-center gap-2 border-2 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:rounded-xl border-green-800 rounded-md p-2 hover:border-green-900"
+                className="flex items-center gap-2 p-2 transition-all duration-300 border-2 border-green-800 rounded-md hover:scale-105 hover:shadow-lg hover:rounded-xl hover:border-green-900"
               >
-                <AiFillPlusCircle className="text-2xl text-green-800 hover:text-green-900 cursor-pointer" />
+                <AiFillPlusCircle className="text-2xl text-green-800 cursor-pointer hover:text-green-900" />
                 <h1 className="cursor-pointer hover:text-green-600">
                   Tambah Pengguna
                 </h1>
@@ -303,32 +303,32 @@ export default function PenggunaPage() {
         </div>
       </div>
       {/* Table */}
-      <div className="overflow-x-auto shadow-lg rounded-lg border">
-        <table className="w-full text-left border-collapse border border-gray-300">
-          <thead className="bg-gradient-to-r from-ijoWasis to-ijoDash text-white">
+      <div className="overflow-x-auto border rounded-lg shadow-lg">
+        <table className="w-full text-left border border-collapse border-gray-300">
+          <thead className="text-white bg-gradient-to-r from-ijoWasis to-ijoDash">
             <tr>
-              <th className="py-2 px-4">Pabrik</th>
-              <th className="py-2 px-4">Nama</th>
-              <th className="py-2 px-4">Jabatan</th>
-              <th className="py-2 px-4">Aksi</th>
+              <th className="px-4 py-2">Pabrik</th>
+              <th className="px-4 py-2">Nama</th>
+              <th className="px-4 py-2">Jabatan</th>
+              <th className="px-4 py-2">Aksi</th>
             </tr>
           </thead>
           <tbody>
             {filteredUsers.length > 0 ? (
               filteredUsers.map((user, index) => (
                 <tr key={index} className="hover:bg-gray-200">
-                  <td className="py-2 px-4 border">
+                  <td className="px-4 py-2 border">
                     {user.pabrikGula
                       ? user.pabrikGula.namaPabrik === "Semua"
                         ? process.env.NEXT_PUBLIC_HOLDING
                         : user.pabrikGula.namaPabrik
                       : process.env.NEXT_PUBLIC_HOLDING}
                   </td>
-                  <td className="py-2 px-4 border">{user.nama}</td>
-                  <td className="py-2 px-4 border">
+                  <td className="px-4 py-2 border">{user.nama}</td>
+                  <td className="px-4 py-2 border">
                     {displayJabatan(user.jabatan)}
                   </td>
-                  <td className="py-2 px-4 border">
+                  <td className="px-4 py-2 border">
                     <div className="flex gap-2">
                       <button
                         className="p-2 bg-yellow-500 rounded hover:bg-yellow-600"
@@ -348,7 +348,7 @@ export default function PenggunaPage() {
               ))
             ) : (
               <tr>
-                <td colSpan="4" className="text-center py-4">
+                <td colSpan="4" className="py-4 text-center">
                   Tidak ada pengguna
                 </td>
               </tr>
@@ -360,17 +360,17 @@ export default function PenggunaPage() {
       {isModalOpen && (
         <div
           id="modalOverlay"
-          className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-start pt-32"
+          className="fixed inset-0 flex items-start justify-center pt-32 bg-black bg-opacity-50"
           onClick={handleClickOutside}
         >
           <div className="bg-gray-50 p-8 rounded-lg shadow-lg w-full sm:w-[30rem] md:w-[40rem] lg:w-[25rem] xl:w-[45rem] relative max-h-[60vh] overflow-y-auto mt-16">
             <button
-              className="absolute top-2 right-2 text-black hover:text-red-500 font-bold"
+              className="absolute font-bold text-black top-2 right-2 hover:text-red-500"
               onClick={closeModal}
             >
               X
             </button>
-            <h2 className="text-black font-bold text-center mb-4 text-xl">
+            <h2 className="mb-4 text-xl font-bold text-center text-black">
               {isEditMode ? "Edit Pengguna" : "Tambah Pengguna Baru"}
             </h2>
 
@@ -389,7 +389,7 @@ export default function PenggunaPage() {
                   value={formData.nama}
                   onChange={handleInputChange}
                   placeholder="Nama"
-                  className="w-full px-4 py-2 rounded-lg bg-gray-200 focus:outline-none"
+                  className="w-full px-4 py-2 bg-gray-200 rounded-lg focus:outline-none"
                 />
               </div>
 
@@ -408,7 +408,7 @@ export default function PenggunaPage() {
                   value={formData.username}
                   onChange={handleInputChange}
                   placeholder="Username"
-                  className="w-full px-4 py-2 rounded-lg bg-gray-200 focus:outline-none"
+                  className="w-full px-4 py-2 bg-gray-200 rounded-lg focus:outline-none"
                 />
               </div>
 
@@ -453,7 +453,7 @@ export default function PenggunaPage() {
 
                 {/* Pesan kesalahan password */}
                 {formData.password.length > 0 && (
-                  <div className="text-red-500 text-sm mt-1">
+                  <div className="mt-1 text-sm text-red-500">
                     {!/[A-Z]/.test(formData.password) && (
                       <p>- Harus mengandung minimal 1 huruf kapital.</p>
                     )}
@@ -479,7 +479,7 @@ export default function PenggunaPage() {
                   <FaUserTie className="text-green-700" /> Jabatan
                 </label>
                 <select
-                  className="w-full px-4 py-2 rounded-lg bg-gray-200 focus:outline-none"
+                  className="w-full px-4 py-2 bg-gray-200 rounded-lg focus:outline-none"
                   value={formData.jabatan}
                   onChange={handleInputChange}
                   name="jabatan"
@@ -495,7 +495,7 @@ export default function PenggunaPage() {
                   </option>
                   <option value="SDM">KEPALA BAGIAN SDM DAN UMUM</option>
                   <option value="INSTALASI">KEPALA BAGIAN INSTALASI</option>
-                  <option value="FABRIKASI">KEPALA BAGIAN FABRIKASI</option>
+                  <option value="FABRIKASI">KEPALA BAGIAN PABRIKASI</option>
                   <option value="TANAMAN">KEPALA BAGIAN TANAMAN</option>
                   <option value="TUK">KEPALA BAGIAN TUK</option>
                 </select>
@@ -515,7 +515,7 @@ export default function PenggunaPage() {
                       name="pabrikGulaId"
                       value={formData.pabrikGulaId}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-2 rounded-lg bg-gray-200 focus:outline-none"
+                      className="w-full px-4 py-2 bg-gray-200 rounded-lg focus:outline-none"
                     >
                       <option value="">Pilih Pabrik</option>
                       {factories.map((factory) => (
@@ -561,7 +561,7 @@ export default function PenggunaPage() {
                 {(!/^0[0-9]*$/.test(formData.nomorHp) ||
                   formData.nomorHp.length > 13 ||
                   formData.nomorHp.length < 10) && (
-                  <p className="text-red-500 text-sm mt-1">
+                  <p className="mt-1 text-sm text-red-500">
                     Nomor HP harus dimulai dengan &quot;0&quot;, minimal 10 dan
                     maksimal 13 digit angka.
                   </p>
@@ -569,17 +569,17 @@ export default function PenggunaPage() {
               </div>
 
               {errorMessage && (
-                <div className="mb-4 text-red-500 font-semibold">
+                <div className="mb-4 font-semibold text-red-500">
                   {errorMessage}
                 </div>
               )}
 
               <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-green-400 to-green-600 text-white py-2 rounded-lg hover:bg-green-800"
+                className="w-full py-2 text-white rounded-lg bg-gradient-to-r from-green-400 to-green-600 hover:bg-green-800"
               >
                 {isLoading ? (
-                  <FaSpinner className="animate-spin mx-auto" />
+                  <FaSpinner className="mx-auto animate-spin" />
                 ) : isEditMode ? (
                   "Simpan Perubahan"
                 ) : (
