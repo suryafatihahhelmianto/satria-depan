@@ -19,6 +19,7 @@ function renderKinerjaSection({
   rows,
   sesiId,
   isAdmin,
+  onLockChange,
   type = "sosial",
 }) {
   if (!allowedRoles.includes(role)) return null;
@@ -29,6 +30,7 @@ function renderKinerjaSection({
       type={type}
       sesiId={sesiId}
       isAdmin={isAdmin}
+      onLockChange={onLockChange}
     />
   );
 }
@@ -55,7 +57,12 @@ export default function DataSosial() {
   });
 
   const [lockedStatus, setLockedStatus] = useState({});
+
   const [loading, setLoading] = useState(true);
+
+  const handleLockChange = (field, locked) => {
+    setLockedStatus((previous) => ({ ...previous, [field]: locked }));
+  };
 
   const handleChangeAndUpdate = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -65,8 +72,9 @@ export default function DataSosial() {
   const handleUpdate = async (field, value) => {
     try {
       if (lockedStatus[field]) {
-        console.log(`Kolom ${field} sudah terkunci, tidak bisa diupdate.`);
-        return;
+        throw new Error(
+          `Kolom ${field} masih terkunci. Klik unlock sebelum mengedit.`
+        );
       }
 
       const data = { sesiId };
@@ -97,10 +105,12 @@ export default function DataSosial() {
         },
         data,
       });
+      handleLockChange(field, true);
       // fetchSosialData();
       // console.log("Update successful");
     } catch (error) {
       console.error("Error updating field: ", error);
+      throw error;
     }
   };
 
@@ -465,6 +475,7 @@ export default function DataSosial() {
             rows: rowsS1,
             sesiId,
             isAdmin,
+            onLockChange: handleLockChange,
           })}
           {renderKinerjaSection({
             role,
@@ -474,6 +485,7 @@ export default function DataSosial() {
             rows: rowsS2,
             sesiId,
             isAdmin,
+            onLockChange: handleLockChange,
           })}
           {renderKinerjaSection({
             role,
@@ -482,6 +494,7 @@ export default function DataSosial() {
             rows: rowsS3,
             sesiId,
             isAdmin,
+            onLockChange: handleLockChange,
           })}
           {renderKinerjaSection({
             role,
@@ -490,6 +503,7 @@ export default function DataSosial() {
             rows: rowsS4,
             sesiId,
             isAdmin,
+            onLockChange: handleLockChange,
           })}
           {renderKinerjaSection({
             role,
@@ -498,6 +512,7 @@ export default function DataSosial() {
             rows: rowsS5,
             sesiId,
             isAdmin,
+            onLockChange: handleLockChange,
           })}
           {renderKinerjaSection({
             role,
@@ -506,6 +521,7 @@ export default function DataSosial() {
             rows: rowsS6,
             sesiId,
             isAdmin,
+            onLockChange: handleLockChange,
           })}
         </>
       )}

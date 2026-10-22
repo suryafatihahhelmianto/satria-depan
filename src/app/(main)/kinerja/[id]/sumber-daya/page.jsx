@@ -21,6 +21,7 @@ function renderKinerjaSection({
   rows,
   sesiId,
   isAdmin,
+  onLockChange,
   type = "sdam",
 }) {
   if (!allowedRoles.includes(role)) return null;
@@ -31,6 +32,7 @@ function renderKinerjaSection({
       type={type}
       sesiId={sesiId}
       isAdmin={isAdmin}
+      onLockChange={onLockChange}
     />
   );
 }
@@ -75,7 +77,12 @@ export default function SumberDayaPage() {
   });
 
   const [lockedStatus, setLockedStatus] = useState({});
+
   const [loading, setLoading] = useState(true);
+
+  const handleLockChange = (field, locked) => {
+    setLockedStatus((previous) => ({ ...previous, [field]: locked }));
+  };
 
   const handleInputChange = (field, value) => {
     setFormData({ ...formData, [field]: value });
@@ -84,8 +91,9 @@ export default function SumberDayaPage() {
   const handleUpdate = async (field, value) => {
     try {
       if (lockedStatus[field]) {
-        console.log(`Kolom ${field} sudah terkunci, tidak bisa diupdate.`);
-        return;
+        throw new Error(
+          `Kolom ${field} masih terkunci. Klik unlock sebelum mengedit.`
+        );
       }
 
       const data = { sesiId };
@@ -116,9 +124,11 @@ export default function SumberDayaPage() {
         },
         data,
       });
+      handleLockChange(field, true);
       // fetchSDAM();
     } catch (error) {
       console.error("Error updating field (sdam): ", error);
+      throw error;
     }
   };
 
@@ -651,6 +661,7 @@ export default function SumberDayaPage() {
             rows: dataD1,
             sesiId,
             isAdmin,
+            onLockChange: handleLockChange,
           })}
           {renderKinerjaSection({
             role,
@@ -659,6 +670,7 @@ export default function SumberDayaPage() {
             rows: dataD2,
             sesiId,
             isAdmin,
+            onLockChange: handleLockChange,
           })}
           {renderKinerjaSection({
             role,
@@ -667,6 +679,7 @@ export default function SumberDayaPage() {
             rows: dataD3,
             sesiId,
             isAdmin,
+            onLockChange: handleLockChange,
           })}
           {renderKinerjaSection({
             role,
@@ -675,6 +688,7 @@ export default function SumberDayaPage() {
             rows: dataD3qc,
             sesiId,
             isAdmin,
+            onLockChange: handleLockChange,
           })}
           {renderKinerjaSection({
             role,
@@ -683,6 +697,7 @@ export default function SumberDayaPage() {
             rows: dataD3sdm,
             sesiId,
             isAdmin,
+            onLockChange: handleLockChange,
           })}
           {renderKinerjaSection({
             role,
@@ -691,6 +706,7 @@ export default function SumberDayaPage() {
             rows: dataD4,
             sesiId,
             isAdmin,
+            onLockChange: handleLockChange,
           })}
           {renderKinerjaSection({
             role,
@@ -699,6 +715,7 @@ export default function SumberDayaPage() {
             rows: dataD5,
             sesiId,
             isAdmin,
+            onLockChange: handleLockChange,
           })}
           {renderKinerjaSection({
             role,
@@ -707,6 +724,7 @@ export default function SumberDayaPage() {
             rows: dataD6,
             sesiId,
             isAdmin,
+            onLockChange: handleLockChange,
           })}
           {renderKinerjaSection({
             role,
@@ -715,6 +733,7 @@ export default function SumberDayaPage() {
             rows: dataD7,
             sesiId,
             isAdmin,
+            onLockChange: handleLockChange,
           })}
           {renderKinerjaSection({
             role,
@@ -724,6 +743,7 @@ export default function SumberDayaPage() {
             rows: dataD8,
             sesiId,
             isAdmin,
+            onLockChange: handleLockChange,
           })}
           {renderKinerjaSection({
             role,
@@ -733,6 +753,7 @@ export default function SumberDayaPage() {
             rows: dataD9,
             sesiId,
             isAdmin,
+            onLockChange: handleLockChange,
           })}
           {renderKinerjaSection({
             role,
@@ -741,6 +762,7 @@ export default function SumberDayaPage() {
             rows: dataD10,
             sesiId,
             isAdmin,
+            onLockChange: handleLockChange,
           })}
         </>
       )}

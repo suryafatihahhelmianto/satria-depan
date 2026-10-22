@@ -3,7 +3,14 @@ import { AiFillCheckCircle } from "react-icons/ai";
 import TableInputRow from "./TableInputRow";
 
 // Main component for performance table
-export default function KinerjaTable({ title, rows, isAdmin, type, sesiId }) {
+export default function KinerjaTable({
+  title,
+  rows,
+  isAdmin,
+  type,
+  sesiId,
+  onLockChange,
+}) {
   return (
     <div className="my-8 p-4 bg-gray-100 rounded-lg shadow-lg">
       {/* Table Title */}
@@ -57,6 +64,7 @@ export default function KinerjaTable({ title, rows, isAdmin, type, sesiId }) {
                   onChange={row.onChange}
                   onSubmit={row.onSubmit}
                   locked={row.locked}
+                  onLockChange={onLockChange}
                   isAdmin={isAdmin}
                   type={type}
                   sesiId={sesiId}

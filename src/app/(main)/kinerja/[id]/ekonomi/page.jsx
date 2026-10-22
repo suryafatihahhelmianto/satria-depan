@@ -17,6 +17,7 @@ function renderKinerjaSection({
   rows,
   sesiId,
   isAdmin,
+  onLockChange,
   type = "ekonomi",
 }) {
   if (!allowedRoles.includes(role)) return null;
@@ -27,6 +28,7 @@ function renderKinerjaSection({
       type={type}
       sesiId={sesiId}
       isAdmin={isAdmin}
+      onLockChange={onLockChange}
     />
   );
 }
@@ -57,9 +59,14 @@ export default function DataKinerja() {
   });
 
   const [lockedStatus, setLockedStatus] = useState({});
+
   const [loading, setLoading] = useState(true);
   const [isFormDirty, setIsFormDirty] = useState(false);
   const [currentPath, setCurrentPath] = useState(pathname);
+
+  const handleLockChange = (field, locked) => {
+    setLockedStatus((previous) => ({ ...previous, [field]: locked }));
+  };
 
   const handleInputChange = (field, value) => {
     setFormData({ ...formData, [field]: value });
@@ -69,8 +76,9 @@ export default function DataKinerja() {
   const handleUpdate = async (field, value) => {
     try {
       if (lockedStatus[field]) {
-        console.log(`Kolom ${field} sudah terkunci, tidak bisa diupdate.`);
-        return;
+        throw new Error(
+          `Kolom ${field} masih terkunci. Klik unlock sebelum mengedit.`
+        );
       }
 
       const data = { sesiId };
@@ -100,11 +108,13 @@ export default function DataKinerja() {
         },
         data,
       });
+      handleLockChange(field, true);
       console.log("Update successful");
       // fetchEkonomi();
       setIsFormDirty(false);
     } catch (error) {
       console.error("Error updating field: ", error);
+      throw error;
     }
   };
 
@@ -504,6 +514,7 @@ export default function DataKinerja() {
             rows: rowsE1,
             sesiId,
             isAdmin,
+            onLockChange: handleLockChange,
           })}
           {renderKinerjaSection({
             role,
@@ -512,6 +523,7 @@ export default function DataKinerja() {
             rows: rowsE2,
             sesiId,
             isAdmin,
+            onLockChange: handleLockChange,
           })}
           {renderKinerjaSection({
             role,
@@ -521,6 +533,7 @@ export default function DataKinerja() {
             rows: rowsE3,
             sesiId,
             isAdmin,
+            onLockChange: handleLockChange,
           })}
           {renderKinerjaSection({
             role,
@@ -529,6 +542,7 @@ export default function DataKinerja() {
             rows: rowsE4,
             sesiId,
             isAdmin,
+            onLockChange: handleLockChange,
           })}
           {renderKinerjaSection({
             role,
@@ -537,6 +551,7 @@ export default function DataKinerja() {
             rows: rowsE5,
             sesiId,
             isAdmin,
+            onLockChange: handleLockChange,
           })}
           {renderKinerjaSection({
             role,
@@ -545,6 +560,7 @@ export default function DataKinerja() {
             rows: rowsE6,
             sesiId,
             isAdmin,
+            onLockChange: handleLockChange,
           })}
         </>
       )}

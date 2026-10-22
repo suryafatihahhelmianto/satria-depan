@@ -19,6 +19,7 @@ function renderKinerjaSection({
   rows,
   sesiId,
   isAdmin,
+  onLockChange,
   type = "lingkungan",
 }) {
   if (!allowedRoles.includes(role)) return null;
@@ -29,6 +30,7 @@ function renderKinerjaSection({
       type={type}
       sesiId={sesiId}
       isAdmin={isAdmin}
+      onLockChange={onLockChange}
     />
   );
 }
@@ -40,6 +42,7 @@ function renderKinerjaBulanSection({
   rows,
   sesiId,
   isAdmin,
+  onLockChange,
   type = "lingkungan",
 }) {
   if (!allowedRoles.includes(role)) return null;
@@ -50,6 +53,7 @@ function renderKinerjaBulanSection({
       type={type}
       sesiId={sesiId}
       isAdmin={isAdmin}
+      onLockChange={onLockChange}
     />
   );
 }
@@ -127,7 +131,12 @@ export default function LingkunganPage() {
   });
 
   const [lockedStatus, setLockedStatus] = useState({});
+
   const [loading, setLoading] = useState(true);
+
+  const handleLockChange = (field, locked) => {
+    setLockedStatus((previous) => ({ ...previous, [field]: locked }));
+  };
 
   const handleInputChange = (field, value) => {
     setFormData({ ...formData, [field]: value });
@@ -136,8 +145,9 @@ export default function LingkunganPage() {
   const handleUpdate = async (field, value) => {
     try {
       if (lockedStatus[field]) {
-        console.log(`Kolom ${field} sudah terkunci, tidak bisa diupdate.`);
-        return;
+        throw new Error(
+          `Kolom ${field} masih terkunci. Klik unlock sebelum mengedit.`
+        );
       }
 
       const data = { sesiId };
@@ -168,9 +178,11 @@ export default function LingkunganPage() {
         },
         data,
       });
+      handleLockChange(field, true);
       // fetchLingkungan();
     } catch (error) {
       console.error("Error updating field (lingkungan): ", error);
+      throw error;
     }
   };
 
@@ -1177,6 +1189,7 @@ export default function LingkunganPage() {
             rows: dataL1,
             sesiId,
             isAdmin,
+            onLockChange: handleLockChange,
           })}
           {renderKinerjaSection({
             role,
@@ -1185,6 +1198,7 @@ export default function LingkunganPage() {
             rows: dataL2,
             sesiId,
             isAdmin,
+            onLockChange: handleLockChange,
           })}
           {renderKinerjaSection({
             role,
@@ -1193,6 +1207,7 @@ export default function LingkunganPage() {
             rows: dataL3,
             sesiId,
             isAdmin,
+            onLockChange: handleLockChange,
           })}
           {renderKinerjaSection({
             role,
@@ -1201,6 +1216,7 @@ export default function LingkunganPage() {
             rows: dataL3instalasi,
             sesiId,
             isAdmin,
+            onLockChange: handleLockChange,
           })}
           {renderKinerjaSection({
             role,
@@ -1209,6 +1225,7 @@ export default function LingkunganPage() {
             rows: dataL3fabrikasi,
             sesiId,
             isAdmin,
+            onLockChange: handleLockChange,
           })}
           {renderKinerjaSection({
             role,
@@ -1217,6 +1234,7 @@ export default function LingkunganPage() {
             rows: dataL4,
             sesiId,
             isAdmin,
+            onLockChange: handleLockChange,
           })}
           {renderKinerjaBulanSection({
             role,
@@ -1225,6 +1243,7 @@ export default function LingkunganPage() {
             rows: dataL5,
             sesiId,
             isAdmin,
+            onLockChange: handleLockChange,
           })}
           {renderKinerjaSection({
             role,
@@ -1233,6 +1252,7 @@ export default function LingkunganPage() {
             rows: dataL6,
             sesiId,
             isAdmin,
+            onLockChange: handleLockChange,
           })}
           {renderKinerjaSection({
             role,
@@ -1241,6 +1261,7 @@ export default function LingkunganPage() {
             rows: dataL7,
             sesiId,
             isAdmin,
+            onLockChange: handleLockChange,
           })}
         </>
       )}

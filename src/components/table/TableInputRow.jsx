@@ -2,8 +2,7 @@
 
 import { fetchData } from "@/tools/api";
 import { getCookie } from "@/tools/getCookie";
-import { useRouter } from "next/navigation";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { HiOutlineLightBulb } from "react-icons/hi";
 import {
   AiFillCheckCircle,
@@ -71,28 +70,16 @@ export default function TableInputRow({
   onSubmit,
   options,
   locked,
+  onLockChange,
   isAdmin,
   type,
   sesiId,
   fieldName,
   capt,
 }) {
-  const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [buttonLoading, setButtonLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [localLocked, setLocalLocked] = useState(locked);
-  const router = useRouter();
-
-  useEffect(() => {
-    if (locked) {
-      setIsSubmitted(true);
-      setLocalLocked(true);
-    } else {
-      setIsSubmitted(false);
-      setLocalLocked(false);
-    }
-  }, [locked]);
 
   const resetState = async () => {
     try {
@@ -103,8 +90,7 @@ export default function TableInputRow({
           Authorization: `Bearer ${getCookie("token")}`,
         },
       });
-      setIsSubmitted(false);
-      setLocalLocked(false);
+      onLockChange(fieldName, false);
     } catch (error) {
       console.error("Error unlocking field: ", error);
       alert("Gagal mengubah status pengisian data");
@@ -114,7 +100,7 @@ export default function TableInputRow({
   };
 
   const handleOpenModal = () => {
-    if (!localLocked) {
+    if (!locked && !buttonLoading && !isLoading) {
       setIsModalOpen(true);
     }
   };
@@ -127,14 +113,12 @@ export default function TableInputRow({
     try {
       setIsLoading(true);
       await onSubmit();
-      setIsSubmitted(true);
-      setLocalLocked(true);
     } catch (error) {
       console.error("Error while submitting:", error);
+      alert("Gagal menyimpan data. Silakan coba lagi.");
     } finally {
       setIsLoading(false);
       handleCloseModal();
-      router.refresh();
     }
   };
 
@@ -151,9 +135,9 @@ export default function TableInputRow({
             value={value}
             onChange={onChange}
             placeholder="0"
-            disabled={localLocked || isLoading || isSubmitted} // Tambahkan kondisi isLoading untuk menonaktifkan input
+            disabled={locked || isLoading || buttonLoading} // Tambahkan kondisi isLoading untuk menonaktifkan input
             className={`p-2 border rounded-md w-full focus:outline-none focus:ring ${
-              localLocked || isLoading
+              locked || isLoading
                 ? "bg-gray-300"
                 : "bg-gray-100 focus:ring-green-300"
             }`}
@@ -166,9 +150,9 @@ export default function TableInputRow({
             value={value}
             onChange={onChange}
             placeholder="0"
-            disabled={localLocked || isLoading || isSubmitted} // Tambahkan kondisi isLoading untuk menonaktifkan input
+            disabled={locked || isLoading || buttonLoading} // Tambahkan kondisi isLoading untuk menonaktifkan input
             className={`p-2 border rounded-md w-full focus:outline-none focus:ring ${
-              localLocked || isLoading
+              locked || isLoading
                 ? "bg-gray-300"
                 : "bg-gray-100 focus:ring-green-300"
             }`}
@@ -179,9 +163,9 @@ export default function TableInputRow({
           <select
             value={value}
             onChange={onChange}
-            disabled={localLocked || isLoading || isSubmitted} // Tambahkan kondisi isLoading untuk menonaktifkan input
+            disabled={locked || isLoading || buttonLoading} // Tambahkan kondisi isLoading untuk menonaktifkan input
             className={`p-2 border rounded-md w-full focus:outline-none ${
-              localLocked || isLoading
+              locked || isLoading
                 ? "bg-gray-300"
                 : "bg-gray-100 focus:ring focus:ring-green-300"
             }`}
@@ -224,10 +208,10 @@ export default function TableInputRow({
         <td className="px-4 py-2 border border-gray-200">{renderInput()}</td>
         <td
           className={`px-4 py-2 border border-gray-200 text-center ${
-            localLocked ? "bg-gray-100 opacity-50" : ""
+            locked ? "bg-gray-100 opacity-50" : ""
           }`}
         >
-          {localLocked ? (
+          {locked ? (
             <div className="flex justify-center w-full">
               <AiFillCheckCircle className="text-green-500 text-center rounded-full text-3xl" />
             </div>
@@ -235,17 +219,11 @@ export default function TableInputRow({
             <button
               type="button"
               onClick={handleOpenModal}
-              disabled={isLoading || isSubmitted} // Tambahkan isLoading agar tombol simpan tidak bisa diklik selama proses
-              className={`p-3 rounded-full text-3xl hover:bg-gray-200 transition ${
-                isSubmitted ? "text-green-500" : "text-gray-700"
-              }`}
+              disabled={isLoading || buttonLoading} // Tambahkan isLoading agar tombol simpan tidak bisa diklik selama proses
+              className="p-3 rounded-full text-3xl text-gray-700 hover:bg-gray-200 transition"
             >
-              {isSubmitted ? (
-                isLoading ? (
-                  <AiOutlineLoading className="animate-spin" />
-                ) : (
-                  <AiFillCheckCircle />
-                )
+              {isLoading ? (
+                <AiOutlineLoading className="animate-spin" />
               ) : (
                 <div className="flex flex-col gap-2 justify-center items-center">
                   <AiFillExclamationCircle className="animate-pulse text-red-500" />
@@ -258,14 +236,14 @@ export default function TableInputRow({
         {isAdmin && (
           <td
             className={`px-4 py-2 border border-gray-200 text-center rounded-r-md ${
-              localLocked ? "opacity-100 bg-blue-50" : "opacity-50 bg-gray-200"
+              locked ? "opacity-100 bg-blue-50" : "opacity-50 bg-gray-200"
             }`}
           >
             <div className="relative group">
               <button
                 type="button"
                 onClick={handleUnlock}
-                disabled={!localLocked || buttonLoading}
+                disabled={!locked || buttonLoading || isLoading}
                 className={`p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition ${
                   buttonLoading ? "cursor-not-allowed" : ""
                 }`}

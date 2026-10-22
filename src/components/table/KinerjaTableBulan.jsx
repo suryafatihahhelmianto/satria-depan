@@ -10,7 +10,7 @@ import { getCookie } from "@/tools/getCookie";
 
 // Add the Confirmation Modal Component here
 
-const ConfirmationModal = ({ isOpen, onConfirm, onClose }) => {
+const ConfirmationModal = ({ isOpen, onConfirm, onClose, isLoading }) => {
   if (!isOpen) return null;
 
   return (
@@ -20,6 +20,7 @@ const ConfirmationModal = ({ isOpen, onConfirm, onClose }) => {
           onClick={onClose}
           className="absolute top-3 right-3 text-3xl font-bold text-gray-500 hover:text-red-500 transition"
           aria-label="Close modal"
+          disabled={isLoading}
         >
           &times;
         </button>
@@ -33,15 +34,17 @@ const ConfirmationModal = ({ isOpen, onConfirm, onClose }) => {
         <div className="flex justify-end space-x-3">
           <button
             onClick={onClose}
+            disabled={isLoading}
             className="px-5 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-red-400 hover:text-white transition"
           >
             Periksa Kembali
           </button>
           <button
             onClick={onConfirm}
+            disabled={isLoading}
             className={`px-5 py-2 rounded-lg transition bg-gradient-to-r from-green-500 to-green-600 text-white hover:from-green-600 hover:to-green-700`}
           >
-            Simpan
+            {isLoading ? <AiOutlineLoading className="animate-spin" /> : "Simpan"}
           </button>
         </div>
       </div>
@@ -49,7 +52,13 @@ const ConfirmationModal = ({ isOpen, onConfirm, onClose }) => {
   );
 };
 
-export default function KinerjaTableBulan({ data, isAdmin, type, sesiId }) {
+export default function KinerjaTableBulan({
+  data,
+  isAdmin,
+  type,
+  sesiId,
+  onLockChange,
+}) {
   const uniqueFieldNames = Array.from(
     new Set(
       data.filter((item) => !item.isSubtitle).map((item) => item.fieldName)
@@ -64,12 +73,6 @@ export default function KinerjaTableBulan({ data, isAdmin, type, sesiId }) {
   );
 
   const [submitLoadingStates, setSubmitLoadingStates] = useState({});
-  const [isSubmitted, setIsSubmitted] = useState(
-    uniqueFieldNames.reduce((acc, fieldName) => {
-      acc[fieldName] = false;
-      return acc;
-    }, {})
-  );
 
   // Modal state
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -113,7 +116,7 @@ export default function KinerjaTableBulan({ data, isAdmin, type, sesiId }) {
           Authorization: `Bearer ${getCookie("token")}`,
         },
       });
-      window.location.reload();
+      onLockChange(fieldName, false);
     } catch (error) {
       console.error(`Error unlocking field ${fieldName}: `, error);
       alert(`Gagal mengubah status field ${fieldName}.`);
@@ -140,13 +143,9 @@ export default function KinerjaTableBulan({ data, isAdmin, type, sesiId }) {
 
     try {
       await onSubmit();
-
-      setIsSubmitted((prevState) => ({
-        ...prevState,
-        [fieldName]: true,
-      }));
     } catch (error) {
       console.error(`Error submitting field ${fieldName}:`, error);
+      alert("Gagal menyimpan data. Silakan coba lagi.");
     } finally {
       setSubmitLoadingStates((prevState) => ({
         ...prevState,
@@ -156,12 +155,12 @@ export default function KinerjaTableBulan({ data, isAdmin, type, sesiId }) {
   };
 
   // Confirm modal actions
-  const handleConfirmSubmit = () => {
+  const handleConfirmSubmit = async () => {
     // Proceed with the submission
     const fieldName = selectedField;
     const parameterData = data.find((item) => item.fieldName === fieldName);
     if (parameterData && parameterData.onSubmit) {
-      handleSubmit(fieldName, parameterData.onSubmit);
+      await handleSubmit(fieldName, parameterData.onSubmit);
     }
     setIsModalVisible(false);
   };
@@ -217,11 +216,14 @@ export default function KinerjaTableBulan({ data, isAdmin, type, sesiId }) {
                           type={parameterData?.inputType || "number"}
                           value={parameterData?.value || ""}
                           onChange={parameterData?.onChange}
-                          disabled={parameterData?.locked}
+                          disabled={
+                            parameterData?.locked ||
+                            loadingStates[parameterData?.fieldName] ||
+                            submitLoadingStates[parameterData?.fieldName]
+                          }
                           className="w-24 p-2 text-center rounded border bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-500"
                         />
-                        {parameterData?.locked ||
-                        isSubmitted[parameterData?.fieldName] ? (
+                        {parameterData?.locked ? (
                           <div className="flex items-center gap-2">
                             <AiFillCheckCircle className="text-green-500 text-xl" />
                             {isAdmin && (
@@ -230,7 +232,8 @@ export default function KinerjaTableBulan({ data, isAdmin, type, sesiId }) {
                                   handleUnlock(parameterData?.fieldName)
                                 }
                                 disabled={
-                                  loadingStates[parameterData?.fieldName]
+                                  loadingStates[parameterData?.fieldName] ||
+                                  submitLoadingStates[parameterData?.fieldName]
                                 }
                                 className="p-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
                               >
@@ -248,7 +251,8 @@ export default function KinerjaTableBulan({ data, isAdmin, type, sesiId }) {
                               openConfirmationModal(parameterData.fieldName)
                             }
                             disabled={
-                              submitLoadingStates[parameterData.fieldName]
+                              submitLoadingStates[parameterData.fieldName] ||
+                              loadingStates[parameterData.fieldName]
                             }
                             className="text-2xl text-red-400 hover:text-red-500 transition-colors"
                           >
@@ -279,6 +283,7 @@ export default function KinerjaTableBulan({ data, isAdmin, type, sesiId }) {
         isOpen={isModalVisible}
         onConfirm={handleConfirmSubmit}
         onClose={handleCancelSubmit}
+        isLoading={submitLoadingStates[selectedField]}
       />
     </div>
   );
